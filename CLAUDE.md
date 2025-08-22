@@ -20,7 +20,7 @@ Process the markdown files in https://github.com/iwolf81/ai-context.
 1. CLI interface
 2. Application executes normally twice a year: January and June.
 
-## Completeness Criteria
+## Information Completeness Criteria
 1. Required: Unit meeting location. (Note: a PO box is not a valid meeting location)
 2. Required: Unit meeting day and time.
 3. Required: Contact email; prefer unit specific (e.g., T32-Scoutmaster@actonscouts.org) over personal (e.g., irawolf81@gmail.com).
@@ -36,15 +36,16 @@ Process the markdown files in https://github.com/iwolf81/ai-context.
 2. The Council Office for Heart of New England Council will provide list of Key Three member for each unit to the developer. This will be an input to the application.
 3. The list of towns in the Heart of New England Council is specified in the map of central Massachusetts located in https://hnescouting.org/about/.
 4. The Zip Code is the search key for https://beascout.scouting.org/ and https://joinexploring.org/.
-5. A town may have multiple Zip Codes.
-6. Search a 10 mile radius for https://beascout.scouting.org/ and a 20 mile radius for https://joinexploring.org/.
-7. The same unit is likely to appear in the search results for multiple Zip Codes.
-8. Information for a specific unit should be consistent across multiple searches. 
-9. Do not present duplicate units.
-10. The following web query finds all Explorer Posts in a 20 mile radius of Acton MA (01720): https://joinexploring.org/list/?zip=01720&program%5B0%5D=post&program%5B1%5D=club&miles=20
-11. The following web query finds all unit types in a 10 mile radius of Acton MA 
+5. The primary unit identifier in the search results is formatted as <unit type> <unit number> <chartered organization name>; the chartered organization name might contain the unit type and unit number.
+6. The primary unit identifier uniquely identifies a unit.
+7. A town may have multiple Zip Codes.
+8. Search a 10 mile radius for https://beascout.scouting.org/ and a 20 mile radius for https://joinexploring.org/.
+9. The same unit is likely to appear in the search results for multiple Zip Codes.
+10. Information for a specific unit should be consistent across multiple searches. 
+11. Do not present duplicate units.
+12. The following web query finds all Explorer Posts in a 20 mile radius of Acton MA (01720): https://joinexploring.org/list/?zip=01720&program%5B0%5D=post&program%5B1%5D=club&miles=20
+13. The following web query finds all unit types in a 10 mile radius of Acton MA 
   (01720): https://beascout.scouting.org/list/?zip=01720&program%5B0%5D=pack&program%5B1%5D=scoutsBSA&program%5B2%5D=crew&program%5B3%5D=ship&cubFilter=all&scoutsBSAFilter=all&miles=10
-12. 
 
 ## Architecture
 See [ARCHITECTURE.md](ARCHITECTURE.md) for complete system design and technical specifications. 

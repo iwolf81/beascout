@@ -74,7 +74,8 @@ Zip Codes → Playwright Scrapers → Raw JSON → Deduplication → SQLite → 
 ## Scraping Strategy
 - **beascout.scouting.org**: 10-mile radius searches per zip code
 - **joinexploring.org**: 20-mile radius searches per zip code  
-- **Deduplication**: Unit ID matching (e.g., "Pack 32", "Troop 7012")
+- **Unit Identification**: Primary identifier format `<unit type> <unit number> <chartered organization name>`
+- **Deduplication**: Multi-level matching strategy (see Unit Deduplication section)
 - **Dynamic Content**: Playwright waits for JavaScript-loaded results
 - **Rate Limiting**: Configurable delays between requests
 
@@ -84,7 +85,9 @@ CREATE TABLE units (
     id INTEGER PRIMARY KEY,
     unit_number TEXT,
     unit_type TEXT,
-    unit_id TEXT UNIQUE,           -- "Pack 32", "Troop 7012"
+    chartered_organization TEXT,
+    primary_identifier TEXT UNIQUE, -- "Pack 32 Acton Congregational Church"
+    unit_id TEXT,                   -- Parsed "Pack 32" for fallback matching
     meeting_location TEXT,
     meeting_day TEXT,
     meeting_time TEXT,
@@ -100,7 +103,7 @@ CREATE TABLE units (
 );
 
 CREATE TABLE completeness_scores (
-    unit_id TEXT REFERENCES units(unit_id),
+    primary_identifier TEXT REFERENCES units(primary_identifier),
     required_fields_complete INTEGER,
     recommended_fields_complete INTEGER,
     total_score REAL,
@@ -109,10 +112,18 @@ CREATE TABLE completeness_scores (
 );
 ```
 
+## Unit Deduplication Strategy
+- **Primary Matching**: Full primary identifier string comparison
+  - Example: "Pack 32 Acton Congregational Church" matches exactly
+- **Fallback Matching**: Parse unit type + number when primary fails
+  - Example: "Pack 32" extracted from different org name variations
+- **Validation Logic**: Ensure same unit doesn't appear with conflicting data
+- **Conflict Resolution**: Flag units with inconsistent information across searches
+
 ## Error Handling and Validation
 - **PO Box Detection**: Regex patterns to identify and flag PO Box addresses
-- **Unit ID Parsing**: Extract unit type and number for deduplication
-- **Data Validation**: Ensure required fields meet completeness criteria
+- **Unit ID Parsing**: Extract unit type and number from primary identifier
+- **Data Validation**: Ensure required fields meet information completeness criteria
 - **Graceful Failures**: Continue processing if individual units fail
 - **Retry Logic**: Handle temporary network issues with exponential backoff
 
