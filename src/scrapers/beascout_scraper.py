@@ -53,18 +53,30 @@ class BeaScoutScraper(BaseScraper):
         units = []
         
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
+            browser = await p.chromium.launch(
+                headless=True,
+                args=['--no-sandbox', '--disable-dev-shm-usage']
+            )
             page = await browser.new_page()
             
             try:
                 print(f"Scraping BeaScout for {zip_code} (radius: {radius} miles)")
-                await page.goto(url)
+                print(f"URL: {url}")
                 
-                # Wait for results to load
-                results_loaded = await self.wait_for_results(page)
-                if not results_loaded:
-                    print(f"No results loaded for {zip_code}")
-                    return units
+                # Navigate to page with shorter timeout
+                await page.goto(url, wait_until='domcontentloaded', timeout=15000)
+                
+                # Wait a bit for any dynamic content
+                await page.wait_for_timeout(3000)
+                
+                # Debug: capture page content
+                page_content = await page.content()
+                print(f"Page loaded, content length: {len(page_content)}")
+                
+                # Save page content for analysis
+                with open(f"data/raw/debug_page_{zip_code}.html", "w") as f:
+                    f.write(page_content)
+                print(f"Page content saved to data/raw/debug_page_{zip_code}.html")
                 
                 # Extract unit information
                 units = await self.extract_units(page)
