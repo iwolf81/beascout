@@ -1,6 +1,6 @@
 # BeAScout Unit Information System - Design Document
 
-**Version:** 1.0 | **Last Updated:** 2024-12-22 | **Status:** Initial Draft
+**Version:** 1.1 | **Last Updated:** 2025-08-22 | **Status:** Recommendation-First Strategy
 
 ## Document Control
 - **Author:** Claude Code + Board Member
@@ -15,16 +15,16 @@
 The BeAScout Unit Information System is designed to improve the quality and completeness of Scouting America unit information published on beascout.scouting.org and joinexploring.org for the Heart of New England Council (Massachusetts). The system will automate data collection, analysis, and monitoring to help prospective Scout families find complete and accurate unit information.
 
 ### Key Objectives
-- **100% Coverage**: Process all 48 zip codes in HNE Council territory
-- **Quality Improvement**: Increase meeting information completeness from current ~40% to 50%+
-- **Ongoing Monitoring**: Provide periodic reports to Council office for Key Three outreach
-- **Duplicate Management**: Identify and resolve duplicate unit listings across platforms
+- **Immediate Value**: Build recommendation system using current 62 validated units
+- **Quality Improvement**: Generate actionable improvement reports for Key Three members
+- **Business Validation**: Prove concept effectiveness before scaling to full 72 zip codes
+- **100% Coverage**: Process all 72 zip codes after recommendation system validation
 
 ### System Benefits
-- Improved unit information quality for family recruitment
-- Automated monitoring and reporting for Council office
-- Data-driven approach to unit support and accountability
-- Streamlined process for biannual information updates
+- **Immediate Impact**: Actionable recommendations for 62 units ready within days
+- **Validation-First**: Prove business value before large-scale infrastructure investment
+- **Key Three Engagement**: Direct unit leader communication with specific improvement guidance
+- **Scalable Foundation**: Validated recommendation engine ready for full council expansion
 
 ---
 
@@ -224,36 +224,36 @@ The BeAScout Unit Information System is designed to improve the quality and comp
 
 ---
 
-## 6. Implementation Timeline
+## 6. Implementation Timeline (Revised: Recommendation-First Strategy)
 
-### Phase 1: Foundation (Weeks 1-2)
-- [ ] Complete HNE zip code validation
-- [ ] Build conservative scraping system
-- [ ] Implement data extraction and storage
-- [ ] Create initial deduplication logic
+### Phase 1: Recommendation System (Days 1-3)
+- [x] Complete data extraction system (62 units from ZIP 01720)
+- [ ] Build quality scoring algorithm with A-F grading
+- [ ] Create unit-specific improvement recommendation reports
+- [ ] Design Key Three email templates and communication workflow
 
-### Phase 2: Data Collection (Weeks 3-6)
-- [ ] Execute complete scraping of all 48 zip codes
-- [ ] Generate baseline unit database
-- [ ] Validate data quality and completeness
-- [ ] Produce first comprehensive Council report
+### Phase 2: Business Validation (Days 4-7)
+- [ ] Generate prototype recommendation reports for 5-10 units
+- [ ] Review business logic and scoring accuracy with Board member
+- [ ] Refine recommendation templates based on feedback
+- [ ] Validate Key Three communication approach
 
-### Phase 3: Monitoring System (Weeks 7-8)
-- [ ] Build automated re-scraping system
-- [ ] Create change detection and alerting
-- [ ] Develop reporting templates and dashboard
-- [ ] Test end-to-end monitoring workflow
+### Phase 3: Full Council Scaling (Weeks 2-4)
+- [ ] Build conservative multi-zip scraping system
+- [ ] Execute complete data collection across all 72 zip codes
+- [ ] Apply validated recommendation system to complete dataset
+- [ ] Generate comprehensive Council-wide quality analysis
 
-### Phase 4: Council Deployment (Week 9)
-- [ ] Deploy system to production environment
-- [ ] Train Council staff on reports and follow-up
-- [ ] Launch Key Three outreach program
-- [ ] Establish ongoing support procedures
+### Phase 4: Council Deployment (Week 5)
+- [ ] Deploy recommendation system to production workflow
+- [ ] Launch Key Three outreach program with validated reports
+- [ ] Train Council staff on system outputs and follow-up procedures
+- [ ] Establish success metrics and tracking
 
 ### Phase 5: Operations (Ongoing)
-- [ ] Biweekly automated monitoring
-- [ ] Monthly strategic analysis
-- [ ] Quarterly system optimization
+- [ ] Monthly automated re-scraping and recommendation updates
+- [ ] Quarterly system optimization and business logic refinement
+- [ ] Biannual comprehensive Council quality analysis
 - [ ] Annual comprehensive review
 
 ---

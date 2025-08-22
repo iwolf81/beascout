@@ -7,13 +7,14 @@ Process the markdown files in https://github.com/iwolf81/ai-context.
 Improve Scouting America unit information quality for the Heart of New England Council by building an automated system that monitors, analyzes, and reports on unit data completeness across beascout.scouting.org and joinexploring.org.
 
 ## Development Guidelines
+- **Business value first**: Build recommendation system with current data before scaling
 - **Conservative approach**: Respectful scraping with rate limiting to avoid blocking
-- **100% coverage**: All 48 HNE Council zip codes must be processed successfully  
+- **100% coverage**: All 72 HNE Council zip codes must be processed successfully  
 - **Board authority**: Developer is HNE Council Board member using data for legitimate council benefit
 - **Rapid prototyping**: Current development phase, files remain in root directory for flexibility
 
 ## Key Technical Constraints
-- **Scale considerations**: ~3,000 units across 48 zip codes requires efficient processing
+- **Scale considerations**: 124-248 units across 72 zip codes requires efficient processing
 - **Detection avoidance**: 8-12 second delays, session limits, human-like patterns
 - **Tiered extraction**: Regex primary, LLM fallback for complex cases
 - **Ongoing monitoring**: System must support periodic re-scraping and change detection
@@ -39,11 +40,11 @@ Improve Scouting America unit information quality for the Heart of New England C
 **See data/zipcodes/hne_council_zipcodes.json for complete zip code list**
 
 **Current Implementation Status:**
-- ✅ Single zip code extraction working (01720 Acton - 62 units)
-- ✅ Meeting info extraction: 42% day, 39% time (improved regex patterns)
-- ✅ Deduplication logic for primary identifier matching
-- 🔄 Multi-zip code processing system (in development)
-- ⏳ Ongoing monitoring and reporting system (design phase)
+- ✅ Single zip code extraction refined (01720 Acton - 62 units)
+- ✅ Meeting info extraction: Significantly improved pattern coverage
+- ✅ Manual review process established with direct annotation feedback
+- 🔄 Quality scoring and recommendation system (next priority)
+- ⏳ Multi-zip code processing system (after recommendation validation)
 
 **Key Technical Patterns:**
 - HTML containers: `div.card-body` contains unit info, `div.unit-name` has identifier

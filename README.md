@@ -35,10 +35,13 @@ playwright install
 
 ### Basic Usage
 ```bash
-# Full analysis pipeline
-beascout collect-zipcodes --council "Heart of New England" --output data/zipcodes/
+# Current prototype workflow (62 units from Acton area)
+python extract_all_units.py  # Extract refined unit data
+python src/analysis/quality_scorer.py  # Generate quality scores
+python src/notifications/report_generator.py  # Create Key Three recommendations
+
+# Future full pipeline (after recommendation system validation)
 beascout scrape --zipcodes data/zipcodes/hne_zipcodes.json --output data/raw/
-beascout deduplicate --input data/raw/ --output data/processed/ --strategy unit-id
 beascout analyze --input data/processed/units.json --criteria config/completeness_criteria.yaml
 beascout report --units data/processed/units.json --keythree data/input/key_three.csv --output data/reports/
 ```
@@ -71,6 +74,14 @@ beascout report --units data/processed/units.json --keythree data/input/key_thre
 - **beascout.scouting.org**: Cub Scout Packs, Scout Troops, Venturing Crews, Sea Scout Ships
 - **joinexploring.org**: Exploring Posts and Clubs
 - **Heart of New England Council**: Unit Key Three member contact lists
+
+## Council Structure
+
+The Heart of New England Council is comprised of two Districts:
+- **QUINAPOXET District** (blue on council map): Northern and central Massachusetts towns
+- **SOARING EAGLE District** (red on council map): Southern and western Massachusetts towns
+
+Each District contains multiple towns, and each town may have zero or more Scout units. The BeAScout system processes units from both districts across all council territory.
 
 ## Development
 

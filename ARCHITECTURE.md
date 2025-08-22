@@ -1,6 +1,6 @@
 # BeAScout Unit Information System - Technical Architecture
 
-**Version**: 1.1 | **Last Updated**: 2024-12-22 | **Implements**: SYSTEM_DESIGN.md requirements
+**Version**: 1.2 | **Last Updated**: 2025-08-22 | **Strategy**: Recommendation-First Development
 
 ## Technology Stack
 - **Web Scraping**: Playwright (handles dynamic JavaScript content with conservative rate limiting)
@@ -15,11 +15,12 @@
 ```
 beascout/
 ├── # Current Development Phase (rapid prototyping in root)
-├── analyze_data.py             # Data extraction and analysis
-├── extract_all_units.py        # Full unit extraction script  
-├── scrape_all_zipcodes.py      # Multi-zip processing (planned)
-├── examine_descriptions.py     # Meeting info analysis
-├── extract_hne_towns.py        # Zip code enumeration
+├── extract_all_units.py        # Refined unit extraction (62 units)
+├── extract_hne_towns.py        # Council territory analysis  
+├── analyze_data.py             # Data extraction and analysis (legacy)
+├── quality_scorer.py           # Quality scoring system (next priority)
+├── report_generator.py         # Key Three recommendations (next priority)
+├── scrape_all_zipcodes.py      # Multi-zip processing (after validation)
 ├── 
 ├── # Target Production Structure
 ├── src/
@@ -67,14 +68,15 @@ beascout/
 
 ### Current Development Interface
 ```bash
-# Extract single zip code for testing
-python analyze_data.py data/raw/debug_page_01720.html
-
-# Extract all units from captured HTML
+# Generate refined unit extraction (62 units from ZIP 01720)
 python extract_all_units.py
 
-# Generate HNE Council zip code list
+# Generate HNE Council territory analysis (72 zip codes, 62 towns)
 python extract_hne_towns.py
+
+# Next: Build recommendation system
+python quality_scorer.py          # A-F grading for current units
+python report_generator.py        # Key Three improvement reports
 ```
 
 ### Target Automated System Interface  
@@ -195,3 +197,32 @@ CREATE TABLE completeness_scores (
 - **Environment Variables**: Support for deployment-specific settings
 - **Validation**: Schema validation for configuration files
 - **Defaults**: Sensible defaults for all configurable options
+
+## File Structure Migration Plan
+
+### Current State (Rapid Prototyping)
+All scripts in root directory for development flexibility and speed
+
+### Migration Trigger
+Move to organized structure after recommendation system validation (Phase 2 completion)
+
+### Target Organization
+```
+beascout/
+├── src/
+│   ├── analysis/
+│   │   ├── quality_scorer.py          # Proven business logic
+│   │   └── completeness_analyzer.py   # Validated scoring algorithms
+│   ├── notifications/
+│   │   ├── report_generator.py        # Key Three communication
+│   │   └── email_templates/           # Validated formats
+│   └── scrapers/
+│       └── multi_zip_scraper.py       # Scaled after validation
+├── scripts/
+│   ├── extract_all_units.py          # Current working extraction
+│   └── extract_hne_towns.py          # Territory analysis
+└── legacy/
+    └── analyze_data.py                # Original prototype
+```
+
+**Migration Strategy**: Preserve working rapid prototype scripts while building validated production structure

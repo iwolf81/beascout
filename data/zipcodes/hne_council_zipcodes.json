@@ -1,0 +1,343 @@
+{
+  "council": "Heart of New England",
+  "total_towns": 62,
+  "total_zipcodes": 72,
+  "estimated_units_range": "124-248",
+  "estimation_method": "2-4 units per town average",
+  "towns": [
+    "Ashby",
+    "Townsend",
+    "Pepperell",
+    "Groton",
+    "Ayer",
+    "Littleton",
+    "Acton",
+    "Boxborough",
+    "Fitchburg",
+    "Lunenburg",
+    "Shirley",
+    "Harvard",
+    "Bolton",
+    "Berlin",
+    "Lancaster",
+    "Leominster",
+    "Sterling",
+    "Clinton",
+    "West Boylston",
+    "Boylston",
+    "Shrewsbury",
+    "Worcester",
+    "Holden",
+    "Rutland",
+    "Princeton",
+    "Paxton",
+    "Leicester",
+    "Auburn",
+    "Millbury",
+    "Royalston",
+    "Winchendon",
+    "Ashburnham",
+    "Gardner",
+    "Templeton",
+    "Phillipston",
+    "Athol",
+    "Orange",
+    "Westminster",
+    "Hubbardston",
+    "Barre",
+    "Petersham",
+    "Hardwick",
+    "New Braintree",
+    "Oakham",
+    "Ware",
+    "West Brookfield",
+    "East Brookfield",
+    "North Brookfield",
+    "Brookfield",
+    "Spencer",
+    "Warren",
+    "Sturbridge",
+    "Charlton",
+    "Oxford",
+    "Dudley",
+    "Webster",
+    "Douglas",
+    "Sutton",
+    "Grafton",
+    "Upton",
+    "Northbridge",
+    "Southbridge"
+  ],
+  "town_zipcodes": {
+    "Acton": [
+      "01720"
+    ],
+    "Ashby": [
+      "01431"
+    ],
+    "Auburn": [
+      "01501"
+    ],
+    "Ayer": [
+      "01432"
+    ],
+    "Berlin": [
+      "01503"
+    ],
+    "Bolton": [
+      "01740"
+    ],
+    "Boxborough": [
+      "01719"
+    ],
+    "Boylston": [
+      "01505"
+    ],
+    "Clinton": [
+      "01510"
+    ],
+    "Fitchburg": [
+      "01420",
+      "01421"
+    ],
+    "Groton": [
+      "01450"
+    ],
+    "Harvard": [
+      "01451"
+    ],
+    "Holden": [
+      "01520"
+    ],
+    "Lancaster": [
+      "01523"
+    ],
+    "Leicester": [
+      "01524"
+    ],
+    "Leominster": [
+      "01453"
+    ],
+    "Littleton": [
+      "01460"
+    ],
+    "Lunenburg": [
+      "01462"
+    ],
+    "Millbury": [
+      "01527"
+    ],
+    "Paxton": [
+      "01612"
+    ],
+    "Pepperell": [
+      "01463"
+    ],
+    "Princeton": [
+      "01541"
+    ],
+    "Rutland": [
+      "01543"
+    ],
+    "Shirley": [
+      "01464"
+    ],
+    "Shrewsbury": [
+      "01545"
+    ],
+    "Sterling": [
+      "01564"
+    ],
+    "Townsend": [
+      "01469"
+    ],
+    "West Boylston": [
+      "01583"
+    ],
+    "Worcester": [
+      "01601",
+      "01602",
+      "01603",
+      "01604",
+      "01605",
+      "01606",
+      "01607",
+      "01608",
+      "01609",
+      "01610"
+    ],
+    "Ashburnham": [
+      "01430"
+    ],
+    "Athol": [
+      "01331"
+    ],
+    "Barre": [
+      "01005"
+    ],
+    "Brookfield": [
+      "01506"
+    ],
+    "Charlton": [
+      "01507"
+    ],
+    "Douglas": [
+      "01516"
+    ],
+    "Dudley": [
+      "01571"
+    ],
+    "East Brookfield": [
+      "01515"
+    ],
+    "Gardner": [
+      "01440"
+    ],
+    "Grafton": [
+      "01519"
+    ],
+    "Hardwick": [
+      "01037"
+    ],
+    "Hubbardston": [
+      "01452"
+    ],
+    "New Braintree": [
+      "01531"
+    ],
+    "North Brookfield": [
+      "01535"
+    ],
+    "Northbridge": [
+      "01534"
+    ],
+    "Oakham": [
+      "01068"
+    ],
+    "Orange": [
+      "01364"
+    ],
+    "Oxford": [
+      "01540"
+    ],
+    "Petersham": [
+      "01366"
+    ],
+    "Phillipston": [
+      "01331"
+    ],
+    "Royalston": [
+      "01368"
+    ],
+    "Southbridge": [
+      "01550"
+    ],
+    "Spencer": [
+      "01562"
+    ],
+    "Sturbridge": [
+      "01566"
+    ],
+    "Sutton": [
+      "01590"
+    ],
+    "Templeton": [
+      "01468"
+    ],
+    "Upton": [
+      "01568"
+    ],
+    "Ware": [
+      "01082"
+    ],
+    "Warren": [
+      "01083"
+    ],
+    "Webster": [
+      "01570"
+    ],
+    "West Brookfield": [
+      "01585"
+    ],
+    "Westminster": [
+      "01473"
+    ],
+    "Winchendon": [
+      "01475"
+    ]
+  },
+  "all_zipcodes": [
+    "01720",
+    "01431",
+    "01501",
+    "01432",
+    "01503",
+    "01740",
+    "01719",
+    "01505",
+    "01510",
+    "01420",
+    "01421",
+    "01450",
+    "01451",
+    "01520",
+    "01523",
+    "01524",
+    "01453",
+    "01460",
+    "01462",
+    "01527",
+    "01612",
+    "01463",
+    "01541",
+    "01543",
+    "01464",
+    "01545",
+    "01564",
+    "01469",
+    "01583",
+    "01601",
+    "01602",
+    "01603",
+    "01604",
+    "01605",
+    "01606",
+    "01607",
+    "01608",
+    "01609",
+    "01610",
+    "01430",
+    "01331",
+    "01005",
+    "01506",
+    "01507",
+    "01516",
+    "01571",
+    "01515",
+    "01440",
+    "01519",
+    "01037",
+    "01452",
+    "01531",
+    "01535",
+    "01534",
+    "01068",
+    "01364",
+    "01540",
+    "01366",
+    "01331",
+    "01368",
+    "01550",
+    "01562",
+    "01566",
+    "01590",
+    "01468",
+    "01568",
+    "01082",
+    "01083",
+    "01570",
+    "01585",
+    "01473",
+    "01475"
+  ]
+}
