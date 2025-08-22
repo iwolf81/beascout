@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Quick test script for BeaScout scraper.
+Quick test script for BeAScout scraper.
 
 Valid inputs: None (hardcoded test zip codes)
 Expected outputs: JSON files with scraped unit data
@@ -12,7 +12,7 @@ import os
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
-from scrapers.beascout_scraper import BeaScoutScraper
+from scrapers.beascout_scraper import BeAScoutScraper
 
 
 async def test_scraper():
@@ -22,7 +22,7 @@ async def test_scraper():
     Valid inputs: None
     Expected outputs: JSON file with scraped units
     """
-    scraper = BeaScoutScraper(delay_seconds=2.0)
+    scraper = BeAScoutScraper(delay_seconds=2.0)
     
     # Test with Acton, MA - 10 mile radius
     test_zip = "01720"
@@ -57,7 +57,7 @@ async def test_scraper():
 
 if __name__ == "__main__":
     # Install playwright browsers if needed
-    print("Starting BeaScout scraper test...")
+    print("Starting BeAScout scraper test...")
     print("Note: If this fails, run: playwright install")
     
     asyncio.run(test_scraper())

@@ -1,5 +1,5 @@
 """
-BeaScout.scouting.org scraper for Scouting America units.
+BeAScout.scouting.org scraper for Scouting America units.
 
 Valid inputs: zip_code (string), radius (10 miles default)
 Expected outputs: List of unit information dictionaries
@@ -9,12 +9,12 @@ from playwright.async_api import async_playwright
 from .base_scraper import BaseScraper
 
 
-class BeaScoutScraper(BaseScraper):
+class BeAScoutScraper(BaseScraper):
     """Scraper for beascout.scouting.org unit information."""
     
     def __init__(self, delay_seconds: float = 1.5):
         """
-        Initialize BeaScout scraper.
+        Initialize BeAScout scraper.
         
         Valid inputs: delay_seconds (float, default 1.5)
         Expected outputs: Configured scraper instance
@@ -24,7 +24,7 @@ class BeaScoutScraper(BaseScraper):
     
     def build_search_url(self, zip_code: str, radius: int = 10) -> str:
         """
-        Build search URL for BeaScout with all unit types.
+        Build search URL for BeAScout with all unit types.
         
         Valid inputs: zip_code (5-digit string), radius (integer, default 10)
         Expected outputs: Complete search URL for all unit types
@@ -44,7 +44,7 @@ class BeaScoutScraper(BaseScraper):
     
     async def scrape_zip_code(self, zip_code: str, radius: int = 10) -> List[Dict]:
         """
-        Scrape all units for a zip code from BeaScout.
+        Scrape all units for a zip code from BeAScout.
         
         Valid inputs: zip_code (string), radius (integer, default 10)
         Expected outputs: List of unit dictionaries with scraped information
@@ -60,7 +60,7 @@ class BeaScoutScraper(BaseScraper):
             page = await browser.new_page()
             
             try:
-                print(f"Scraping BeaScout for {zip_code} (radius: {radius} miles)")
+                print(f"Scraping BeAScout for {zip_code} (radius: {radius} miles)")
                 print(f"URL: {url}")
                 
                 # Navigate to page with shorter timeout

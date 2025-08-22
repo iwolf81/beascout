@@ -22,7 +22,7 @@ def analyze_html_data(html_file):
     
     soup = BeautifulSoup(content, 'html.parser')
     
-    print("=== BeaScout HTML Data Analysis ===\n")
+    print("=== BeAScout HTML Data Analysis ===\n")
     
     # Find all unit containers - card-body contains the relevant information
     unit_wrappers = soup.find_all('div', class_='card-body')

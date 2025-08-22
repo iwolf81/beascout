@@ -1,1 +1,1 @@
-# BeaScout Unit Information Analyzer
+# BeAScout Unit Information Analyzer

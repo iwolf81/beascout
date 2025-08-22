@@ -1,5 +1,5 @@
 """
-Base scraper class for BeaScout unit information collection.
+Base scraper class for BeAScout unit information collection.
 
 Valid inputs: zip_code (string), radius (integer)
 Expected outputs: List of unit dictionaries with scraped information

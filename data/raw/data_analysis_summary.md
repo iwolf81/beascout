@@ -1,4 +1,4 @@
-# BeaScout Data Analysis Summary
+# BeAScout Data Analysis Summary
 
 ## Current Extraction Success Rates
 - **Primary Identifier**: 100% (66/66) - Successfully parsing "Pack 0070 Acton-Congregational Church" format

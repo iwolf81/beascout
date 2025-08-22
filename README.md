@@ -1,10 +1,10 @@
-# BeaScout Unit Information Analyzer
+# BeAScout Unit Information Analyzer
 
 Automated analysis and improvement of Scouting America unit information published on [beascout.scouting.org](https://beascout.scouting.org/) and [joinexploring.org](https://joinexploring.org/) for the Heart of New England Council (Massachusetts). This tool helps prospective Scouts and their families easily find complete, accurate contact information for local units.
 
 ## Overview
 
-The BeaScout analyzer collects unit information from official Scouting websites, validates completeness against established criteria, and generates improvement recommendations for unit leaders. The system operates on a biannual schedule (January and June) to ensure information stays current and helpful for families seeking Scouting opportunities.
+The BeAScout analyzer collects unit information from official Scouting websites, validates completeness against established criteria, and generates improvement recommendations for unit leaders. The system operates on a biannual schedule (January and June) to ensure information stays current and helpful for families seeking Scouting opportunities.
 
 ## Key Features
 

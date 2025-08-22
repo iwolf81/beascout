@@ -1,4 +1,4 @@
-# BeaScout Unit Information Analyzer - Architecture
+# BeAScout Unit Information Analyzer - Architecture
 
 ## Technology Stack
 - **Web Scraping**: Playwright (handles dynamic JavaScript content)

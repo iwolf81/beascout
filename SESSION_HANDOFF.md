@@ -1,4 +1,4 @@
-# BeaScout Project - Session Handoff Document
+# BeAScout Project - Session Handoff Document
 
 ## Project Overview
 **Objective**: Improve Scouting America unit information quality for Heart of New England Council (Massachusetts) by scraping, analyzing, and reporting on unit completeness from beascout.scouting.org.
@@ -118,7 +118,7 @@ Examples from current data:
 ### 4. joinexploring.org Integration (Medium Priority)
 - Implement scraper for Exploring units (20-mile radius)
 - Similar extraction patterns but different website structure
-- Combine with BeaScout data for complete council coverage
+- Combine with BeAScout data for complete council coverage
 
 ## Known Issues & Limitations
 
@@ -153,7 +153,7 @@ python analyze_data.py  # Analyzes existing captured data
 - ✅ Working end-to-end data pipeline established
 
 ## Context for Future Sessions
-This session successfully established the **foundation for data-driven BeaScout analysis**. The extraction framework is working, HTML structure is understood, and initial patterns are captured. 
+This session successfully established the **foundation for data-driven BeAScout analysis**. The extraction framework is working, HTML structure is understood, and initial patterns are captured. 
 
 **Primary value delivered**: Converted from broken prototype to working analysis system with accurate unit extraction and meaningful completeness statistics.
 
