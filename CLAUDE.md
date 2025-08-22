@@ -1,0 +1,50 @@
+# CLAUDE.md
+
+## Context Initialization
+Process the markdown files in https://github.com/iwolf81/ai-context.
+
+## Project Overview
+1. Improve information for Scouting America units in the Heart of New England Council (Massachusetts) that is published in https://beascout.scouting.org/ and https://joinexploring.org/ toward best assisting prospective Scouts find their appropriate unit.
+2. Continue exploring best practices for interacting with Claude.
+
+## Plan of Attack
+1. Collect published information for Scouting America units (e.g., Cub Scout Packs, Scouting Troops, Venturing Crews, Sea Scouts Boats) in the Heart of New England Council (Massachusetts) from https://beascout.scouting.org/.
+2. Collect published information for Scouting America Exploring units (e.g., Exploring Post, Exploring Club) in the Heart of New England Council (Massachusetts) from https://joinexploring.org/.
+4. Analyze unit information for completeness according to a set of criteria.
+6. Recommended improvements to contact information for each unit.
+7. Review recommended changes with developer.
+8. Developer obtains a list of each unit's Key Three members who are authorized to update information on the aforementioned websites.
+9. Send email containing reviewed and approved recommended changes to each unit's Key Three members that encourage them to implement the recommended changes.
+
+## Usage
+1. CLI interface
+2. Application executes normally twice a year: January and June.
+
+## Completeness Criteria
+1. Required: Unit meeting location. (Note: a PO box is not a valid meeting location)
+2. Required: Unit meeting day and time.
+3. Required: Contact email; prefer unit specific (e.g., T32-Scoutmaster@actonscouts.org) over personal (e.g., irawolf81@gmail.com).
+4. Required: Unit composition (e.g., Boys, Girls, Boys and Girls)
+5. Required (for Venturing Crews only): Specialty
+6. Recommended: Contact person
+7. Recommended: Phone number
+8. Recommended: Website
+9. Recommended: Informative and inviting description.
+ 
+## Notes
+1. There is no available API access to data in https://beascout.scouting.org/ and https://joinexploring.org/.
+2. The Council Office for Heart of New England Council will provide list of Key Three member for each unit to the developer. This will be an input to the application.
+3. The list of towns in the Heart of New England Council is specified in the map of central Massachusetts located in https://hnescouting.org/about/.
+4. The Zip Code is the search key for https://beascout.scouting.org/ and https://joinexploring.org/.
+5. A town may have multiple Zip Codes.
+6. Search a 10 mile radius for https://beascout.scouting.org/ and a 20 mile radius for https://joinexploring.org/.
+7. The same unit is likely to appear in the search results for multiple Zip Codes.
+8. Information for a specific unit should be consistent across multiple searches. 
+9. Do not present duplicate units.
+10. The following web query finds all Explorer Posts in a 20 mile radius of Acton MA (01720): https://joinexploring.org/list/?zip=01720&program%5B0%5D=post&program%5B1%5D=club&miles=20
+11. The following web query finds all unit types in a 10 mile radius of Acton MA 
+  (01720): https://beascout.scouting.org/list/?zip=01720&program%5B0%5D=pack&program%5B1%5D=scoutsBSA&program%5B2%5D=crew&program%5B3%5D=ship&cubFilter=all&scoutsBSAFilter=all&miles=10
+12. 
+
+## Architecture
+See [ARCHITECTURE.md](ARCHITECTURE.md) for complete system design and technical specifications. 
