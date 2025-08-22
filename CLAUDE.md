@@ -1,5 +1,45 @@
 # CLAUDE.md
 
+## Session Handoff Management
+
+### Automatic Updates to SESSION_HANDOFF.md
+You MUST update SESSION_HANDOFF.md whenever ANY of the following occurs:
+
+#### 🔴 Critical Updates (Always Update)
+- Implementation of new major features (scrapers, analysis modules, data processing)
+- Changes to extraction logic or data models (field definitions, parsing patterns)  
+- Architecture modifications (database schema, file structure, technology stack)
+- Significant bug fixes that alter system behavior
+- Performance improvements with measurable impact
+- Dependency changes (requirements.txt, new libraries, version updates)
+
+#### 🟡 Important Updates (Update During Session)
+- Discovery of new technical insights (HTML structure, data patterns)
+- Changes to success metrics or completeness criteria
+- New known issues or limitations identified
+- Configuration changes affecting extraction or analysis
+- Test coverage improvements or new testing approaches
+
+#### 🟢 Session Boundary Updates (End of Work Session)
+- Before committing major milestones or feature completions
+- When switching contexts or concluding work sessions
+- After completing analysis phases or data collection cycles
+- When next steps or priorities change significantly
+
+### Update Process
+1. Read existing SESSION_HANDOFF.md to understand current state
+2. Update relevant sections with new information:
+   - Current State Summary (achievements, metrics)
+   - Key Technical Discoveries (patterns, insights, fixes)
+   - Files & Artifacts (new files, changed logic)
+   - Immediate Next Steps (updated priorities)
+   - Known Issues & Limitations (new problems found)
+3. Commit SESSION_HANDOFF.md with descriptive commit message
+4. Ensure handoff preserves all context for future sessions
+
+### Decision Rule
+Update if changes would take >30 minutes to explain to someone picking up the work fresh.
+
 ## Context Initialization
 Process the markdown files in https://github.com/iwolf81/ai-context.
 
