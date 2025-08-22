@@ -1,83 +1,140 @@
-# BeAScout Unit Information Analyzer - Architecture
+# BeAScout Unit Information System - Technical Architecture
+
+**Version**: 1.1 | **Last Updated**: 2024-12-22 | **Implements**: SYSTEM_DESIGN.md requirements
 
 ## Technology Stack
-- **Web Scraping**: Playwright (handles dynamic JavaScript content)
-- **CLI Framework**: Python Click/Argparse for subcommand structure
-- **Data Storage**: SQLite database for structured queries and deduplication
-- **Testing**: pytest with automated unit tests
+- **Web Scraping**: Playwright (handles dynamic JavaScript content with conservative rate limiting)
+- **HTML Parsing**: BeautifulSoup for data extraction and field parsing
+- **Data Storage**: Hybrid approach - JSON for raw data, SQLite for processed analysis
+- **Concurrency**: Asyncio for controlled parallel processing with semaphores
+- **Monitoring**: Automated scheduling and change detection system
+- **Testing**: pytest with automated unit and integration tests
 - **Language**: Python 3.8+
 
 ## Project Structure
 ```
 beascout/
-├── cli/
-│   ├── main.py              # Entry point and argument parsing
-│   ├── commands/
-│   │   ├── collect_zipcodes.py
-│   │   ├── scrape.py
-│   │   ├── deduplicate.py
-│   │   ├── analyze.py
-│   │   └── report.py
-│   └── config.py
+├── # Current Development Phase (rapid prototyping in root)
+├── analyze_data.py             # Data extraction and analysis
+├── extract_all_units.py        # Full unit extraction script  
+├── scrape_all_zipcodes.py      # Multi-zip processing (planned)
+├── examine_descriptions.py     # Meeting info analysis
+├── extract_hne_towns.py        # Zip code enumeration
+├── 
+├── # Target Production Structure
 ├── src/
 │   ├── scrapers/
-│   │   ├── base_scraper.py     # Abstract base scraper
-│   │   ├── beascout_scraper.py # 10-mile radius scraper
-│   │   └── exploring_scraper.py # 20-mile radius scraper
+│   │   ├── base_scraper.py         # Abstract scraper with rate limiting
+│   │   ├── hne_scraper.py          # Conservative multi-zip scraper
+│   │   └── monitoring_scraper.py   # Periodic re-scraping system
+│   ├── extraction/
+│   │   ├── html_parser.py          # BeautifulSoup extraction logic
+│   │   ├── meeting_extractor.py    # Regex + LLM meeting info extraction
+│   │   └── field_validator.py      # Data quality validation
 │   ├── storage/
-│   │   ├── database.py         # SQLite operations
-│   │   ├── models.py           # Data models/schemas
-│   │   └── deduplication.py    # Unit ID matching logic
+│   │   ├── raw_storage.py          # JSON file management
+│   │   ├── database.py             # SQLite operations and schema
+│   │   └── deduplication.py        # Cross-zip duplicate detection
 │   ├── analysis/
-│   │   ├── completeness_checker.py # Validates against criteria
-│   │   └── report_generator.py     # Creates analysis reports
-│   └── notifications/
-│       └── email_generator.py      # Key Three email creation
+│   │   ├── completeness_scorer.py  # Quality scoring and grading
+│   │   ├── change_detector.py      # Monitoring and delta analysis
+│   │   └── trend_analyzer.py       # Temporal pattern analysis
+│   ├── reporting/
+│   │   ├── dashboard_generator.py  # Council office reports
+│   │   ├── unit_scorecards.py      # Individual unit analysis
+│   │   └── key_three_notifier.py   # Outreach communications
+│   └── monitoring/
+│       ├── scheduler.py            # Periodic processing automation
+│       ├── alert_system.py         # Error and change notifications
+│       └── health_checker.py       # System status monitoring
 ├── data/
-│   ├── input/                  # Key Three CSV from council
-│   ├── zipcodes/              # Heart of New England zip codes
-│   ├── raw/                   # Scraped data before deduplication
-│   ├── processed/             # Clean, deduplicated unit data
-│   └── reports/               # Analysis and email outputs
+│   ├── zipcodes/                   # HNE Council zip codes (48 total)
+│   ├── raw/                        # HTML files per zip code
+│   ├── processed/                  # Extracted and deduplicated units
+│   ├── reports/                    # Generated dashboards and scorecards
+│   └── monitoring/                 # Change tracking and alerts
 ├── config/
-│   ├── completeness_criteria.yaml
-│   └── scraping_config.yaml
+│   ├── scraping_config.json        # Rate limits, delays, session settings
+│   ├── extraction_config.json      # Field definitions and scoring weights
+│   └── monitoring_config.json      # Alert thresholds and reporting schedules
 └── tests/
-    ├── unit/
-    ├── integration/
-    └── fixtures/
+    ├── unit/                       # Component testing
+    ├── integration/                # End-to-end workflow testing
+    └── fixtures/                   # Sample data for testing
 ```
 
-## CLI Command Structure
+## System Interface Design
+
+### Current Development Interface
 ```bash
-# Collect zip codes for Heart of New England Council
-beascout collect-zipcodes --council "Heart of New England" --output data/zipcodes/
+# Extract single zip code for testing
+python analyze_data.py data/raw/debug_page_01720.html
 
-# Scrape units from both websites
-beascout scrape --zipcodes data/zipcodes/hne_zipcodes.json --output data/raw/
+# Extract all units from captured HTML
+python extract_all_units.py
 
-# Remove duplicates using unit ID matching
-beascout deduplicate --input data/raw/ --output data/processed/ --strategy unit-id
-
-# Analyze completeness against criteria
-beascout analyze --input data/processed/units.json --criteria config/completeness_criteria.yaml
-
-# Generate reports and emails
-beascout report --units data/processed/units.json --keythree data/input/key_three.csv --output data/reports/
+# Generate HNE Council zip code list
+python extract_hne_towns.py
 ```
 
-## Data Flow Pipeline
-```
-Zip Codes → Playwright Scrapers → Raw JSON → Deduplication → SQLite → Analysis → Reports → Emails
+### Target Automated System Interface  
+```python
+# Primary system entry points
+from src.scrapers.hne_scraper import HNECouncilScraper
+from src.monitoring.scheduler import MonitoringScheduler
+from src.reporting.dashboard_generator import CouncilDashboard
+
+# Initial data collection (100% coverage requirement)
+scraper = HNECouncilScraper(conservative_mode=True)
+results = await scraper.scrape_all_zipcodes()  # All 48 zip codes
+
+# Ongoing monitoring system
+monitor = MonitoringScheduler(schedule='biweekly')
+monitor.start_automated_monitoring()
+
+# Generate council reports
+dashboard = CouncilDashboard()
+dashboard.generate_unit_scorecards()
+dashboard.generate_monthly_analysis()
 ```
 
-## Scraping Strategy
-- **beascout.scouting.org**: 10-mile radius searches per zip code
-- **joinexploring.org**: 20-mile radius searches per zip code  
-- **Unit Identification**: Primary identifier format `<unit type> <unit number> <chartered organization name>`
-- **Deduplication**: Multi-level matching strategy (see Unit Deduplication section)
-- **Dynamic Content**: Playwright waits for JavaScript-loaded results
-- **Rate Limiting**: Configurable delays between requests
+## Data Flow Architecture
+
+### Initial Collection Pipeline
+```
+HNE Zip Codes (48) → Conservative Scraper → Raw HTML Files → 
+BeautifulSoup Parser → Unit Extraction → JSON Storage →
+Cross-Zip Deduplication → SQLite Database → Quality Analysis → 
+Baseline Reports
+```
+
+### Ongoing Monitoring Pipeline  
+```
+Scheduled Trigger → Re-scrape All Zips → Change Detection →
+Delta Analysis → Alert Generation → Updated Reports → 
+Key Three Notifications → Council Dashboard
+```
+
+## Conservative Scraping Implementation
+
+### Rate Limiting Strategy (Implements SYSTEM_DESIGN.md requirements)
+```python
+SCRAPING_CONFIG = {
+    'delay_between_requests': (8, 12),    # Random 8-12 seconds
+    'max_requests_per_session': 8,        # Browser restart after 8 requests  
+    'session_cooldown': 14400,            # 4 hours between sessions
+    'daily_zip_limit': 12,                # Maximum 12 zip codes per day
+    'max_concurrent_pages': 1,            # Sequential processing only
+    'request_timeout': 30000,             # 30 second page timeout
+    'business_hours_only': True,          # 9 AM - 5 PM EST only
+}
+```
+
+### Detection Avoidance Patterns
+- **Human-like navigation**: Homepage → Search → Results flow
+- **Browser fingerprint randomization**: User agents, viewport sizes
+- **Session management**: Cookie handling, realistic session duration
+- **Error response monitoring**: Automatic pause on 403/429 responses
 
 ## Database Schema
 ```sql

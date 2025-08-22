@@ -4,7 +4,7 @@ Automated analysis and improvement of Scouting America unit information publishe
 
 ## Overview
 
-The BeAScout analyzer collects unit information from official Scouting websites, validates completeness against established criteria, and generates improvement recommendations for unit leaders. The system operates on a biannual schedule (January and June) to ensure information stays current and helpful for families seeking Scouting opportunities.
+The BeAScout analyzer collects unit information from official Scouting websites, validates completeness against established criteria, and generates improvement recommendations for unit leaders. The system operates on a configurable periodic schedule for report generation to ensure information stays current and helpful for families seeking Scouting opportunities.
 
 ## Key Features
 
@@ -60,8 +60,10 @@ beascout report --units data/processed/units.json --keythree data/input/key_thre
 
 ## Project Documentation
 
-- **[CLAUDE.md](CLAUDE.md)**: Complete project specification, requirements, and usage guidelines
+- **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Complete business requirements, operational workflows, and success metrics
 - **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical design, database schema, and implementation details
+- **[CLAUDE.md](CLAUDE.md)**: AI development context and project specifications
+- **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Current project state and development context
 
 ## Data Sources
 
@@ -72,9 +74,11 @@ beascout report --units data/processed/units.json --keythree data/input/key_thre
 ## Development
 
 ### Technology Stack
-- **Python 3.8+** with Playwright for web scraping
+- **Python 3.8+** with Playwright for dynamic web scraping
+- **BeautifulSoup** for HTML parsing and data extraction
 - **SQLite** for data storage and deduplication
-- **CLI framework** with subcommand structure
+- **JSON** for raw data storage and configuration
+- **Asyncio** for concurrent processing
 - **pytest** for automated testing
 
 ### Project Structure

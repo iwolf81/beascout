@@ -1,51 +1,61 @@
-# CLAUDE.md
+# CLAUDE.md - AI Development Context
 
 ## Context Initialization
 Process the markdown files in https://github.com/iwolf81/ai-context.
 
-## Project Overview
-1. Improve information for Scouting America units in the Heart of New England Council (Massachusetts) that is published in https://beascout.scouting.org/ and https://joinexploring.org/ toward best assisting prospective Scouts find their appropriate unit.
-2. Continue exploring best practices for interacting with Claude.
+## Project Mission
+Improve Scouting America unit information quality for the Heart of New England Council by building an automated system that monitors, analyzes, and reports on unit data completeness across beascout.scouting.org and joinexploring.org.
 
-## Plan of Attack
-1. Collect published information for Scouting America units (e.g., Cub Scout Packs, Scouting Troops, Venturing Crews, Sea Scouts Boats) in the Heart of New England Council (Massachusetts) from https://beascout.scouting.org/.
-2. Collect published information for Scouting America Exploring units (e.g., Exploring Post, Exploring Club) in the Heart of New England Council (Massachusetts) from https://joinexploring.org/.
-4. Analyze unit information for completeness according to a set of criteria.
-6. Recommended improvements to contact information for each unit.
-7. Review recommended changes with developer.
-8. Developer obtains a list of each unit's Key Three members who are authorized to update information on the aforementioned websites.
-9. Send email containing reviewed and approved recommended changes to each unit's Key Three members that encourage them to implement the recommended changes.
+## Development Guidelines
+- **Conservative approach**: Respectful scraping with rate limiting to avoid blocking
+- **100% coverage**: All 48 HNE Council zip codes must be processed successfully  
+- **Board authority**: Developer is HNE Council Board member using data for legitimate council benefit
+- **Rapid prototyping**: Current development phase, files remain in root directory for flexibility
 
-## Usage
-1. CLI interface
-2. Application executes normally twice a year: January and June.
+## Key Technical Constraints
+- **Scale considerations**: ~3,000 units across 48 zip codes requires efficient processing
+- **Detection avoidance**: 8-12 second delays, session limits, human-like patterns
+- **Tiered extraction**: Regex primary, LLM fallback for complex cases
+- **Ongoing monitoring**: System must support periodic re-scraping and change detection
 
-## Information Completeness Criteria
-1. Required: Unit meeting location. (Note: a PO box is not a valid meeting location)
-2. Required: Unit meeting day and time.
-3. Required: Contact email; prefer unit specific (e.g., T32-Scoutmaster@actonscouts.org) over personal (e.g., irawolf81@gmail.com).
-4. Required: Unit composition (e.g., Boys, Girls, Boys and Girls)
-5. Required (for Venturing Crews only): Specialty
-6. Recommended: Contact person
-7. Recommended: Phone number
-8. Recommended: Website
-9. Recommended: Informative and inviting description.
+## Core Business Rules
+**See SYSTEM_DESIGN.md for complete requirements and success metrics**
+
+**Primary Unit Identifier Format:** `<unit type> <unit number> <chartered organization name>`
+- Example: "Pack 0070 Acton-Congregational Church" 
+- Used for deduplication across zip codes and platforms
+
+**Quality Scoring:**
+- Required fields: 70% weight (meeting location/day/time, contact email, unit composition)
+- Recommended fields: 30% weight (contact person, phone, website, description)
+- Grade scale: A (90%+), B (80-89%), C (70-79%), D (60-69%), F (<60%)
+
+**Search Parameters:**
+- beascout.scouting.org: 10-mile radius
+- joinexploring.org: 20-mile radius  
+- All unit types: Packs, Troops, Crews, Ships, Posts, Clubs
  
-## Notes
-1. There is no available API access to data in https://beascout.scouting.org/ and https://joinexploring.org/.
-2. The Council Office for Heart of New England Council will provide list of Key Three member for each unit to the developer. This will be an input to the application.
-3. The list of towns in the Heart of New England Council is specified in the map of central Massachusetts located in https://hnescouting.org/about/.
-4. The Zip Code is the search key for https://beascout.scouting.org/ and https://joinexploring.org/.
-5. The primary unit identifier in the search results is formatted as <unit type> <unit number> <chartered organization name>; the chartered organization name might contain the unit type and unit number.
-6. The primary unit identifier uniquely identifies a unit.
-7. A town may have multiple Zip Codes.
-8. Search a 10 mile radius for https://beascout.scouting.org/ and a 20 mile radius for https://joinexploring.org/.
-9. The same unit is likely to appear in the search results for multiple Zip Codes.
-10. Information for a specific unit should be consistent across multiple searches. 
-11. Do not present duplicate units.
-12. The following web query finds all Explorer Posts in a 20 mile radius of Acton MA (01720): https://joinexploring.org/list/?zip=01720&program%5B0%5D=post&program%5B1%5D=club&miles=20
-13. The following web query finds all unit types in a 10 mile radius of Acton MA 
-  (01720): https://beascout.scouting.org/list/?zip=01720&program%5B0%5D=pack&program%5B1%5D=scoutsBSA&program%5B2%5D=crew&program%5B3%5D=ship&cubFilter=all&scoutsBSAFilter=all&miles=10
+## Development Context
+**See data/zipcodes/hne_council_zipcodes.json for complete zip code list**
 
-## Architecture
-See [ARCHITECTURE.md](ARCHITECTURE.md) for complete system design and technical specifications. 
+**Current Implementation Status:**
+- ✅ Single zip code extraction working (01720 Acton - 62 units)
+- ✅ Meeting info extraction: 42% day, 39% time (improved regex patterns)
+- ✅ Deduplication logic for primary identifier matching
+- 🔄 Multi-zip code processing system (in development)
+- ⏳ Ongoing monitoring and reporting system (design phase)
+
+**Key Technical Patterns:**
+- HTML containers: `div.card-body` contains unit info, `div.unit-name` has identifier
+- Meeting extraction: Complex regex patterns for various description formats
+- Error handling: Exponential backoff, session resets, cooling periods
+- Data flow: Raw HTML → JSON → SQLite → Reports
+
+**Reference URLs:**
+- beascout.scouting.org example: `?zip=01720&program[0]=pack&program[1]=scoutsBSA&program[2]=crew&program[3]=ship&cubFilter=all&scoutsBSAFilter=all&miles=10`
+- joinexploring.org example: `?zip=01720&program[0]=post&program[1]=club&miles=20`
+
+## Related Documentation
+- **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Complete business requirements and operational workflows
+- **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical implementation details and system design
+- **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Current project state and recent achievements 
