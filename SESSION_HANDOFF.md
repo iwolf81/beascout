@@ -74,9 +74,9 @@ if unit_type == 'Crew':
 ## Files & Current Implementation
 
 ### Core Scripts
-- **`extract_all_units.py`** - Main extraction script with refined patterns
-- **`extract_hne_towns.py`** - Council territory analysis (62 towns, 72 zip codes)
-- **`data/raw/all_units_01720.json`** - Refined extraction results for manual review
+- **`prototype/extract_all_units.py`** - Main extraction script with refined patterns
+- **`prototype/extract_hne_towns.py`** - Council territory analysis (62 towns, 72 zip codes)
+- **`prototype/`** - 8 working prototype files organized for clear development phases
 
 ### Data Assets
 - **`data/raw/debug_page_01720.html`** - Source HTML (66 units from beascout.scouting.org)
@@ -135,8 +135,8 @@ Raw HTML → JSON extraction → SQLite deduplication → Quality analysis → K
 ```bash
 # Current working state
 cd beascout/
-python extract_all_units.py  # Generate refined unit data
-python extract_hne_towns.py  # Council analysis
+python prototype/extract_all_units.py  # Generate refined unit data
+python prototype/extract_hne_towns.py  # Council analysis
 
 # Dependencies installed
 pip install beautifulsoup4 lxml --break-system-packages

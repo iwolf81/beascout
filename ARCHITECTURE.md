@@ -14,13 +14,15 @@
 ## Project Structure
 ```
 beascout/
-├── # Current Development Phase (rapid prototyping in root)
-├── extract_all_units.py        # Refined unit extraction (62 units)
-├── extract_hne_towns.py        # Council territory analysis  
-├── analyze_data.py             # Data extraction and analysis (legacy)
-├── quality_scorer.py           # Quality scoring system (next priority)
-├── report_generator.py         # Key Three recommendations (next priority)
-├── scrape_all_zipcodes.py      # Multi-zip processing (after validation)
+├── prototype/                   # Current working prototypes
+│   ├── extract_all_units.py   # Refined unit extraction (62 units)
+│   ├── extract_hne_towns.py   # Council territory analysis  
+│   ├── analyze_data.py         # Original analysis script (legacy)
+│   └── [5 other prototype files]
+├── 
+├── # Next Development Phase (recommendation system)
+├── src/analysis/quality_scorer.py           # Quality scoring (next priority)
+├── src/notifications/report_generator.py   # Key Three recommendations (next priority)
 ├── 
 ├── # Target Production Structure
 ├── src/
@@ -69,14 +71,14 @@ beascout/
 ### Current Development Interface
 ```bash
 # Generate refined unit extraction (62 units from ZIP 01720)
-python extract_all_units.py
+python prototype/extract_all_units.py
 
 # Generate HNE Council territory analysis (72 zip codes, 62 towns)
-python extract_hne_towns.py
+python prototype/extract_hne_towns.py
 
 # Next: Build recommendation system
-python quality_scorer.py          # A-F grading for current units
-python report_generator.py        # Key Three improvement reports
+python src/analysis/quality_scorer.py          # A-F grading for current units
+python src/notifications/report_generator.py   # Key Three improvement reports
 ```
 
 ### Target Automated System Interface  
@@ -218,11 +220,12 @@ beascout/
 │   │   └── email_templates/           # Validated formats
 │   └── scrapers/
 │       └── multi_zip_scraper.py       # Scaled after validation
-├── scripts/
-│   ├── extract_all_units.py          # Current working extraction
-│   └── extract_hne_towns.py          # Territory analysis
-└── legacy/
-    └── analyze_data.py                # Original prototype
+├── prototype/                          # Preserved working prototypes
+│   ├── extract_all_units.py          # Refined extraction baseline
+│   ├── extract_hne_towns.py          # Territory analysis baseline
+│   └── [6 other prototype files]     # Complete development history
+└── scripts/                           # Production utilities
+    └── deployment_tools.py           # Final deployment scripts
 ```
 
 **Migration Strategy**: Preserve working rapid prototype scripts while building validated production structure

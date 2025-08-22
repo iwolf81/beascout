@@ -36,9 +36,9 @@ playwright install
 ### Basic Usage
 ```bash
 # Current prototype workflow (62 units from Acton area)
-python extract_all_units.py  # Extract refined unit data
-python src/analysis/quality_scorer.py  # Generate quality scores
-python src/notifications/report_generator.py  # Create Key Three recommendations
+python prototype/extract_all_units.py  # Extract refined unit data
+python src/analysis/quality_scorer.py  # Generate quality scores (next step)
+python src/notifications/report_generator.py  # Create Key Three recommendations (next step)
 
 # Future full pipeline (after recommendation system validation)
 beascout scrape --zipcodes data/zipcodes/hne_zipcodes.json --output data/raw/
