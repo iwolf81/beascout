@@ -9,7 +9,7 @@
       "chartered_organization": "Acton-Congregational Church",
       "meeting_location": "",
       "meeting_day": "Friday",
-      "meeting_time": "6:30pm.",
+      "meeting_time": "6:30 pm.",
       "contact_email": "spiccinotti@gmail.com",
       "contact_person": "Silvia Piccinotti",
       "phone_number": "(609) 304-2373",
@@ -107,15 +107,15 @@
       "field_type": "required"
     },
     "meeting_day": {
-      "filled": 14,
+      "filled": 26,
       "total": 62,
-      "percentage": 22.6,
+      "percentage": 41.9,
       "field_type": "required"
     },
     "meeting_time": {
-      "filled": 13,
+      "filled": 24,
       "total": 62,
-      "percentage": 21.0,
+      "percentage": 38.7,
       "field_type": "required"
     },
     "contact_email": {
