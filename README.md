@@ -93,19 +93,7 @@ Each District contains multiple towns, and each town may have zero or more Scout
 - **Asyncio** for concurrent processing
 - **pytest** for automated testing
 
-### Project Structure
-```
-beascout/
-├── cli/                    # Command-line interface
-├── src/                    # Core application logic
-│   ├── scrapers/          # Web scraping modules
-│   ├── storage/           # Database and data models
-│   ├── analysis/          # Completeness checking
-│   └── notifications/     # Email generation
-├── data/                  # Data storage directories
-├── config/                # Configuration files
-└── tests/                 # Test suites
-```
+For detailed project structure and development organization, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Contributing
 
