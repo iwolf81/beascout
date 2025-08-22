@@ -64,6 +64,7 @@ beascout report --units data/processed/units.json --keythree data/input/key_thre
 - **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical design, database schema, and implementation details
 - **[CLAUDE.md](CLAUDE.md)**: AI development context and project specifications
 - **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Current project state and development context
+- **[COLLABORATION_LOG.md](COLLABORATION_LOG.md)**: Evolution of AI-human collaboration patterns and best practices
 
 ## Data Sources
 
