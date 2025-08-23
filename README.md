@@ -36,8 +36,9 @@ playwright install
 ### Basic Usage
 ```bash
 # Current implemented workflow (62 units from Acton area)
-python prototype/extract_all_units.py  # Extract refined unit data with fixed time parsing
+python prototype/extract_all_units.py  # Extract refined unit data with enhanced parsing
 python src/analysis/quality_scorer.py data/raw/all_units_01720.json  # Generate A-F quality scores with recommendations
+python scripts/email_analysis.py data/raw/all_units_01720.json  # Analyze email classifications systematically
 python src/notifications/report_generator.py  # Create Key Three improvement emails (next step)
 
 # Future full pipeline (after recommendation system validation)
@@ -64,9 +65,10 @@ beascout report --units data/processed/units.json --keythree data/input/key_thre
 - **Description** (7.5%): Informative program details
 
 ### Current Results (62 units, ZIP 01720)
-- **Average score**: 59.0% indicating significant improvement opportunities
-- **Grade distribution**: 8.1% A, 12.9% B, 11.3% C, 11.3% D, 56.5% F
-- **Key insight**: 62.9% of units need major information improvements for family decision-making
+- **Average score**: 61.0% indicating significant improvement opportunities
+- **Grade distribution**: 9.7% A, 16.1% B, 12.9% C, 6.5% D, 54.8% F
+- **Email classification**: 27.4% unit emails, 56.5% personal emails, 16.1% missing
+- **Key insight**: 54.8% of units need major information improvements for family decision-making
 
 ## Project Documentation
 
