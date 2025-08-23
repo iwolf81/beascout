@@ -111,6 +111,9 @@ class UnitQualityScorer:
             r'^cubmaster', 
             r'^committee',
             r'^beascout',  # Platform-specific email
+            r'^secretary',
+            r'^info',
+            r'^admin',
         ]
         
         is_unit_role = any(re.search(pattern, local_part) 
@@ -145,11 +148,7 @@ class UnitQualityScorer:
             r'scouts?',
             r'cubmaster',
             r'scoutmaster',
-            r'committee',
-            r'sudbury',
-            r'westford',
-            r'harvard',
-            r'concord'
+            r'committee'
         ]
         has_unit_identifier = any(re.search(pattern, local_part) 
                                 for pattern in unit_patterns)

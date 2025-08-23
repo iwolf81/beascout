@@ -17,8 +17,13 @@ def format_meeting_location(raw_location):
     location = re.sub(r'([^,\s])\s*([A-Z][a-z]+\s+[A-Z]{2}\s+\d{5})', r'\1, \2', location)
     
     # Add comma and space between building name and street address
-    # Pattern: looks for building name followed by street number + street name
+    # Handle two patterns: Building Name + Street Address OR Street Address + Building Name
+    
+    # Pattern 1: Building name followed by street number (Building NameSTREET)
     location = re.sub(r'([A-Za-z][A-Za-z\s\'&.-]+[A-Za-z])(\d+\s+[A-Za-z\s]+(?:St|Street|Rd|Road|Ave|Avenue|Ln|Lane|Dr|Drive|Blvd|Boulevard|Way|Place|Court|Ct))', r'\1, \2', location)
+    
+    # Pattern 2: Street address followed by building name (435 Central StreetSt. Matthew's Church)
+    location = re.sub(r'(\d+\s+[A-Za-z\s]+(?:St|Street|Rd|Road|Ave|Avenue|Ln|Lane|Dr|Drive|Blvd|Boulevard|Way|Place|Court|Ct))([A-Z][A-Za-z\s\'&.-]+)', r'\1, \2', location)
     
     # Fix cases where comma exists but no space after it
     location = re.sub(r',(\d)', r', \1', location)
@@ -267,7 +272,8 @@ def extract_meeting_info(description):
     time_patterns = [
         r'(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})\s*([ap])\.?m?\.?',  # "7:00 - 8:30 p.m."
         r'(\d{1,2}:\d{2})\s*([ap])\.?m?\.?\s*-\s*(\d{1,2}:\d{2})\s*([ap])\.?m?\.?',  # "6:30 p.m. - 8:00 p.m."
-        r'(\d{1,2})\s*-\s*(\d{1,2}:\d{2})',  # "7 - 8:30" (simple time range)
+        r'(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})',  # "7:00 - 8:30" (full time range, no AM/PM)
+        r'(?:\s|,)\s*(\d{1,2})\s*-\s*(\d{1,2}:\d{2})',  # " 7 - 8:30" (simple time range after space/comma)
         r'(?:at\s+)?(\d{1,2}:\d{2})\s*([ap])\.?m?\.?',  # "at 6:30pm", "7:00 PM"
         r'(?:at\s+)?(\d{3,4})\s*([ap])\.?m?\.?',  # "at 330pm", "1230 PM" (3-4 digit times)
         r'(?:at\s+)?(\d{1,2})\s*([ap])\.?m?\.?',  # "at 7pm"
@@ -302,10 +308,17 @@ def extract_meeting_info(description):
         match = re.search(pattern, description, re.IGNORECASE)
         if match:
             groups = match.groups()
-            # Check if this is the simple range pattern "7 - 8:30" (2 groups, no AM/PM)
-            if len(groups) == 2 and ':' in groups[1] and ':' not in groups[0]:
+            # Handle different pattern types based on number of groups
+            if len(groups) == 2 and ':' in groups[0] and ':' in groups[1]:
+                # Full time range without AM/PM: "7:00 - 8:30"
+                # Assume PM for evening times (6 PM or later)
+                start_hour = int(groups[0].split(':')[0])
+                ampm = "PM" if start_hour >= 6 else "AM"
+                time = f"{groups[0]} {ampm} - {groups[1]} {ampm}"
+            elif len(groups) == 2 and ':' in groups[1] and ':' not in groups[0]:
                 # Simple range like "7 - 8:30" - assume PM if in evening range
-                time1 = f"{groups[0]}:00 PM" if int(groups[0]) >= 6 else f"{groups[0]}:00 AM"
+                start_hour = int(groups[0])
+                time1 = f"{start_hour}:00 PM" if start_hour >= 6 else f"{start_hour}:00 AM"
                 time2 = f"{groups[1]} PM" if not groups[1].endswith('M') else groups[1]
                 time = f"{time1} - {time2}"
             elif len(groups) >= 4 and groups[2] and groups[3]:  # Full range with both AM/PM
