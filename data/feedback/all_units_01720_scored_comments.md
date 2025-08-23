@@ -40,3 +40,9 @@ These are not personal emails:
 33      harvardcubpack10@gmail.com               QUALITY_PERSONAL_EMAIL   Pack 0010 Harvard-Boy Scouts Inc
 44      cubscoutchelmsfordpack81@gmail.com       QUALITY_PERSONAL_EMAIL   Pack 0081 Chelmsford Land Conservation Trust Inc
 50      ayerscouts@gmail.com                     QUALITY_PERSONAL_EMAIL   Pack 0032 Ayer-St Andrews Church
+
+# PASS 4
+
+This are personal emails. Recall that a personal reference in an email address overrides an otherwise unit-specific email thus it should be tagged as QUALITY_PERSONAL_EMAIL
+4       smbrunker.troop1acton@gmail.com          GOOD                     Troop 0001 Acton-Group Of Citizens, Inc
+21      anthony.nardone.scouts@gmail.com         GOOD                     Crew 1923 Troop One Stow Alumni Inc Specialty:  CA...

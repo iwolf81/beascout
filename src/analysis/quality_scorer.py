@@ -122,39 +122,50 @@ class UnitQualityScorer:
         if is_unit_role:
             return False  # Unit role emails are not personal
         
-        # SECOND: Check for clear unit identifiers BEFORE personal patterns
-        # These patterns indicate unit-specific emails even if they might match personal patterns
-        unit_patterns = [
-            r'pack\d+',
-            r'troop\d+', 
-            r'crew\d+',
-            r'ship\d+',
-            r'scouts?',
-            r'cubmaster',
-            r'scoutmaster',
-            r'committee'
-        ]
-        has_unit_identifier = any(re.search(pattern, local_part) 
-                                for pattern in unit_patterns)
-        
-        if has_unit_identifier:
-            return False  # Clear unit identifier - not personal
-            
-        # THIRD: Check for personal identifier patterns (only if no unit identifiers)
+        # SECOND: Check for personal identifier patterns FIRST (they override unit patterns)
         personal_patterns = [
-            r'[a-z]+\.[a-z]+',             # first.last format anywhere
-            r'^[a-z]{2,3}[a-z]{4,8}$',     # initials + name (2-3 chars + 4-8 chars, excludes single words like "scoutmaster")
-            r'^[a-z]{3}$',                 # 3-letter initials (like DRD)
-            r'[a-z]+[0-9]{2,4}$',          # ends with name + year/numbers (but not unit emails)
-            r'[a-z]+[0-9]{1,3}$',          # ends with name + small numbers (but not unit emails)
+            r'[a-z]+\.[a-z]+',             # first.last format anywhere (overrides unit context)
             r'[a-z]+\.[a-z]+\.[a-z]+',     # first.middle.last anywhere
+            r'^[a-z]{3}$',                 # 3-letter initials (like DRD)
         ]
         
         has_personal_identifier = any(re.search(pattern, local_part) 
                                     for pattern in personal_patterns)
         
-        # If has personal identifiers, it's personal
+        # If has clear personal identifiers, it's personal regardless of unit context
         if has_personal_identifier:
+            return True
+        
+        # THIRD: Check for unit-only identifiers (no personal names mixed in)
+        # These are clearly unit emails with numbers or other patterns
+        unit_only_patterns = [
+            r'^[a-z]*pack\d+[a-z]*$',           # pack62, westfordpack100, etc.
+            r'^[a-z]*troop\d+[a-z]*$',          # troop100, etc.
+            r'^[a-z]*crew\d+[a-z]*$',           # crew100, etc.
+            r'^[a-z]*ship\d+[a-z]*$',           # ship100, etc.
+            r'^[a-z]*scouts?[a-z]*$',           # scouts, ayerscouts, etc.
+            r'^cubscout[a-z]*pack\d+[a-z]*$',   # cubscoutchelmsfordpack81, etc.
+            r'^[a-z]*scoutmaster\d*[a-z]*$',    # scoutmaster1gstow, etc.
+        ]
+        
+        has_unit_only_identifier = any(re.search(pattern, local_part) 
+                                     for pattern in unit_only_patterns)
+        
+        if has_unit_only_identifier:
+            return False  # Clear unit-only identifier - not personal
+            
+        # FOURTH: Check remaining personal patterns (for ambiguous cases)
+        ambiguous_personal_patterns = [
+            r'^[a-z]{2,3}[a-z]{4,8}$',     # initials + name (2-3 chars + 4-8 chars)
+            r'[a-z]+[0-9]{2,4}$',          # ends with name + year/numbers (but not unit emails)
+            r'[a-z]+[0-9]{1,3}$',          # ends with name + small numbers (but not unit emails)
+        ]
+        
+        has_ambiguous_personal = any(re.search(pattern, local_part) 
+                                   for pattern in ambiguous_personal_patterns)
+        
+        # If has ambiguous personal patterns, it's personal
+        if has_ambiguous_personal:
             return True
         
         # FOURTH: For emails without unit or personal identifiers, check personal domains
