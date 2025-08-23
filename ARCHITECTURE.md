@@ -51,7 +51,7 @@ beascout/
 │       ├── alert_system.py         # Error and change notifications
 │       └── health_checker.py       # System status monitoring
 ├── data/
-│   ├── zipcodes/                   # HNE Council zip codes (48 total)
+│   ├── zipcodes/                   # HNE Council zip codes (72 total)
 │   ├── raw/                        # HTML files per zip code
 │   ├── processed/                  # Extracted and deduplicated units
 │   ├── reports/                    # Generated dashboards and scorecards
@@ -90,7 +90,7 @@ from src.reporting.dashboard_generator import CouncilDashboard
 
 # Initial data collection (100% coverage requirement)
 scraper = HNECouncilScraper(conservative_mode=True)
-results = await scraper.scrape_all_zipcodes()  # All 48 zip codes
+results = await scraper.scrape_all_zipcodes()  # All 72 zip codes
 
 # Ongoing monitoring system
 monitor = MonitoringScheduler(schedule='biweekly')
@@ -106,7 +106,7 @@ dashboard.generate_monthly_analysis()
 
 ### Initial Collection Pipeline
 ```
-HNE Zip Codes (48) → Conservative Scraper → Raw HTML Files → 
+HNE Zip Codes (72) → Conservative Scraper → Raw HTML Files → 
 BeautifulSoup Parser → Unit Extraction → JSON Storage →
 Cross-Zip Deduplication → SQLite Database → Quality Analysis → 
 Baseline Reports

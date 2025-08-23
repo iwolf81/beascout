@@ -96,7 +96,7 @@ Problem: Meeting day extraction 22.6%, meeting time 21.0% success rates
 
 ### Claude Response
 - Immediately recognized scope implications
-- Generated analysis: 37 towns, 48 zip codes, ~3,000 total units
+- Generated analysis: 62 towns, 72 zip codes, 124-248 total units
 - Shifted from single-zip to multi-zip thinking
 - Recommended tiered approach (regex + LLM fallback)
 
@@ -232,7 +232,7 @@ Problem: Meeting day extraction 22.6%, meeting time 21.0% success rates
 
 ### Technical Evolution
 - **Started**: Single zip code extraction (62 units)
-- **Current**: Multi-zip system design (48 zip codes, ~3,000 units)
+- **Current**: Multi-zip system design (72 zip codes, 124-248 units)
 - **Architecture**: Conservative scraping with monitoring system
 
 ### Documentation Evolution

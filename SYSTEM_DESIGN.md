@@ -35,7 +35,7 @@ The BeAScout Unit Information System is designed to improve the quality and comp
 **Input Sources:**
 - beascout.scouting.org (10-mile radius searches)
 - joinexploring.org (20-mile radius searches)
-- 48 zip codes across HNE Council territory
+- 72 zip codes across HNE Council territory
 
 **Collection Strategy:**
 - Conservative scraping approach to avoid blocking
@@ -158,7 +158,7 @@ The BeAScout Unit Information System is designed to improve the quality and comp
 ### 4.2 Ongoing Monitoring System
 
 **Re-scraping Schedule:**
-- **Biweekly**: Complete re-scraping of all 48 zip codes
+- **Biweekly**: Complete re-scraping of all 72 zip codes
 - **Monthly**: Deep analysis and strategic reporting
 - **Quarterly**: Comprehensive system review and updates
 
@@ -341,7 +341,7 @@ The BeAScout Unit Information System is designed to improve the quality and comp
 
 ### 9.3 Technical Validation
 - [ ] **Extraction Accuracy**: Validate regex patterns against larger dataset
-- [ ] **Performance Testing**: Confirm system can handle full 48-zip processing
+- [ ] **Performance Testing**: Confirm system can handle full 72-zip processing
 - [ ] **Error Handling**: Test recovery procedures under various failure modes
 
 ---
@@ -349,7 +349,7 @@ The BeAScout Unit Information System is designed to improve the quality and comp
 ## Appendices
 
 ### Appendix A: HNE Council Zip Codes
-**Total:** 48 zip codes across 37 towns
+**Total:** 72 zip codes across 62 towns
 **Estimated Units:** ~3,000 units council-wide
 
 **Major Population Centers:**
