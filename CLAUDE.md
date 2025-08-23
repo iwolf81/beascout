@@ -60,7 +60,7 @@ Improve Scouting America unit information quality for the Heart of New England C
 - **Recommended Fields (30% weight)**: 7.5% each (contact person, phone, website, description)
 - **Quality Penalties**: Half credit for PO Box locations, personal emails
 - **Grade Scale**: A (90%+), B (80-89%), C (70-79%), D (60-69%), F (<60%)
-- **Current Results**: 62 units, 56.3% average, 62.9% F grades indicating significant improvement opportunities
+- **Current Results**: 62 units, 59.0% average, 56.5% F grades with enhanced accuracy through edge case resolution
 
 **Reference URLs:**
 - beascout.scouting.org example: `?zip=01720&program[0]=pack&program[1]=scoutsBSA&program[2]=crew&program[3]=ship&cubFilter=all&scoutsBSAFilter=all&miles=10`

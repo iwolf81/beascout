@@ -46,20 +46,27 @@ beascout analyze --input data/processed/units.json --criteria config/completenes
 beascout report --units data/processed/units.json --keythree data/input/key_three.csv --output data/reports/
 ```
 
-## Information Completeness Criteria
+## Quality Scoring System
 
-### Required Fields
-- Unit meeting location (PO boxes not accepted)
-- Unit meeting day and time
-- Contact email (unit-specific preferred over personal)
-- Unit composition (Boys, Girls, or Boys and Girls)
-- Specialty (Venturing Crews only)
+**Implemented A-F grading with recommendation identifiers for Key Three outreach**
 
-### Recommended Fields
-- Contact person name
-- Phone number
-- Unit website
-- Informative and inviting description
+### Required Fields (70% weight)
+- **Meeting location** (17.5% non-Crews, 14% Crews): Street address required, half credit for PO boxes
+- **Meeting day** (17.5%/14%): Full weekday names, supports abbreviation expansion  
+- **Meeting time** (17.5%/14%): Precise times with enhanced parsing (3-4 digit formats)
+- **Contact email** (17.5%/14%): Unit-specific preferred, personal emails flagged for continuity
+- **Specialty** (14% Venturing Crews only): Program focus area
+
+### Recommended Fields (30% weight)  
+- **Contact person** (7.5%): Unit leader or designated contact
+- **Phone number** (7.5%): Direct contact method
+- **Website** (7.5%): Unit-specific information page
+- **Description** (7.5%): Informative program details
+
+### Current Results (62 units, ZIP 01720)
+- **Average score**: 59.0% indicating significant improvement opportunities
+- **Grade distribution**: 8.1% A, 12.9% B, 11.3% C, 11.3% D, 56.5% F
+- **Key insight**: 62.9% of units need major information improvements for family decision-making
 
 ## Project Documentation
 

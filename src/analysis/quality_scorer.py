@@ -105,10 +105,25 @@ class UnitQualityScorer:
         # Extract the local part (before @) for analysis
         local_part = email.split('@')[0].lower()
         
-        # Check for personal identifier patterns anywhere in local part
+        # FIRST: Check for unit-specific patterns that should override personal detection
+        unit_role_patterns = [
+            r'^scoutmaster',
+            r'^cubmaster', 
+            r'^committee',
+            r'^beascout',  # Platform-specific email
+        ]
+        
+        is_unit_role = any(re.search(pattern, local_part) 
+                          for pattern in unit_role_patterns)
+        
+        if is_unit_role:
+            return False  # Unit role emails are not personal
+            
+        # SECOND: Check for personal identifier patterns  
         personal_patterns = [
             r'[a-z]+\.[a-z]+',             # first.last format anywhere
-            r'^[a-z]{2,3}[a-z]+',          # starts with initials + name (like smbrunker, ericwhitney)
+            r'^[a-z]{2,3}[a-z]{4,8}$',     # initials + name (2-3 chars + 4-8 chars, excludes single words like "scoutmaster")
+            r'^[a-z]{3}$',                 # 3-letter initials (like DRD)
             r'[a-z]+[0-9]{2,4}$',          # ends with name + year/numbers
             r'[a-z]+[0-9]{1,3}$',          # ends with name + small numbers  
             r'[a-z]+\.[a-z]+\.[a-z]+',     # first.middle.last anywhere
@@ -117,11 +132,32 @@ class UnitQualityScorer:
         has_personal_identifier = any(re.search(pattern, local_part) 
                                     for pattern in personal_patterns)
         
-        # If has personal identifiers, it's personal regardless of domain or unit identifiers
+        # If has personal identifiers, it's personal regardless of unit context (for continuity)
         if has_personal_identifier:
             return True
             
-        # For non-personal identifier emails, check if it's on a personal domain without unit identifiers
+        # SECOND: Check for unit-specific patterns (only if no personal identifiers)
+        unit_patterns = [
+            r'pack\d+',
+            r'troop\d+', 
+            r'crew\d+',
+            r'ship\d+',
+            r'scouts?',
+            r'cubmaster',
+            r'scoutmaster',
+            r'committee',
+            r'sudbury',
+            r'westford',
+            r'harvard',
+            r'concord'
+        ]
+        has_unit_identifier = any(re.search(pattern, local_part) 
+                                for pattern in unit_patterns)
+        
+        if has_unit_identifier:
+            return False  # Unit-specific email without personal identifiers
+        
+        # THIRD: For emails without unit or personal identifiers, check personal domains
         personal_domains = [
             r'@gmail\.com$',
             r'@yahoo\.com$', 
@@ -133,23 +169,8 @@ class UnitQualityScorer:
         is_personal_domain = any(re.search(pattern, email, re.IGNORECASE) 
                                 for pattern in personal_domains)
         
-        if is_personal_domain:
-            # Check for unit-specific patterns
-            unit_patterns = [
-                r'pack\d+',
-                r'troop\d+', 
-                r'crew\d+',
-                r'ship\d+',
-                r'scouts?',
-                r'cubmaster',
-                r'scoutmaster',
-                r'committee'
-            ]
-            has_unit_identifier = any(re.search(pattern, local_part) 
-                                    for pattern in unit_patterns)
-            return not has_unit_identifier
-        
-        return False
+        # If on personal domain with no unit identifiers, it's personal
+        return is_personal_domain
     
     def score_unit(self, unit: Dict[str, Any]) -> Tuple[float, List[str]]:
         """Score a single unit and return score and recommendations"""

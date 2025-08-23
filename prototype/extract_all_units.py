@@ -8,17 +8,20 @@ import json
 
 def format_meeting_location(raw_location):
     """Format meeting location with proper comma separators"""
-    # Pattern to add commas between components
-    # Street address, building name, city/state/zip
+    # Expected format: Building Name, Street Address, City State ZIP
     
     # Remove extra spaces and normalize
     location = re.sub(r'\s+', ' ', raw_location.strip())
     
-    # Add comma before city/state/zip pattern
-    location = re.sub(r'([A-Za-z\d\s]+)([A-Z][a-z]+\s+[A-Z]{2}\s+\d{5})', r'\1, \2', location)
+    # Add comma before city/state/zip pattern (e.g., "Littleton MA 01460")
+    location = re.sub(r'([^,\s])\s*([A-Z][a-z]+\s+[A-Z]{2}\s+\d{5})', r'\1, \2', location)
     
-    # Add comma before building/organization name pattern
-    location = re.sub(r'(\d+\s+[A-Za-z\s]+(?:St|Street|Rd|Road|Ave|Avenue|Ln|Lane|Dr|Drive|Blvd|Boulevard))([A-Z][A-Za-z\s]+)', r'\1, \2', location)
+    # Add comma and space between building name and street address
+    # Pattern: looks for building name followed by street number + street name
+    location = re.sub(r'([A-Za-z][A-Za-z\s\'&.-]+[A-Za-z])(\d+\s+[A-Za-z\s]+(?:St|Street|Rd|Road|Ave|Avenue|Ln|Lane|Dr|Drive|Blvd|Boulevard|Way|Place|Court|Ct))', r'\1, \2', location)
+    
+    # Fix cases where comma exists but no space after it
+    location = re.sub(r',(\d)', r', \1', location)
     
     return location
 
@@ -244,19 +247,27 @@ def extract_meeting_info(description):
     time = ""
     location = ""
     
-    # Meeting day patterns - enhanced to capture more variations
+    # Meeting day patterns - enhanced to capture more variations including abbreviations
     day_patterns = [
         r'meets?\s+(?:most\s+)?(?:on\s+)?([A-Za-z]+day)s?',  # "meets most Wednesdays"
         r'([A-Za-z]+day)s?\s+(?:at|from|nights?)',  # "Wednesday nights", "Mondays at"
         r'(?:every\s+)?([A-Za-z]+day)\s+(?:night|evening)',  # "every Monday night"
         r'(?:first|second|third|fourth|1st|2nd|3rd|4th|last)\s+(?:and\s+(?:second|third|fourth|2nd|3rd|4th)\s+)?([A-Za-z]+day)',  # "1st & 3rd Tuesday"
         r'([A-Za-z]+day)s?\s+\d{1,2}:\d{2}',  # "Monday 7:00"
+        r'\d{1,2}:\d{2}\s*[ap]?m?\s*([A-Za-z]+day)s?',  # "7pm Tuesdays", "6:30 PM Wednesdays"
+        r'(?:meet|meets)\s+\d{1,2}[ap]?m?\s*([A-Za-z]+day)s?',  # "Meet 7pm Tuesdays"
+        # Day abbreviations - capture and expand to full day names
+        r'(?:every\s+)?(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\.?\s+(?:night|evening)',  # "every Tue. night"
+        r'(?:meet|meets)\s+(?:every\s+)?(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\.?',  # "Meet every Tues."
+        r'(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\.?\s+(?:night|evening)',  # "Tues. night"
+        r'(Tues|Thurs)\.?',  # Common abbreviations "Tues." or "Thurs."
     ]
     
     # Meeting time patterns - enhanced for more formats
     time_patterns = [
         r'(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})\s*([ap])\.?m?\.?',  # "7:00 - 8:30 p.m."
         r'(\d{1,2}:\d{2})\s*([ap])\.?m?\.?\s*-\s*(\d{1,2}:\d{2})\s*([ap])\.?m?\.?',  # "6:30 p.m. - 8:00 p.m."
+        r'(\d{1,2})\s*-\s*(\d{1,2}:\d{2})',  # "7 - 8:30" (simple time range)
         r'(?:at\s+)?(\d{1,2}:\d{2})\s*([ap])\.?m?\.?',  # "at 6:30pm", "7:00 PM"
         r'(?:at\s+)?(\d{3,4})\s*([ap])\.?m?\.?',  # "at 330pm", "1230 PM" (3-4 digit times)
         r'(?:at\s+)?(\d{1,2})\s*([ap])\.?m?\.?',  # "at 7pm"
@@ -267,7 +278,23 @@ def extract_meeting_info(description):
     for pattern in day_patterns:
         match = re.search(pattern, description, re.IGNORECASE)
         if match:
-            day = match.group(1).capitalize()
+            day_match = match.group(1).capitalize()
+            
+            # Expand common abbreviations to full day names
+            abbreviation_map = {
+                'Mon': 'Monday',
+                'Tue': 'Tuesday', 
+                'Tues': 'Tuesday',
+                'Wed': 'Wednesday',
+                'Thu': 'Thursday',
+                'Thurs': 'Thursday', 
+                'Fri': 'Friday',
+                'Sat': 'Saturday',
+                'Sun': 'Sunday'
+            }
+            
+            # Use full day name if abbreviation found, otherwise keep original
+            day = abbreviation_map.get(day_match, day_match)
             break
     
     # Extract time - handle various formats and clean up
@@ -275,7 +302,13 @@ def extract_meeting_info(description):
         match = re.search(pattern, description, re.IGNORECASE)
         if match:
             groups = match.groups()
-            if len(groups) >= 4 and groups[2] and groups[3]:  # Full range with both AM/PM
+            # Check if this is the simple range pattern "7 - 8:30" (2 groups, no AM/PM)
+            if len(groups) == 2 and ':' in groups[1] and ':' not in groups[0]:
+                # Simple range like "7 - 8:30" - assume PM if in evening range
+                time1 = f"{groups[0]}:00 PM" if int(groups[0]) >= 6 else f"{groups[0]}:00 AM"
+                time2 = f"{groups[1]} PM" if not groups[1].endswith('M') else groups[1]
+                time = f"{time1} - {time2}"
+            elif len(groups) >= 4 and groups[2] and groups[3]:  # Full range with both AM/PM
                 time1 = format_meeting_time(f"{groups[0]} {groups[1]}M")
                 time2 = format_meeting_time(f"{groups[2]} {groups[3]}M")
                 time = f"{time1} - {time2}"

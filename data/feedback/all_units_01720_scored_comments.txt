@@ -1,0 +1,14 @@
+
+Index 14 has meeting time as "7 - 8:30" in description but not in "meeting_time"
+
+Index 13 meeting_location does not have ", " separator between address and town - "St. Anne's Church basement, 75 King StreetLittleton MA 01460". Same issue for Index 16. This is aesthetic improvement for JSON reader only.
+
+Index 17 email is NOT personal as tagged with QUALITY_PERSONAL_EMAIL - cubmaster.concord133@gmail.com
+
+Index 21 does specify location in description as "The first meeting is in-person at Camp Resolute"; however, its address is incomplete, so keep the REQUIRED_MISSING_LOCATION tag.
+
+Index 28 email is NOT personal as tagged with QUALITY_PERSONAL_EMAIL - sudburypack62@gmail.com
+
+Index 32 email is NOT personal as tagged with QUALITY_PERSONAL_EMAIL - westfordpack100@gmail.com
+
+Index 33 email is NOT personal as tagged with QUALITY_PERSONAL_EMAIL - harvardcubpack10@gmail.com
