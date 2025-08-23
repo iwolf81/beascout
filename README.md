@@ -35,10 +35,10 @@ playwright install
 
 ### Basic Usage
 ```bash
-# Current prototype workflow (62 units from Acton area)
-python prototype/extract_all_units.py  # Extract refined unit data
-python src/analysis/quality_scorer.py  # Generate quality scores (next step)
-python src/notifications/report_generator.py  # Create Key Three recommendations (next step)
+# Current implemented workflow (62 units from Acton area)
+python prototype/extract_all_units.py  # Extract refined unit data with fixed time parsing
+python src/analysis/quality_scorer.py data/raw/all_units_01720.json  # Generate A-F quality scores with recommendations
+python src/notifications/report_generator.py  # Create Key Three improvement emails (next step)
 
 # Future full pipeline (after recommendation system validation)
 beascout scrape --zipcodes data/zipcodes/hne_zipcodes.json --output data/raw/
@@ -63,11 +63,12 @@ beascout report --units data/processed/units.json --keythree data/input/key_thre
 
 ## Project Documentation
 
-- **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Complete business requirements, operational workflows, and success metrics
-- **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical design, database schema, and implementation details
-- **[CLAUDE.md](CLAUDE.md)**: AI development context and project specifications
-- **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Current project state and development context
-- **[COLLABORATION_LOG.md](COLLABORATION_LOG.md)**: Evolution of AI-human collaboration patterns and best practices
+Review and process the following markdown files in the listed order:
+1. **[CLAUDE.md](CLAUDE.md)**: AI development context and project specifications
+2. **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Complete business requirements, operational workflows, and success metrics
+3. **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical design, database schema, and implementation details
+4. **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Current project state and development context
+5. **[COLLABORATION_LOG.md](COLLABORATION_LOG.md)**: Evolution of AI-human collaboration patterns and best practices
 
 ## Data Sources
 

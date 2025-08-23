@@ -1,7 +1,7 @@
 # CLAUDE.md - AI Development Context
 
 ## Context Initialization
-Process the markdown files in https://github.com/iwolf81/ai-context.
+Process the markdown files in https://github.com/iwolf81/ai-context at the start of each new session.
 
 ## Project Mission
 Improve Scouting America unit information quality for the Heart of New England Council by building an automated system that monitors, analyzes, and reports on unit data completeness across beascout.scouting.org and joinexploring.org.
@@ -41,22 +41,30 @@ Improve Scouting America unit information quality for the Heart of New England C
 
 **Current Implementation Status:**
 - ✅ Single zip code extraction refined (01720 Acton - 62 units)
-- ✅ Meeting info extraction: Significantly improved pattern coverage
-- ✅ Manual review process established with direct annotation feedback
-- 🔄 Quality scoring and recommendation system (next priority)
+- ✅ Meeting info extraction: Significantly improved pattern coverage including 3-4 digit times (330PM→3:30PM)
+- ✅ Manual review process established with direct annotation feedback in `data/feedback/`
+- ✅ Quality scoring system implemented with A-F grading and recommendation identifiers
+- ✅ Personal email detection across all domains for unit continuity recommendations
+- ⏳ Key Three recommendation generation system (next priority)
 - ⏳ Multi-zip code processing system (after recommendation validation)
 
 **Key Technical Patterns:**
 - HTML containers: `div.card-body` contains unit info, `div.unit-name` has identifier
-- Meeting extraction: Complex regex patterns for various description formats
+- Meeting extraction: Complex regex patterns for various description formats including 3-4 digit times
+- Personal email detection: Cross-domain patterns to identify emails needing unit-specific replacements
 - Error handling: Exponential backoff, session resets, cooling periods
-- Data flow: Raw HTML → JSON → SQLite → Reports
+- Data flow: Raw HTML → JSON → Quality Scoring → Recommendations → Key Three Reports
+
+**Quality Scoring Implementation:**
+- **Required Fields (70% weight)**: Non-Crews: 17.5% each (location, day, time, email); Crews: 14% each (+ specialty)
+- **Recommended Fields (30% weight)**: 7.5% each (contact person, phone, website, description)
+- **Quality Penalties**: Half credit for PO Box locations, personal emails
+- **Grade Scale**: A (90%+), B (80-89%), C (70-79%), D (60-69%), F (<60%)
+- **Current Results**: 62 units, 56.3% average, 62.9% F grades indicating significant improvement opportunities
 
 **Reference URLs:**
 - beascout.scouting.org example: `?zip=01720&program[0]=pack&program[1]=scoutsBSA&program[2]=crew&program[3]=ship&cubFilter=all&scoutsBSAFilter=all&miles=10`
 - joinexploring.org example: `?zip=01720&program[0]=post&program[1]=club&miles=20`
 
 ## Related Documentation
-- **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Complete business requirements and operational workflows
-- **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical implementation details and system design
-- **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Current project state and recent achievements 
+Refer to the Project Documentation section in **[README.md](README.md)**.

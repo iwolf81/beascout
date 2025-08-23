@@ -112,10 +112,20 @@ The BeAScout Unit Information System is designed to improve the quality and comp
 - Unit website
 - Informative description
 
-**Completeness Scoring:**
-- Required fields: 70% weight
-- Recommended fields: 30% weight
-- Grade scale: A (90%+), B (80-89%), C (70-79%), D (60-69%), F (<60%)
+**Completeness Scoring (IMPLEMENTED):**
+- **Required fields: 70% weight**
+  - Non-Crew units (Packs, Troops, Ships): 17.5% each (location, day, time, email)
+  - Crew units: 14% each (location, day, time, email, specialty)
+- **Recommended fields: 30% weight**
+  - 7.5% each (contact person, phone, website, description)
+- **Quality Penalties**: Half credit for PO Box locations and personal emails
+- **Grade scale**: A (90%+), B (80-89%), C (70-79%), D (60-69%), F (<60%)
+- **Baseline Results (62 units)**: 56.3% average, 62.9% F grades
+
+**Recommendation Identifier System:**
+- Human-readable codes: `REQUIRED_MISSING_DAY`, `QUALITY_PERSONAL_EMAIL`, etc.
+- Stored persistently with unit data for tracking over time
+- Mapped to actionable improvement descriptions for Key Three emails
 
 ### 3.3 Deduplication Logic
 
@@ -226,10 +236,12 @@ The BeAScout Unit Information System is designed to improve the quality and comp
 
 ## 6. Implementation Timeline (Revised: Recommendation-First Strategy)
 
-### Phase 1: Recommendation System (Days 1-3)
+### Phase 1: Recommendation System (Days 1-3) ✅ COMPLETED
 - [x] Complete data extraction system (62 units from ZIP 01720)
-- [ ] Build quality scoring algorithm with A-F grading
-- [ ] Create unit-specific improvement recommendation reports
+- [x] Build quality scoring algorithm with A-F grading
+- [x] Implement recommendation identifier system with human-readable codes
+- [x] Create enhanced personal email detection across all domains
+- [x] Fix time parsing for 3-4 digit formats (330PM → 3:30PM)
 - [ ] Design Key Three email templates and communication workflow
 
 ### Phase 2: Business Validation (Days 4-7)

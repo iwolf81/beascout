@@ -1,0 +1,10 @@
+  1. Field Weighting: Should all required fields have equal weight (14% each) or different weights based on
+  importance? ## A unit-specific contact email is full credit; a personal email is half credit. Unit composition may be always populated by default. If so, it should not be part of weight/grading system. 
+  2. Quality vs Presence: Should we score just presence/absence, or factor in data quality (e.g., PO Box location
+  = partial credit)? ## Full credit for an street address; half-credit for PO BOX
+  3. Specialty Fields: How should Venturing Crew specialty field factor into scoring? ## It is required for Crews; detract 14% if missing. Does this seem fair?
+  4. Threshold Behavior: Should missing critical fields (like meeting location) automatically cap the grade
+  regardless of other completeness? ## No, there may be legitimate reasons to not publish address.
+  5. Recommendation Impact: Should having quality issues (QUALITY_POBOX_LOCATION, QUALITY_PERSONAL_EMAIL) reduce
+  the score even if the field is technically "present"? ## Yes, as answered in earlier comments
+  

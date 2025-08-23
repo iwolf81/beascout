@@ -1,6 +1,14 @@
 {
   "total_units": 62,
-  "all_units": [
+  "scoring_summary": {
+    "A": 2,
+    "B": 7,
+    "C": 7,
+    "D": 7,
+    "F": 39
+  },
+  "average_score": 56.3,
+  "units_with_scores": [
     {
       "index": 0,
       "primary_identifier": "Pack 0070 Acton-Congregational Church",
@@ -18,7 +26,12 @@
       "description": "Pack 70 in Acton is inclusive and open to all K-5 youth and their families. \n\nWe value and welcome all diversity of experience, identity, race, religion, and everything that makes you and your family unique. Our Pack meetings are the first Friday of the month at 6:30pm. Visitors are always welcome, so please come check us out!",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0070 Acton-Congregational Church\n\n\n          12 Concord RdActon Congregational ChurchActon MA 01720        \n\n\n\nContact: Silvia Piccinotti\n\n\nPhone: (609) 304-2373\n(609) 304-2373\n\n\nEmail: spicci..."
+      "raw_content": "\n\n\nPack 0070 Acton-Congregational Church\n\n\n          12 Concord RdActon Congregational ChurchActon MA 01720        \n\n\n\nContact: Silvia Piccinotti\n\n\nPhone: (609) 304-2373\n(609) 304-2373\n\n\nEmail: spicci...",
+      "completeness_score": 91.2,
+      "completeness_grade": "A",
+      "recommendations": [
+        "QUALITY_PERSONAL_EMAIL"
+      ]
     },
     {
       "index": 1,
@@ -37,7 +50,15 @@
       "description": "Pack One Acton is an inclusive Family Cub Scout Pack located in Acton, Massachusetts.  We welcome all who are interested in joining.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0001 Acton-The Church of The Good Shepherd\n\n\n          164 Newtown RdActon MA 01720        \n\n\n\nContact: Peter Katsoulis\n\n\nEmail: pack1actoncommitteechair@gmail.com\npack1actoncommitteechair@gma..."
+      "raw_content": "\n\n\nPack 0001 Acton-The Church of The Good Shepherd\n\n\n          164 Newtown RdActon MA 01720        \n\n\n\nContact: Peter Katsoulis\n\n\nEmail: pack1actoncommitteechair@gmail.com\npack1actoncommitteechair@gma...",
+      "completeness_score": 48.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 2,
@@ -56,7 +77,16 @@
       "description": "Our motto: \"Helping Each Boy Reach His Own Highest Potential\"\nSince 1957 we have produced solid citizens and over 45 Eagle Scouts!",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0284 Acton-Boxborough Rotary Club\n\n\n\n\nContact: William Zoldak\n\n\nWebsite: https://www.troopwebhost.org/Troop284Acton/\n Go to Website\n\n\n\n Boy Troop\n Online Registration available for this unit...."
+      "raw_content": "\n\n\nTroop 0284 Acton-Boxborough Rotary Club\n\n\n\n\nContact: William Zoldak\n\n\nWebsite: https://www.troopwebhost.org/Troop284Acton/\n Go to Website\n\n\n\n Boy Troop\n Online Registration available for this unit....",
+      "completeness_score": 22.5,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "REQUIRED_MISSING_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 3,
@@ -75,7 +105,15 @@
       "description": "Meets most Wednesdays 7:00 - 8:30 p.m. when school is in session.\n\n For more information, email troop32-information@actonscouts.org",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0032 Acton-Group Of Citizens, Inc\n\n\n\nEmail: troop32-information@actonscouts.org\ntroop32-information@actonscouts.org\n\n\nWebsite: https://actonscouts.org/\n Go to Website\n\n\n\n Boy Troop\n Online Re..."
+      "raw_content": "\n\n\nTroop 0032 Acton-Group Of Citizens, Inc\n\n\n\nEmail: troop32-information@actonscouts.org\ntroop32-information@actonscouts.org\n\n\nWebsite: https://actonscouts.org/\n Go to Website\n\n\n\n Boy Troop\n Online Re...",
+      "completeness_score": 58.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_CONTACT",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 4,
@@ -94,7 +132,13 @@
       "description": "Troop 1 Acton, MA has been IN ACTION since 1916, and continues to support scout-led, (leader-guided) outdoor adventures, community engagement, citizenship opportunities, and scout skills in fun ways to scouts ages 11-17 yrs. We are a diverse and inclusive Troop with active families who work together to help our scouts with programming throughout the year. For more information, see our Troop 1 Acton website.",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0001 Acton-Group Of Citizens, Inc\n\n\n          435 Central StreetSt. Matthew's ChurchActon MA 01720        \n\n\n\nContact: Timothy Brunker\n\n\nPhone: (617) 653-1986\n(617) 653-1986\n\n\nEmail: smbrunke..."
+      "raw_content": "\n\n\nTroop 0001 Acton-Group Of Citizens, Inc\n\n\n          435 Central StreetSt. Matthew's ChurchActon MA 01720        \n\n\n\nContact: Timothy Brunker\n\n\nPhone: (617) 653-1986\n(617) 653-1986\n\n\nEmail: smbrunke...",
+      "completeness_score": 73.8,
+      "completeness_grade": "C",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "QUALITY_PERSONAL_EMAIL"
+      ]
     },
     {
       "index": 5,
@@ -113,7 +157,14 @@
       "description": "Scouts from Acton, Boxborough, Concord, Carlisle, and surrounding towns. We meet on Wednesdays from 7-8:30PM. For more information, send us an email at T12-Information@actonscouts.org.",
       "unit_composition": "Girl Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 7012 Acton-Group Of Citizens, Inc\n\n\n\nEmail: T12-Information@actonscouts.org\nT12-Information@actonscouts.org\n\n\nWebsite: https://actonscouts.org/troops/troop-12/\n Go to Website\n\n\n\n Girl Troop\n ..."
+      "raw_content": "\n\n\nTroop 7012 Acton-Group Of Citizens, Inc\n\n\n\nEmail: T12-Information@actonscouts.org\nT12-Information@actonscouts.org\n\n\nWebsite: https://actonscouts.org/troops/troop-12/\n Go to Website\n\n\n\n Girl Troop\n ...",
+      "completeness_score": 67.5,
+      "completeness_grade": "D",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "RECOMMENDED_MISSING_CONTACT",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 6,
@@ -132,7 +183,14 @@
       "description": "We have families from within and around Boxborough and Acton.  It's a wonderful group of K through 5th graders who have joined us and we look forward to welcoming you and your family to Scouting!!  Call or write if you have any questions!",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0026 Boxborough-District Minutemen Inc\n\n\n          Blanchard Memorial School493 Mass Ave  Rt 111Boxborough MA 01719        \n\n\n\nContact: Eric Whitney\n\n\nPhone: (617) 335-2465\n(617) 335-2465\n\n\nEm..."
+      "raw_content": "\n\n\nPack 0026 Boxborough-District Minutemen Inc\n\n\n          Blanchard Memorial School493 Mass Ave  Rt 111Boxborough MA 01719        \n\n\n\nContact: Eric Whitney\n\n\nPhone: (617) 335-2465\n(617) 335-2465\n\n\nEm...",
+      "completeness_score": 56.2,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL"
+      ]
     },
     {
       "index": 7,
@@ -151,7 +209,14 @@
       "description": "Pack 130 meets at the local schools or the Maynard Rod & Gun Club. We are an active pack, with boys and girls. Our derbies, stem, camping, and hikes are a huge hit!",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0130 Maynard Rod and Gun Club Inc.\n\n\n          45 Old Mill RoadMaynard MA 01754        \n\n\n\nContact: Jarrod Kennedy\n\n\nPhone: (351) 209-0555\n(351) 209-0555\n\n\nEmail: Kennedy.jbk@gmail.com\nKennedy..."
+      "raw_content": "\n\n\nPack 0130 Maynard Rod and Gun Club Inc.\n\n\n          45 Old Mill RoadMaynard MA 01754        \n\n\n\nContact: Jarrod Kennedy\n\n\nPhone: (351) 209-0555\n(351) 209-0555\n\n\nEmail: Kennedy.jbk@gmail.com\nKennedy...",
+      "completeness_score": 56.2,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL"
+      ]
     },
     {
       "index": 8,
@@ -170,7 +235,12 @@
       "description": "Meet every Tues. night from 6:30 p.m. to 8:00 p.m., Sept. thru June, excluding school vacations. Meeting space is fully accessible to all.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0130 Maynard Rod and Gun Club Inc.\n\n\n          Maynard Rod & Gun Club,45 Old Mill RoadMaynard MA 01754        \n\n\n\nContact: Christina Mitchell\n\n\nPhone: (978) 580-4226\n(978) 580-4226\n\n\nEmail: 1..."
+      "raw_content": "\n\n\nTroop 0130 Maynard Rod and Gun Club Inc.\n\n\n          Maynard Rod & Gun Club,45 Old Mill RoadMaynard MA 01754        \n\n\n\nContact: Christina Mitchell\n\n\nPhone: (978) 580-4226\n(978) 580-4226\n\n\nEmail: 1...",
+      "completeness_score": 82.5,
+      "completeness_grade": "B",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY"
+      ]
     },
     {
       "index": 9,
@@ -189,7 +259,13 @@
       "description": "Meetings are held on Wednesday nights from 7:00 - 8:30 At the United Chruch of Christ, Boxborough community center. 723 Mass Ave, Boxborough, MA",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0001 Boxborough-District Minutemen Inc\n\n\n          United Church of Christ Boxborough Community Center723 Mass AveBoxborough MA 01719        \n\n\n\nContact: James Richardson\n\n\nPhone: (978) 501-4..."
+      "raw_content": "\n\n\nTroop 0001 Boxborough-District Minutemen Inc\n\n\n          United Church of Christ Boxborough Community Center723 Mass AveBoxborough MA 01719        \n\n\n\nContact: James Richardson\n\n\nPhone: (978) 501-4...",
+      "completeness_score": 83.8,
+      "completeness_grade": "B",
+      "recommendations": [
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 10,
@@ -208,7 +284,18 @@
       "description": "Crew 0130 Maynard Rod and Gun Club Inc.Specialty:HIGH ADVENTURE",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nCrew 0130 Maynard Rod and Gun Club Inc.Specialty: HIGH ADVENTURE\n\n\n\n\n Online Registration available for this unit.\n\n\nApply NowMore Information \n\n..."
+      "raw_content": "\n\n\nCrew 0130 Maynard Rod and Gun Club Inc.Specialty: HIGH ADVENTURE\n\n\n\n\n Online Registration available for this unit.\n\n\nApply NowMore Information \n\n...",
+      "completeness_score": 21.5,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "REQUIRED_MISSING_EMAIL",
+        "RECOMMENDED_MISSING_CONTACT",
+        "RECOMMENDED_MISSING_PHONE",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 11,
@@ -227,7 +314,14 @@
       "description": "Pack meets approx once per month on Sundays at 330 PM.  We also enjoy an abundance of outdoor activities and outings.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0021 Littleton-Congregational Church\n\n\n          Congregational Church of Littleton330 King StLittleton MA 01460        \n\n\n\nContact: Theresa Oliveri\n\n\nEmail: theresa.oliveri84@gmail.com\ntheres..."
+      "raw_content": "\n\n\nPack 0021 Littleton-Congregational Church\n\n\n          Congregational Church of Littleton330 King StLittleton MA 01460        \n\n\n\nContact: Theresa Oliveri\n\n\nEmail: theresa.oliveri84@gmail.com\ntheres...",
+      "completeness_score": 76.2,
+      "completeness_grade": "C",
+      "recommendations": [
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 12,
@@ -246,7 +340,14 @@
       "description": "Troop 19 Littleton is for girls ages 11-17. We meet currently on Monday nights at 7pm at the Congregational Church of Littleton. Contact Tom Kneeland at tomkf116@gmail.com for info.",
       "unit_composition": "Girl Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 7019 Littleton-Congregational Church\n\n\n\n\nContact: Thomas Kneeland\n\n\nEmail: tomkf116@gmail.com\ntomkf116@gmail.com\n\n\nWebsite: https://www.facebook.com/Troop19Littleton\n Go to Website\n\n\n\n Girl T..."
+      "raw_content": "\n\n\nTroop 7019 Littleton-Congregational Church\n\n\n\n\nContact: Thomas Kneeland\n\n\nEmail: tomkf116@gmail.com\ntomkf116@gmail.com\n\n\nWebsite: https://www.facebook.com/Troop19Littleton\n Go to Website\n\n\n\n Girl T...",
+      "completeness_score": 66.2,
+      "completeness_grade": "D",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 13,
@@ -265,7 +366,16 @@
       "description": "Troop 20 is an active and welcoming Scouts BSA Troop open to all members who commit to the Boy Scout Oath and Law. Troop 20 is a scout lead troop where scouts lead planning and activities with adult support and mentoring.",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0020 Littleton-Scouting Trust\n\n\n          St. Anne's Church basement75 King StreetLittleton MA 01460        \n\n\n\nContact: Daniel Kane\n\n\nEmail: dan.kane@hnescouting.org\ndan.kane@hnescouting.org..."
+      "raw_content": "\n\n\nTroop 0020 Littleton-Scouting Trust\n\n\n          St. Anne's Church basement75 King StreetLittleton MA 01460        \n\n\n\nContact: Daniel Kane\n\n\nEmail: dan.kane@hnescouting.org\ndan.kane@hnescouting.org...",
+      "completeness_score": 41.2,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 14,
@@ -284,7 +394,14 @@
       "description": "Meets weekly on Monday evenings from 7 - 8:30",
       "unit_composition": "Girl Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0001 Troop One Stow Alumni Inc\n\n\n          PO Box 75Stow MA 01775        \n\n\n\nContact: Cecelia Braun\n\n\nPhone: (617) 669-2729\n(617) 669-2729\n\n\nEmail: scoutmaster1gstow@gmail.com\nscoutmaster1gst..."
+      "raw_content": "\n\n\nTroop 0001 Troop One Stow Alumni Inc\n\n\n          PO Box 75Stow MA 01775        \n\n\n\nContact: Cecelia Braun\n\n\nPhone: (617) 669-2729\n(617) 669-2729\n\n\nEmail: scoutmaster1gstow@gmail.com\nscoutmaster1gst...",
+      "completeness_score": 56.2,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL"
+      ]
     },
     {
       "index": 15,
@@ -303,7 +420,15 @@
       "description": "Welcome to Pack 149!  Pack 149 is the Cub Scout Pack affiliated with Willard Elementary School.  However, we welcome families from all areas of our community.  Please feel free to contact us atCUBMASTER149@GMAIL.COM.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0149 Concord Scout House, Inc.\n\n\n          74 Walden StreetConcord MA 01742        \n\n\n\nContact: Keith Moritz\n\n\nEmail: Keithmoritz1@gmail.com\nKeithmoritz1@gmail.com\n\n\nWebsite: http://concordpac..."
+      "raw_content": "\n\n\nPack 0149 Concord Scout House, Inc.\n\n\n          74 Walden StreetConcord MA 01742        \n\n\n\nContact: Keith Moritz\n\n\nEmail: Keithmoritz1@gmail.com\nKeithmoritz1@gmail.com\n\n\nWebsite: http://concordpac...",
+      "completeness_score": 48.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 16,
@@ -322,7 +447,14 @@
       "description": "Meet 7pm Tuesdays when schools are open. We emphasize camping, friendship, advancement, fun.",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0001 Littleton-Congregational Church\n\n\n          57 Russell StLittleton MA 01460        \n\n\n\nContact: Thomas Kneeland\n\n\nWebsite: http://www.troop1littleton.org\n Go to Website\n\n\n\n Boy Troop\n On..."
+      "raw_content": "\n\n\nTroop 0001 Littleton-Congregational Church\n\n\n          57 Russell StLittleton MA 01460        \n\n\n\nContact: Thomas Kneeland\n\n\nWebsite: http://www.troop1littleton.org\n Go to Website\n\n\n\n Boy Troop\n On...",
+      "completeness_score": 57.5,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 17,
@@ -341,7 +473,15 @@
       "description": "Pack 133 was founded in 1943.  The Pack includes 40-50 boys and girls in grades K-5 who attend Alcott, Thoreau, and other Elementary Schools in the Concord, MA area. \n\nWe welcome members of all genders and backgrouns. \n Scouting has a long tradition of providing youth opportunities to develop leadership skills, and nurture diverse interests, in a fun environment that emphasizes outdoor activity.  Please feel invited to attend any of our meetings or events.http://concordpack133.com",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0133 Concord Scout House, Inc.\n\n\n          Concord Scout House74 Walden StConcord MA 01742        \n\n\n\nContact: Michael DeOrsey\n\n\nEmail: cubmaster.concord133@gmail.com\ncubmaster.concord133@gmai..."
+      "raw_content": "\n\n\nPack 0133 Concord Scout House, Inc.\n\n\n          Concord Scout House74 Walden StConcord MA 01742        \n\n\n\nContact: Michael DeOrsey\n\n\nEmail: cubmaster.concord133@gmail.com\ncubmaster.concord133@gmai...",
+      "completeness_score": 48.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 18,
@@ -360,7 +500,15 @@
       "description": "Contact:Joseph GalluccioEmail:joe8612@yahoo.comjoe8612@yahoo.comWebsite:http://www.troop132.com/Go to Website",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0132 Concord Scout House, Inc.\n\n\n          74 Walden StreetConcord MA 01742        \n\n\n\nContact: Joseph Galluccio\n\n\nEmail: joe8612@yahoo.com\njoe8612@yahoo.com\n\n\nWebsite: http://www.troop132.co..."
+      "raw_content": "\n\n\nTroop 0132 Concord Scout House, Inc.\n\n\n          74 Walden StreetConcord MA 01742        \n\n\n\nContact: Joseph Galluccio\n\n\nEmail: joe8612@yahoo.com\njoe8612@yahoo.com\n\n\nWebsite: http://www.troop132.co...",
+      "completeness_score": 48.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 19,
@@ -379,7 +527,15 @@
       "description": "Pompositticut Community Center509 Great Rd.Stow MA 01775",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0039 Troop One Stow Alumni Inc\n\n\n          Pompositticut Community Center509 Great Rd. Stow MA 01775        \n\n\n\nContact: Thomas Vargo\n\n\nWebsite: http://pack39stow.org\n Go to Website\n\n\n\n Dens f..."
+      "raw_content": "\n\n\nPack 0039 Troop One Stow Alumni Inc\n\n\n          Pompositticut Community Center509 Great Rd. Stow MA 01775        \n\n\n\nContact: Thomas Vargo\n\n\nWebsite: http://pack39stow.org\n Go to Website\n\n\n\n Dens f...",
+      "completeness_score": 40.0,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "REQUIRED_MISSING_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 21,
@@ -398,7 +554,14 @@
       "description": "Crew 23 meets on the 2nd & 4th Tuesday of each month, at 6:45pm. The first meeting is in-person at Camp Resolute, and the second is usually an outing or service project in the area.\n\nVenturing is the BSA's primary older youth program, and Crew 23 is primarily focused on camping, hiking, and service.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nCrew 1923 Troop One Stow Alumni IncSpecialty: CAMPING/BACKPACKING/HIKING\n\n\n\n\nContact: Anthony Nardone\n\n\nEmail: anthony.nardone.scouts@gmail.com\nanthony.nardone.scouts@gmail.com\n\n\nWebsite: https://w..."
+      "raw_content": "\n\n\nCrew 1923 Troop One Stow Alumni IncSpecialty: CAMPING/BACKPACKING/HIKING\n\n\n\n\nContact: Anthony Nardone\n\n\nEmail: anthony.nardone.scouts@gmail.com\nanthony.nardone.scouts@gmail.com\n\n\nWebsite: https://w...",
+      "completeness_score": 71.5,
+      "completeness_grade": "C",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 22,
@@ -417,7 +580,16 @@
       "description": "Crew 0250 Harvard-Sportsmens ClubSpecialty:GUN/MARKSMANSHIP TARGET",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nCrew 0250 Harvard-Sportsmens ClubSpecialty: GUN/MARKSMANSHIP TARGET\n\n\n          250 Littleton County RdHarvard MA 01451        \n\n\n\nContact: Edward Sterling\n\n\n\n Online Registration available for thi..."
+      "raw_content": "\n\n\nCrew 0250 Harvard-Sportsmens ClubSpecialty: GUN/MARKSMANSHIP TARGET\n\n\n          250 Littleton County RdHarvard MA 01451        \n\n\n\nContact: Edward Sterling\n\n\n\n Online Registration available for thi...",
+      "completeness_score": 43.0,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "REQUIRED_MISSING_EMAIL",
+        "RECOMMENDED_MISSING_PHONE",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 23,
@@ -436,7 +608,15 @@
       "description": "Venturing Crew for Troop 437 Westford MA. Focused on high adventure, mixed gender trips.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nCrew 0437 Trailblazing Together FoundationSpecialty: HIGH ADVENTURE\n\n\n          114 Dunstable Rd Westford MA 01886        \n\n\n\nContact: Andrew McKeen\n\n\nEmail: scoutmaster@westfordtroop437.us\nscoutma..."
+      "raw_content": "\n\n\nCrew 0437 Trailblazing Together FoundationSpecialty: HIGH ADVENTURE\n\n\n          114 Dunstable Rd Westford MA 01886        \n\n\n\nContact: Andrew McKeen\n\n\nEmail: scoutmaster@westfordtroop437.us\nscoutma...",
+      "completeness_score": 57.5,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 24,
@@ -455,7 +635,17 @@
       "description": "Contact:Thomas LoweryEmail:tjlowery@gmail.comtjlowery@gmail.com",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 1847 Troop 1847 Parents' Committee\n\n\n\n\nContact: Thomas Lowery\n\n\nEmail: tjlowery@gmail.com\ntjlowery@gmail.com\n\n\n\n Boy Troop\n Online Registration available for this unit.\n\n\nApply NowMore Inform..."
+      "raw_content": "\n\n\nTroop 1847 Troop 1847 Parents' Committee\n\n\n\n\nContact: Thomas Lowery\n\n\nEmail: tjlowery@gmail.com\ntjlowery@gmail.com\n\n\n\n Boy Troop\n Online Registration available for this unit.\n\n\nApply NowMore Inform...",
+      "completeness_score": 23.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 25,
@@ -474,7 +664,18 @@
       "description": "Girl TroopOnline Registrationavailable for this unit.",
       "unit_composition": "Girl Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0135 Friends of Carlisle Scouting\n\n\n\n\n Girl Troop\n Online Registration available for this unit.\n\n\nApply NowMore Information \n\n..."
+      "raw_content": "\n\n\nTroop 0135 Friends of Carlisle Scouting\n\n\n\n\n Girl Troop\n Online Registration available for this unit.\n\n\nApply NowMore Information \n\n...",
+      "completeness_score": 7.5,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "REQUIRED_MISSING_EMAIL",
+        "RECOMMENDED_MISSING_CONTACT",
+        "RECOMMENDED_MISSING_PHONE",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 26,
@@ -493,7 +694,16 @@
       "description": "Contact:Danielle MahanEmail:committee@pack135.comcommittee@pack135.comWebsite:https://www.facebook.com/people/Carlisle-Pack-135-Scouts/61551871289289/Go to Website",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0135 Friends of Carlisle Scouting\n\n\n          P.O. Box 135Carlisle MA 01741        \n\n\n\nContact: Danielle Mahan\n\n\nEmail: committee@pack135.com\ncommittee@pack135.com\n\n\nWebsite: https://www.faceb..."
+      "raw_content": "\n\n\nPack 0135 Friends of Carlisle Scouting\n\n\n          P.O. Box 135Carlisle MA 01741        \n\n\n\nContact: Danielle Mahan\n\n\nEmail: committee@pack135.com\ncommittee@pack135.com\n\n\nWebsite: https://www.faceb...",
+      "completeness_score": 31.2,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 28,
@@ -512,7 +722,15 @@
       "description": "Sudbury Pack 62 is an active pack welcoming all Sudbury kids entering K-5.  Learn about our activities and more atSudburyPack62.org",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0062 St Elizabeth's Episcopal Church\n\n\n          1 Morse RoadSudbury MA 01776        \n\n\n\nContact: William Bryce\n\n\nEmail: sudburypack62@gmail.com\nsudburypack62@gmail.com\n\n\nWebsite: http://Sudbu..."
+      "raw_content": "\n\n\nPack 0062 St Elizabeth's Episcopal Church\n\n\n          1 Morse RoadSudbury MA 01776        \n\n\n\nContact: William Bryce\n\n\nEmail: sudburypack62@gmail.com\nsudburypack62@gmail.com\n\n\nWebsite: http://Sudbu...",
+      "completeness_score": 48.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 29,
@@ -531,7 +749,13 @@
       "description": "Come experience the fun and exciting adventure of Scouting with Boy Scouts of America Troop 63. Our weekly troop meetings are Thursday evenings at 7:00PM.",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0063 Saint Elizabeth's Episcopal Church\n\n\n          St Elizabeth's Episcopal Church1 Morse Rd, Sudbury, MA 01776Sudbury MA 01776        \n\n\n\nContact: Navid Yazdani\n\n\nEmail: Navid.yazdani@gmail..."
+      "raw_content": "\n\n\nTroop 0063 Saint Elizabeth's Episcopal Church\n\n\n          St Elizabeth's Episcopal Church1 Morse Rd, Sudbury, MA 01776Sudbury MA 01776        \n\n\n\nContact: Navid Yazdani\n\n\nEmail: Navid.yazdani@gmail...",
+      "completeness_score": 83.8,
+      "completeness_grade": "B",
+      "recommendations": [
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 30,
@@ -550,7 +774,15 @@
       "description": "Pack 96 is a family-oriented pack welcoming boys and girls entering Kindergarten through grade 5.  We have a pack meeting one Sunday afternoon a month, a den (grade level) meeting once a month, as well as pack and den outings (overnights, visits to local organizations, hikes on local trails, service projects). We hold the ever popular Pinewood Derby in February.  Photos and information can also be found on our Facebook page - Cub Scout Pack 96 - Westford, MA.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0096 Friends of Westford Scouting Inc\n\n\n          48 Main StreetFirst Parish Church UnitedWestford MA 01886        \n\n\n\nContact: Mark Paradis\n\n\nEmail: Pack96Westford@gmail.com\nPack96Westford@gm..."
+      "raw_content": "\n\n\nPack 0096 Friends of Westford Scouting Inc\n\n\n          48 Main StreetFirst Parish Church UnitedWestford MA 01886        \n\n\n\nContact: Mark Paradis\n\n\nEmail: Pack96Westford@gmail.com\nPack96Westford@gm...",
+      "completeness_score": 48.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 31,
@@ -569,7 +801,14 @@
       "description": "Troop meetings are on Thursday's 7:00-8:30pm at FPCU. Visitors always welcome! We are a scout-led troop with monthly outings, and our own \"venture program\" for 14+ scouts looking to challenge themselves. We always attend a week of summer camp, and at least one high adventure trip each year!",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0159 First Parish Church United\n\n\n          First Parish Church United48 Main StWestford MA 01886        \n\n\n\nContact: Jeremy Brown\n\n\nEmail: scoutmaster@troop159westford.org\nscoutmaster@troop1..."
+      "raw_content": "\n\n\nTroop 0159 First Parish Church United\n\n\n          First Parish Church United48 Main StWestford MA 01886        \n\n\n\nContact: Jeremy Brown\n\n\nEmail: scoutmaster@troop159westford.org\nscoutmaster@troop1...",
+      "completeness_score": 66.2,
+      "completeness_grade": "D",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 32,
@@ -588,7 +827,14 @@
       "description": "Pack 100 Pack Meetings are held the first Friday of each month at Abbot Elementary School. Interested families are welcome at any event. Our tentative schedule for each season is on our website atWestfordPack100.com.\n\nEmail us at:westfordpack100@gmail.com",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0100 Westford Rotary Club Inc\n\n\n          Abbot Elementary School25 Depot StreetWestford MA 01886        \n\n\nWebsite: http://www.westfordpack100.com/\n Go to Website\n\n\n\n Dens for Boys or Girls\n ..."
+      "raw_content": "\n\n\nPack 0100 Westford Rotary Club Inc\n\n\n          Abbot Elementary School25 Depot StreetWestford MA 01886        \n\n\nWebsite: http://www.westfordpack100.com/\n Go to Website\n\n\n\n Dens for Boys or Girls\n ...",
+      "completeness_score": 76.2,
+      "completeness_grade": "C",
+      "recommendations": [
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_CONTACT",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 33,
@@ -607,7 +853,15 @@
       "description": "Cub Scout Pack 10 is located in Harvard MA. Pack 10 is home to boys and girls in grades K through 5. We are gearing up for the new year and are busy planning fun and safe activities for our scouts. We look forward to meeting you!",
       "unit_composition": "Pack 0010 Harvard-Boy Scouts Inc",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0010 Harvard-Boy Scouts Inc\n\n\n\n\nContact: Kerry Evans\n\n\nPhone: (978) 501-5646\n(978) 501-5646\n\n\nEmail: harvardcubpack10@gmail.com\nharvardcubpack10@gmail.com\n\n\nWebsite: http://heartofnewenglandbs..."
+      "raw_content": "\n\n\nPack 0010 Harvard-Boy Scouts Inc\n\n\n\n\nContact: Kerry Evans\n\n\nPhone: (978) 501-5646\n(978) 501-5646\n\n\nEmail: harvardcubpack10@gmail.com\nharvardcubpack10@gmail.com\n\n\nWebsite: http://heartofnewenglandbs...",
+      "completeness_score": 38.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL"
+      ]
     },
     {
       "index": 34,
@@ -626,7 +880,17 @@
       "description": "We are a welcoming and fun group of youth-led adventurers who enjoy the outdoors. Our scouts learn valuable leadership skills and build resilience and self-confidence in a safe, supportive learning environment. We host weekly events and monthly trips throughout the year including canoeing, kayaking, whitewater rafting, hiking, camping, and urban exploration. Join us!",
       "unit_composition": "Troop 0001 Harvard-Boy Scouts Inc",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0001 Harvard-Boy Scouts Inc\n\n\n\n\nContact: Gary Madison\n\n\nEmail: gmadison@hobbsmadison.com\ngmadison@hobbsmadison.com\n\n\n\n Boy Troop\n Online Registration available for this unit.\n\n\nWe are a welco..."
+      "raw_content": "\n\n\nTroop 0001 Harvard-Boy Scouts Inc\n\n\n\n\nContact: Gary Madison\n\n\nEmail: gmadison@hobbsmadison.com\ngmadison@hobbsmadison.com\n\n\n\n Boy Troop\n Online Registration available for this unit.\n\n\nWe are a welco...",
+      "completeness_score": 23.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 35,
@@ -645,7 +909,12 @@
       "description": "Sudbury's first Girl's Troop led by girls for girls, ages 11-17.  The Troop meets Thursday evenings 7:30-9pm for scout skills, merit badge work, and fun! Scouts go on monthly outings and are active with community service.  Visit us athttps://www.facebook.com/sudburytroop65",
       "unit_composition": "Girl Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0065 Sudbury Scouting Association\n\n\n          251 Old Sudbury RdSudbury MA 01776        \n\n\n\nContact: George Cooley\n\n\nPhone: (781) 321 - 2962\n(781) 321 - 2962\n\n\nWebsite: https://www.facebook.c..."
+      "raw_content": "\n\n\nTroop 0065 Sudbury Scouting Association\n\n\n          251 Old Sudbury RdSudbury MA 01776        \n\n\n\nContact: George Cooley\n\n\nPhone: (781) 321 - 2962\n(781) 321 - 2962\n\n\nWebsite: https://www.facebook.c...",
+      "completeness_score": 82.5,
+      "completeness_grade": "B",
+      "recommendations": [
+        "REQUIRED_MISSING_EMAIL"
+      ]
     },
     {
       "index": 36,
@@ -664,7 +933,17 @@
       "description": "Contact:Kerry EvansEmail:kmh_wildbill@yahoo.comkmh_wildbill@yahoo.com",
       "unit_composition": "Troop 7001 Harvard-Boy Scouts Inc",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 7001 Harvard-Boy Scouts Inc\n\n\n\n\nContact: Kerry Evans\n\n\nEmail: kmh_wildbill@yahoo.com\nkmh_wildbill@yahoo.com\n\n\n\n Girl Troop\n Online Registration available for this unit.\n\n\nApply NowMore Inform..."
+      "raw_content": "\n\n\nTroop 7001 Harvard-Boy Scouts Inc\n\n\n\n\nContact: Kerry Evans\n\n\nEmail: kmh_wildbill@yahoo.com\nkmh_wildbill@yahoo.com\n\n\n\n Girl Troop\n Online Registration available for this unit.\n\n\nApply NowMore Inform...",
+      "completeness_score": 23.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 37,
@@ -683,7 +962,12 @@
       "description": "Contact us at :nickandnate@comcast.netWe meet on Monday's 7pm to 8pm at the Mason's Lodge, 187 Lincoln Rd., Lincoln, MA.",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0127 Joseph Warren Soley Lodge\n\n\n          187 Lincoln RoadLincoln MA 01773        \n\n\n\nContact: Mark Soukup\n\n\nPhone: (617) 851-9402\n(617) 851-9402\n\n\nEmail: nickandnate@comcast.net\nnickandnate..."
+      "raw_content": "\n\n\nTroop 0127 Joseph Warren Soley Lodge\n\n\n          187 Lincoln RoadLincoln MA 01773        \n\n\n\nContact: Mark Soukup\n\n\nPhone: (617) 851-9402\n(617) 851-9402\n\n\nEmail: nickandnate@comcast.net\nnickandnate...",
+      "completeness_score": 91.2,
+      "completeness_grade": "A",
+      "recommendations": [
+        "QUALITY_PERSONAL_EMAIL"
+      ]
     },
     {
       "index": 38,
@@ -702,7 +986,13 @@
       "description": "Pack 3104 meets on the fourth Tuesday of every month at Riverside Gun Club, 16 Wilkins St., Hudson, MA. Emailhudsoncubscouts@gmail.comor see us at Celebrate Hudson on Sept. 14 for details.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 3104 Hudson Historical Society\n\n\n          16 Wilkins StRiverside Gun ClubHudson MA 01749        \n\n\n\nContact: Chris Staysniak\n\n\nPhone: (857) 231-2073\n(857) 231-2073\n\n\nEmail: cstaysniak@gmail.c..."
+      "raw_content": "\n\n\nPack 3104 Hudson Historical Society\n\n\n          16 Wilkins StRiverside Gun ClubHudson MA 01749        \n\n\n\nContact: Chris Staysniak\n\n\nPhone: (857) 231-2073\n(857) 231-2073\n\n\nEmail: cstaysniak@gmail.c...",
+      "completeness_score": 73.8,
+      "completeness_grade": "C",
+      "recommendations": [
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL"
+      ]
     },
     {
       "index": 39,
@@ -721,7 +1011,13 @@
       "description": "Boy Scout Troop 195 was founded in 1995. We meet on Tuesdays (when school is in) from 7pm - 8.30pm.  Meetings are outside in the parking lot when the weather is good and in the church basement when the weather is wet.",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0195 Friends of Westford Scouting Inc\n\n\n          107 N Main StWestford MA 01886        \n\n\n\nContact: Kevin Dickson\n\n\nEmail: troop195scoutmaster+beascout@gmail.com\ntroop195scoutmaster+beascout..."
+      "raw_content": "\n\n\nTroop 0195 Friends of Westford Scouting Inc\n\n\n          107 N Main StWestford MA 01886        \n\n\n\nContact: Kevin Dickson\n\n\nEmail: troop195scoutmaster+beascout@gmail.com\ntroop195scoutmaster+beascout...",
+      "completeness_score": 83.8,
+      "completeness_grade": "B",
+      "recommendations": [
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 40,
@@ -740,7 +1036,15 @@
       "description": "Join us for fun scouting activities! Parades, rockets, museums, Pinewood Derby, games, battleships, bonfires, camping and more! For 2024-2025 our Pack charges $40/yr in addition to the council fees.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0194 Anthony Hunt Hamilton  A .L. Post 221\n\n\n          John Glenn Middle School Cafeteria99 McMahon RdBedford MA 01730        \n\n\n\nContact: Andrew Jeffrey\n\n\nEmail: aejeffrey@gmail.com\naejeffrey..."
+      "raw_content": "\n\n\nPack 0194 Anthony Hunt Hamilton  A .L. Post 221\n\n\n          John Glenn Middle School Cafeteria99 McMahon RdBedford MA 01730        \n\n\n\nContact: Andrew Jeffrey\n\n\nEmail: aejeffrey@gmail.com\naejeffrey...",
+      "completeness_score": 48.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 41,
@@ -759,7 +1063,14 @@
       "description": "7pm Tuesdays. Dedicated to developing youth leaders through the Patrol Method of Scouting. We invite you to visit us!",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0114 F. W. Thompson Masonic Lodge\n\n\n          25 Great RoadCongregational Church Lower Level Meeting RoomBedford MA 01730        \n\n\n\nContact: Jeffrey Munsie\n\n\nEmail: jmunsie@gmail.com\njmunsie..."
+      "raw_content": "\n\n\nTroop 0114 F. W. Thompson Masonic Lodge\n\n\n          25 Great RoadCongregational Church Lower Level Meeting RoomBedford MA 01730        \n\n\n\nContact: Jeffrey Munsie\n\n\nEmail: jmunsie@gmail.com\njmunsie...",
+      "completeness_score": 66.2,
+      "completeness_grade": "D",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 42,
@@ -778,7 +1089,15 @@
       "description": "Family Pack\n\nAll K-5 boys and girls are welcome!",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0095 Westford Sportsmens Club\n\n\n          80 West StreetWestford, MA MA 01886        \n\n\n\nContact: Julia Quinn\n\n\nEmail: Jcdale@gmail.com\nJcdale@gmail.com\n\n\nWebsite: http://sites.google.com/site..."
+      "raw_content": "\n\n\nPack 0095 Westford Sportsmens Club\n\n\n          80 West StreetWestford, MA MA 01886        \n\n\n\nContact: Julia Quinn\n\n\nEmail: Jcdale@gmail.com\nJcdale@gmail.com\n\n\nWebsite: http://sites.google.com/site...",
+      "completeness_score": 48.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 43,
@@ -797,7 +1116,15 @@
       "description": "Troop 2 uses a hybrid approach between the scouts and adults to run its program. While the scouts plan the program and provide leadership among their peers, we believe active engagement with the adult leadership provides further reinforcement of skills and advanced concepts.\n\nWe are very proud of the program we offer. Troop 2\nstrives to have an active program including; day trips,\nhikes, weekend campouts, merit badge classes, youth\nleadership training, and summer camp.",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0002 Ayer-Gun & Sportsmen Club Inc\n\n\n          255 Snake Hill RdAyer MA 01432        \n\n\n\nContact: David DAmbrosio\n\n\nEmail: DRD@IMEC-US.com\nDRD@IMEC-US.com\n\n\nWebsite: http://troop2ayer.com\n Go..."
+      "raw_content": "\n\n\nTroop 0002 Ayer-Gun & Sportsmen Club Inc\n\n\n          255 Snake Hill RdAyer MA 01432        \n\n\n\nContact: David DAmbrosio\n\n\nEmail: DRD@IMEC-US.com\nDRD@IMEC-US.com\n\n\nWebsite: http://troop2ayer.com\n Go...",
+      "completeness_score": 48.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 44,
@@ -816,7 +1143,14 @@
       "description": "Serving youth primarily from South Row Elementary district, we are a growing and active Pack of boys and girls that is inclusive and welcoming of all families.\nPack meetings are third Friday of the month @ Aldersgate Church in Chelmsford next to South Row Elementary.  Check out our website or e-mails us for details.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0081 Chelmsford Land Conservation Trust Inc\n\n\n          242 Boston RoadChelmsford MA 01824        \n\n\n\nContact: Melissa Albano-Davis\n\n\nEmail: cubscoutchelmsfordpack81@gmail.com\ncubscoutchelmsfo..."
+      "raw_content": "\n\n\nPack 0081 Chelmsford Land Conservation Trust Inc\n\n\n          242 Boston RoadChelmsford MA 01824        \n\n\n\nContact: Melissa Albano-Davis\n\n\nEmail: cubscoutchelmsfordpack81@gmail.com\ncubscoutchelmsfo...",
+      "completeness_score": 66.2,
+      "completeness_grade": "D",
+      "recommendations": [
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 45,
@@ -835,7 +1169,15 @@
       "description": "Troop 61 is boy-led: from planning to camping. Whether whitewater rafting or Zombie Apocalypse, it\u0019s the true Scout program and more. All are welcome in our troop where we create a safe space for young people to explore exciting new challenges, learn countless useful skills, and build character and leadership traits that last a lifetime. The experiences we offer build amazing confidence while connecting our scouts with their community, building strong citizens through education and volunteerism.",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0061 Memorial Congregational Church\n\n\n          26 Concord RdSudbury MA 07116        \n\n\n\nContact: Sean Barrett\n\n\nEmail: scoutmaster.troop61sudbury@gmail.com\nscoutmaster.troop61sudbury@gmail.c..."
+      "raw_content": "\n\n\nTroop 0061 Memorial Congregational Church\n\n\n          26 Concord RdSudbury MA 07116        \n\n\n\nContact: Sean Barrett\n\n\nEmail: scoutmaster.troop61sudbury@gmail.com\nscoutmaster.troop61sudbury@gmail.c...",
+      "completeness_score": 48.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 46,
@@ -854,7 +1196,14 @@
       "description": "Troop 81 in Chelmsford is a Linked Unit with Troop 81G. We meet at the Aldersgate Church 242 Boston Rd Chelmsford Ma 01824.\nMeetings are every Wednesday 7-8:30 during the school year. \nSince we are a linked troop our format is great for families who have siblings in scouting. \n\nAll are welcome!",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0081 Chelmsford Land Conservation Trust Inc\n\n\n          242 Boston RdChelmsford MA 01824        \n\n\n\nContact: Zachery Swanfeldt\n\n\nPhone: (978) 250-1475\n(978) 250-1475\n\n\nEmail: zachery.swanfeld..."
+      "raw_content": "\n\n\nTroop 0081 Chelmsford Land Conservation Trust Inc\n\n\n          242 Boston RdChelmsford MA 01824        \n\n\n\nContact: Zachery Swanfeldt\n\n\nPhone: (978) 250-1475\n(978) 250-1475\n\n\nEmail: zachery.swanfeld...",
+      "completeness_score": 56.2,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL"
+      ]
     },
     {
       "index": 48,
@@ -873,7 +1222,15 @@
       "description": "Check out our website to learn more about community service, building skills and youth leadership.",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0077 Veterans Of Foreign Wars Hudson Post #1027\n\n\n          3 Palmieri DrHudson MA 01749        \n\n\n\nContact: Carl Candiloro\n\n\nEmail: scoutmaster@troop77hudson.org\nscoutmaster@troop77hudson.or..."
+      "raw_content": "\n\n\nTroop 0077 Veterans Of Foreign Wars Hudson Post #1027\n\n\n          3 Palmieri DrHudson MA 01749        \n\n\n\nContact: Carl Candiloro\n\n\nEmail: scoutmaster@troop77hudson.org\nscoutmaster@troop77hudson.or...",
+      "completeness_score": 48.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 49,
@@ -892,7 +1249,16 @@
       "description": "We are a military Pack, serving Hanscom Air Force Base.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0173 Assoc of Old Crows Patriots Roost Chapter\n\n\n\n\nContact: Christopher Muller\n\n\nPhone: (757) 880-6596\n(757) 880-6596\n\n\nEmail: Christopher.muller1@gmail.com\nChristopher.muller1@gmail.com\n\n\n\n D..."
+      "raw_content": "\n\n\nPack 0173 Assoc of Old Crows Patriots Roost Chapter\n\n\n\n\nContact: Christopher Muller\n\n\nPhone: (757) 880-6596\n(757) 880-6596\n\n\nEmail: Christopher.muller1@gmail.com\nChristopher.muller1@gmail.com\n\n\n\n D...",
+      "completeness_score": 31.2,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 50,
@@ -911,7 +1277,13 @@
       "description": "Our goal at Pack 32 in Ayer is to provide the best scouting experience possible.  We want to encourage our scouts to teach themselves by doing things hands-on. The  lessons and skills your child will learn, will be something they will carry for their entire life.  We welcome members of all genders and backgrounds. To accomplish our goal, Pack 32 meets every 2nd Wednesday and 4th Thursday of each month at 6:30pm at St Andrew\u0019s Parish Hall, plus other monthly adventures.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0032 Ayer-St Andrews Church\n\n\n          7 Faulkner St.Ayer MA 01432        \n\n\n\nContact: Jennifer Kelly\n\n\nEmail: ayerscouts@gmail.com\nayerscouts@gmail.com\n\n\nWebsite: http://pack32ayer.org\n Go t..."
+      "raw_content": "\n\n\nPack 0032 Ayer-St Andrews Church\n\n\n          7 Faulkner St.Ayer MA 01432        \n\n\n\nContact: Jennifer Kelly\n\n\nEmail: ayerscouts@gmail.com\nayerscouts@gmail.com\n\n\nWebsite: http://pack32ayer.org\n Go t...",
+      "completeness_score": 83.8,
+      "completeness_grade": "B",
+      "recommendations": [
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 51,
@@ -930,7 +1302,13 @@
       "description": "Troop 512 Boys, usually called \"Troop 2 Hudson,\" meets at 6:30 PM every Wednesday during the school year at the First United Methodist Church of Hudson (downstairs). Troop 2  is active in the community and Mayflower Council. We are part of Scouting America's combined unit pilot, accepting all youth 11-17.\n#Troop2CanDo!",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0512 Hudson Historical Society\n\n\n          34 Felton StHudson MA 01749        \n\n\n\nContact: Andrew Hermann\n\n\nPhone: (978) 763-8083\n(978) 763-8083\n\n\nEmail: troop2hudson@gmail.com\ntroop2hudson@g..."
+      "raw_content": "\n\n\nTroop 0512 Hudson Historical Society\n\n\n          34 Felton StHudson MA 01749        \n\n\n\nContact: Andrew Hermann\n\n\nPhone: (978) 763-8083\n(978) 763-8083\n\n\nEmail: troop2hudson@gmail.com\ntroop2hudson@g...",
+      "completeness_score": 73.8,
+      "completeness_grade": "C",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "QUALITY_PERSONAL_EMAIL"
+      ]
     },
     {
       "index": 52,
@@ -949,7 +1327,14 @@
       "description": "Troop 1 meets every Monday night, 7:00 - 8:30, in the Grotonwood gym when school is in session.  Interested youth are welcome to come to any meeting.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0001 Groton-Firefighters Association\n\n\n          134 Prescott St.Groton MA 01450        \n\n\n\nContact: Kevin Kennedy\n\n\nEmail: kevintkennedy@hotmail.com\nkevintkennedy@hotmail.com\n\n\nWebsite: http..."
+      "raw_content": "\n\n\nTroop 0001 Groton-Firefighters Association\n\n\n          134 Prescott St.Groton MA 01450        \n\n\n\nContact: Kevin Kennedy\n\n\nEmail: kevintkennedy@hotmail.com\nkevintkennedy@hotmail.com\n\n\nWebsite: http...",
+      "completeness_score": 66.2,
+      "completeness_grade": "D",
+      "recommendations": [
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 53,
@@ -968,7 +1353,13 @@
       "description": "We are a girls troop that meets every Monday from 7-8:30pm when school is in session. Please email for more info and come by to meet us!",
       "unit_composition": "Girl Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 7013 Groton-Firefighters Association\n\n\n          Grotonwood Camp167 Prescott StreetGroton MA 01472        \n\n\n\nContact: Erin Keaney\n\n\nEmail: EEK22422@gmail.com\nEEK22422@gmail.com\n\n\nWebsite: ht..."
+      "raw_content": "\n\n\nTroop 7013 Groton-Firefighters Association\n\n\n          Grotonwood Camp167 Prescott StreetGroton MA 01472        \n\n\n\nContact: Erin Keaney\n\n\nEmail: EEK22422@gmail.com\nEEK22422@gmail.com\n\n\nWebsite: ht...",
+      "completeness_score": 83.8,
+      "completeness_grade": "B",
+      "recommendations": [
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 54,
@@ -987,7 +1378,16 @@
       "description": "Pack 37 is an active &amp; fun group of over 40 scouts &amp; leaders in Bolton. We welcome new scouts!",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0037 Bolton-The First Parish of Bolton\n\n\n          673 Main StBolton MA 01740        \n\n\n\nContact: Stephanie Schneider\n\n\nEmail: secretarypack37@gmail.com\nsecretarypack37@gmail.com\n\n\n\n Dens for ..."
+      "raw_content": "\n\n\nPack 0037 Bolton-The First Parish of Bolton\n\n\n          673 Main StBolton MA 01740        \n\n\n\nContact: Stephanie Schneider\n\n\nEmail: secretarypack37@gmail.com\nsecretarypack37@gmail.com\n\n\n\n Dens for ...",
+      "completeness_score": 41.2,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 55,
@@ -1006,7 +1406,14 @@
       "description": "Cub Pack 107 meet at Gracepoint Church, adjacent to the Chelmsford Common, typically 3rd Friday of the month, starting at 6:30 PM. We welcome children in K-5th.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0107 Central Baptist Church\n\n\n          9 Academy StreetChelmsford MA 01824        \n\n\n\nContact: Matthew Crouthamel\n\n\nEmail: Pack107scouts@gmail.com\nPack107scouts@gmail.com\n\n\n\n Dens for Boys or..."
+      "raw_content": "\n\n\nPack 0107 Central Baptist Church\n\n\n          9 Academy StreetChelmsford MA 01824        \n\n\n\nContact: Matthew Crouthamel\n\n\nEmail: Pack107scouts@gmail.com\nPack107scouts@gmail.com\n\n\n\n Dens for Boys or...",
+      "completeness_score": 76.2,
+      "completeness_grade": "C",
+      "recommendations": [
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 56,
@@ -1025,7 +1432,15 @@
       "description": "Wayland Pack 88 welcomes boys and girls K-5 from Claypit Hill School and also those who live in the area and may attend another elementary school.",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0088 Wayland Scouters Inc\n\n\n          40 Adams LnWayland MA 01778        \n\n\n\nContact: James Peyton\n\n\nPhone: (508) 612-0664\n(508) 612-0664\n\n\nEmail: jimpeyton22@gmail.com\njimpeyton22@gmail.com\n\n..."
+      "raw_content": "\n\n\nPack 0088 Wayland Scouters Inc\n\n\n          40 Adams LnWayland MA 01778        \n\n\n\nContact: James Peyton\n\n\nPhone: (508) 612-0664\n(508) 612-0664\n\n\nEmail: jimpeyton22@gmail.com\njimpeyton22@gmail.com\n\n...",
+      "completeness_score": 48.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 57,
@@ -1044,7 +1459,15 @@
       "description": "Contact:Christopher SianoWebsite:https://www.troopwebhost.org/Troop1Bolton/Index.htmGo to Website",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0001 Bolton-The First Parish of Bolton\n\n\n          673 Main StBolton MA 01740        \n\n\n\nContact: Christopher Siano\n\n\nWebsite: https://www.troopwebhost.org/Troop1Bolton/Index.htm\n Go to Websi..."
+      "raw_content": "\n\n\nTroop 0001 Bolton-The First Parish of Bolton\n\n\n          673 Main StBolton MA 01740        \n\n\n\nContact: Christopher Siano\n\n\nWebsite: https://www.troopwebhost.org/Troop1Bolton/Index.htm\n Go to Websi...",
+      "completeness_score": 40.0,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "REQUIRED_MISSING_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 58,
@@ -1063,7 +1486,15 @@
       "description": "Crew 4048 (4,000-48) is just getting started, but we have big plans...to climb all the 4,000ft peaks in New Hampshire. There are 48 of them, hence the 4048 crew number.\n \nPlease contact us if you would like to be part of group founding this Venture Crew.\n\nFor current Scouting America members there is NO FEE to join.\n\nOnwards to adventure!",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nCrew 4048 All Saints Episcopal ChurchSpecialty: HIGH ADVENTURE\n\n\n          10 Billerica Rd All Saints' Episcopal ChurchChelmsford MA 01824        \n\n\n\nContact: Richard Friesner\n\n\nPhone: (540) 455-03..."
+      "raw_content": "\n\n\nCrew 4048 All Saints Episcopal ChurchSpecialty: HIGH ADVENTURE\n\n\n          10 Billerica Rd All Saints' Episcopal ChurchChelmsford MA 01824        \n\n\n\nContact: Richard Friesner\n\n\nPhone: (540) 455-03...",
+      "completeness_score": 57.5,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 59,
@@ -1082,7 +1513,15 @@
       "description": "Troop Meetings are Wednesdays 7-8:30PM during days when school is in session. Meetings are held at St. Mary's Parish, 25 North Rd, Chelmsford, MA 01824. \nTroop 77 is mid-sized, has active Scouts for weekly meetings and has great parent participation and leadership. \nTroop 77 is also great for those families who want to balance other activities like sports and music, AND scouts/camping.\nMinimal fundraising is required of parents.",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0077 Friends of New England Base Camp\n\n\n          25 North RoadChelmsford MA 01824        \n\n\n\nContact: Charles Morin\n\n\nEmail: cmorinr74@gmail.com\ncmorinr74@gmail.com\n\n\n\n Boy Troop\n Online Reg..."
+      "raw_content": "\n\n\nTroop 0077 Friends of New England Base Camp\n\n\n          25 North RoadChelmsford MA 01824        \n\n\n\nContact: Charles Morin\n\n\nEmail: cmorinr74@gmail.com\ncmorinr74@gmail.com\n\n\n\n Boy Troop\n Online Reg...",
+      "completeness_score": 58.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE",
+        "RECOMMENDED_MISSING_WEBSITE"
+      ]
     },
     {
       "index": 60,
@@ -1101,7 +1540,14 @@
       "description": "New Girls troop just formed in 2025.  We have 7 members now and are growing.  We are associated with Troop 194B (the boy's troop) that have 30 members.  Please come check us out!  Feel free to reach out to discuss any questions or concerns at:coadyallan@gmail.com",
       "unit_composition": "Girl Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0194 Anthony Hunt Hamilton  A .L. Post 221\n\n\n          357 Great RdBedford MA 01730        \n\n\n\nContact: Allan Coady\n\n\nPhone: (781) 439-2156\n(781) 439-2156\n\n\nEmail: coadyallan@gmail.com\ncoadya..."
+      "raw_content": "\n\n\nTroop 0194 Anthony Hunt Hamilton  A .L. Post 221\n\n\n          357 Great RdBedford MA 01730        \n\n\n\nContact: Allan Coady\n\n\nPhone: (781) 439-2156\n(781) 439-2156\n\n\nEmail: coadyallan@gmail.com\ncoadya...",
+      "completeness_score": 56.2,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL"
+      ]
     },
     {
       "index": 62,
@@ -1120,7 +1566,15 @@
       "description": "Pack 31 is a very active pack in Marlborough, meeting weekly at Goodnow Elementary School.  Please visit our website to learn more!",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nPack 0031 Rotary Club of Marlborough\n\n\n          Meetings on Mondays at Goodnow441 Bolton StMarlborough MA 01752        \n\n\n\nContact: Andrew Pye\n\n\nEmail: adwpye@gmail.com\nadwpye@gmail.com\n\n\nWebsite:..."
+      "raw_content": "\n\n\nPack 0031 Rotary Club of Marlborough\n\n\n          Meetings on Mondays at Goodnow441 Bolton StMarlborough MA 01752        \n\n\n\nContact: Andrew Pye\n\n\nEmail: adwpye@gmail.com\nadwpye@gmail.com\n\n\nWebsite:...",
+      "completeness_score": 48.8,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 63,
@@ -1139,7 +1593,14 @@
       "description": "We meet Monday nights 7 to 8:30 Trinity Lutheran Church. Visitors always welcome.",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0075 Trinity Lutheran and Central Congregational Church UCC\n\n\n          170 Old Westford RoadChelmsford MA 01824        \n\n\n\nContact: Elmer Lyons\n\n\nEmail: beascout@chelmsford75.mytroop.us\nbeas..."
+      "raw_content": "\n\n\nTroop 0075 Trinity Lutheran and Central Congregational Church UCC\n\n\n          170 Old Westford RoadChelmsford MA 01824        \n\n\n\nContact: Elmer Lyons\n\n\nEmail: beascout@chelmsford75.mytroop.us\nbeas...",
+      "completeness_score": 66.2,
+      "completeness_grade": "D",
+      "recommendations": [
+        "REQUIRED_MISSING_TIME",
+        "QUALITY_PERSONAL_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 64,
@@ -1158,7 +1619,15 @@
       "description": "We are a youth-led troop that camps and goes on adventures often.  We meet Tuesday nights at 7:00pm at the Ayer Fire Station.",
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nTroop 0003 Ayer-Volunteer Fire AuxiliariesCombinatioin Co #1\n\n\n\nWebsite: http://troop3ayer.weebly.com/index.html\n Go to Website\n\n\n\n Boy Troop\n Online Registration available for this unit.\n\n\nWe are ..."
+      "raw_content": "\n\n\nTroop 0003 Ayer-Volunteer Fire AuxiliariesCombinatioin Co #1\n\n\n\nWebsite: http://troop3ayer.weebly.com/index.html\n Go to Website\n\n\n\n Boy Troop\n Online Registration available for this unit.\n\n\nWe are ...",
+      "completeness_score": 50.0,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_LOCATION",
+        "REQUIRED_MISSING_EMAIL",
+        "RECOMMENDED_MISSING_CONTACT",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     },
     {
       "index": 65,
@@ -1177,7 +1646,15 @@
       "description": "Venturing Crew 7 is a co-ed program that is youth led.  The youth hold monthly meetings, plan monthly activities and plan one annual High Adventure of a week or more duration.  C7 Vision: Our Crew vision is to have fun while exploring new places, learning new skills, meeting new people and stepping out of our comfort zone!",
       "unit_composition": "",
       "distance": "0.5 miles",
-      "raw_content": "\n\n\nCrew 0007 Trinity Lutheran ChurchSpecialty: HIGH ADVENTURE\n\n\n          170 Old Westford RdChelmsford MA 01824        \n\n\n\nContact: Judith Dedinsky\n\n\nWebsite: http://chelmsfordcrew7.mytroop.us\n Go to..."
+      "raw_content": "\n\n\nCrew 0007 Trinity Lutheran ChurchSpecialty: HIGH ADVENTURE\n\n\n          170 Old Westford RdChelmsford MA 01824        \n\n\n\nContact: Judith Dedinsky\n\n\nWebsite: http://chelmsfordcrew7.mytroop.us\n Go to...",
+      "completeness_score": 50.5,
+      "completeness_grade": "F",
+      "recommendations": [
+        "REQUIRED_MISSING_DAY",
+        "REQUIRED_MISSING_TIME",
+        "REQUIRED_MISSING_EMAIL",
+        "RECOMMENDED_MISSING_PHONE"
+      ]
     }
   ]
 }

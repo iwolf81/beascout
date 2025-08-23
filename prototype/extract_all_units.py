@@ -30,9 +30,23 @@ def format_meeting_time(time_str):
     # Clean up common issues
     time_str = time_str.replace('.', '').strip()
     
-    # Convert to standard format
-    time_str = re.sub(r'(\d{1,2}):(\d{2})\s*([ap])\.?m?\.?', r'\1:\2 \3M', time_str, flags=re.IGNORECASE)
-    time_str = re.sub(r'(\d{1,2})\s*([ap])\.?m?\.?', r'\1:00 \2M', time_str, flags=re.IGNORECASE)
+    # Handle 3-4 digit times (e.g., "330" -> "3:30", "1230" -> "12:30")
+    digit_match = re.match(r'^(\d{3,4})\s*([ap])\.?m?\.?$', time_str, re.IGNORECASE)
+    if digit_match:
+        digits = digit_match.group(1)
+        am_pm = digit_match.group(2)
+        if len(digits) == 3:
+            hour = digits[0]
+            minute = digits[1:]
+        else:  # len(digits) == 4
+            hour = digits[:2]
+            minute = digits[2:]
+        time_str = f"{hour}:{minute} {am_pm}M"
+    
+    # Convert to standard format - check for already formatted times first
+    if not re.search(r'\d{1,2}:\d{2}\s*[ap]m', time_str, re.IGNORECASE):
+        time_str = re.sub(r'(\d{1,2}):(\d{2})\s*([ap])\.?m?\.?', r'\1:\2 \3M', time_str, flags=re.IGNORECASE)
+        time_str = re.sub(r'(\d{1,2})\s*([ap])\.?m?\.?', r'\1:00 \2M', time_str, flags=re.IGNORECASE)
     
     return time_str.upper()
 
@@ -244,6 +258,7 @@ def extract_meeting_info(description):
         r'(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})\s*([ap])\.?m?\.?',  # "7:00 - 8:30 p.m."
         r'(\d{1,2}:\d{2})\s*([ap])\.?m?\.?\s*-\s*(\d{1,2}:\d{2})\s*([ap])\.?m?\.?',  # "6:30 p.m. - 8:00 p.m."
         r'(?:at\s+)?(\d{1,2}:\d{2})\s*([ap])\.?m?\.?',  # "at 6:30pm", "7:00 PM"
+        r'(?:at\s+)?(\d{3,4})\s*([ap])\.?m?\.?',  # "at 330pm", "1230 PM" (3-4 digit times)
         r'(?:at\s+)?(\d{1,2})\s*([ap])\.?m?\.?',  # "at 7pm"
         r'(?:from\s+)?(\d{1,2}:\d{2})\s*(?:to\s+(\d{1,2}:\d{2}))?\s*([ap])\.?m?\.?',  # "from 7:00 to 8:30 PM"
     ]

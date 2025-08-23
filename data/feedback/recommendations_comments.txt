@@ -1,0 +1,34 @@
+  Recommendation Categories Identified:
+
+  Data Quality/Formatting Issues: ## These were issues with extraction code that should be already fixed.
+  - "Add comma separators in meeting location format"
+  - "Correct time format to standard (6:30 PM)"
+  - "Format phone number to standard (XXX) XXX-XXXX"
+  - "Extract meeting day from description text"
+  - "Extract meeting time from description text"
+  - "Extract complete time range from description"
+
+  Missing Required Fields:
+  - "Add valid meeting location with street address" ## Change to "Add meeting location with street address"
+  - "Add meeting day information" ## Remove 'information'
+  - "Add meeting time information" ## Remove 'information'
+  - "Add contact email address"
+  - "Add unit composition information" ## This should be fixed now.
+
+  Missing Recommended Fields:
+  - "Add contact person name"
+  - "Add phone number" ## Change to "Add contact phone number"
+  - "Add unit-specific website"
+  - "Add unit description" ## Use description recommendation further below instead of this one.
+
+  Invalid/Poor Quality Data:
+  - "Replace invalid meeting location (unit number used as address)" ## This should be fixed now.
+  - "Replace PO Box with physical meeting location"
+  - "Replace online registration link with unit-specific website" ## This should be fixed now.
+  - "Use unit-specific email instead of personal email"
+  - "Extract specialty field for Venturing Crews" ## This should be fixed now.
+
+  Content Quality Improvements:
+  - "Add informative and inviting unit description" ## append with " that includes meeting day(s) and time(s)"
+  - "Use descriptive email address for unit contact" ## Do not use this recommendation 
+  - "Create unit-specific website instead of registration link" ## This should be fixed now.
