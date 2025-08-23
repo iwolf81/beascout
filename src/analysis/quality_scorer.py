@@ -121,25 +121,9 @@ class UnitQualityScorer:
         
         if is_unit_role:
             return False  # Unit role emails are not personal
-            
-        # SECOND: Check for personal identifier patterns  
-        personal_patterns = [
-            r'[a-z]+\.[a-z]+',             # first.last format anywhere
-            r'^[a-z]{2,3}[a-z]{4,8}$',     # initials + name (2-3 chars + 4-8 chars, excludes single words like "scoutmaster")
-            r'^[a-z]{3}$',                 # 3-letter initials (like DRD)
-            r'[a-z]+[0-9]{2,4}$',          # ends with name + year/numbers
-            r'[a-z]+[0-9]{1,3}$',          # ends with name + small numbers  
-            r'[a-z]+\.[a-z]+\.[a-z]+',     # first.middle.last anywhere
-        ]
         
-        has_personal_identifier = any(re.search(pattern, local_part) 
-                                    for pattern in personal_patterns)
-        
-        # If has personal identifiers, it's personal regardless of unit context (for continuity)
-        if has_personal_identifier:
-            return True
-            
-        # SECOND: Check for unit-specific patterns (only if no personal identifiers)
+        # SECOND: Check for clear unit identifiers BEFORE personal patterns
+        # These patterns indicate unit-specific emails even if they might match personal patterns
         unit_patterns = [
             r'pack\d+',
             r'troop\d+', 
@@ -154,9 +138,26 @@ class UnitQualityScorer:
                                 for pattern in unit_patterns)
         
         if has_unit_identifier:
-            return False  # Unit-specific email without personal identifiers
+            return False  # Clear unit identifier - not personal
+            
+        # THIRD: Check for personal identifier patterns (only if no unit identifiers)
+        personal_patterns = [
+            r'[a-z]+\.[a-z]+',             # first.last format anywhere
+            r'^[a-z]{2,3}[a-z]{4,8}$',     # initials + name (2-3 chars + 4-8 chars, excludes single words like "scoutmaster")
+            r'^[a-z]{3}$',                 # 3-letter initials (like DRD)
+            r'[a-z]+[0-9]{2,4}$',          # ends with name + year/numbers (but not unit emails)
+            r'[a-z]+[0-9]{1,3}$',          # ends with name + small numbers (but not unit emails)
+            r'[a-z]+\.[a-z]+\.[a-z]+',     # first.middle.last anywhere
+        ]
         
-        # THIRD: For emails without unit or personal identifiers, check personal domains
+        has_personal_identifier = any(re.search(pattern, local_part) 
+                                    for pattern in personal_patterns)
+        
+        # If has personal identifiers, it's personal
+        if has_personal_identifier:
+            return True
+        
+        # FOURTH: For emails without unit or personal identifiers, check personal domains
         personal_domains = [
             r'@gmail\.com$',
             r'@yahoo\.com$', 

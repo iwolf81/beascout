@@ -29,3 +29,14 @@ unit_patterns[] in quality_scorer.py includes some town name. Suggest removing t
             r'westford',
             r'harvard',
             r'concord'
+
+# PASS 3
+
+This is NOT a personal email. The search results included units from towns outside of Heart of New England Council, thus Sudbury is not present in town_zipcodes[]. 01720 is on boarder of HNE council. I am unsure how to best solve this.
+28      sudburypack62@gmail.com                  QUALITY_PERSONAL_EMAIL   Pack 0062 St Elizabeth's Episcopal Church
+
+These are not personal emails:
+32      westfordpack100@gmail.com                QUALITY_PERSONAL_EMAIL   Pack 0100 Westford Rotary Club Inc
+33      harvardcubpack10@gmail.com               QUALITY_PERSONAL_EMAIL   Pack 0010 Harvard-Boy Scouts Inc
+44      cubscoutchelmsfordpack81@gmail.com       QUALITY_PERSONAL_EMAIL   Pack 0081 Chelmsford Land Conservation Trust Inc
+50      ayerscouts@gmail.com                     QUALITY_PERSONAL_EMAIL   Pack 0032 Ayer-St Andrews Church

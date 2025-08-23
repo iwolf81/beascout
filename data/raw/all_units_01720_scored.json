@@ -1,13 +1,13 @@
 {
   "total_units": 62,
   "scoring_summary": {
-    "A": 5,
-    "B": 10,
-    "C": 8,
-    "D": 5,
+    "A": 6,
+    "B": 11,
+    "C": 7,
+    "D": 4,
     "F": 34
   },
-  "average_score": 60.3,
+  "average_score": 61.3,
   "units_with_scores": [
     {
       "index": 0,
@@ -131,11 +131,10 @@
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
       "raw_content": "\n\n\nTroop 0001 Acton-Group Of Citizens, Inc\n\n\n          435 Central StreetSt. Matthew's ChurchActon MA 01720        \n\n\n\nContact: Timothy Brunker\n\n\nPhone: (617) 653-1986\n(617) 653-1986\n\n\nEmail: smbrunke...",
-      "completeness_score": 73.8,
-      "completeness_grade": "C",
+      "completeness_score": 82.5,
+      "completeness_grade": "B",
       "recommendations": [
-        "REQUIRED_MISSING_DAY",
-        "QUALITY_PERSONAL_EMAIL"
+        "REQUIRED_MISSING_DAY"
       ]
     },
     {
@@ -547,11 +546,10 @@
       "unit_composition": "",
       "distance": "0.5 miles",
       "raw_content": "\n\n\nCrew 1923 Troop One Stow Alumni IncSpecialty: CAMPING/BACKPACKING/HIKING\n\n\n\n\nContact: Anthony Nardone\n\n\nEmail: anthony.nardone.scouts@gmail.com\nanthony.nardone.scouts@gmail.com\n\n\nWebsite: https://w...",
-      "completeness_score": 71.5,
+      "completeness_score": 78.5,
       "completeness_grade": "C",
       "recommendations": [
         "REQUIRED_MISSING_LOCATION",
-        "QUALITY_PERSONAL_EMAIL",
         "RECOMMENDED_MISSING_PHONE"
       ]
     },
@@ -713,12 +711,11 @@
       "unit_composition": "",
       "distance": "0.5 miles",
       "raw_content": "\n\n\nPack 0062 St Elizabeth's Episcopal Church\n\n\n          1 Morse RoadSudbury MA 01776        \n\n\n\nContact: William Bryce\n\n\nEmail: sudburypack62@gmail.com\nsudburypack62@gmail.com\n\n\nWebsite: http://Sudbu...",
-      "completeness_score": 48.8,
+      "completeness_score": 57.5,
       "completeness_grade": "F",
       "recommendations": [
         "REQUIRED_MISSING_DAY",
         "REQUIRED_MISSING_TIME",
-        "QUALITY_PERSONAL_EMAIL",
         "RECOMMENDED_MISSING_PHONE"
       ]
     },
@@ -815,10 +812,9 @@
       "unit_composition": "",
       "distance": "0.5 miles",
       "raw_content": "\n\n\nPack 0100 Westford Rotary Club Inc\n\n\n          Abbot Elementary School25 Depot StreetWestford MA 01886        \n\n\nWebsite: http://www.westfordpack100.com/\n Go to Website\n\n\n\n Dens for Boys or Girls\n ...",
-      "completeness_score": 76.2,
-      "completeness_grade": "C",
+      "completeness_score": 85.0,
+      "completeness_grade": "B",
       "recommendations": [
-        "QUALITY_PERSONAL_EMAIL",
         "RECOMMENDED_MISSING_CONTACT",
         "RECOMMENDED_MISSING_PHONE"
       ]
@@ -841,13 +837,12 @@
       "unit_composition": "Pack 0010 Harvard-Boy Scouts Inc",
       "distance": "0.5 miles",
       "raw_content": "\n\n\nPack 0010 Harvard-Boy Scouts Inc\n\n\n\n\nContact: Kerry Evans\n\n\nPhone: (978) 501-5646\n(978) 501-5646\n\n\nEmail: harvardcubpack10@gmail.com\nharvardcubpack10@gmail.com\n\n\nWebsite: http://heartofnewenglandbs...",
-      "completeness_score": 38.8,
+      "completeness_score": 47.5,
       "completeness_grade": "F",
       "recommendations": [
         "REQUIRED_MISSING_LOCATION",
         "REQUIRED_MISSING_DAY",
-        "REQUIRED_MISSING_TIME",
-        "QUALITY_PERSONAL_EMAIL"
+        "REQUIRED_MISSING_TIME"
       ]
     },
     {
@@ -1129,11 +1124,10 @@
       "unit_composition": "",
       "distance": "0.5 miles",
       "raw_content": "\n\n\nPack 0081 Chelmsford Land Conservation Trust Inc\n\n\n          242 Boston RoadChelmsford MA 01824        \n\n\n\nContact: Melissa Albano-Davis\n\n\nEmail: cubscoutchelmsfordpack81@gmail.com\ncubscoutchelmsfo...",
-      "completeness_score": 66.2,
-      "completeness_grade": "D",
+      "completeness_score": 75.0,
+      "completeness_grade": "C",
       "recommendations": [
         "REQUIRED_MISSING_TIME",
-        "QUALITY_PERSONAL_EMAIL",
         "RECOMMENDED_MISSING_PHONE"
       ]
     },
@@ -1260,10 +1254,9 @@
       "unit_composition": "",
       "distance": "0.5 miles",
       "raw_content": "\n\n\nPack 0032 Ayer-St Andrews Church\n\n\n          7 Faulkner St.Ayer MA 01432        \n\n\n\nContact: Jennifer Kelly\n\n\nEmail: ayerscouts@gmail.com\nayerscouts@gmail.com\n\n\nWebsite: http://pack32ayer.org\n Go t...",
-      "completeness_score": 83.8,
-      "completeness_grade": "B",
+      "completeness_score": 92.5,
+      "completeness_grade": "A",
       "recommendations": [
-        "QUALITY_PERSONAL_EMAIL",
         "RECOMMENDED_MISSING_PHONE"
       ]
     },
