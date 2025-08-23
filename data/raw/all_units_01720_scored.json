@@ -1,13 +1,13 @@
 {
   "total_units": 62,
   "scoring_summary": {
-    "A": 5,
-    "B": 11,
+    "A": 6,
+    "B": 10,
     "C": 8,
     "D": 4,
     "F": 34
   },
-  "average_score": 60.7,
+  "average_score": 61.0,
   "units_with_scores": [
     {
       "index": 0,
@@ -234,11 +234,9 @@
       "unit_composition": "",
       "distance": "0.5 miles",
       "raw_content": "\n\n\nTroop 0130 Maynard Rod and Gun Club Inc.\n\n\n          Maynard Rod & Gun Club,45 Old Mill RoadMaynard MA 01754        \n\n\n\nContact: Christina Mitchell\n\n\nPhone: (978) 580-4226\n(978) 580-4226\n\n\nEmail: 1...",
-      "completeness_score": 91.2,
+      "completeness_score": 100.0,
       "completeness_grade": "A",
-      "recommendations": [
-        "QUALITY_PERSONAL_EMAIL"
-      ]
+      "recommendations": []
     },
     {
       "index": 9,
@@ -998,10 +996,9 @@
       "unit_composition": "Boy Troop",
       "distance": "0.5 miles",
       "raw_content": "\n\n\nTroop 0195 Friends of Westford Scouting Inc\n\n\n          107 N Main StWestford MA 01886        \n\n\n\nContact: Kevin Dickson\n\n\nEmail: troop195scoutmaster+beascout@gmail.com\ntroop195scoutmaster+beascout...",
-      "completeness_score": 83.8,
-      "completeness_grade": "B",
+      "completeness_score": 92.5,
+      "completeness_grade": "A",
       "recommendations": [
-        "QUALITY_PERSONAL_EMAIL",
         "RECOMMENDED_MISSING_PHONE"
       ]
     },

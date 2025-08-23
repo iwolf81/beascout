@@ -46,3 +46,9 @@ These are not personal emails:
 This are personal emails. Recall that a personal reference in an email address overrides an otherwise unit-specific email thus it should be tagged as QUALITY_PERSONAL_EMAIL
 4       smbrunker.troop1acton@gmail.com          GOOD                     Troop 0001 Acton-Group Of Citizens, Inc
 21      anthony.nardone.scouts@gmail.com         GOOD                     Crew 1923 Troop One Stow Alumni Inc Specialty:  CA...
+
+# PASS 5
+
+These are not personal emails. Not that '130' in the email is the unit number. Should you search email for unit number, with and without leading zeros, to identify the found string as unit-specific and not personal? Note that the unit number could appear anywhere in the email address.
+8       130scoutmaster@gmail.com                 QUALITY_PERSONAL_EMAIL   Troop 0130 Maynard Rod and Gun Club Inc.
+39      troop195scoutmaster+beascout@gmail.com   QUALITY_PERSONAL_EMAIL   Troop 0195 Friends of Westford Scouting Inc

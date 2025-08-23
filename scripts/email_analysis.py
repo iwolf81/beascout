@@ -18,13 +18,24 @@ from typing import List, Tuple
 import re
 
 
-def is_personal_email(email: str) -> bool:
+def is_personal_email(email: str, unit_data: dict = None) -> bool:
     """Check if email appears to be personal rather than unit-specific"""
     if not email:
         return False
     
     # Extract the local part (before @) for analysis
     local_part = email.split('@')[0].lower()
+    
+    # Extract unit number for comparison if available
+    unit_number = None
+    if unit_data:
+        unit_num_str = unit_data.get('unit_number', '')
+        if unit_num_str:
+            # Remove leading zeros and convert to int for matching
+            try:
+                unit_number = int(unit_num_str.lstrip('0') or '0')
+            except ValueError:
+                unit_number = None
     
     # FIRST: Check for unit-specific patterns that should override personal detection
     unit_role_patterns = [
@@ -76,10 +87,23 @@ def is_personal_email(email: str) -> bool:
         return False  # Clear unit-only identifier - not personal
         
     # FOURTH: Check remaining personal patterns (for ambiguous cases)
+    # First check for unit numbers in the email to avoid false positives
+    if unit_number:
+        # Look for unit number anywhere in email (with or without leading zeros)
+        unit_patterns = [
+            rf'\b0*{unit_number}\b',  # unit number with optional leading zeros
+            rf'^{unit_number}[a-z]',  # unit number at start followed by letters (130scoutmaster)
+            rf'[a-z]{unit_number}[a-z]', # unit number embedded in letters (troop195scoutmaster)
+        ]
+        
+        has_unit_number = any(re.search(pattern, local_part) for pattern in unit_patterns)
+        if has_unit_number:
+            return False  # Contains unit number - not personal
+    
     ambiguous_personal_patterns = [
         r'^[a-z]{2,3}[a-z]{4,8}$',     # initials + name (2-3 chars + 4-8 chars)
-        r'[a-z]+[0-9]{2,4}$',          # ends with name + year/numbers (but not unit emails)
-        r'[a-z]+[0-9]{1,3}$',          # ends with name + small numbers (but not unit emails)
+        r'[a-z]+[0-9]{2,4}$',          # ends with name + year/numbers (but check unit number first)
+        r'[a-z]+[0-9]{1,3}$',          # ends with name + small numbers (but check unit number first)
     ]
     
     has_ambiguous_personal = any(re.search(pattern, local_part) 
@@ -123,7 +147,7 @@ def analyze_file(file_path: str) -> List[Tuple[int, str, str, str]]:
             
             if not email:
                 quality_tag = 'NONE'
-            elif is_personal_email(email):
+            elif is_personal_email(email, unit):
                 quality_tag = 'QUALITY_PERSONAL_EMAIL'
             else:
                 quality_tag = 'GOOD'
