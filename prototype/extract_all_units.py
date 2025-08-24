@@ -138,8 +138,80 @@ def extract_town_from_org(chartered_org):
     # Could not determine town
     return ""
 
-def parse_crew_specialty(primary_id, chartered_org):
-    """Parse specialty from Crew primary identifier"""
+def filter_hne_units(units):
+    """Filter units to only include those within HNE Council territory
+    
+    Args:
+        units: List of unit dictionaries
+        
+    Returns:
+        Filtered list containing only HNE Council units
+    """
+    # Load HNE towns list
+    try:
+        import sys
+        import os
+        sys.path.append(os.path.dirname(__file__))
+        from extract_hne_towns import get_hne_towns_and_zipcodes
+        hne_towns, _ = get_hne_towns_and_zipcodes()
+        hne_towns_lower = [town.lower() for town in hne_towns]
+    except ImportError:
+        print("Warning: Could not load HNE towns data - all units will be included")
+        return units
+    
+    hne_units = []
+    non_hne_units = []
+    
+    for unit in units:
+        unit_town = unit.get('unit_town', '').lower().strip()
+        chartered_org = unit.get('chartered_organization', '').lower()
+        
+        # Check if unit town is in HNE territory
+        is_hne = False
+        
+        if unit_town and unit_town in hne_towns_lower:
+            # Unit town is clearly identified and is in HNE territory
+            is_hne = True
+        elif unit_town:
+            # Unit town is clearly identified but is NOT in HNE territory
+            # Do not override with chartered org matching - trust the extracted location
+            is_hne = False
+        else:
+            # No unit town identified - use chartered organization as fallback
+            # Sort by length (longest first) to match "West Boylston" before "Boylston"
+            sorted_towns = sorted(hne_towns, key=len, reverse=True)
+            for town in sorted_towns:
+                town_lower = town.lower()
+                if town_lower in chartered_org:
+                    # Additional validation to avoid false positives
+                    # Make sure it's a word boundary match
+                    if re.search(rf'\b{re.escape(town_lower)}\b', chartered_org):
+                        is_hne = True
+                        # Update unit_town with the detected town
+                        unit['unit_town'] = town
+                        break
+        
+        if is_hne:
+            hne_units.append(unit)
+        else:
+            non_hne_units.append(unit)
+    
+    # Print filtering summary
+    print(f"HNE Territory Filtering:")
+    print(f"  HNE Council units: {len(hne_units)}")
+    print(f"  Non-HNE units filtered out: {len(non_hne_units)}")
+    
+    if non_hne_units:
+        print(f"  Filtered out units:")
+        for unit in non_hne_units:
+            town = unit.get('unit_town', 'Unknown')
+            identifier = unit.get('primary_identifier', 'Unknown')
+            print(f"    - {identifier} ({town})")
+    
+    return hne_units
+
+def parse_specialty_info(primary_id, chartered_org):
+    """Parse specialty from specialized unit primary identifier (Crew, Post, Club)"""
     if 'Specialty:' not in primary_id:
         return chartered_org, ""
     
@@ -149,7 +221,7 @@ def parse_crew_specialty(primary_id, chartered_org):
         # Clean up chartered org (remove specialty part)
         clean_org = parts[0].strip()
         # Remove unit info from org name
-        clean_org = re.sub(r'^(Crew|Pack|Troop)\s+\d+\s+', '', clean_org).strip()
+        clean_org = re.sub(r'^(Crew|Post|Club|Pack|Troop)\s+\d+\s+', '', clean_org).strip()
         
         # Extract specialty
         specialty = parts[1].strip()
@@ -199,9 +271,9 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
                         # Extract town name from chartered organization
                         unit_data['unit_town'] = extract_town_from_org(chartered_org)
                         
-                        # Handle Crew specialty parsing
-                        if unit_data['unit_type'] == 'Crew':
-                            clean_org, specialty = parse_crew_specialty(full_name, chartered_org)
+                        # Handle specialty parsing for specialized units (Crew, Post, Club)
+                        if unit_data['unit_type'] in ['Crew', 'Post', 'Club']:
+                            clean_org, specialty = parse_specialty_info(full_name, chartered_org)
                             unit_data['chartered_organization'] = clean_org
                             unit_data['specialty'] = specialty
                         else:
@@ -277,7 +349,7 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
         if composition_elem:
             # Get the parent element's text
             parent_text = composition_elem.parent.get_text(strip=True)
-            if 'Troop' in parent_text or 'Pack' in parent_text or 'Crew' in parent_text:
+            if any(unit_type in parent_text for unit_type in ['Troop', 'Pack', 'Crew', 'Post', 'Club']):
                 unit_data['unit_composition'] = parent_text
         
         # Meeting info extraction from description - prioritize over address extraction
@@ -448,11 +520,16 @@ def deduplicate_units(units):
     
     return unique_units
 
-def main():
-    html_file = 'data/raw/debug_page_01720.html'
+def process_html_file(html_file_path, source_name=""):
+    """Process a single HTML file and extract unit data"""
+    print(f"\nProcessing {source_name}: {html_file_path}")
     
-    with open(html_file, 'r') as f:
-        content = f.read()
+    try:
+        with open(html_file_path, 'r') as f:
+            content = f.read()
+    except FileNotFoundError:
+        print(f"File not found: {html_file_path}")
+        return []
     
     soup = BeautifulSoup(content, 'html.parser')
     
@@ -464,26 +541,94 @@ def main():
     print(f"Found {len(unit_names)} unit names")
     
     # Extract all units
-    all_units = []
+    units = []
     for i, wrapper in enumerate(unit_wrappers):
         unit_name_elem = unit_names[i] if i < len(unit_names) else None
         unit_data = extract_unit_fields(wrapper, i, unit_name_elem)
-        all_units.append(unit_data)
+        
+        # Add source information
+        unit_data['data_source'] = source_name
+        units.append(unit_data)
     
-    # Deduplicate
+    print(f"Extracted {len(units)} units from {source_name}")
+    return units
+
+
+def main():
+    import sys
+    
+    if len(sys.argv) < 2:
+        print("Usage: python prototype/extract_all_units.py <html_file> [additional_html_files...]")
+        print("Examples:")
+        print("  python prototype/extract_all_units.py data/raw/debug_page_01720.html")
+        print("  python prototype/extract_all_units.py data/raw/beascout_01720.html data/raw/joinexploring_01720.html")
+        sys.exit(1)
+    
+    html_files = sys.argv[1:]
+    all_units = []
+    
+    # Process each HTML file
+    for html_file in html_files:
+        # Determine source name from filename
+        if 'beascout' in html_file.lower():
+            source_name = "BeAScout"
+        elif 'joinexploring' in html_file.lower():
+            source_name = "JoinExploring" 
+        else:
+            source_name = "Unknown"
+        
+        units = process_html_file(html_file, source_name)
+        all_units.extend(units)
+    
+    print(f"\n=== SUMMARY ===")
+    print(f"Total units extracted from all sources: {len(all_units)}")
+    
+    # Show breakdown by source
+    source_counts = {}
+    for unit in all_units:
+        source = unit.get('data_source', 'Unknown')
+        source_counts[source] = source_counts.get(source, 0) + 1
+    
+    for source, count in source_counts.items():
+        print(f"  {source}: {count} units")
+    
+    # Deduplicate across all sources
     unique_units = deduplicate_units(all_units)
     print(f"After deduplication: {len(unique_units)} unique units")
     
+    # Apply HNE Council territory filtering
+    hne_filtered_units = filter_hne_units(unique_units)
+    print(f"After HNE filtering: {len(hne_filtered_units)} HNE Council units")
+    
+    # Determine output filename based on input
+    if len(html_files) == 1:
+        # Single file - use existing naming convention
+        base_name = html_files[0].replace('data/raw/', '').replace('.html', '')
+        output_file = f'data/raw/all_units_{base_name.replace("debug_page_", "")}.json'
+    else:
+        # Multiple files - use combined naming
+        zip_codes = []
+        for file in html_files:
+            if '01720' in file:
+                zip_codes.append('01720')
+        zip_part = '_'.join(set(zip_codes)) if zip_codes else 'combined'
+        output_file = f'data/raw/all_units_{zip_part}.json'
+    
     # Save all units to JSON
     output_data = {
-        'total_units': len(unique_units),
-        'all_units': unique_units
+        'extraction_info': {
+            'source_files': html_files,
+            'source_counts': source_counts,
+            'extraction_date': str(__import__('datetime').datetime.now())
+        },
+        'total_units': len(hne_filtered_units),
+        'all_units': hne_filtered_units
     }
     
-    with open('data/raw/all_units_01720.json', 'w') as f:
+    with open(output_file, 'w') as f:
         json.dump(output_data, f, indent=2)
     
-    print(f"Saved all {len(unique_units)} units to data/raw/all_units_01720.json")
+    print(f"Saved all {len(hne_filtered_units)} units to {output_file}")
 
 if __name__ == "__main__":
     main()

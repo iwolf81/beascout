@@ -19,16 +19,16 @@ from pathlib import Path
 @dataclass
 class ScoringWeights:
     """Scoring weights by unit type"""
-    # Non-Crew units (Packs, Troops, Ships): 4 required fields at 17.5% each
-    NON_CREW_REQUIRED = {
+    # Non-specialized units (Packs, Troops, Ships): 4 required fields at 17.5% each
+    STANDARD_REQUIRED = {
         'meeting_location': 17.5,
         'meeting_day': 17.5,
         'meeting_time': 17.5,
         'contact_email': 17.5
     }
     
-    # Crew units: 5 required fields at 14% each
-    CREW_REQUIRED = {
+    # Specialized units (Crews, Posts, Clubs): 5 required fields at 14% each
+    SPECIALIZED_REQUIRED = {
         'meeting_location': 14.0,
         'meeting_day': 14.0,
         'meeting_time': 14.0,
@@ -71,9 +71,10 @@ class UnitQualityScorer:
             'CONTENT_MISSING_DESCRIPTION': "Add informative and inviting unit description that includes meeting day(s) and time(s)"
         }
     
-    def is_crew_unit(self, unit: Dict[str, Any]) -> bool:
-        """Check if unit is a Venturing Crew"""
-        return unit.get('unit_type', '').lower() == 'crew'
+    def is_specialized_unit(self, unit: Dict[str, Any]) -> bool:
+        """Check if unit is specialized (requires specialty field): Crew, Post, or Club"""
+        unit_type = unit.get('unit_type', '').lower()
+        return unit_type in ['crew', 'post', 'club']
     
     def is_field_present(self, unit: Dict[str, Any], field: str) -> bool:
         """Check if field has meaningful content"""
@@ -211,14 +212,14 @@ class UnitQualityScorer:
         """Score a single unit and return score and recommendations"""
         score = 0.0
         recommendations = []
-        is_crew = self.is_crew_unit(unit)
+        is_specialized = self.is_specialized_unit(unit)
         
         # Get appropriate required field weights
-        required_weights = self.weights.CREW_REQUIRED if is_crew else self.weights.NON_CREW_REQUIRED
+        required_weights = self.weights.SPECIALIZED_REQUIRED if is_specialized else self.weights.STANDARD_REQUIRED
         
         # Score required fields
         for field, weight in required_weights.items():
-            if field == 'specialty' and not is_crew:
+            if field == 'specialty' and not is_specialized:
                 continue  # Skip specialty for non-crew units
                 
             if not self.is_field_present(unit, field):
