@@ -83,7 +83,36 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 
 **Key Learning:** Manual review systems should be designed for efficiency and trackability from the start.
 
-### 2.4 Production Readiness Validation
+### 2.4 Town Extraction and HNE Filtering System
+**Challenge:** Accurately identifying unit towns for Heart of New England Council territory filtering.
+
+**Initial Approach:** Extract town names from chartered organization names using pattern matching and HNE town list comparison.
+
+**Discovered Issues:**
+- Organization names containing historical figures' names caused incorrect extractions (e.g., "Joseph Warren Soley Lodge" incorrectly extracted "Warren" instead of meeting location "Lincoln")
+- Units meeting outside their chartered organization's town were misclassified
+- Personal names in organizations (e.g., "Joseph Warren") were matched as town names
+
+**Enhanced Solution:** Multi-method town extraction with address prioritization:
+1. **Primary method:** Extract from meeting location address (most reliable)
+2. **Fallback method:** Extract from organization name with historical name pattern detection
+3. **Person name filtering:** Detect patterns like "FirstName TownName" to avoid false matches
+4. **Address parsing:** Multiple regex patterns for various address formats
+
+**Implementation:**
+- `extract_town_from_address()`: Parses meeting location addresses for town names
+- Enhanced `extract_town_from_org()`: Avoids historical figure name conflicts  
+- Priority-based extraction: Address-based extraction takes precedence over organization parsing
+- HNE territory validation: Cross-references extracted towns against official HNE Council boundaries
+
+**Results:**
+- Troop 127 Lincoln correctly classified as non-HNE (Lincoln not in HNE territory)
+- Improved from 24 incorrectly included units to 23 accurate HNE units
+- 39 non-HNE units properly excluded from email generation
+
+**Key Learning:** Geographic classification requires address-based validation, not just organization name parsing.
+
+### 2.5 Production Readiness Validation
 **Metrics Achieved:**
 - 98%+ Key Three cross-referencing accuracy (1 miss out of 62 units)
 - 61.0% average unit completeness score
