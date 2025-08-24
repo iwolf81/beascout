@@ -52,3 +52,9 @@ This are personal emails. Recall that a personal reference in an email address o
 These are not personal emails. Not that '130' in the email is the unit number. Should you search email for unit number, with and without leading zeros, to identify the found string as unit-specific and not personal? Note that the unit number could appear anywhere in the email address.
 8       130scoutmaster@gmail.com                 QUALITY_PERSONAL_EMAIL   Troop 0130 Maynard Rod and Gun Club Inc.
 39      troop195scoutmaster+beascout@gmail.com   QUALITY_PERSONAL_EMAIL   Troop 0195 Friends of Westford Scouting Inc
+
+# PASS 6
+
+The script email_analysis.py is meant to only assist in the **manual reviewing** of email address quality assessments in generated all_units_<zip>_scored.json file(s). Specifically, it is supposed to **only extract** the "index", "contact_email", quality email recommendation result, and "primary_identifier" from the generated input file(s) being evaluated without performing any transformation or assessment, then present those fields in a table for manual review.
+1. Revise this script to perform this function, removing any and all transformation and assessment actions.
+2. Execute the revised script. 

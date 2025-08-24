@@ -204,5 +204,13 @@ Successfully evolved from **single zip code prototype** to **production-ready ex
 2. **Non-native English speaker guidelines**: Include clarity recommendations for descriptions
 3. **Multi-zip code scaling decision**: Business validation vs technical expansion
 
+### Unplanned Next Steps
+1. When generating emails and reports, do not include units whose town is not within Heart of New England Council.
+2. Re-assess Troop 1 Acton missing corresponding chartered organization in HNE_key_three.xlsx. A prior assessment stated the following, which is incorrect. Both the BeAScout data and spreadsheet include "Acton Group of Citizens" as chartered organization. I suspect the '-' character is affecting incorrect assessment:
+   The Missing Unit: Troop 1 Acton chartered by "Group Of Citizens, Inc" - this suggests:
+    - Either this unit is not in the Key Three roster
+    - Or there's a naming/organization mismatch between the unit data and Key Three spreadsheet
+
+
 ---
 *Updated on 2025-08-23 - Quality scoring system production-ready with sophisticated email classification, 54.8% of units identified for improvement through 5-pass manual review refinement*

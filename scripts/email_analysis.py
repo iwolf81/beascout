@@ -2,12 +2,13 @@
 """
 Email Analysis Script for BeAScout Unit Data
 
-Analyzes contact_email fields from all_units_<zip>.json files and generates
-a table showing index, contact_email, and quality classification.
+Extracts contact_email fields and quality assessments from scored all_units_<zip>_scored.json files 
+and displays them in a table for manual review. This script performs NO analysis or transformation - 
+it only extracts existing data from already-scored JSON files.
 
 Usage:
-    python scripts/email_analysis.py data/raw/all_units_01720.json
-    python scripts/email_analysis.py data/raw/all_units_*.json
+    python scripts/email_analysis.py data/raw/all_units_01720_scored.json
+    python scripts/email_analysis.py data/raw/all_units_*_scored.json
 """
 
 import json
@@ -15,139 +16,34 @@ import sys
 import glob
 from pathlib import Path
 from typing import List, Tuple
-import re
 
 
-def is_personal_email(email: str, unit_data: dict = None) -> bool:
-    """Check if email appears to be personal rather than unit-specific"""
-    if not email:
-        return False
-    
-    # Extract the local part (before @) for analysis
-    local_part = email.split('@')[0].lower()
-    
-    # Extract unit number for comparison if available
-    unit_number = None
-    if unit_data:
-        unit_num_str = unit_data.get('unit_number', '')
-        if unit_num_str:
-            # Remove leading zeros and convert to int for matching
-            try:
-                unit_number = int(unit_num_str.lstrip('0') or '0')
-            except ValueError:
-                unit_number = None
-    
-    # FIRST: Check for unit-specific patterns that should override personal detection
-    unit_role_patterns = [
-        r'^scoutmaster',
-        r'^cubmaster', 
-        r'^committee',
-        r'^beascout',  # Platform-specific email
-        r'^secretary',
-        r'^info',
-        r'^admin',
-    ]
-    
-    is_unit_role = any(re.search(pattern, local_part) 
-                      for pattern in unit_role_patterns)
-    
-    if is_unit_role:
-        return False  # Unit role emails are not personal
-    
-    # SECOND: Check for personal identifier patterns FIRST (they override unit patterns)
-    personal_patterns = [
-        r'[a-z]+\.[a-z]+',             # first.last format anywhere (overrides unit context)
-        r'[a-z]+\.[a-z]+\.[a-z]+',     # first.middle.last anywhere
-        r'^[a-z]{3}$',                 # 3-letter initials (like DRD)
-    ]
-    
-    has_personal_identifier = any(re.search(pattern, local_part) 
-                                for pattern in personal_patterns)
-    
-    # If has clear personal identifiers, it's personal regardless of unit context
-    if has_personal_identifier:
-        return True
-    
-    # THIRD: Check for unit-only identifiers (no personal names mixed in)
-    # These are clearly unit emails with numbers or other patterns
-    unit_only_patterns = [
-        r'^[a-z]*pack\d+[a-z]*$',           # pack62, westfordpack100, etc.
-        r'^[a-z]*troop\d+[a-z]*$',          # troop100, etc.
-        r'^[a-z]*crew\d+[a-z]*$',           # crew100, etc.
-        r'^[a-z]*ship\d+[a-z]*$',           # ship100, etc.
-        r'^[a-z]*scouts?[a-z]*$',           # scouts, ayerscouts, etc.
-        r'^cubscout[a-z]*pack\d+[a-z]*$',   # cubscoutchelmsfordpack81, etc.
-        r'^[a-z]*scoutmaster\d*[a-z]*$',    # scoutmaster1gstow, etc.
-    ]
-    
-    has_unit_only_identifier = any(re.search(pattern, local_part) 
-                                 for pattern in unit_only_patterns)
-    
-    if has_unit_only_identifier:
-        return False  # Clear unit-only identifier - not personal
-        
-    # FOURTH: Check remaining personal patterns (for ambiguous cases)
-    # First check for unit numbers in the email to avoid false positives
-    if unit_number:
-        # Look for unit number anywhere in email (with or without leading zeros)
-        unit_patterns = [
-            rf'\b0*{unit_number}\b',  # unit number with optional leading zeros
-            rf'^{unit_number}[a-z]',  # unit number at start followed by letters (130scoutmaster)
-            rf'[a-z]{unit_number}[a-z]', # unit number embedded in letters (troop195scoutmaster)
-        ]
-        
-        has_unit_number = any(re.search(pattern, local_part) for pattern in unit_patterns)
-        if has_unit_number:
-            return False  # Contains unit number - not personal
-    
-    ambiguous_personal_patterns = [
-        r'^[a-z]{2,3}[a-z]{4,8}$',     # initials + name (2-3 chars + 4-8 chars)
-        r'[a-z]+[0-9]{2,4}$',          # ends with name + year/numbers (but check unit number first)
-        r'[a-z]+[0-9]{1,3}$',          # ends with name + small numbers (but check unit number first)
-    ]
-    
-    has_ambiguous_personal = any(re.search(pattern, local_part) 
-                               for pattern in ambiguous_personal_patterns)
-    
-    # If has ambiguous personal patterns, it's personal
-    if has_ambiguous_personal:
-        return True
-    
-    # FOURTH: For emails without unit or personal identifiers, check personal domains
-    personal_domains = [
-        r'@gmail\.com$',
-        r'@yahoo\.com$', 
-        r'@hotmail\.com$',
-        r'@aol\.com$',
-        r'@comcast\.net$'
-    ]
-    
-    is_personal_domain = any(re.search(pattern, email, re.IGNORECASE) 
-                            for pattern in personal_domains)
-    
-    # If on personal domain with no unit identifiers, it's personal
-    return is_personal_domain
-
-
-def analyze_file(file_path: str) -> List[Tuple[int, str, str, str]]:
-    """Analyze a single JSON file and return list of (index, email, quality_tag, primary_identifier)"""
+def extract_from_file(file_path: str) -> List[Tuple[int, str, str, str]]:
+    """Extract data from a single scored JSON file and return list of (index, email, quality_tag, primary_identifier)"""
     results = []
     
     try:
         with open(file_path, 'r') as f:
             data = json.load(f)
         
-        # Handle both raw extraction files and scored files
-        units = data.get('all_units', data.get('units_with_scores', []))
+        # Extract from scored files (units_with_scores)
+        units = data.get('units_with_scores', [])
+        
+        if not units:
+            print(f"Warning: No 'units_with_scores' found in {file_path}. This script requires scored JSON files.", file=sys.stderr)
+            return results
         
         for unit in units:
             index = unit.get('index', 0)
             email = unit.get('contact_email', '')
             primary_id = unit.get('primary_identifier', 'Unknown Unit')
             
+            # Extract existing quality assessment from recommendations
+            recommendations = unit.get('recommendations', [])
+            
             if not email:
                 quality_tag = 'NONE'
-            elif is_personal_email(email, unit):
+            elif 'QUALITY_PERSONAL_EMAIL' in recommendations:
                 quality_tag = 'QUALITY_PERSONAL_EMAIL'
             else:
                 quality_tag = 'GOOD'
@@ -237,7 +133,7 @@ def main():
             print(f"File not found: {file_path}", file=sys.stderr)
             continue
         
-        results = analyze_file(file_path)
+        results = extract_from_file(file_path)
         
         if len(all_files) > 1:
             print_table(results, file_path)

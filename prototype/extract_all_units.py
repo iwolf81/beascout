@@ -58,6 +58,86 @@ def format_meeting_time(time_str):
     
     return time_str.upper()
 
+def extract_town_from_address(meeting_location):
+    """Extract town name from meeting location address
+    
+    Most reliable method - uses actual meeting location
+    """
+    if not meeting_location:
+        return ""
+    
+    # Common patterns for addresses ending with town and state/zip
+    address_patterns = [
+        r',\s*([A-Za-z\s]+)\s+MA\s+\d{5}',  # ", Town MA 12345"
+        r',\s*([A-Za-z\s]+)\s+MA',           # ", Town MA"
+        r',\s*([A-Za-z\s]+)\s*$',            # ", Town" at end
+    ]
+    
+    for pattern in address_patterns:
+        match = re.search(pattern, meeting_location)
+        if match:
+            return match.group(1).strip()
+    
+    return ""
+
+def extract_town_from_org(chartered_org):
+    """Extract town name from chartered organization field
+    
+    Handles two main formats:
+    1. "Town-Organization Name" (e.g., "Acton-Congregational Church")
+    2. "Organization Name" with town in name (e.g., "Maynard Rod and Gun Club")
+    
+    Note: This method is less reliable than address-based extraction
+    """
+    if not chartered_org:
+        return ""
+    
+    # Method 1: Dash-based extraction (most reliable)
+    if '-' in chartered_org:
+        town = chartered_org.split('-')[0].strip()
+        return town
+    
+    # Method 2: Search for HNE town names in organization
+    # Import HNE towns data
+    try:
+        import sys
+        import os
+        sys.path.append(os.path.dirname(__file__))
+        from extract_hne_towns import get_hne_towns_and_zipcodes
+        hne_towns, _ = get_hne_towns_and_zipcodes()
+        
+        org_lower = chartered_org.lower()
+        
+        # Look for town names in the organization name
+        # Sort by length (longest first) to match "West Boylston" before "Boylston"
+        sorted_towns = sorted(hne_towns, key=len, reverse=True)
+        
+        for town in sorted_towns:
+            # Avoid matching names that are part of historical figures
+            # e.g., "Joseph Warren" should not match "Warren" the town
+            town_lower = town.lower()
+            if town_lower in org_lower:
+                # Additional check: make sure it's not part of a person's name
+                # Look for patterns like "FirstName TownName" which indicate a person
+                if re.search(rf'\b[A-Z][a-z]+\s+{re.escape(town)}\b', chartered_org):
+                    continue  # Skip this match - likely a person's name
+                return town
+        
+    except ImportError:
+        pass  # Fallback if HNE towns data not available
+    
+    # Method 3: Common patterns for non-HNE towns
+    org_lower = chartered_org.lower()
+    common_towns = ['stow', 'concord', 'maynard', 'sudbury', 'westford', 'chelmsford', 
+                   'hudson', 'marlborough', 'wayland', 'carlisle']
+    
+    for town in common_towns:
+        if town in org_lower:
+            return town.title()
+    
+    # Could not determine town
+    return ""
+
 def parse_crew_specialty(primary_id, chartered_org):
     """Parse specialty from Crew primary identifier"""
     if 'Specialty:' not in primary_id:
@@ -84,6 +164,7 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
         'primary_identifier': '',
         'unit_type': '',
         'unit_number': '',
+        'unit_town': '',  # New field for extracted town name
         'chartered_organization': '',
         'specialty': '',
         'meeting_location': '',
@@ -114,6 +195,9 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
                     unit_data['unit_number'] = name_parts[1]
                     if len(name_parts) > 2:
                         chartered_org = ' '.join(name_parts[2:])
+                        
+                        # Extract town name from chartered organization
+                        unit_data['unit_town'] = extract_town_from_org(chartered_org)
                         
                         # Handle Crew specialty parsing
                         if unit_data['unit_type'] == 'Crew':
@@ -236,6 +320,20 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
                     # Format location with proper separators
                     formatted_location = format_meeting_location(raw_location)
                     unit_data['meeting_location'] = formatted_location
+        
+        # Extract town name - prioritize meeting location address over organization name
+        if not unit_data.get('unit_town'):
+            # Method 1: Extract from meeting location address (most reliable)
+            if unit_data.get('meeting_location'):
+                town_from_address = extract_town_from_address(unit_data['meeting_location'])
+                if town_from_address:
+                    unit_data['unit_town'] = town_from_address
+            
+            # Method 2: Fallback to organization name extraction (less reliable)
+            if not unit_data.get('unit_town') and unit_data.get('chartered_organization'):
+                town_from_org = extract_town_from_org(unit_data['chartered_organization'])
+                if town_from_org:
+                    unit_data['unit_town'] = town_from_org
         
         # Raw content for debugging
         unit_data['raw_content'] = wrapper.get_text()[:200] + "..."
