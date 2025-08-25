@@ -475,4 +475,115 @@ Problem: Meeting day extraction 22.6%, meeting time 21.0% success rates
 
 ---
 
-*This extended log documents the complete evolution from concept to production-ready system through user-driven manual review methodology, demonstrating the power of systematic edge case refinement in AI-human collaboration.*
+---
+
+## Phase 11: Dual-Source Integration & Explorer Unit Support (Aug 24, 2025)
+
+### Strategic Expansion Request
+**User Directive**: "Let's discuss scraping and process beascout data for Explorer Posts and Explorer Clubs" with specific JoinExploring URL example and requirement to "change zip code being used from 01420 to 01720 as it will test filtering out non-HNE units"
+
+### Technical Discovery & Implementation
+**AJAX Challenge**: Initial curl-based approach failed - JoinExploring uses dynamic content loading requiring browser automation
+
+**Browser Automation Implementation**:
+- Built Playwright-based system (`src/scraping/browser_scraper.py`)
+- Created URL generation system (`src/scraping/url_generator.py`) with proper array parameter encoding
+- Implemented dual-source processing in single tool for BeAScout and JoinExploring
+- Enhanced unit type support: Packs, Troops, Crews, Ships, Posts, Clubs
+
+### Critical HNE Filtering Bug Discovery
+**User Identification**: "The wilmington explorer post is not part of HNE council. Are non-HNE exploring unit being correctly filtered?"
+
+**Root Cause**: Pattern matching prioritized chartered organization name over extracted unit location
+- Problem: "Warren" in "Joseph Warren Soley Lodge" matched HNE town Warren
+- Result: Troop 127 Lincoln incorrectly included despite being outside HNE territory
+
+**Solution**: Enhanced filtering with unit_town prioritization over org name matching
+
+### Quality Scoring Enhancement
+**Specialized Unit Support**: Updated scoring system for Posts, Clubs, and Crews
+- Standard units: 17.5% each for 4 required fields  
+- Specialized units: 14% each for 5 required fields (includes specialty)
+
+### Retry Logic Implementation
+**User Request**: "Let's fix beascout timeout. Consider random exponential back off retries"
+
+**Implementation**:
+- Common retry mechanism for both BeAScout and JoinExploring
+- Exponential backoff with random jitter (1-4 seconds base, 0.5-1.5x multiplier)
+- Fresh page creation for each retry attempt to avoid state issues
+- Configurable retry attempts (default 3 retries, 4 total attempts)
+
+### End-to-End Pipeline Validation
+**Fresh Data Processing**:
+- 69 total units scraped (66 BeAScout + 3 JoinExploring)
+- 65 unique units after deduplication
+- 24 HNE Council units after territory filtering
+- 57.2% average quality score (54.2% F grades)
+- 24 personalized Key Three emails generated
+- 1 district report created for Quinapoxet District
+
+### Best Practices Discovered
+
+**Progressive Requirements Discovery**:
+- User revealed Explorer unit requirement after traditional system was working
+- Incremental scope expansion allowed architecture to evolve naturally
+- Testing with specific zip code (01720) revealed territory filtering issues
+
+**Real-World Bug Discovery**:
+- User's domain knowledge identified false positives in territory classification
+- Specific examples ("Troop 0127 Joseph Warren Soley Lodge") led to algorithmic fixes
+- Pattern matching pitfalls require domain expert validation
+
+**Common Code Architecture**:
+- User emphasis on "common code for both websites" drove better design
+- Single retry mechanism serves both BeAScout and JoinExploring
+- Reduced maintenance burden and consistent behavior
+
+**Complete Pipeline Testing**:
+- User request to "rerun pipeline without falling back to previously saved data"
+- Fresh end-to-end validation ensures system robustness
+- No dependency on intermediate cached results
+
+### Development Velocity Analysis
+
+**Dual-Source Integration Session**:
+- **Duration**: ~6 hours of active collaboration
+- **Major Deliverables**: 
+  - Complete browser automation system
+  - Dual-source data integration
+  - Enhanced HNE territory filtering
+  - Retry logic implementation
+  - End-to-end pipeline validation
+- **Technical Complexity**: AJAX handling, territory classification, specialized unit scoring
+
+**Collaboration Efficiency**:
+- **Problem-driven development**: User identified specific issues (timeouts, territory filtering)
+- **Domain expertise integration**: User's HNE Council knowledge shaped filtering logic
+- **Iterative validation**: "rerun pipeline" request ensured fresh data validation
+
+### Key Insights
+
+**Domain Expertise Critical**: User's knowledge of HNE territory boundaries prevented incorrect unit classification that could have compromised council reporting accuracy
+
+**Progressive Architecture**: Building traditional units first, then adding Explorer units allowed natural system evolution without breaking existing functionality  
+
+**Real-World Testing**: Actual zip code data revealed edge cases not visible in theoretical design (chartered org name matching conflicts)
+
+**Automation Robustness**: Retry logic with exponential backoff and fresh contexts handles website variability more effectively than simple timeout increases
+
+### Production Impact
+
+**System Capabilities Achieved**:
+- Dual-source data collection from BeAScout and JoinExploring
+- All six unit types supported (Packs, Troops, Crews, Ships, Posts, Clubs)  
+- Robust HNE territory classification with 41 non-HNE units correctly filtered
+- Automated personalized email generation for Key Three members
+- District-specific Excel reporting
+- Resilient retry logic handling website timeouts
+
+**Next Phase Readiness**: System ready for multi-zip code deployment across all 72 HNE zip codes with proper deduplication handling
+
+---
+
+*This phase demonstrates the power of progressive requirements discovery combined with domain expert validation, resulting in a robust dual-source integration system ready for production deployment.*

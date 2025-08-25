@@ -1,88 +1,153 @@
 # BeAScout Unit Information System - Technical Architecture
 
-**Version**: 1.2 | **Last Updated**: 2025-08-22 | **Strategy**: Recommendation-First Development
+**Version**: 2.0 | **Last Updated**: 2025-08-24 | **Strategy**: Production-Ready Dual-Source System
 
 ## Technology Stack
-- **Web Scraping**: Playwright (handles dynamic JavaScript content with conservative rate limiting)
-- **HTML Parsing**: BeautifulSoup for data extraction and field parsing
-- **Data Storage**: Hybrid approach - JSON for raw data, SQLite for processed analysis
-- **Concurrency**: Asyncio for controlled parallel processing with semaphores
-- **Monitoring**: Automated scheduling and change detection system
-- **Testing**: pytest with automated unit and integration tests
-- **Language**: Python 3.8+
+- **Dual-Source Scraping**: Playwright for browser automation (BeAScout + JoinExploring)
+- **HTML Parsing**: BeautifulSoup for unit data extraction from dynamic content
+- **Browser Automation**: Retry logic with exponential backoff and jitter
+- **Data Processing**: JSON for structured unit data with quality scoring
+- **Unit Types**: Packs, Troops, Crews, Ships, Posts, Clubs (all 6 types)
+- **Reporting**: Personalized Key Three emails and Excel district reports
+- **Territory Filtering**: HNE Council boundary validation with town prioritization
+- **Language**: Python 3.13+ with Playwright dependency
 
 ## Project Structure
 ```
 beascout/
-├── prototype/                   # Current working prototypes
-│   ├── extract_all_units.py   # Refined unit extraction (62 units)
-│   ├── extract_hne_towns.py   # Council territory analysis  
-│   ├── analyze_data.py         # Original analysis script (legacy)
-│   └── [5 other prototype files]
-├── 
-├── # Implemented Systems
-├── src/analysis/quality_scorer.py           # ✅ Quality scoring with A-F grading (COMPLETED)
-├── data/feedback/                           # ✅ Manual review and annotation system (COMPLETED)
-├── src/notifications/report_generator.py   # Key Three recommendations (next priority)
-├── 
-├── # Target Production Structure
+├── # Core Production System ✅
 ├── src/
-│   ├── scrapers/
-│   │   ├── base_scraper.py         # Abstract scraper with rate limiting
-│   │   ├── hne_scraper.py          # Conservative multi-zip scraper
-│   │   └── monitoring_scraper.py   # Periodic re-scraping system
-│   ├── extraction/
-│   │   ├── html_parser.py          # BeautifulSoup extraction logic
-│   │   ├── meeting_extractor.py    # Regex + LLM meeting info extraction
-│   │   └── field_validator.py      # Data quality validation
-│   ├── storage/
-│   │   ├── raw_storage.py          # JSON file management
-│   │   ├── database.py             # SQLite operations and schema
-│   │   └── deduplication.py        # Cross-zip duplicate detection
+│   ├── scraping/                         # ✅ Dual-source browser automation
+│   │   ├── browser_scraper.py           # Playwright automation with exponential backoff retry
+│   │   │                                # - BeAScout + JoinExploring integration
+│   │   │                                # - Common retry logic with jitter
+│   │   │                                # - Fresh page contexts for retries
+│   │   └── url_generator.py             # URL generation for both platforms
+│   │                                    # - Proper array parameter encoding
+│   │                                    # - Configurable radius and unit types
 │   ├── analysis/
-│   │   ├── completeness_scorer.py  # Quality scoring and grading
-│   │   ├── change_detector.py      # Monitoring and delta analysis
-│   │   └── trend_analyzer.py       # Temporal pattern analysis
-│   ├── reporting/
-│   │   ├── dashboard_generator.py  # Council office reports
-│   │   ├── unit_scorecards.py      # Individual unit analysis
-│   │   └── key_three_notifier.py   # Outreach communications
-│   └── monitoring/
-│       ├── scheduler.py            # Periodic processing automation
-│       ├── alert_system.py         # Error and change notifications
-│       └── health_checker.py       # System status monitoring
+│   │   └── quality_scorer.py            # ✅ Enhanced quality scoring system
+│   │                                    # - Specialized unit support (Posts/Clubs/Crews)
+│   │                                    # - Personal email classification with 5-pass refinement
+│   │                                    # - Human-readable recommendation identifiers
+│   ├── scrapers/                        # 🔄 Legacy single-source scrapers (deprecated)
+│   │   ├── base_scraper.py              # Original scraping infrastructure
+│   │   └── beascout_scraper.py          # Pre-Playwright BeAScout scraper
+│   ├── notifications/                   # Empty directory
+│   └── storage/                         # Empty directory
+├── 
+├── scripts/                              # ✅ Production automation scripts
+│   ├── generate_key_three_emails.py     # Personalized Key Three email generation
+│   │                                    # - Actual HNE Key Three contact integration
+│   │                                    # - Unit-specific improvement recommendations
+│   │                                    # - Email cleanup system (removes old emails)
+│   ├── generate_district_reports.py     # Excel district reports
+│   │                                    # - Quinapoxet District operational
+│   │                                    # - Unit quality metrics and recommendations
+│   ├── email_analysis.py                # Email classification validation tool for manual reviews
+│   └── convert_key_three_to_json.py     # Key Three data management utility
+├── 
+├── prototype/                            # ✅ Enhanced extraction and utilities
+│   ├── extract_all_units.py            # ✅ Dual-source extraction with HNE filtering
+│   │                                    # - BeAScout + JoinExploring processing
+│   │                                    # - Enhanced HNE territory filtering
+│   │                                    # - Unit_town prioritization over org matching
+│   │                                    # - All 6 unit types (Packs/Troops/Crews/Ships/Posts/Clubs)
+│   ├── extract_hne_towns.py            # Council territory analysis
+│   ├── analyze_data.py                  # Legacy analysis script
+│   ├── check_duplicates.py              # Unit deduplication utilities
+│   ├── debug_extraction.py              # Extraction debugging tools
+│   ├── examine_descriptions.py          # Description analysis utilities
+│   ├── improved_meeting_extraction.py   # Meeting information extraction
+│   ├── test_extraction_approaches.py    # Extraction method testing
+│   └── test_scraper.py                  # Scraper testing utilities
+├── 
 ├── data/
-│   ├── zipcodes/                   # HNE Council zip codes (72 total)
-│   ├── raw/                        # HTML files per zip code
-│   ├── processed/                  # Extracted and deduplicated units
-│   ├── reports/                    # Generated dashboards and scorecards
-│   └── monitoring/                 # Change tracking and alerts
-├── config/
-│   ├── scraping_config.json        # Rate limits, delays, session settings
-│   ├── extraction_config.json      # Field definitions and scoring weights
-│   └── monitoring_config.json      # Alert thresholds and reporting schedules
-└── tests/
-    ├── unit/                       # Component testing
-    ├── integration/                # End-to-end workflow testing
-    └── fixtures/                   # Sample data for testing
+│   ├── input/                           # Source data and references
+│   │   ├── HNE_key_three.json          # Key Three member database (498 records)
+│   │   ├── HNE_key_three.xlsx          # Original Excel source
+│   │   ├── HNE_council_map.png         # Council territory map
+│   │   ├── Be-A-Scout-Pin-Set-up.pdf   # BeAScout reference documentation
+│   ├── output/                          # ✅ Production system outputs
+│   │   ├── emails/                      # Personalized Key Three unit emails
+│   │   │   ├── Pack_0070_Acton-Congregational_Church_email.md
+│   │   │   ├── Post_4879_Groton-Fire_Service_Local_4879_email.md
+│   │   │   └── [22 other unit emails]
+│   │   ├── reports/                     # District Excel reports
+│   │   ├── sample_key_three_email.md    # Email template examples
+│   ├── scraped/                         # ✅ Browser automation outputs
+│   │   ├── beascout_01720_auto.html     # Fresh Playwright-captured BeAScout data
+│   │   └── joinexploring_01720_auto.html # Fresh Playwright-captured JoinExploring data
+│   ├── raw/                             # ✅ Processed unit data
+│   │   ├── all_units_01720.json         # 24 HNE units (current dataset)
+│   │   ├── all_units_01720_scored.json  # Quality scoring results (57.2% avg)
+│   │   ├── all_units_beascout_01720.json # BeAScout-only historical data
+│   │   ├── analysis_01720.json          # Analysis results
+│   │   ├── data_analysis_summary.md     # Analysis documentation
+│   │   ├── debug_page_01720.html        # Debug extraction data
+│   │   ├── joinexploring_ajax_01720.json # JoinExploring AJAX data
+│   │   ├── sample_joinexploring_01420.html # Sample data files
+│   │   ├── sample_joinexploring_01720.html
+│   │   └── all_units_data/              # Additional data subdirectory
+│   ├── feedback/                        # Manual review and annotation system
+│   ├── processed/                       # Empty directory for future processing
+│   └── zipcodes/
+│       └── hne_council_zipcodes.json    # All 72 HNE Council zip codes
+├── 
+├── # Testing Infrastructure
+├── tests/
+│   ├── __init__.py
+│   ├── conftest.py
+│   ├── fixtures/                        # Test data fixtures
+│   ├── integration/                     # Integration test directory
+│   └── unit/
+│       └── test_sample.py               # Sample unit test
+├── 
+├── # Configuration and Dependencies
+├── requirements.txt                     # Python dependencies including Playwright
+├── pytest.ini                          # pytest configuration
+├── 
+├── # Development Utilities
+├── cli/                                 # Empty CLI directory
+├── config/                              # Empty config directory
+├── venv/                                # Python virtual environment
+├── 
+├── # Documentation Structure
+├── README.md                            # System overview and usage examples
+├── ARCHITECTURE.md                      # Technical architecture (this file)
+├── SYSTEM_DESIGN.md                     # Business requirements and success metrics
+├── PRODUCTION_STATUS.md                 # Current deployment status and achievements
+├── COLLABORATION_LOG.md                 # AI-human development insights and lessons learned
+├── SESSION_HANDOFF.md                   # Session context preservation
+├── CLAUDE.md                           # AI development context and implementation status
+└── LICENSE                             # Project license file
 ```
 
 ## System Interface Design
 
-### Current Development Interface
+### Production System Interface
 ```bash
-# Generate refined unit extraction (62 units from ZIP 01720)
-python prototype/extract_all_units.py
+# End-to-end pipeline execution (production-ready)
 
-# Generate HNE Council territory analysis (72 zip codes, 62 towns)
-python prototype/extract_hne_towns.py
+# 1. Dual-source browser scraping with retry logic
+python src/scraping/browser_scraper.py 01720
+# Outputs: data/scraped/beascout_01720_auto.html + joinexploring_01720_auto.html
 
-# Quality scoring system (implemented)
-python src/analysis/quality_scorer.py data/raw/all_units_01720.json  # A-F grading with recommendations
-# Output: data/raw/all_units_01720_scored.json with completeness scores and recommendation IDs
+# 2. Enhanced unit extraction with HNE filtering
+python prototype/extract_all_units.py data/scraped/beascout_01720_auto.html data/scraped/joinexploring_01720_auto.html data/raw/all_units_01720.json
+# Output: 24 HNE units from 69 total scraped (dual-source with deduplication)
 
-# Next: Build Key Three communication system
-python src/notifications/report_generator.py   # Key Three improvement reports
+# 3. Quality scoring with specialized unit support
+python src/analysis/quality_scorer.py data/raw/all_units_01720.json
+# Output: data/raw/all_units_01720_scored.json (57.2% average, A-F grading)
+
+# 4. Key Three email generation (personalized)
+python scripts/generate_key_three_emails.py data/raw/all_units_01720_scored.json
+# Output: 24 emails in data/output/emails/ with actual Key Three contacts
+
+# 5. District reporting (Excel format)
+python scripts/generate_district_reports.py data/raw/all_units_01720_scored.json  
+# Output: Quinapoxet_District_BeAScout_Report_[date].xlsx in data/output/reports/
 ```
 
 ### Target Automated System Interface  
@@ -108,74 +173,112 @@ dashboard.generate_monthly_analysis()
 
 ## Data Flow Architecture
 
-### Initial Collection Pipeline
+### Current Production Pipeline (Validated End-to-End)
 ```
-HNE Zip Codes (72) → Conservative Scraper → Raw HTML Files → 
-BeautifulSoup Parser → Unit Extraction → JSON Storage →
-Cross-Zip Deduplication → SQLite Database → Quality Analysis → 
-Baseline Reports
-```
-
-### Ongoing Monitoring Pipeline  
-```
-Scheduled Trigger → Re-scrape All Zips → Change Detection →
-Delta Analysis → Alert Generation → Updated Reports → 
-Key Three Notifications → Council Dashboard
+Zip Code Input → Dual-Source Browser Automation (BeAScout + JoinExploring) →
+HTML Capture with Retry Logic → BeautifulSoup Unit Extraction →
+HNE Territory Filtering → Unit Deduplication → Quality Scoring →
+Key Three Email Generation → District Excel Reports
 ```
 
-## Conservative Scraping Implementation
+### Multi-Zip Deployment Pipeline (Next Phase)
+```
+All HNE Zip Codes (72) → Batch Browser Automation → 
+Cross-Zip Unit Deduplication → Central Unit Registry →
+Quality Analysis → Comprehensive District Reports →
+Council Dashboard Generation
+```
 
-### Rate Limiting Strategy (Implements SYSTEM_DESIGN.md requirements)
+### Planned Monitoring Pipeline
+```
+Scheduled Trigger → Multi-Zip Re-scraping → Change Detection →
+Delta Analysis → Unit Update Notifications → Refreshed Reports → 
+Automated Key Three Communications
+```
+
+## Browser Automation Implementation
+
+### Current Retry Logic Strategy (Production-Tested)
 ```python
-SCRAPING_CONFIG = {
-    'delay_between_requests': (8, 12),    # Random 8-12 seconds
-    'max_requests_per_session': 8,        # Browser restart after 8 requests  
-    'session_cooldown': 14400,            # 4 hours between sessions
-    'daily_zip_limit': 12,                # Maximum 12 zip codes per day
-    'max_concurrent_pages': 1,            # Sequential processing only
-    'request_timeout': 30000,             # 30 second page timeout
-    'business_hours_only': True,          # 9 AM - 5 PM EST only
+BROWSER_AUTOMATION_CONFIG = {
+    'headless': True,                     # Background browser execution
+    'wait_timeout': 45000,               # 45 second page load timeout
+    'max_retries': 3,                    # 4 total attempts (1 + 3 retries)
+    'exponential_backoff': True,         # 1s, 2s, 4s base delays
+    'random_jitter': (0.5, 1.5),        # Random delay multiplier
+    'fresh_page_per_retry': True,        # Clean browser context per attempt
+    'user_agent': 'Mozilla/5.0 Chrome/120.0.0.0',  # Standard browser fingerprint
 }
 ```
 
-### Detection Avoidance Patterns
-- **Human-like navigation**: Homepage → Search → Results flow
-- **Browser fingerprint randomization**: User agents, viewport sizes
-- **Session management**: Cookie handling, realistic session duration
-- **Error response monitoring**: Automatic pause on 403/429 responses
+### Dual-Source Architecture
+- **BeAScout Integration**: 10-mile radius, traditional units (Packs, Troops, Crews, Ships)
+- **JoinExploring Integration**: 20-mile radius, Explorer units (Posts, Clubs)
+- **Common Retry Logic**: Shared exponential backoff mechanism for both sources
+- **Anti-Detection**: Standard user agents, proper wait patterns, session management
 
-## Database Schema
-```sql
-CREATE TABLE units (
-    id INTEGER PRIMARY KEY,
-    unit_number TEXT,
-    unit_type TEXT,
-    chartered_organization TEXT,
-    primary_identifier TEXT UNIQUE, -- "Pack 32 Acton Congregational Church"
-    unit_id TEXT,                   -- Parsed "Pack 32" for fallback matching
-    meeting_location TEXT,
-    meeting_day TEXT,
-    meeting_time TEXT,
-    contact_email TEXT,
-    contact_person TEXT,
-    phone_number TEXT,
-    website TEXT,
-    description TEXT,
-    unit_composition TEXT,
-    specialty TEXT,                 -- Venturing Crews only
-    source_website TEXT,
-    last_updated DATETIME
-);
+## Current Data Structure (JSON-Based)
 
-CREATE TABLE completeness_scores (
-    primary_identifier TEXT REFERENCES units(primary_identifier),
-    required_fields_complete INTEGER,
-    recommended_fields_complete INTEGER,
-    total_score REAL,
-    issues TEXT,                    -- JSON array of problems
-    last_analyzed DATETIME
-);
+### Unit Data Schema (data/raw/all_units_01720.json)
+```json
+{
+  "extraction_info": {
+    "source_files": ["beascout_file.html", "joinexploring_file.html"],
+    "source_counts": {"BeAScout": 66, "JoinExploring": 3},
+    "extraction_date": "2025-08-24 11:37:43.588678"
+  },
+  "total_units": 24,
+  "all_units": [
+    {
+      "index": 0,
+      "primary_identifier": "Pack 0070 Acton-Congregational Church",
+      "unit_type": "Pack",
+      "unit_number": "0070", 
+      "unit_town": "Acton",
+      "chartered_organization": "Acton-Congregational Church",
+      "specialty": "",                    // For Crews, Posts, Clubs only
+      "meeting_location": "12 Concord Rd, Acton Congregational Church, Acton MA 01720",
+      "meeting_day": "Friday",
+      "meeting_time": "6:30:00 PM",
+      "contact_email": "spiccinotti@comcast.net",
+      "contact_person": "Silvia Piccinotti",
+      "phone_number": "(609) 304-2373",
+      "website": "",
+      "description": "Pack 70 in Acton is inclusive and open to all K-5 youth...",
+      "unit_composition": "",
+      "distance": "0.5 miles",
+      "data_source": "BeAScout",         // "BeAScout" or "JoinExploring"
+      "raw_content": "..."               // Original HTML for debugging
+    }
+  ]
+}
 ```
+
+### Quality Scoring Schema (data/raw/all_units_01720_scored.json)
+```json
+{
+  "total_units": 24,
+  "scoring_summary": {"A": 2, "B": 3, "C": 3, "D": 3, "F": 13},
+  "average_score": 57.2,
+  "units_with_scores": [
+    {
+      // All unit fields from base schema above, plus:
+      "completeness_score": 77.5,
+      "completeness_grade": "C",
+      "recommendations": [
+        "REQUIRED_MISSING_EMAIL",
+        "RECOMMENDED_MISSING_PHONE",
+        "QUALITY_PERSONAL_EMAIL"
+      ]
+    }
+  ]
+}
+```
+
+### Recommendation Identifiers
+- **Required Field Issues**: `REQUIRED_MISSING_LOCATION`, `REQUIRED_MISSING_DAY`, `REQUIRED_MISSING_TIME`, `REQUIRED_MISSING_EMAIL`, `REQUIRED_MISSING_SPECIALTY`
+- **Quality Issues**: `QUALITY_POBOX_LOCATION`, `QUALITY_PERSONAL_EMAIL`  
+- **Recommended Field Issues**: `RECOMMENDED_MISSING_CONTACT`, `RECOMMENDED_MISSING_PHONE`, `RECOMMENDED_MISSING_WEBSITE`, `CONTENT_MISSING_DESCRIPTION`
 
 ## Unit Deduplication Strategy
 - **Primary Matching**: Full primary identifier string comparison
