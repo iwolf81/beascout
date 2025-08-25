@@ -464,8 +464,11 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 ## Appendices
 
 ### Appendix A: HNE Council Zip Codes
-**Total:** 72 zip codes across 62 towns
-**Estimated Units:** ~3,000 units council-wide
+**Total:** 72 zip code entries across 62 towns (71 unique zip codes)
+**Total Units:** 169 units council-wide (exact count from HNE Key Three database)
+
+**Shared Zip Codes:**
+- **01331** serves both Athol and Phillipston (appears twice in town mapping but scraped once)
 
 **Major Population Centers:**
 - Worcester: 01601-01610 (10 zip codes)
@@ -473,31 +476,85 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - Leominster: 01453
 - Acton: 01720 (baseline test case)
 
+**Scraping Implementation Note:** 
+System automatically deduplicates zip codes during processing, resulting in 71 unique scraping operations despite 72 zip code entries in the configuration file.
+
 ### Appendix B: Data Schema
+
+**Raw Unit Data Format** (data/raw/all_units_[zipcode].json):
 ```json
 {
-  "unit": {
-    "primary_identifier": "Pack 0070 Acton-Congregational Church",
-    "unit_type": "Pack",
-    "unit_number": "0070", 
-    "chartered_organization": "Acton-Congregational Church",
-    "meeting_location": "12 Concord Rd",
-    "meeting_day": "Friday",
-    "meeting_time": "6:30 PM",
-    "contact_email": "unit@example.com",
-    "contact_person": "John Smith",
-    "phone_number": "(555) 123-4567",
-    "website": "https://unit.example.com",
-    "description": "Unit description text...",
-    "unit_composition": "Boys and Girls",
-    "specialty": "High Adventure",
-    "source_website": "beascout.scouting.org",
-    "zipcode_found": "01720",
-    "distance": "0.5 miles",
-    "last_updated": "2024-12-22T10:30:00Z",
-    "completeness_score": 85.5,
-    "completeness_grade": "B+"
-  }
+  "extraction_info": {
+    "source_files": ["beascout_file.html", "joinexploring_file.html"],
+    "source_counts": {"BeAScout": 66, "JoinExploring": 3},
+    "extraction_date": "2025-08-24 11:37:43.588678"
+  },
+  "total_units": 24,
+  "all_units": [
+    {
+      "index": 0,
+      "primary_identifier": "Pack 0070 Acton-Congregational Church",
+      "unit_type": "Pack",
+      "unit_number": "0070", 
+      "unit_town": "Acton",
+      "chartered_organization": "Acton-Congregational Church",
+      "specialty": "",
+      "meeting_location": "12 Concord Rd, Acton Congregational Church, Acton MA 01720",
+      "meeting_day": "Friday",
+      "meeting_time": "6:30 PM",
+      "contact_email": "spiccinotti@comcast.net",
+      "contact_person": "Silvia Piccinotti",
+      "phone_number": "(609) 304-2373",
+      "website": "https://sites.google.com/view/abcubscouts",
+      "description": "Pack 70 in Acton is inclusive and open to all K-5 youth...",
+      "unit_composition": "",
+      "distance": "0.5 miles",
+      "data_source": "BeAScout",
+      "raw_content": "..."
+    }
+  ]
+}
+```
+
+**Quality Scored Data Format** (data/raw/all_units_[zipcode]_scored.json):
+```json
+{
+  "total_units": 24,
+  "scoring_summary": {"A": 2, "B": 3, "C": 3, "D": 3, "F": 13},
+  "average_score": 57.2,
+  "units_with_scores": [
+    {
+      // All unit fields from base schema above, plus:
+      "completeness_score": 77.5,
+      "completeness_grade": "C",
+      "recommendations": [
+        "REQUIRED_MISSING_EMAIL",
+        "RECOMMENDED_MISSING_PHONE", 
+        "QUALITY_PERSONAL_EMAIL"
+      ]
+    }
+  ]
+}
+```
+
+**Multi-Town Registry Format** (future enhancement):
+```json
+{
+  "registry_info": {
+    "deduplication_method": "unit_type + unit_number + town",
+    "stats": {
+      "total_unique_units": 169,
+      "total_appearances": 324,
+      "duplicates_eliminated": 155
+    }
+  },
+  "units": [
+    {
+      // All unit fields plus:
+      "simple_identifier": "Pack 70 Acton", 
+      "found_in_zips": ["01720", "01432"]
+    }
+  ]
 }
 ```
 
@@ -506,6 +563,36 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - Unit Scorecard Template  
 - Change Detection Report Template
 - Key Three Outreach Template
+
+---
+
+## Future Enhancements
+
+### Automated District Reporting Distribution
+
+**Enhancement**: Complete automated pipeline from scraping to stakeholder notification
+
+**Implementation**:
+- **Summary Spreadsheet Generation**: Multi-sheet Excel with district-specific data
+  - Sheet 1: Executive Summary (council-wide metrics)
+  - Sheet 2: Quinapoxet District (complete unit data with Key Three contacts)
+  - Sheet 3: Soaring Eagle District (complete unit data with Key Three contacts)  
+  - Sheet 4: Improvement Priorities (cross-district units needing attention)
+  - Sheet 5: Historical Trends (comparison with previous sessions)
+
+- **Automated Email Distribution**: Role-based content delivery
+  - **District Executives**: Full spreadsheet with district focus
+  - **District Commissioners**: Full spreadsheet with quality oversight perspective
+  - **Council Commissioner**: Executive summary with strategic council view
+  - **Board Members**: Complete data with system performance metrics
+
+**Trigger**: After successful completion of multi-zip scraping session
+**Schedule**: Configurable (monthly/quarterly) with manual trigger capability
+**Failure Handling**: Status reports sent if scraping incomplete
+
+**Business Value**: Transforms system from data collection tool to complete automated reporting solution for HNE Council leadership.
+
+**Priority**: Phase 2 enhancement after production readiness requirements completed.
 
 ---
 
