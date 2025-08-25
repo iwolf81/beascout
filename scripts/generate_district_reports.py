@@ -23,7 +23,7 @@ import re
 
 
 class DistrictReportGenerator:
-    def __init__(self, key_three_file: str = "data/input/HNE_key_three.xlsx"):
+    def __init__(self, key_three_file: str = "data/input/Key 3 08-22-2025.xlsx"):
         """Initialize with Key Three member data"""
         self.key_three_data = self._load_key_three_data(key_three_file)
         self.district_towns = self._load_district_towns()
@@ -31,9 +31,22 @@ class DistrictReportGenerator:
     def _load_key_three_data(self, file_path: str) -> pd.DataFrame:
         """Load Key Three member data from Excel file"""
         try:
-            df = pd.read_excel(file_path, header=8)
+            # Read Excel file, skip header rows to get to actual data
+            df = pd.read_excel(file_path, header=None, skiprows=3)
             print(f"Loaded {len(df)} Key Three member records")
-            return df
+            
+            # Set proper column names based on the structure we know
+            if len(df.columns) >= 11:
+                df.columns = ['district', 'unit_id', 'fullname', 'address', 'citystate', 'zipcode', 
+                             'email', 'phone', 'position', 'unitcommorgname', 'status']
+                
+                # Filter to only active members
+                df = df[df['status'] == 'ACTIVE']
+                
+                return df
+            else:
+                print(f"Unexpected file structure - {len(df.columns)} columns found")
+                return pd.DataFrame()
         except Exception as e:
             print(f"Error loading Key Three data: {e}", file=sys.stderr)
             return pd.DataFrame()
@@ -75,7 +88,12 @@ class DistrictReportGenerator:
             return {"Quinapoxet": [], "Soaring Eagle": []}
     
     def _classify_unit_district(self, unit: Dict[str, Any]) -> str:
-        """Classify unit into district based on town"""
+        """Get district from unit data (pre-calculated) or classify based on town"""
+        # Use pre-calculated district if available
+        if 'district' in unit and unit['district']:
+            return unit['district']
+        
+        # Fallback to calculating from town (for backward compatibility)
         unit_town = unit.get('unit_town', '').strip()
         
         if unit_town in self.district_towns["Quinapoxet"]:
@@ -118,11 +136,40 @@ class DistrictReportGenerator:
                 
                 key_three_members.append(member_data)
         
+        # Enhanced matching for missing units (Key Three Only)
+        if len(key_three_members) == 0 and unit.get('data_source') == 'Key Three Only':
+            # Try more flexible matching for missing units
+            unit_type = unit.get('unit_type', '')
+            unit_number = unit.get('unit_number', '').lstrip('0')
+            unit_town = unit.get('unit_town', '')
+            
+            for _, row in self.key_three_data.iterrows():
+                org_name = str(row.get('unitcommorgname', '')).strip()
+                
+                # Check if unit type, number, and town all appear in the org name
+                if (unit_type.lower() in org_name.lower() and 
+                    unit_number in org_name and
+                    unit_town.lower() in org_name.lower()):
+                    
+                    member_data = {
+                        'name': str(row.get('fullname', 'Missing')).strip(),
+                        'position': str(row.get('position', 'Missing')).strip(), 
+                        'email': str(row.get('email', 'Missing')).strip(),
+                        'phone': str(row.get('phone', 'Missing')).strip()
+                    }
+                    
+                    # Clean up missing data
+                    for key, value in member_data.items():
+                        if value in ['nan', 'None', '', 'NaT']:
+                            member_data[key] = 'None'
+                    
+                    key_three_members.append(member_data)
+        
         # Ensure we have exactly 3 members (pad with "None" if needed)
         while len(key_three_members) < 3:
             key_three_members.append({
                 "name": "None", 
-                "position": "None", 
+                "position": "None",
                 "email": "None", 
                 "phone": "None"
             })
@@ -200,8 +247,171 @@ class DistrictReportGenerator:
             'recommended': recommended_issues
         }
     
-    def _create_legend_data(self) -> List[Dict[str, str]]:
-        """Create legend data for issue descriptions"""
+    def _create_unit_data_headers(self, units: List[Dict[str, Any]], district_name: str) -> List[str]:
+        """Create header rows for Unit Data sheet matching user specification"""
+        now = datetime.now()
+        date_str = now.strftime("%Y-%m-%d")
+        time_str = now.strftime("%H:%M%p").lower()
+        
+        # Calculate metrics
+        total_units = len(units)
+        towns = set(unit.get('unit_town', '') for unit in units)
+        town_count = len(towns)
+        
+        # Grade distribution - count F & D grades for outreach
+        outreach_needed = 0
+        personal_email_count = 0
+        
+        for unit in units:
+            grade = unit.get('completeness_grade', '')
+            if grade in ['F', 'D']:
+                outreach_needed += 1
+            
+            recommendations = unit.get('recommendations', [])
+            if 'QUALITY_PERSONAL_EMAIL' in recommendations:
+                personal_email_count += 1
+        
+        # Create header rows exactly as specified
+        return [
+            "BeAScout Quality Report",
+            f"{district_name} District - Heart of New England Council (HNE), Scouting America", 
+            f"Generated: {date_str} {time_str}",
+            "",
+            "Generated by HNE Council Executive Board for Unit Improvement Initiatives.",
+            "This information is to be used only for authorized purposes on behalf of Scouting America.",
+            "Disclosing, copying, or making any inappropriate use of this information is strictly prohibited.",
+            "",
+            'Data Sources: BeAScout.org (10-mile radius) + JoinExploring.org (20-mile radius)',
+            f"Last Complete Data Retrieval: {date_str}",
+            "",
+            f"District Coverage: {total_units} units analyzed across {town_count} towns",
+            f"Key Three outreach required (F & D grades): {outreach_needed}",
+            f"Units using personal emails: {personal_email_count}",
+            "",
+            "Legend:",
+            "Location - Missing meeting location (street address required for families to find meetings)",
+            "Day - Missing meeting day (families need to know when meetings occur)",
+            "Time - Missing meeting time (specific meeting times help families plan attendance)",
+            "Personal Email - Unit-specific contact email is preferable (personal emails create continuity issues when leaders change)",
+            "Website - Recommend a unit-specific website (provides families detailed program information)",
+            "Contact - Recommend a contact name (gives families a specific person to reach out to)",
+            "Phone - Recommend a contact phone number (provides direct communication method for interested families)",
+            ""
+        ]
+    
+    def _write_unit_data_with_headers(self, writer, header_rows: List[str], df_main: pd.DataFrame, sheet_name: str):
+        """Write header rows followed by unit data to Excel sheet with formatting"""
+        import openpyxl
+        from openpyxl.utils.dataframe import dataframe_to_rows
+        from openpyxl.styles import Font
+        
+        # Create worksheet
+        ws = writer.book.create_sheet(sheet_name)
+        
+        # Write header rows
+        for row_num, header_text in enumerate(header_rows, 1):
+            ws[f'A{row_num}'] = header_text
+        
+        # Apply formatting to specific header rows
+        bold_font = Font(bold=True)
+        
+        # Row 1: Report Name (bold)
+        ws['A1'].font = bold_font
+        
+        # Row 2: District name (bold) 
+        ws['A2'].font = bold_font
+        
+        # Row 12: District Coverage (bold) - find the row with "District Coverage"
+        for row_num, header_text in enumerate(header_rows, 1):
+            if "District Coverage:" in str(header_text):
+                ws[f'A{row_num}'].font = bold_font
+                break
+        
+        # Write unit data starting after headers
+        start_row = len(header_rows) + 1
+        
+        # Write column headers (bold)
+        for col_num, col_name in enumerate(df_main.columns, 1):
+            cell = ws.cell(row=start_row, column=col_num, value=col_name)
+            cell.font = bold_font
+        
+        # Write data rows
+        for r_idx, row in enumerate(dataframe_to_rows(df_main, index=False, header=False), start_row + 1):
+            for c_idx, value in enumerate(row, 1):
+                ws.cell(row=r_idx, column=c_idx, value=value)
+        
+        # Set column widths
+        # Columns A-E: width 15
+        for col_letter in ['A', 'B', 'C', 'D', 'E']:
+            ws.column_dimensions[col_letter].width = 15
+        
+        # Columns F and beyond: width 20
+        for col_num in range(6, len(df_main.columns) + 1):
+            col_letter = openpyxl.utils.get_column_letter(col_num)
+            ws.column_dimensions[col_letter].width = 20
+    
+    def _create_header_data_legacy(self, units: List[Dict[str, Any]], district_name: str) -> List[Dict[str, str]]:
+        """Create professional header data based on user requirements"""
+        now = datetime.now()
+        date_str = now.strftime("%Y-%m-%d")
+        time_str = now.strftime("%H:%M%p").lower()
+        
+        # Calculate metrics
+        total_units = len(units)
+        towns = set(unit.get('unit_town', '') for unit in units)
+        town_count = len(towns)
+        
+        # Grade distribution
+        grade_counts = {'F': 0, 'D': 0}
+        personal_email_count = 0
+        
+        for unit in units:
+            grade = unit.get('completeness_grade', '')
+            if grade in ['F', 'D']:
+                grade_counts[grade] += 1
+            
+            recommendations = unit.get('recommendations', [])
+            if 'QUALITY_PERSONAL_EMAIL' in recommendations:
+                personal_email_count += 1
+        
+        outreach_needed = grade_counts['F'] + grade_counts['D']
+        
+        return [
+            {"Header": "BeAScout Quality Report"},
+            {"Header": "Heart of New England Council (HNE), Scouting America"},
+            {"Header": f"Generated: {date_str} {time_str}"},
+            {"Header": ""},
+            {"Header": "Generated by HNE Council Executive Board for Unit Improvement Initiatives."},
+            {"Header": "This information is to be used only for authorized purposes on behalf of Scouting America."},
+            {"Header": "Disclosing, copying, or making any inappropriate use of this information is strictly prohibited."},
+            {"Header": ""},
+            {"Header": 'Data Sources: BeAScout.org (10-mile radius) + JoinExploring.org (20-mile radius)'},
+            {"Header": f"Last Complete Data Retrieval: {date_str}"},
+            {"Header": ""},
+            {"Header": f"District Coverage: {total_units} units analyzed across {town_count} towns"},
+            {"Header": f"Key Three outreach required (F & D grades): {outreach_needed}"},
+            {"Header": f"Units using personal emails: {personal_email_count}"},
+            {"Header": ""}
+        ]
+    
+    def _create_expanded_legend_data(self) -> List[Dict[str, str]]:
+        """Create expanded legend data with user-requested clarity"""
+        return [
+            {"Category": "Required Information", "Issue": "Location", "Description": "Missing meeting location (street address required for families to find meetings)"},
+            {"Category": "Required Information", "Issue": "Day", "Description": "Missing meeting day (families need to know when meetings occur)"},
+            {"Category": "Required Information", "Issue": "Time", "Description": "Missing meeting time (specific meeting times help families plan attendance)"},
+            {"Category": "Required Information", "Issue": "Contact Email", "Description": "Missing contact email (families need a way to ask questions and get information)"},
+            {"Category": "Required Information", "Issue": "Specialty", "Description": "Missing specialty focus (required for Venturing Crews - e.g., High Adventure, STEM)"},
+            {"Category": "Quality Issues", "Issue": "Personal Email", "Description": "Unit-specific contact email is preferable (personal emails create continuity issues when leaders change)"},
+            {"Category": "Quality Issues", "Issue": "PO Box Location", "Description": "Street address preferred over PO Box (helps families locate actual meeting place)"},
+            {"Category": "Recommended Information", "Issue": "Contact", "Description": "Recommend a contact name (gives families a specific person to reach out to)"},
+            {"Category": "Recommended Information", "Issue": "Phone", "Description": "Recommend a contact phone number (provides direct communication method for interested families)"},
+            {"Category": "Recommended Information", "Issue": "Website", "Description": "Recommend a unit-specific website (provides families detailed program information)"},
+            {"Category": "Recommended Information", "Issue": "Description", "Description": "Recommend program description (helps families understand what makes the unit special and welcoming)"}
+        ]
+    
+    def _create_legacy_legend_data(self) -> List[Dict[str, str]]:
+        """Legacy legend method for backwards compatibility"""
         return [
             {"Code": "Meeting Location", "Category": "Required", "Description": "Street address where unit meets - helps families find meetings and events"},
             {"Code": "Meeting Day", "Category": "Required", "Description": "Day of week when unit regularly meets - essential for family scheduling"},
@@ -255,6 +465,7 @@ class DistrictReportGenerator:
                 'Unit Number': unit.get('unit_number', ''),
                 'Town': unit.get('unit_town', ''),
                 'BeAScout Score (%)': round(unit.get('completeness_score', 0), 1),
+                'Grade': unit.get('completeness_grade', ''),
                 'Missing Information': required_str,
                 'Quality Issues': quality_str,
                 'Recommended Information': recommended_str,
@@ -274,20 +485,19 @@ class DistrictReportGenerator:
         output_path.mkdir(parents=True, exist_ok=True)
         
         date_str = datetime.now().strftime("%Y%m%d")
-        filename = f"{district_name}_District_BeAScout_Report_{date_str}.xlsx"
+        time_str = datetime.now().strftime("%H%M%S")
+        filename = f"{district_name}_District_BeAScout_Report_{date_str}_{time_str}.xlsx"
         file_path = output_path / filename
         
         with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
-            # Main data sheet
+            # Unit Data sheet with header integrated at top
+            header_rows = self._create_unit_data_headers(district_units, district_name)
             df_main = pd.DataFrame(report_data)
-            df_main.to_excel(writer, sheet_name='Unit Data', index=False)
             
-            # Legend sheet
-            legend_data = self._create_legend_data()
-            df_legend = pd.DataFrame(legend_data)
-            df_legend.to_excel(writer, sheet_name='Issue Legend', index=False)
+            # Write header rows first, then unit data
+            self._write_unit_data_with_headers(writer, header_rows, df_main, 'Unit Data')
             
-            # Summary sheet
+            # Summary sheet (keep this)
             summary_data = self._create_summary_data(district_units, district_name)
             df_summary = pd.DataFrame(summary_data)
             df_summary.to_excel(writer, sheet_name='District Summary', index=False)
@@ -359,13 +569,18 @@ class DistrictReportGenerator:
                 
                 units = data.get('units_with_scores', [])
                 
-                # Filter to only HNE Council units
-                hne_units = []
-                for unit in units:
-                    unit_town = unit.get('unit_town', '')
-                    if (unit_town in self.district_towns["Quinapoxet"] or 
-                        unit_town in self.district_towns["Soaring Eagle"]):
-                        hne_units.append(unit)
+                # If this is the authoritative final dataset, trust it's already HNE-only
+                if 'authoritative_final' in file_path:
+                    hne_units = units  # Trust the authoritative dataset 
+                    print(f"Using authoritative dataset - no additional filtering needed")
+                else:
+                    # Filter to only HNE Council units for other datasets
+                    hne_units = []
+                    for unit in units:
+                        unit_town = unit.get('unit_town', '')
+                        if (unit_town in self.district_towns["Quinapoxet"] or 
+                            unit_town in self.district_towns["Soaring Eagle"]):
+                            hne_units.append(unit)
                 
                 all_units.extend(hne_units)
                 print(f"Loaded {len(hne_units)} HNE units from {file_path}")
@@ -380,15 +595,91 @@ class DistrictReportGenerator:
         
         print(f"Total HNE units loaded: {len(all_units)}")
         
-        # Generate reports for each district
-        generated_files = []
+        # Generate single council report with both district sheets
+        council_report = self.generate_council_report(all_units, output_dir)
+        return [council_report] if council_report else []
+    
+    def generate_council_report(self, all_units: List[Dict[str, Any]], output_dir: str) -> str:
+        """Generate single council report with separate district sheets"""
+        output_path = Path(output_dir)
+        output_path.mkdir(parents=True, exist_ok=True)
         
-        for district_name in ["Quinapoxet", "Soaring Eagle"]:
-            report_file = self.generate_district_report(all_units, district_name, output_dir)
-            if report_file:
-                generated_files.append(report_file)
+        date_str = datetime.now().strftime("%Y%m%d")
+        time_str = datetime.now().strftime("%H%M%S")
+        filename = f"HNE_Council_BeAScout_Report_{date_str}_{time_str}.xlsx"
+        file_path = output_path / filename
         
-        return generated_files
+        with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+            # Generate both district sheets
+            for district_name in ["Quinapoxet", "Soaring Eagle"]:
+                district_units = [unit for unit in all_units if self._classify_unit_district(unit) == district_name]
+                
+                # Always create sheet even if no units (per feedback requirement #1)
+                if not district_units:
+                    print(f"No units found for {district_name} District - creating empty sheet")
+                
+                # Sort units by type, number, town
+                district_units.sort(key=lambda x: (
+                    x.get('unit_type', ''),
+                    int(x.get('unit_number', '0') or '0'),
+                    x.get('unit_town', '')
+                ))
+                
+                # Create header rows for this district
+                header_rows = self._create_unit_data_headers(district_units, district_name)
+                
+                # Prepare unit data
+                report_data = []
+                for unit in district_units:
+                    # Get Key Three members (up to 3)
+                    key_three_members = self._get_unit_key_three(unit)[:3]
+                    
+                    # Categorize issues
+                    recommendations = unit.get('recommendations', [])
+                    issues = self._categorize_issues(recommendations)
+                    
+                    # Format issues as comma-separated strings
+                    required_str = ', '.join(issues['required']) if issues['required'] else 'None'
+                    quality_str = ', '.join(issues['quality']) if issues['quality'] else 'None'
+                    recommended_str = ', '.join(issues['recommended']) if issues['recommended'] else 'None'
+                    
+                    # Build row data
+                    row_data = {
+                        'Unit Type': unit.get('unit_type', ''),
+                        'Unit Number': unit.get('unit_number', ''),
+                        'Town': unit.get('unit_town', ''),
+                        'BeAScout Score (%)': round(unit.get('completeness_score', 0), 1),
+                        'Grade': unit.get('completeness_grade', ''),
+                        'Missing Information': required_str,
+                        'Quality Issues': quality_str,
+                        'Recommended Information': recommended_str,
+                    }
+                    
+                    # Add Key Three members (exactly 3 slots)
+                    for i in range(3):
+                        if i < len(key_three_members):
+                            member = key_three_members[i]
+                            row_data[f'Key Three #{i+1} Name'] = member['name']
+                            row_data[f'Key Three #{i+1} Position'] = member['position']
+                            row_data[f'Key Three #{i+1} Email'] = member['email']
+                            row_data[f'Key Three #{i+1} Phone'] = member['phone']
+                        else:
+                            # Empty slots for missing Key Three members
+                            row_data[f'Key Three #{i+1} Name'] = ''
+                            row_data[f'Key Three #{i+1} Position'] = ''
+                            row_data[f'Key Three #{i+1} Email'] = ''
+                            row_data[f'Key Three #{i+1} Phone'] = ''
+                    
+                    report_data.append(row_data)
+                
+                # Create dataframe and write to sheet
+                df_main = pd.DataFrame(report_data)
+                self._write_unit_data_with_headers(writer, header_rows, df_main, f'{district_name} District')
+                
+                print(f"Created {district_name} District sheet with {len(district_units)} units")
+        
+        print(f"Generated council report: {filename}")
+        return str(file_path)
 
 
 def main():

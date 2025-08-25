@@ -6,6 +6,30 @@ import re
 from bs4 import BeautifulSoup
 import json
 
+def get_district_for_town(town):
+    """Assign district based on town name"""
+    quinapoxet_towns = [
+        "Ashby", "Townsend", "Pepperell", "Groton", "Ayer", "Littleton", "Acton", "Boxborough",
+        "Fitchburg", "Lunenburg", "Shirley", "Harvard", "Bolton", "Berlin", "Lancaster", "Leominster",
+        "Sterling", "Clinton", "West Boylston", "Boylston", "Shrewsbury", "Worcester", 
+        "Holden", "Rutland", "Princeton", "Paxton", "Leicester", "Auburn", "Millbury"
+    ]
+    
+    soaring_eagle_towns = [
+        "Royalston", "Winchendon", "Ashburnham", "Gardner", "Templeton", "Phillipston", "Athol", "Orange",
+        "Westminster", "Hubbardston", "Barre", "Petersham", "Hardwick", "New Braintree",
+        "Oakham", "Ware", "West Brookfield", "East Brookfield", "North Brookfield", "Brookfield", "Spencer",
+        "Warren", "Sturbridge", "Charlton", "Oxford", "Dudley", "Webster", "Douglas", "Sutton", "Grafton", 
+        "Upton", "Northbridge", "Southbridge"
+    ]
+    
+    if town in quinapoxet_towns:
+        return "Quinapoxet"
+    elif town in soaring_eagle_towns:
+        return "Soaring Eagle"
+    else:
+        return "Unknown"
+
 def format_meeting_location(raw_location):
     """Format meeting location with proper comma separators"""
     # Expected format: Building Name, Street Address, City State ZIP
@@ -414,6 +438,10 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
         print(f"Error processing unit {index}: {e}")
         unit_data['raw_content'] = f"Error: {e}"
     
+    # Add district assignment based on unit_town
+    unit_town = unit_data.get('unit_town', '').strip()
+    unit_data['district'] = get_district_for_town(unit_town)
+    
     return unit_data
 
 def extract_meeting_info(description):
@@ -601,18 +629,22 @@ def main():
     print(f"After HNE filtering: {len(hne_filtered_units)} HNE Council units")
     
     # Determine output filename based on input
-    if len(html_files) == 1:
-        # Single file - use existing naming convention
-        base_name = html_files[0].replace('data/raw/', '').replace('.html', '')
-        output_file = f'data/raw/all_units_{base_name.replace("debug_page_", "")}.json'
+    # Extract zip codes from filenames to create proper output filename
+    import re
+    zip_codes = set()
+    for file in html_files:
+        # Extract 5-digit zip codes from filename (look for beascout_##### or joinexploring_##### pattern)
+        zip_match = re.search(r'(?:beascout|joinexploring)_(\d{5})\.html', file)
+        if zip_match:
+            zip_codes.add(zip_match.group(1))
+    
+    if zip_codes:
+        # Use first zip code found for output filename
+        zip_code = sorted(zip_codes)[0]  # Use first zip code alphabetically for consistency
+        output_file = f'data/raw/all_units_{zip_code}.json'
     else:
-        # Multiple files - use combined naming
-        zip_codes = []
-        for file in html_files:
-            if '01720' in file:
-                zip_codes.append('01720')
-        zip_part = '_'.join(set(zip_codes)) if zip_codes else 'combined'
-        output_file = f'data/raw/all_units_{zip_part}.json'
+        # Fallback to combined if no zip codes found
+        output_file = 'data/raw/all_units_combined.json'
     
     # Save all units to JSON
     output_data = {
