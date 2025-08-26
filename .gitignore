@@ -1,0 +1,47 @@
+# Personal Information - Key Three Database Files
+data/input/HNE_key_three.json
+data/input/HNE_key_three.xlsx
+data/input/key_three_units.txt
+
+# Generated Reports with Personal Information
+data/output/reports/*.xlsx
+data/output/emails/*.md
+
+# Python Virtual Environment
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary Files
+*.tmp
+~$*
