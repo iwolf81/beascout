@@ -5,7 +5,8 @@ data/input/key_three_units.txt
 
 # Generated Reports with Personal Information
 data/output/reports/*.xlsx
-data/output/emails/*.md
+data/output/emails/
+data/output/three_way_validation_results.json
 
 # Python Virtual Environment
 venv/
