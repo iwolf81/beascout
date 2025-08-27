@@ -93,7 +93,7 @@ def process_scraped_session(session_dir: str):
     """Process a complete scraping session directory using current pipeline"""
     # Reset debug session to ensure single debug file per execution
     from src.core.unit_identifier import UnitIdentifierNormalizer
-    UnitIdentifierNormalizer.reset_debug_session()
+    UnitIdentifierNormalizer.reset_debug_session('scraped')
 
     session_path = Path(session_dir)
 

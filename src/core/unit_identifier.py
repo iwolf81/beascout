@@ -22,12 +22,13 @@ class UnitIdentifierNormalizer:
     """
 
     @classmethod
-    def reset_debug_session(cls):
+    def reset_debug_session(cls, source='scraped'):
         """Reset debug session for new execution"""
         if hasattr(cls, '_debug_filename'):
             delattr(cls, '_debug_filename')
         if hasattr(cls, '_discarded_debug_filename'):
             delattr(cls, '_discarded_debug_filename')
+        cls._debug_source = source
     
     @classmethod
     def log_discarded_unit(cls, unit_type: str, unit_number: str, town: str, 
@@ -40,12 +41,21 @@ class UnitIdentifierNormalizer:
         if not hasattr(cls, '_discarded_debug_filename'):
             # Get timestamp from main debug file or create new one
             if hasattr(cls, '_debug_filename'):
-                # Extract timestamp from existing debug filename
-                timestamp = cls._debug_filename.split('_')[-1].replace('.log', '')
+                # Extract source and timestamp from existing debug filename
+                filename_parts = cls._debug_filename.split('_')
+                if len(filename_parts) >= 4:
+                    source = filename_parts[-3]  # e.g., 'scraped' or 'keythree'
+                    datestamp = filename_parts[-2]  # e.g., '20250827'
+                    timestamp = filename_parts[-1].replace('.log', '')  # e.g., '145748'
+                    full_timestamp = f'{datestamp}_{timestamp}'
+                else:
+                    source = getattr(cls, '_debug_source', 'scraped')
+                    full_timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             else:
-                timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                source = getattr(cls, '_debug_source', 'scraped')
+                full_timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             
-            cls._discarded_debug_filename = f'data/debug/discarded_unit_identifier_debug_{timestamp}.log'
+            cls._discarded_debug_filename = f'data/debug/discarded_unit_identifier_debug_{source}_{full_timestamp}.log'
             
             # Ensure debug directory exists
             os.makedirs('data/debug', exist_ok=True)
@@ -134,7 +144,8 @@ class UnitIdentifierNormalizer:
         # Use a session-based timestamp (created once per execution)
         if not hasattr(UnitIdentifierNormalizer, '_debug_filename'):
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            UnitIdentifierNormalizer._debug_filename = f'data/debug/unit_identifier_debug_{timestamp}.log'
+            source = getattr(UnitIdentifierNormalizer, '_debug_source', 'scraped')
+            UnitIdentifierNormalizer._debug_filename = f'data/debug/unit_identifier_debug_{source}_{timestamp}.log'
 
             # Ensure debug directory exists
             os.makedirs('data/debug', exist_ok=True)

@@ -155,7 +155,6 @@ class KeyThreeParser:
                 return self._normalize_town_name(potential_village)
         
         # If no pattern matches, return empty - will be flagged for manual review
-        print(f"Warning: Could not extract town from: {orgname}")
         return ""
     
     def _is_valid_town(self, town_candidate: str) -> bool:
@@ -227,6 +226,9 @@ class KeyThreeParser:
             if not self.load_excel_data():
                 return []
         
+        # Reset debug session for Key Three parsing
+        UnitIdentifierNormalizer.reset_debug_session('keythree')
+        
         # Get unique unitcommorgname values (should be 169)
         unique_orgs = self.raw_data['unitcommorgname'].dropna().unique()
         print(f"Found {len(unique_orgs)} unique unitcommorgname values")
@@ -237,7 +239,7 @@ class KeyThreeParser:
             unit_info = self.extract_unit_info_from_unitcommorgname(org_name)
             
             if unit_info and unit_info.get('unit_town'):
-                # Create standardized unit record using normalizer
+                # Create standardized unit record using normalizer (generates debug log)
                 standardized_record = UnitIdentifierNormalizer.create_unit_record(
                     unit_info['unit_type'],
                     unit_info['unit_number'], 
@@ -248,6 +250,14 @@ class KeyThreeParser:
                 
                 self.parsed_units.append(standardized_record)
             else:
+                # Log discarded Key Three unit
+                UnitIdentifierNormalizer.log_discarded_unit(
+                    unit_info.get('unit_type', 'Unknown'),
+                    unit_info.get('unit_number', 'Unknown'),
+                    unit_info.get('unit_town', 'Unknown'),
+                    str(org_name),
+                    'Key Three: Could not extract unit info or town'
+                )
                 print(f"Warning: Could not parse unit from: {org_name}")
         
         print(f"Successfully parsed {len(self.parsed_units)} units from Key Three")
