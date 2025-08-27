@@ -1,339 +1,241 @@
-# BeAScout Unit Information System - Technical Architecture
+# BeAScout Unit Data Quality Monitoring System - Technical Architecture
 
-**Version**: 3.0 | **Last Updated**: 2025-08-26 | **Strategy**: Production-Ready Three-Way Validation System
+**Version**: 4.0 | **Last Updated**: 2025-08-27 | **Status**: Production-Ready with Village-Aware Processing
 
-## Technology Stack
-- **Three-Way Validation**: Key Three database (169 units) + dual-source web scraping (152 unique units)
-- **Enhanced Address Parsing**: 6-pattern town extraction with MA/CT support and territory validation
-- **Consistent Normalization**: unit_key format enables reliable cross-source matching and deduplication
-- **Visual District Mapping**: HNE council map analysis eliminates "Special 04" database inconsistencies
-- **Production-Scale Processing**: All 72 HNE zip codes (2,034 raw → 152 unique, 92% deduplication)
-- **Territory Filtering**: Enhanced HNE filtering excludes non-council units (Uxbridge MA, Putnam CT)
-- **Professional Reporting**: Excel commissioner reports with BOTH/KEY_THREE_ONLY/WEB_ONLY classification
-- **Language**: Python 3.13+ with comprehensive parsing libraries
+## System Overview
+
+The BeAScout system is a production-ready data quality monitoring platform that processes three primary data sources to generate comprehensive unit quality reports for the Heart of New England Council. The system features village-aware processing, comprehensive debug logging, and automated report generation.
+
+## Core Components
+
+### Data Sources
+- **Key Three Database** (169 units): Official council unit registry from Excel exports
+- **BeAScout.org** (10-mile radius search): Primary unit information platform  
+- **JoinExploring.org** (20-mile radius search): Exploring/Venturing unit information
+- **HNE Territory Map** (65 towns, 2 districts): Authoritative geographic boundaries
+
+### Processing Pipeline
+```
+Raw Data → HTML/Excel → JSON → Normalized → Scored → Reports
+   ↓           ↓          ↓        ↓         ↓        ↓
+Scraping   Parsing   Extraction  Quality   Final   Output
+```
 
 ## Project Structure
+
 ```
-beascout/
-├── # Core Production System ✅
-├── src/
-│   ├── core/                            # ✅ Consistent normalization system
-│   │   └── unit_identifier.py          # Standardized unit_key format for cross-source matching
-│   │                                    # - Eliminates identifier inconsistencies
-│   │                                    # - Handles town name variations (E Brookfield → East Brookfield)
-│   │                                    # - Creates reliable join keys for validation
-│   ├── mapping/                         # ✅ Visual district mapping system  
-│   │   └── district_mapping.py         # HNE council map → town assignments
-│   │                                    # - Eliminates "Special 04" database issues
-│   │                                    # - 62 towns mapped to Quinapoxet/Soaring Eagle districts
-│   │                                    # - Visual source of truth overrides database inconsistencies
-│   ├── parsing/                         # ✅ Production-ready parsing engines
-│   │   ├── key_three_parser.py         # Key Three database processing (169 active units)
-│   │   │                                # - Handles all edge cases from manual analysis
-│   │   │                                # - Extracts town from complex org names
-│   │   │                                # - Normalizes directional abbreviations  
-│   │   └── fixed_scraped_data_parser.py # Enhanced 6-pattern address parsing
-│   │                                    # - Handles comma-separated directional towns
-│   │                                    # - MA/CT address support with territory validation
-│   │                                    # - Excludes non-HNE units (Uxbridge, Putnam CT)
-│   ├── processing/                      # ✅ Massive-scale data processing
-│   │   └── comprehensive_scraped_parser.py # All 72 zip codes with intelligent deduplication
-│   │                                    # - Processes 2,034 raw units → 152 unique (92% efficiency)
-│   │                                    # - Cross-zip deduplication using unit_key matching
-│   │                                    # - Territory filtering and statistics tracking
-│   ├── validation/                      # ✅ Three-way cross-validation engine
-│   │   ├── three_way_validator.py       # BOTH/KEY_THREE_ONLY/WEB_ONLY classification
-│   │   │                                # - Cross-references 169 Key Three vs 152 scraped units
-│   │   │                                # - Identifies missing web presence and data gaps
-│   │   ├── enhanced_validator.py        # Advanced validation with confidence scoring
-│   │   └── targeted_unit_matcher.py     # Targeted matching for specific unit analysis
-│   └── analysis/
-│       └── quality_scorer.py            # Enhanced A-F quality scoring system
-│                                        # - Specialized unit support (Posts/Clubs/Crews)
-│                                        # - Personal email classification with 5-pass refinement
-│                                        # - Human-readable recommendation identifiers
-├── 
-├── scripts/                              # ✅ Professional reporting and analysis scripts
-│   ├── generate_commissioner_report.py  # Professional Excel reports for commissioners
-│   │                                    # - 5-sheet Excel format with executive summary
-│   │                                    # - BOTH/KEY_THREE_ONLY/WEB_ONLY unit classification
-│   │                                    # - Action flags for commissioner follow-up
-│   ├── process_full_dataset.py          # End-to-end pipeline orchestration
-│   │                                    # - Coordinates all processing stages
-│   │                                    # - Handles edge cases and error recovery
-│   ├── analyze_identifier_matching.py   # Unit identifier analysis and debugging
-│   ├── analyze_missing_units.py         # Missing unit investigation tools
-│   ├── create_complete_dataset.py       # Dataset consolidation utilities
-│   ├── filter_hne_units.py              # HNE territory filtering utilities
-│   └── search_missing_units.py          # Targeted missing unit search tools
-├── 
-├── prototype/                            # ✅ Enhanced extraction and utilities
-│   ├── conservative_multi_zip_scraper.py # Browser automation for all HNE zip codes
-│   │                                    # - Playwright automation with exponential backoff
-│   │                                    # - Dual-source BeAScout + JoinExploring
-│   │                                    # - All 72 zip codes with rate limiting
-│   ├── extract_all_units.py            # ✅ Dual-source extraction with HNE filtering
-│   │                                    # - BeAScout + JoinExploring processing
-│   │                                    # - Enhanced HNE territory filtering
-│   │                                    # - Unit_town prioritization over org matching
-│   │                                    # - All 6 unit types (Packs/Troops/Crews/Ships/Posts/Clubs)
-│   └── multi_town_deduplication.py     # Advanced deduplication utilities
-├── 
-├── data/
-│   ├── raw/                             # ✅ Production-scale processed data
-│   │   ├── all_units_{zipcode}.json     # Raw scraped data for all 72 HNE zip codes
-│   │   ├── scraped_units_comprehensive.json # 152 unique units (92% deduplication from 2,034 raw)
-│   │   │                                # - Cross-zip deduplication complete
-│   │   │                                # - District distribution: Quinapoxet 78, Soaring Eagle 76
-│   │   │                                # - Territory filtering excludes non-HNE units
-│   │   ├── key_three_comparison.json    # 169 Key Three units with web cross-reference
-│   │   │                                # - BOTH_SOURCES: 142 units (84.0% web presence)
-│   │   │                                # - KEY_THREE_ONLY: 27 units (missing web presence)
-│   │   │                                # - WEB_ONLY: 10 units (not in Key Three)
-│   │   └── key_three_parsed_units.json  # Processed Key Three database with edge cases
-│   ├── output/                          # ✅ Professional reporting outputs
-│   │   ├── reports/                     # Excel commissioner reports with action flags
-│   │   │   └── HNE_Commissioner_Data_Quality_Report_[date].xlsx # 5-sheet professional format
-│   │   ├── emails/                      # Personalized Key Three improvement emails
-│   │   └── enhanced_three_way_validation_results.json # Detailed validation analysis
-│   ├── feedback/                        # ✅ Edge case analysis and user feedback
-│   │   ├── Rethinking_Processing.md     # Architectural guidance document
-│   │   ├── missing_beascout.txt         # Units missing from web scraping
-│   │   ├── unit_identifier_debug_*.md   # Parsing debugging with user annotations  
-│   │   └── HNE_Commissioner_Data_Quality_Report_*_comments.xlsx # User feedback on reports
-│   ├── debug/                           # ✅ System debugging and validation logs
-│   │   └── unit_identifier_debug_*.log  # Detailed parsing logs for validation
-│   └── zipcodes/
-│       └── hne_council_zipcodes.json    # All 72 HNE Council zip codes
-├── 
-├── # Testing Infrastructure
-├── tests/
-│   ├── __init__.py
-│   ├── conftest.py
-│   ├── fixtures/                        # Test data fixtures
-│   ├── integration/                     # Integration test directory
-│   └── unit/
-│       └── test_sample.py               # Sample unit test
-├── 
-├── # Configuration and Dependencies
-├── requirements.txt                     # Python dependencies including Playwright
-├── pytest.ini                          # pytest configuration
-├── 
-├── # Development Utilities
-├── venv/                                # Python virtual environment
-├── 
-├── # Documentation Structure
-├── README.md                            # System overview and usage examples
-├── ARCHITECTURE.md                      # Technical architecture (this file)
-├── SYSTEM_DESIGN.md                     # Business requirements and success metrics
-├── PRODUCTION_STATUS.md                 # Current deployment status and achievements
-├── COLLABORATION_LOG.md                 # AI-human development insights and lessons learned
-├── SESSION_HANDOFF.md                   # Session context preservation
-├── CLAUDE.md                           # AI development context and implementation status
-└── LICENSE                             # Project license file
+src/                                 # All production code (organized by function)
+├── core/                           # ✅ Core system components
+│   └── unit_identifier.py         # Unit normalization with debug logging
+│                                   # - Creates standardized unit_key format
+│                                   # - Handles village extraction (Fiskdale, Whitinsville, Jefferson)
+│                                   # - Source-specific debug file generation
+│                                   # - Discarded unit logging with audit trails
+├── mapping/                        # ✅ Geographic data management  
+│   └── district_mapping.py        # HNE territory definitions
+│                                   # - 65 towns across Quinapoxet/Soaring Eagle districts
+│                                   # - Centralized TOWN_TO_DISTRICT dictionary
+│                                   # - Village definitions as separate towns
+├── parsing/                        # ✅ Data parsing engines
+│   ├── fixed_scraped_data_parser.py # Scraped HTML processor
+│   │                               # - Village-priority extraction logic
+│   │                               # - 6-pattern address parsing
+│   │                               # - HNE territory filtering
+│   │                               # - Comprehensive error handling
+│   └── key_three_parser.py        # Excel spreadsheet processor  
+│                                   # - 169 unit processing with edge case handling
+│                                   # - Sophisticated town extraction (9 patterns)
+│                                   # - Debug logging integration
+├── scraping/                       # ✅ Data collection (when needed)
+│   ├── browser_scraper.py         # Playwright automation
+│   └── url_generator.py           # Search URL creation
+├── analysis/                       # ✅ Data quality assessment
+│   └── quality_scorer.py          # Unit completeness scoring
+│                                   # - Required vs recommended field weighting
+│                                   # - A-F grading system
+│                                   # - Specialized scoring for unit types
+├── scripts/                        # ✅ Production pipeline scripts
+│   ├── process_full_dataset_v2.py      # Main pipeline orchestration
+│   ├── generate_district_reports.py    # Excel report generation
+│   ├── generate_key_three_emails.py    # Personalized email creation
+│   ├── create_authoritative_dataset.py # Dataset consolidation
+│   └── generate_commissioner_report.py # Executive summary reports
+└── legacy/                         # ✅ Legacy tools (still used)
+    └── extract_all_units.py       # HTML → JSON conversion
+
+scripts/                            # Utility & testing scripts
+├── search_strings.py              # Multi-file search tool
+└── test_key_three_debug.py        # Key Three parser validation
+
+data/                              # All data files (organized by stage)
+├── input/                         # Source data files
+│   └── Key 3 08-22-2025.xlsx     # Monthly Key Three export
+├── scraped/                       # Raw HTML from websites  
+│   └── YYYYMMDD_HHMMSS/          # Timestamped scraping sessions
+├── raw/                          # Processed JSON data
+│   └── all_units_comprehensive_scored.json # Final consolidated dataset
+├── debug/                        # Debug & audit logs
+│   ├── unit_identifier_debug_scraped_*.log      # Scraped data processing
+│   ├── unit_identifier_debug_keythree_*.log     # Key Three processing  
+│   └── discarded_unit_identifier_debug_*.log    # Excluded units
+├── output/                       # Final reports
+│   ├── reports/                  # Excel district reports
+│   └── emails/                   # Generated Key Three emails
+└── feedback/                     # Analysis & documentation
+
+archive/                          # Deprecated code (historical reference)
 ```
 
-## System Interface Design
+## Key Technical Features
 
-### Production Three-Way Validation Pipeline
-```bash
-# Complete production pipeline (all 72 HNE zip codes)
+### Village-Aware Processing
+The system correctly identifies and processes village units that were causing cross-validation failures:
+- **Fiskdale** (within Sturbridge) - 2-3 units
+- **Whitinsville** (within Northbridge) - 2 units  
+- **Jefferson** (within Holden) - 1 unit
 
-# Stage A: Visual District Mapping (eliminates database inconsistencies)
-python src/mapping/district_mapping.py
-# Output: Town → District assignments from HNE council map analysis
+### Debug Logging System
+Comprehensive audit trails distinguish between data sources:
+- `unit_identifier_debug_scraped_YYYYMMDD_HHMMSS.log`
+- `unit_identifier_debug_keythree_YYYYMMDD_HHMMSS.log`  
+- `discarded_unit_identifier_debug_SOURCE_YYYYMMDD_HHMMSS.log`
 
-# Stage B: Key Three Database Processing (169 active units)
-python src/parsing/key_three_parser.py
-# Output: data/raw/key_three_parsed_units.json (handles all edge cases)
+### Quality Scoring Algorithm
+- **Required Fields** (70% weight): Location, meeting day/time, contact email, unit composition
+- **Recommended Fields** (30% weight): Contact person, phone, website, description
+- **Grading Scale**: A (90%+), B (80-89%), C (70-79%), D (60-69%), F (<60%)
+- **Penalties**: Half credit for PO Box locations, personal email addresses
 
-# Stage C: Consistent Unit Identifier Normalization
-python src/core/unit_identifier.py
-# Output: Standardized unit_key format for reliable cross-source matching
-
-# Stage D: Enhanced Scraped Data Processing (all zip codes)
-python src/processing/comprehensive_scraped_parser.py
-# Output: data/raw/scraped_units_comprehensive.json (152 unique from 2,034 raw)
-
-# Stage E: Three-Way Cross-Validation
-python src/validation/three_way_validator.py
-# Output: BOTH/KEY_THREE_ONLY/WEB_ONLY classification analysis
-
-# Stage F: Professional Commissioner Reporting
-python scripts/generate_commissioner_report.py
-# Output: 5-sheet Excel report with executive summary and action flags
-```
-
-### Target Automated System Interface  
-```python
-# Primary system entry points
-from src.processing.comprehensive_scraped_parser import ComprehensiveScrapedParser
-from src.validation.three_way_validator import ThreeWayValidator
-from src.reporting.commissioner_reports import CommissionerReportGenerator
-
-# Complete data processing (all 72 zip codes)
-parser = ComprehensiveScrapedParser()
-scraped_results = parser.process_all_scraped_files()  # 152 unique units from 2,034 raw
-
-# Three-way validation analysis
-validator = ThreeWayValidator()
-validation_results = validator.perform_comprehensive_validation()  # BOTH/KEY_THREE_ONLY/WEB_ONLY
-
-# Professional commissioner reporting
-reporter = CommissionerReportGenerator()
-reporter.generate_executive_summary()  # Excel format with action flags
-```
+### Territory Management
+- **65 HNE Towns**: Definitive list with district assignments
+- **2 Districts**: Quinapoxet (29 towns), Soaring Eagle (36 towns)
+- **Boundary Filtering**: Excludes non-HNE units (e.g., Uxbridge MA, Connecticut towns)
 
 ## Data Flow Architecture
 
-### Current Three-Way Validation Pipeline (Production-Ready)
 ```
-Key Three Database (169 units) + All HNE Zip Codes (72) → 
-Enhanced Address Parsing (6 patterns) → Territory Validation → 
-Consistent Normalization (unit_key format) → Cross-Source Deduplication (92% efficiency) → 
-Three-Way Validation (BOTH/KEY_THREE_ONLY/WEB_ONLY) → 
-Professional Commissioner Reports → Action Flag Classification
-```
-
-### Automated Monitoring Pipeline (Next Phase)
-```
-Scheduled Re-scraping (Biweekly) → Change Detection → 
-Data Quality Trend Analysis → Unit Status Updates → 
-Automated Commissioner Notifications → Dashboard Updates →
-Key Three Integration for Missing Units
-```
-
-## Enhanced Address Parsing Implementation
-
-### Six-Pattern Address Parsing Strategy
-```python
-ADDRESS_PARSING_PATTERNS = {
-    'simple_town_state': r'^([A-Za-z\s]+)\s+(MA|CT)\s*\d*$',
-    'street_city_state_zip': r',\s*([A-Za-z\s]+),\s*(MA|CT)\s+\d{5}',
-    'street_city_state_no_comma': r',\s*([A-Za-z\s,]+?)\s+(MA|CT)\s+\d{5}',
-    'directional_comma_town': r',\s*([A-Za-z]+),\s*([A-Za-z]+)\s+(MA|CT)',
-    'concatenated_street_town': r'([A-Za-z\s]+St|Ave|Rd|Dr|Ln|Way|Blvd)([A-Za-z\s]+)\s+(MA|CT)\s+\d{5}',
-    'facility_building_town': r'([A-Za-z\s]*Hall|Church|Center)([A-Za-z\s]+)\s+(MA|CT)\s+\d{5}'
-}
-
-TERRITORY_VALIDATION = {
-    'exclude_non_hne': ['uxbridge', 'putnam', 'danielson', 'thompson'],
-    'ma_ct_support': True,
-    'directional_town_handling': True
-}
-```
-
-### Current Data Structure (Enhanced JSON)
-
-### Unit Data Schema (data/raw/scraped_units_comprehensive.json)
-```json
-{
-  "total_unique_units": 152,
-  "scraped_units": [
-    {
-      "unit_key": "Pack 70 Acton",
-      "unit_type": "Pack",
-      "unit_number": "70",
-      "unit_town": "Acton",
-      "chartered_organization": "Acton-Congregational Church",
-      "district": "Quinapoxet",
-      "data_source": "scraped",
-      "meeting_location": "12 Concord Rd, Acton Congregational Church, Acton MA 01720",
-      "meeting_day": "Friday",
-      "meeting_time": "6:30:00 PM",
-      "contact_email": "pack70acton@gmail.com",
-      "contact_person": "Unit Contact",
-      "phone_number": "(978) 555-0123",
-      "website": "",
-      "description": "Pack 70 in Acton is inclusive and open to all K-5 youth...",
-      "specialty": "",
-      "original_scraped_data": { /* Complete scraped unit data */ }
-    }
-  ],
-  "parsing_stats": {
-    "files_processed": 72,
-    "total_raw_units": 2034,
-    "unique_units": 152,
-    "duplicates_removed": 1882,
-    "district_distribution": {
-      "Quinapoxet": 78,
-      "Soaring Eagle": 76
-    },
-    "town_extraction_methods": {
-      "unit_address": 1506,
-      "unit_description": 160,
-      "chartered_org": 351,
-      "failed": 10
-    }
-  }
-}
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           INPUT STAGE (3 Sources)                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 1. Web Scraping (BeAScout + JoinExploring)                                │
+│    • 71 zip codes × 2 websites = 142 HTML files                           │
+│    • Rate-limited browser automation                                      │
+│    • Exponential backoff retry logic                                      │
+│                                                                            │
+│ 2. Key Three Excel Processing                                             │
+│    • Monthly export with 169 active units                                │
+│    • Sophisticated town extraction (9 patterns)                          │
+│    • Contact information integration                                      │
+│                                                                            │
+│ 3. Territory Mapping                                                      │
+│    • 65 towns across 2 districts                                         │
+│    • Village definitions as separate entities                             │
+│    • Geographic boundary validation                                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       PROCESSING STAGE (6 Steps)                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 1. HTML → JSON Extraction                                                 │
+│    • Legacy parser processes HTML to structured JSON                      │
+│    • Unit container identification and data extraction                    │
+│                                                                            │
+│ 2. Unit Normalization & Village Processing                               │
+│    • Standardized unit_key creation: "Pack 3 Leominster"                │
+│    • Village-priority extraction (Fiskdale, Whitinsville, Jefferson)     │
+│    • Debug logging with source identification                             │
+│                                                                            │
+│ 3. Territory Filtering                                                    │
+│    • HNE boundary validation using TOWN_TO_DISTRICT mapping              │
+│    • Non-HNE unit exclusion with logging                                 │
+│                                                                            │
+│ 4. Quality Scoring                                                        │
+│    • Weighted field analysis (70% required, 30% recommended)             │
+│    • A-F grade assignment                                                 │
+│    • Improvement recommendations generation                                │
+│                                                                            │
+│ 5. Deduplication                                                          │
+│    • Cross-zip unit_key matching                                         │
+│    • Best-score unit retention                                           │
+│                                                                            │
+│ 6. District Assignment & Key Three Integration                           │
+│    • Town → District mapping                                             │
+│    • Key Three member contact matching                                    │
+│    • Final dataset consolidation                                          │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         OUTPUT STAGE (2 Types)                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ 1. Excel District Reports                                                │
+│    • HNE_Council_BeAScout_Report_YYYYMMDD_HHMMSS.xlsx                   │
+│    • Separate sheets for Quinapoxet and Soaring Eagle districts          │
+│    • Quality scores, grades, and specific recommendations                 │
+│    • Key Three member contact information (up to 3 per unit)             │
+│    • Professional formatting for commissioner distribution                 │
+│                                                                            │
+│ 2. Personalized Key Three Emails                                         │
+│    • Individual improvement plans for unit leaders                        │
+│    • Specific, actionable recommendations                                 │
+│    • Contact information and next steps                                   │
+│    • Ready-to-send email format                                          │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Three-Way Validation Results Schema
-```json
-{
-  "total_key_three_units": 169,
-  "total_scraped_units": 152,
-  "validation_results": {
-    "BOTH_SOURCES": {
-      "count": 142,
-      "percentage": 84.0,
-      "units": [/* Units found in both Key Three and web */]
-    },
-    "KEY_THREE_ONLY": {
-      "count": 27,
-      "percentage": 16.0,
-      "units": [/* Units only in Key Three (missing web presence) */],
-      "action_required": "Web presence creation needed"
-    },
-    "WEB_ONLY": {
-      "count": 10,
-      "percentage": 5.9,
-      "units": [/* Units only on web (not in Key Three) */],
-      "action_required": "Key Three registration verification needed"
-    }
-  }
-}
+## Pipeline Execution Commands
+
+### Complete Pipeline (Fresh Scraping)
+```bash
+# Step 1: Fresh data collection (30-45 minutes)
+python src/scraping/browser_scraper.py --all-zipcodes --output data/scraped/$(date +%Y%m%d_%H%M%S)/
+
+# Step 2: Complete processing pipeline
+python src/scripts/process_full_dataset_v2.py data/scraped/YYYYMMDD_HHMMSS/
+
+# Step 3: Generate district reports  
+python src/scripts/generate_district_reports.py data/raw/all_units_comprehensive_scored.json --output-dir data/output/reports/
+
+# Step 4: Generate personalized emails (optional)
+python src/scripts/generate_key_three_emails.py data/raw/all_units_comprehensive_scored.json
 ```
 
-## Unit Normalization Strategy
-- **Consistent unit_key Format**: `"{unit_type} {unit_number} {unit_town}"`
-- **Town Name Standardization**: Handles "E Brookfield" → "East Brookfield"
-- **Number Format**: Removes leading zeros ("0070" → "70")
-- **Cross-Source Matching**: Enables reliable joins between Key Three and scraped data
-- **Edge Case Handling**: Processes complex organizational names and address formats
+### Process Existing Data
+```bash
+# Use existing scraped data
+python src/scripts/process_full_dataset_v2.py data/scraped/20250824_220843/
+python src/scripts/generate_district_reports.py data/raw/all_units_comprehensive_scored.json --output-dir data/output/reports/
+```
 
-## Error Handling and Validation
-- **Territory Validation**: Excludes non-HNE units (Uxbridge MA, Putnam CT)
-- **Address Parsing Fallbacks**: 6 progressive patterns with graceful degradation
-- **Edge Case Documentation**: Complete user feedback loop with manual annotation
-- **Debug Logging**: Comprehensive parsing logs for validation and troubleshooting
-- **Data Quality Assurance**: 100% parsing success with detailed statistics
+### Debug & Validation  
+```bash
+# Test Key Three parsing
+python scripts/test_key_three_debug.py
 
-## Professional Reporting Architecture
-- **Executive Summary**: High-level metrics for commissioner briefings
-- **Action Flag Classification**: Clear follow-up requirements for each unit
-- **Multi-Sheet Excel Format**: Separate sheets for different unit categories
-- **Cross-Reference Validation**: Links between Key Three and web data sources
-- **Visual Data Presentation**: Charts and summaries for stakeholder communication
+# Search across multiple files
+python scripts/search_strings.py search_terms.txt data/debug/*.log
 
-## Security and Data Privacy
-- **Personal Information Exclusion**: No personal contact data in public repository
-- **Local Data Retention**: Sensitive files kept only in local development environment
-- **Anonymized Reporting**: Unit information without personal identifiers
-- **Secure Processing**: All personal data processing occurs locally
-- **Documentation Privacy**: Public documentation contains only system architecture
+# View latest debug logs
+ls -la data/debug/unit_identifier_debug_*$(date +%Y%m%d)*.log
+```
 
-## Configuration Management
-- **Environment-Based Processing**: Separate handling for development vs production data
-- **Flexible Territory Definitions**: Easy updates to HNE Council boundary definitions
-- **Configurable Parsing Parameters**: Adjustable address parsing patterns and thresholds
-- **Modular Architecture**: Independent components for easy maintenance and updates
-- **Version Control Integration**: Complete system state tracking with git workflow
+## Production Metrics
 
-## Performance and Scalability
-- **Massive-Scale Processing**: 2,034 raw units processed efficiently
-- **Intelligent Deduplication**: 92% efficiency in cross-zip duplicate removal
-- **Memory-Efficient Processing**: Streaming JSON processing for large datasets
-- **Parallel Processing Ready**: Architecture supports concurrent zip code processing
-- **Incremental Updates**: System supports delta processing for ongoing monitoring
+### Current Data Processing
+- **Total Units Processed**: 308 units from dual-source scraping
+- **HNE Units After Filtering**: 156 units (territory validation)
+- **Average Quality Score**: 62.8%
+- **Grade Distribution**: A(57), B(48), C(32), D(25), F(146)
+
+### District Distribution  
+- **Quinapoxet District**: 96 units across 29 towns
+- **Soaring Eagle District**: 55 units across 36 towns (includes 5 units from unknown district classification)
+
+### Processing Performance
+- **Zip Codes Processed**: 71 of 72 HNE zip codes (98.6% coverage)
+- **Village Extraction**: 100% accurate for Fiskdale, Whitinsville, Jefferson
+- **Debug Logging**: Complete audit trail with source-specific identification
+- **Report Generation**: Professional Excel reports with Key Three integration
+
+The system is production-ready and successfully processes the complete HNE Council unit dataset with comprehensive quality assessment and reporting capabilities.

@@ -1,24 +1,68 @@
-# BeAScout Unit Information Analyzer
+# BeAScout Unit Data Quality Monitoring System
 
-Comprehensive data validation and audit platform for Scouting America unit information across [beascout.scouting.org](https://beascout.scouting.org/) and [joinexploring.org](https://joinexploring.org/) for the Heart of New England Council (Massachusetts). This system provides data quality auditing, discrepancy detection, and automated reporting for council leadership.
+Production-ready data quality monitoring and reporting platform for Scouting America unit information across [beascout.scouting.org](https://beascout.scouting.org/) and [joinexploring.org](https://joinexploring.org/) for the Heart of New England Council (Massachusetts). The system provides comprehensive data quality auditing, automated reporting, and personalized improvement recommendations for council leadership and unit Key Three members.
 
-## Overview
+## System Overview
 
-The BeAScout system performs three-way validation between the official Key Three database (169 units) and web presence data to identify units missing from online platforms or requiring data updates. Built with production-ready parsing and normalization capabilities, it processes all 72 HNE zip codes (2,034 raw scraped units) with 100% parsing success and 92% deduplication accuracy.
+The BeAScout system processes three primary data sources to generate comprehensive unit quality reports:
+- **Key Three Database** (169 units) - Official council unit registry with leadership contacts
+- **BeAScout/JoinExploring Web Data** (308+ units across 71 zip codes) - Public unit information with contact details
+- **HNE Council Territory Map** (65 towns across 2 districts) - Authoritative geographic boundaries
+
+The system features production-ready parsing with village extraction (Fiskdale, Whitinsville, Jefferson), quality scoring, and automated generation of district reports and personalized Key Three emails.
+
+## Data Flow Architecture
+
+```
+┌───────────────────────────────────────────────────────────────────┐
+│                        DATA SOURCES (3)                             │
+├───────────────────────────────────────────────────────────────────┤
+│ BeAScout.org      │ JoinExploring.org  │ Key Three Spreadsheet   │
+│ (10mi radius)     │ (20mi radius)      │ (169 units)             │
+│                   │                    │                         │
+│ Browser Automation│ Browser Automation │ Excel Parser            │
+│ ↓                 │ ↓                  │ ↓                       │
+│ HTML Files        │ HTML Files         │ Structured Data         │
+└───────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ↓
+┌───────────────────────────────────────────────────────────────────┐
+│                   DATA PROCESSING PIPELINE                        │
+├───────────────────────────────────────────────────────────────────┤
+│ 1. HTML → JSON Extraction (Legacy Parser)                       │
+│ 2. Unit Normalization (Village-Aware: Fiskdale, Whitinsville)     │
+│ 3. Territory Filtering (65 HNE Towns)                             │
+│ 4. Quality Scoring (Required vs Recommended Fields)               │
+│ 5. Deduplication (unit_key matching)                              │
+│ 6. District Assignment (Quinapoxet vs Soaring Eagle)              │
+└───────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ↓
+┌───────────────────────────────────────────────────────────────────┐
+│                    OUTPUTS (2 types)                            │
+├───────────────────────────────────────────────────────────────────┤
+│ Excel District Reports          │ Personalized Key Three Emails │
+│ • Quinapoxet District Sheet     │ • Individual improvement plans  │
+│ • Soaring Eagle District Sheet  │ • Contact information           │
+│ • Quality scores & grades       │ • Specific recommendations     │
+│ • Key Three member contacts     │ • Ready-to-send email format   │
+└───────────────────────────────────────────────────────────────────┘
+```
 
 ## Key Features
 
-- **Dual-Source Data Collection**: Browser automation for beascout.scouting.org (10-mile radius) and joinexploring.org (20-mile radius) with exponential backoff retry logic
-- **Production-Scale Processing**: Handles all 72 HNE zip codes with 152 unique units identified from 2,034 raw scraped records
-- **Sophisticated Town Extraction**: 6-pattern address parsing with territory validation to exclude non-HNE units (Uxbridge MA, Putnam CT)
-- **Consistent Unit Normalization**: Standardized unit_key format enables reliable cross-source matching and deduplication
-- **Three-Way Validation**: BOTH_SOURCES (142 units), KEY_THREE_ONLY (27 units), WEB_ONLY (10 units) classification
-- **Visual District Mapping**: HNE council map analysis eliminates "Special 04" database inconsistencies
-- **Enhanced HNE Filtering**: Unit_town prioritization over chartered org matching for accurate territory classification
+- **Automated Data Collection**: Browser automation for dual-source scraping (BeAScout + JoinExploring) with retry logic and rate limiting
+- **Village-Aware Processing**: Correctly identifies villages (Fiskdale, Whitinsville, Jefferson) from chartered organization names for accurate cross-validation
+- **Quality Scoring System**: Professional grading (A-F) with weighted scoring for required vs recommended fields
+- **Territory Validation**: Precise HNE boundary filtering across 65 towns in Quinapoxet and Soaring Eagle districts
+- **Comprehensive Debug Logging**: Source-specific debug files distinguish Key Three vs scraped data parsing with full audit trails
+- **Automated Report Generation**: Excel district reports with Key Three member integration and personalized email recommendations
+- **Production-Ready Pipeline**: End-to-end processing from fresh scraping through final reports with error handling and monitoring
 
 ## Quick Start
 
-### Installation
+### System Requirements & Installation
+
 ```bash
 # Clone the repository
 git clone https://github.com/iwolf81/beascout.git
@@ -31,23 +75,127 @@ source venv/bin/activate
 # Install dependencies
 pip install -r requirements.txt
 
-# Install Playwright browsers
+# Install Playwright browsers for web scraping
 playwright install
+
+# Verify installation
+python src/core/unit_identifier.py  # Test unit identifier normalization
+python scripts/test_key_three_debug.py  # Test Key Three parsing
 ```
 
-### Production Pipeline Usage
+## Project File Structure
+
+```
+beascout/
+├── src/                          # All production code
+│   ├── core/                     # Core system components
+│   │   └── unit_identifier.py    # Unit normalization & debug logging
+│   ├── mapping/                  # Geographic data
+│   │   └── district_mapping.py   # HNE territory definitions (65 towns)
+│   ├── parsing/                  # Data parsing engines
+│   │   ├── fixed_scraped_data_parser.py  # Scraped HTML processor
+│   │   └── key_three_parser.py   # Excel spreadsheet processor
+│   ├── scraping/                 # Data collection
+│   │   ├── browser_scraper.py    # Playwright automation
+│   │   └── url_generator.py      # Search URL creation
+│   ├── analysis/                 # Data quality assessment
+│   │   └── quality_scorer.py     # Unit completeness scoring
+│   ├── scripts/                  # Production pipeline scripts
+│   │   ├── process_full_dataset_v2.py    # Main pipeline
+│   │   ├── generate_district_reports.py  # Excel report generation
+│   │   └── generate_key_three_emails.py  # Email generation
+│   └── legacy/                   # Legacy extraction tools
+│       └── extract_all_units.py  # HTML → JSON converter
+├── scripts/                      # Utility scripts
+│   ├── search_strings.py         # Multi-file search tool
+│   └── test_key_three_debug.py   # Key Three parser testing
+├── data/                         # All data files
+│   ├── input/                    # Source data
+│   │   └── Key 3 08-22-2025.xlsx  # Monthly Key Three export
+│   ├── scraped/                  # Raw HTML from websites
+│   │   └── 20250827_HHMMSS/      # Timestamped scraping sessions
+│   ├── raw/                      # Processed JSON data
+│   │   └── all_units_comprehensive_scored.json  # Final dataset
+│   ├── debug/                    # Debug & audit logs
+│   │   ├── unit_identifier_debug_scraped_*.log
+│   │   ├── unit_identifier_debug_keythree_*.log
+│   │   └── discarded_unit_identifier_debug_*.log
+│   ├── output/                   # Final reports
+│   │   ├── reports/              # Excel district reports
+│   │   └── emails/               # Generated Key Three emails
+│   └── feedback/                 # Analysis & documentation
+└── archive/                      # Deprecated code (kept for reference)
+```
+
+## Debug and Monitoring
+
+### Debug Log Analysis
+The system generates comprehensive debug logs for troubleshooting:
+
 ```bash
-# Stage A: Visual District Mapping (eliminates database inconsistencies)
-python src/mapping/district_mapping.py  # Creates town→district assignments
+# View latest scraped data processing
+cat data/debug/unit_identifier_debug_scraped_$(date +%Y%m%d)*.log | head -20
 
-# Stage B: Key Three Database Processing 
-python src/parsing/key_three_parser.py  # Parses 169 active units with edge case handling
+# Check Key Three parsing results  
+cat data/debug/unit_identifier_debug_keythree_$(date +%Y%m%d)*.log | head -10
 
-# Stage C: Consistent Unit Identifier Normalization
-python src/core/unit_identifier.py  # Standardizes unit_key format across sources
+# Review excluded units
+cat data/debug/discarded_unit_identifier_debug_*$(date +%Y%m%d)*.log
 
-# Stage D: Enhanced Scraped Data Processing
-python src/processing/comprehensive_scraped_parser.py  # Processes all 72 zip codes
+# Count unique units processed
+sort -u data/debug/unit_identifier_debug_scraped_*.log | wc -l
+
+# Search for specific issues
+python scripts/search_strings.py search_terms.txt data/debug/*.log
+```
+
+### Village Processing Verification
+Verify village units are correctly identified:
+```bash
+# Check village extraction from debug logs
+grep -i 'fiskdale\|whitinsville\|jefferson' data/debug/unit_identifier_debug_*.log
+
+# Should show units like:
+# unit_town: 'Fiskdale', chartered_org: 'Fiskdale-American Legion Post 109'
+# unit_town: 'Whitinsville', chartered_org: 'Whitinsville - Village Congregational Church'  
+# unit_town: 'Jefferson', chartered_org: 'Jefferson - Saint Marys Church'
+```
+
+### Required Input Files
+Place these files in `data/input/` before running the pipeline:
+- **Key Three Spreadsheet**: `Key 3 08-22-2025.xlsx` (or current month)
+- **Council Territory Map**: HNE town boundaries (built-in to `src/mapping/district_mapping.py`)
+- **Optional**: Existing scraped HTML files in `data/scraped/YYYYMMDD_HHMMSS/`
+
+### Complete Pipeline Execution
+
+#### Option 1: Full Pipeline from Fresh Scraping
+```bash
+# Step 1: Fresh Data Scraping (30-45 minutes for all 71 zip codes)
+python src/scraping/browser_scraper.py --all-zipcodes --output data/scraped/$(date +%Y%m%d_%H%M%S)/
+
+# Step 2: Process Scraped Data Through Complete Pipeline
+python src/scripts/process_full_dataset_v2.py data/scraped/YYYYMMDD_HHMMSS/
+
+# Step 3: Generate District Reports  
+python src/scripts/generate_district_reports.py data/raw/all_units_comprehensive_scored.json --output-dir data/output/reports/
+
+# Step 4: Generate Key Three Emails (optional)
+python src/scripts/generate_key_three_emails.py data/raw/all_units_comprehensive_scored.json
+```
+
+#### Option 2: Process Existing Scraped Data
+```bash
+# Use existing scraped HTML files
+python src/scripts/process_full_dataset_v2.py data/scraped/20250824_220843/
+python src/scripts/generate_district_reports.py data/raw/all_units_comprehensive_scored.json --output-dir data/output/reports/
+```
+
+#### Option 3: Test Key Three Parsing Only
+```bash
+# Generate debug logs for Key Three parsing verification
+python scripts/test_key_three_debug.py
+```
 
 # Stage E: Three-Way Cross-Validation
 python src/validation/three_way_validator.py  # BOTH/KEY_THREE_ONLY/WEB_ONLY classification

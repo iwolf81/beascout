@@ -52,39 +52,31 @@ class DistrictReportGenerator:
             return pd.DataFrame()
     
     def _load_district_towns(self) -> Dict[str, List[str]]:
-        """Load district town assignments"""
+        """Load district town assignments from centralized mapping"""
         try:
+            # Add project root to path
             import os
-            sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'prototype'))
-            from src.config.hne_towns import get_hne_towns_and_zipcodes
-            hne_towns, _ = get_hne_towns_and_zipcodes()
+            sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+            from mapping.district_mapping import TOWN_TO_DISTRICT
             
-            # Get the actual district assignments from extract_hne_towns.py
-            from src.config.hne_towns import get_hne_towns_and_zipcodes
+            # Group towns by district
+            quinapoxet_towns = []
+            soaring_eagle_towns = []
             
-            # Read the source to get district breakdowns
-            quinapoxet_towns = [
-                "Ashby", "Townsend", "Pepperell", "Groton", "Ayer", "Littleton", "Acton", "Boxborough",
-                "Fitchburg", "Lunenburg", "Shirley", "Harvard", "Bolton", "Berlin", "Lancaster", "Leominster",
-                "Sterling", "Clinton", "West Boylston", "Boylston", "Shrewsbury", "Worcester", 
-                "Holden", "Rutland", "Princeton", "Paxton", "Leicester", "Auburn", "Millbury"
-            ]
+            for town, district in TOWN_TO_DISTRICT.items():
+                if district == "Quinapoxet":
+                    quinapoxet_towns.append(town)
+                elif district == "Soaring Eagle":
+                    soaring_eagle_towns.append(town)
             
-            soaring_eagle_towns = [
-                "Royalston", "Winchendon", "Ashburnham", "Gardner", "Templeton", "Phillipston", "Athol", "Orange",
-                "Westminster", "Hubbardston", "Barre", "Petersham", "Hardwick", "New Braintree",
-                "Oakham", "Ware", "West Brookfield", "East Brookfield", "North Brookfield", "Brookfield", "Spencer",
-                "Warren", "Sturbridge", "Charlton", "Oxford", "Dudley", "Webster", "Douglas", "Sutton", "Grafton", 
-                "Upton", "Northbridge", "Southbridge"
-            ]
-            
+            print(f"Loaded {len(quinapoxet_towns)} Quinapoxet towns, {len(soaring_eagle_towns)} Soaring Eagle towns")
             return {
                 "Quinapoxet": quinapoxet_towns,
                 "Soaring Eagle": soaring_eagle_towns
             }
             
-        except ImportError:
-            print("Warning: Could not load HNE district data", file=sys.stderr)
+        except Exception as e:
+            print(f"Warning: Could not load HNE district data: {e}", file=sys.stderr)
             return {"Quinapoxet": [], "Soaring Eagle": []}
     
     def _classify_unit_district(self, unit: Dict[str, Any]) -> str:
