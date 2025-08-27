@@ -47,21 +47,9 @@ class FixedScrapedDataParser:
         }
     
     def _load_hne_towns(self) -> Set[str]:
-        """Load definitive HNE town list from district mapping"""
-        hne_towns = {
-            'acton', 'ashby', 'ayer', 'berlin', 'bolton', 'boxborough', 'boylston',
-            'brookfield', 'charlton', 'clinton', 'douglas', 'dudley', 'fitchburg',
-            'gardner', 'grafton', 'groton', 'harvard', 'holden', 'hubbardston',
-            'lancaster', 'leicester', 'leominster', 'littleton', 'lunenburg',
-            'millbury', 'northbridge', 'oakham', 'orange', 'oxford', 'paxton',
-            'pepperell', 'phillipston', 'princeton', 'rutland', 'shirley',
-            'spencer', 'sterling', 'sturbridge', 'sutton', 'templeton', 'townsend',
-            'upton', 'ware', 'warren', 'webster', 'west boylston', 'westborough',
-            'westminster', 'winchendon', 'worcester', 'athol', 'barre', 'hardwick',
-            'new braintree', 'north brookfield', 'west brookfield', 'petersham',
-            'royalston', 'east brookfield', 'jefferson', 'whitinsville'
-        }
-        return hne_towns
+        """Load HNE town names from centralized source"""
+        from src.mapping.district_mapping import get_all_hne_towns
+        return get_all_hne_towns()
     
     def parse_json_file(self, file_path: str) -> List[Dict[str, Any]]:
         """Parse a scraped data JSON file with improved town extraction"""
@@ -87,6 +75,14 @@ class FixedScrapedDataParser:
                 # Check if unit is in HNE territory before processing
                 if self._is_non_hne_unit(unit):
                     self.parsing_stats['excluded_non_hne'] += 1
+                    # Log discarded non-HNE unit
+                    UnitIdentifierNormalizer.log_discarded_unit(
+                        str(unit.get('unit_type', 'Unknown')),
+                        str(unit.get('unit_number', 'Unknown')), 
+                        str(unit.get('chartered_organization', 'Unknown')),
+                        str(unit.get('chartered_organization', 'Unknown')),
+                        'Non-HNE unit (outside council territory)'
+                    )
                     continue
                 
                 parsed_unit = self.parse_unit_record(unit)
@@ -132,18 +128,36 @@ class FixedScrapedDataParser:
         unit_number = self._extract_unit_number(unit)  # Keep as 4-digit string
         
         if not unit_type or not unit_number:
+            # Log discarded unit
+            UnitIdentifierNormalizer.log_discarded_unit(
+                unit_type or 'Unknown', unit_number or 'Unknown', 
+                'Unknown', str(unit.get('chartered_organization', '')), 
+                'Missing unit type or number'
+            )
             return None
         
         # Fixed town extraction following user's priority order
         town = self._extract_town_from_unit_fixed(unit)
         
         if not town:
+            # Log discarded unit
+            UnitIdentifierNormalizer.log_discarded_unit(
+                unit_type, unit_number, 'Unknown',
+                str(unit.get('chartered_organization', '')), 
+                'Could not extract town'
+            )
             self.parsing_stats['town_extraction_methods']['failed'] += 1
             return None
         
         # Validate town is in HNE territory
         if not self._validate_hne_town(town):
             self.parsing_stats['excluded_non_hne'] += 1
+            # Log discarded unit with invalid town
+            UnitIdentifierNormalizer.log_discarded_unit(
+                unit_type, unit_number, town,
+                str(unit.get('chartered_organization', '')).strip(),
+                f'Invalid town: {town} not in HNE territory'
+            )
             return None
         
         # Extract other unit data
@@ -225,14 +239,54 @@ class FixedScrapedDataParser:
     
     def _extract_town_from_unit_fixed(self, unit: Dict[str, Any]) -> Optional[str]:
         """
-        Fixed town extraction following user's priority order:
+        Fixed town extraction with village priority handling:
+        Special case: If unit name contains village names (Fiskdale, Jefferson), 
+        prioritize unit name over address for cross-validation with Key Three.
+        
+        Standard priority order:
         1. <div class="unit-address"> (from HTML parsing)
         2. <div class="unit-name"> (from HTML parsing)  
         3. <div class="unit-description"> (from HTML parsing)
         4. Chartered organization parsing (fallback)
         """
         
-        # Priority 1: unit-address field (highest priority)
+        # Special Exception: Village priority for Key Three cross-validation
+        # Villages: Fiskdale, Jefferson, Whitinsville
+        # Check both unit name and chartered organization for villages
+        
+        # Check unit name for villages
+        if 'unit_name' in unit and unit['unit_name']:
+            unit_name_lower = str(unit['unit_name']).lower()
+            if 'fiskdale' in unit_name_lower:
+                if self._validate_hne_town('Fiskdale'):
+                    self.parsing_stats['town_extraction_methods']['unit_name'] += 1
+                    return 'Fiskdale'
+            elif 'whitinsville' in unit_name_lower:
+                if self._validate_hne_town('Whitinsville'):
+                    self.parsing_stats['town_extraction_methods']['unit_name'] += 1
+                    return 'Whitinsville'
+            elif 'jefferson' in unit_name_lower:
+                if self._validate_hne_town('Jefferson'):
+                    self.parsing_stats['town_extraction_methods']['unit_name'] += 1
+                    return 'Jefferson'
+        
+        # Check chartered organization for villages (highest priority!)
+        if 'chartered_organization' in unit and unit['chartered_organization']:
+            org_name_lower = str(unit['chartered_organization']).lower()
+            if 'fiskdale' in org_name_lower:
+                if self._validate_hne_town('Fiskdale'):
+                    self.parsing_stats['town_extraction_methods']['chartered_org'] += 1
+                    return 'Fiskdale'
+            elif 'whitinsville' in org_name_lower:
+                if self._validate_hne_town('Whitinsville'):
+                    self.parsing_stats['town_extraction_methods']['chartered_org'] += 1
+                    return 'Whitinsville'
+            elif 'jefferson' in org_name_lower:
+                if self._validate_hne_town('Jefferson'):
+                    self.parsing_stats['town_extraction_methods']['chartered_org'] += 1
+                    return 'Jefferson'
+        
+        # Priority 1: unit-address field (standard priority)
         if 'unit_address' in unit and unit['unit_address']:
             town = self._parse_town_from_address(str(unit['unit_address']))
             if town:
@@ -258,7 +312,7 @@ class FixedScrapedDataParser:
                         self.parsing_stats['town_extraction_methods']['unit_address'] += 1
                         return town
         
-        # Priority 2: unit-name field
+        # Priority 2: unit-name field (standard parsing)
         if 'unit_name' in unit and unit['unit_name']:
             town = self._parse_town_from_text(str(unit['unit_name']))
             if town and self._validate_hne_town(town):
@@ -395,8 +449,22 @@ class FixedScrapedDataParser:
         Examples:
         - "West Boylston-American Legion Post 204" → "West Boylston"
         - "Grafton - Our Lady of Hope Parish" → "Grafton"
+        - "Sturbridge-Fiskdale Community Club" → "Fiskdale" (village priority)
         """
         org_name = org_name.strip()
+        
+        # Special Exception: Village priority for Key Three cross-validation
+        # Villages: Fiskdale, Jefferson, Whitinsville
+        org_name_lower = org_name.lower()
+        if 'fiskdale' in org_name_lower:
+            if self._validate_hne_town('Fiskdale'):
+                return 'Fiskdale'
+        elif 'whitinsville' in org_name_lower:
+            if self._validate_hne_town('Whitinsville'):
+                return 'Whitinsville'
+        elif 'jefferson' in org_name_lower:
+            if self._validate_hne_town('Jefferson'):
+                return 'Jefferson'
         
         # Pattern 1: "Town-Organization" or "Town - Organization"
         match = re.match(r'^([A-Za-z\s]+?)\s*-\s*(.+)$', org_name)
@@ -442,7 +510,7 @@ class FixedScrapedDataParser:
             "E Boylston": "East Boylston",
             "N Worcester": "North Worcester", 
             "S Worcester": "South Worcester",
-            "Fiskdale": "Sturbridge",  # Village mapping
+            # Fiskdale: No mapping needed - treated as separate HNE town for Key Three correlation
             "Whitinsville": "Northbridge",  # Village mapping
         }
         

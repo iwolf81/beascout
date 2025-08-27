@@ -145,14 +145,14 @@ class KeyThreeParser:
             if self._is_valid_town(word):
                 return self._normalize_town_name(word)
         
-        # Pattern 9: "Fiskdale-American Legion Post 109"
-        # Village name that maps to actual town
+        # Pattern 9: Village name handling
+        # Villages are now treated as separate towns for unit correlation
         village_match = re.match(r'^([A-Za-z]+)', clean_orgname)
         if village_match:
             potential_village = village_match.group(1)
-            # Check if it's a known village (Fiskdale → Sturbridge)
-            if potential_village == "Fiskdale":
-                return "Sturbridge"
+            # Check if it's a valid HNE town (including villages)
+            if self._is_valid_town(potential_village):
+                return self._normalize_town_name(potential_village)
         
         # If no pattern matches, return empty - will be flagged for manual review
         print(f"Warning: Could not extract town from: {orgname}")
@@ -165,13 +165,14 @@ class KeyThreeParser:
     
     def _normalize_town_name(self, town: str) -> str:
         """Normalize town name to canonical form"""
-        # Handle common variations
+        # Handle common variations and village mappings
         town_map = {
             "E Brookfield": "East Brookfield",
             "W Brookfield": "West Brookfield", 
             "N Brookfield": "North Brookfield",
             "W Boylston": "West Boylston",
-            "Jefferson": "Jefferson"  # Add Jefferson as valid town
+            "Jefferson": "Jefferson",  # Village within Holden, treated as separate HNE town
+            # Fiskdale: No mapping needed - treated as separate HNE town
         }
         normalized = town_map.get(town, town)
         

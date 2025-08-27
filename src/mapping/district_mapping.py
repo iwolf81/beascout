@@ -8,18 +8,21 @@ Replaces Key Three district data to eliminate "Special 04" district issues
 # Definitive district mapping from HNE Council map image
 # Blue = Quinapoxet District, Red = Soaring Eagle District
 TOWN_TO_DISTRICT = {
-    # Quinapoxet District (Blue region)
+    # Quinapoxet District (Blue region) - 32 towns
     "Acton": "Quinapoxet",
     "Ashby": "Quinapoxet", 
+    "Auburn": "Quinapoxet",
     "Ayer": "Quinapoxet",
     "Berlin": "Quinapoxet",
     "Bolton": "Quinapoxet",
     "Boxborough": "Quinapoxet",
     "Boylston": "Quinapoxet",
     "Clinton": "Quinapoxet",
+    "Fitchburg": "Quinapoxet",
     "Groton": "Quinapoxet",
     "Harvard": "Quinapoxet",
     "Holden": "Quinapoxet",
+    "Jefferson": "Quinapoxet",  # Village within Holden, MA
     "Lancaster": "Quinapoxet",
     "Leicester": "Quinapoxet",
     "Leominster": "Quinapoxet",
@@ -30,26 +33,26 @@ TOWN_TO_DISTRICT = {
     "Princeton": "Quinapoxet", 
     "Rutland": "Quinapoxet",
     "Shirley": "Quinapoxet",
+    "Shrewsbury": "Quinapoxet",
     "Sterling": "Quinapoxet",
     "Townsend": "Quinapoxet",
     "West Boylston": "Quinapoxet",
     "Worcester": "Quinapoxet",
     
-    # Soaring Eagle District (Red region)
+    # Soaring Eagle District (Red region) - 33 towns
+    "Ashburnham": "Soaring Eagle",
     "Athol": "Soaring Eagle",
-    "Auburn": "Soaring Eagle",
     "Barre": "Soaring Eagle",
     "Brookfield": "Soaring Eagle",
     "Charlton": "Soaring Eagle",
     "Douglas": "Soaring Eagle",
     "Dudley": "Soaring Eagle",
     "East Brookfield": "Soaring Eagle",
-    "Fitchburg": "Soaring Eagle",
+    "Fiskdale": "Soaring Eagle",  # Village within Sturbridge, treated as separate HNE town
     "Gardner": "Soaring Eagle",
     "Grafton": "Soaring Eagle",
     "Hardwick": "Soaring Eagle",
     "Hubbardston": "Soaring Eagle",
-    "Jefferson": "Soaring Eagle",  # Small town near other Soaring Eagle towns
     "Millbury": "Soaring Eagle",
     "New Braintree": "Soaring Eagle",
     "Northbridge": "Soaring Eagle",
@@ -60,7 +63,7 @@ TOWN_TO_DISTRICT = {
     "Petersham": "Soaring Eagle",
     "Phillipston": "Soaring Eagle",
     "Royalston": "Soaring Eagle",
-    "Shrewsbury": "Soaring Eagle",
+    "Southbridge": "Soaring Eagle",
     "Spencer": "Soaring Eagle",
     "Sturbridge": "Soaring Eagle",
     "Sutton": "Soaring Eagle",
@@ -71,8 +74,8 @@ TOWN_TO_DISTRICT = {
     "Webster": "Soaring Eagle",
     "West Brookfield": "Soaring Eagle",
     "Westminster": "Soaring Eagle",
+    "Whitinsville": "Soaring Eagle",  # Village within Northbridge, treated as separate HNE town
     "Winchendon": "Soaring Eagle",
-    "Whitinsville": "Soaring Eagle",  # Village of Northbridge
 }
 
 # Common town name variations and aliases
@@ -82,7 +85,6 @@ TOWN_ALIASES = {
     "E Brookfield": "East Brookfield", 
     "W Brookfield": "West Brookfield",
     "N Brookfield": "North Brookfield",
-    "Fiskdale": "Sturbridge",  # Village of Sturbridge
     
     # Handle Key Three formatting variations
     "West Boylston": "West Boylston",
@@ -122,6 +124,15 @@ def get_district_for_town(town_name: str) -> str:
             return district
     
     return "Unknown"
+
+def get_all_hne_towns() -> set:
+    """
+    Get all HNE towns as a set (lowercase for matching)
+    
+    Returns:
+        Set of all HNE town names in lowercase
+    """
+    return {town.lower() for town in TOWN_TO_DISTRICT.keys()}
 
 def get_all_towns_by_district() -> dict:
     """
