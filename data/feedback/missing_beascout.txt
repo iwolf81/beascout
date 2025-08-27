@@ -1,0 +1,27 @@
+Crew 1924 Rutland
+Crew 2254 Rutland
+Pack 101 Auburn
+Pack 114 Shrewsbury
+Pack 148 East Brookfield
+Pack 150 Whitinsville
+Pack 151 West Boylston
+Pack 158 Shrewsbury
+Pack 161 Sturbridge
+Pack 3 Leominster
+Pack 46 Jefferson
+Pack 53 Auburn
+Pack 62 Shrewsbury
+Troop 1004 Shrewsbury
+Troop 101 Auburn
+Troop 114 Shrewsbury
+Troop 118 West Brookfield
+Troop 121 Auburn
+Troop 151 Leominster
+Troop 155 Whitinsville
+Troop 161 Sturbridge
+Troop 227 Shrewsbury
+Troop 238 East Brookfield
+Troop 53 Auburn
+Troop 7114 Shrewsbury
+Troop 7163 Sturbridge
+Troop 7530 Auburn

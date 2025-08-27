@@ -19,3 +19,13 @@
    8. Troop 7001 Harvard
    9. Troop 7027 Templeton
    10. Troop 7165 Charlton
+
+# Key Three Units vs Scraped Units
+Presuming non-HNE units have been filtered out already:
+1. A unit may exist in both data sets (Key Three, beascout/joinexploring).
+   - This is normal and expected.
+2. A unit may exist in Key Three, but not found in beascout/joinexploring.
+   - This means an HNE unit is missing from beascout/joinexploring and that must be highlighted in excel report.
+3. A unit may exist in beascout/joinexploring, but not found in Key Three.
+   - This means the HNE unit is no longer active and its information must be removed from beascout/joinexploring.
+   - This discrepancy must also be highlight in excel report
