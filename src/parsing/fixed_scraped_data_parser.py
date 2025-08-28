@@ -172,6 +172,9 @@ class FixedScrapedDataParser:
         description = str(unit.get('description', '')).strip()
         specialty = str(unit.get('specialty', '')).strip()
         
+        # Preserve quality flags from extraction process
+        quality_flags = unit.get('quality_flags', [])
+        
         # Create standardized unit record using UnitIdentifierNormalizer
         record = UnitIdentifierNormalizer.create_unit_record(
             unit_type=unit_type,
@@ -188,6 +191,7 @@ class FixedScrapedDataParser:
             website=website,
             description=description,
             specialty=specialty,
+            quality_flags=quality_flags,
             original_scraped_data=unit
         )
         
