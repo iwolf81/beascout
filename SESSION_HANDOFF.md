@@ -336,4 +336,54 @@ This insight has been integrated into COLLABORATION_LOG.md as essential methodol
 All parsing errors resolved, territory validation complete, comprehensive documentation updated. System ready for three-way validation and commissioner reporting deployment.
 
 ---
-*Final Update 2025-08-26: Complete production-ready three-way validation system with 100% parsing accuracy, enhanced territory filtering, and comprehensive edge case resolution. Ready for deployment across HNE Council operations.*
+
+### August 29, 2025 Session - CRITICAL REGRESSION IDENTIFIED
+
+**🚨 EMERGENCY STATUS: System Regression Analysis**
+
+**Working Baseline**: `unit_identifier_debug_scraped_20250828_085755_u.log` (last good pipeline run)  
+**Broken State**: Current pipeline producing duplicates, missing units, wrong town assignments  
+**Root Cause**: Quality scoring commit `3dda3b2` (2025-08-28 10:05:44) broke unit town parsing
+
+**Working State Analysis**:
+- Line 21: `Pack 0031 Shirley` ✅ Single clean entry (Shirley is full HNE town, not village)
+- Line 23: `Pack 0033 Westminster` ✅ Present and working
+- Line 24: `Pack 0034 Sterling` ✅ Present and working  
+- Line 17: Only `Pack 0025 Princeton` ✅ (No problematic Uxbridge/Athol unit)
+- Line 43: `Pack 0148 East Brookfield` ✅ Single clean entry
+- Line 45: `Pack 0151 West Boylston` ✅ Single clean entry
+- **Only Issue**: Troop 0132 missing (discarded due to Mendon meeting location)
+
+**Current Broken Issues**:
+- Westminster Pack 0033 ❌ Missing  
+- Sterling Pack 0034 ❌ Missing
+- Pack 0031 appears TWICE (Ayer and Shirley) ❌ Duplicates
+- Pack 0025 showing as Athol instead of filtered out ❌ Wrong assignment
+- Pack 0148 appears TWICE (Brookfield and East Brookfield) ❌ Duplicates
+- Pack 0151 appears TWICE (Boylston and West Boylston) ❌ Duplicates
+
+**IMMEDIATE ACTION PLAN**:
+
+1. **Revert Quality Changes**: `git revert 3dda3b2 --no-edit`
+2. **Test Against Reference**: Compare to `unit_identifier_debug_scraped_20250828_085755_u.log`
+3. **Add Troop 0132 Fix**: Minimal Mendon→Upton exception only
+4. **Test Again**: Verify stable baseline + Troop 0132
+5. **Update Reference**: New stable baseline
+6. **Reassess**: Plan quality improvements without breaking parsing
+
+**Key User Insights**:
+- User requested QUALITY_ADDRESS_EMPTY functionality (not RECOMMENDED_MISSING_ADDRESS)
+- Quality scoring changes interfered with unit town parsing logic
+- Shirley is full HNE town (from HNE_council_map.png), not village
+- System was working perfectly except for Troop 0132 meeting location issue
+
+**Critical Lesson**: Keep quality scoring (quality_scorer.py) completely separate from unit parsing logic (fixed_scraped_data_parser.py)
+
+**Files Modified This Session (Need Revert)**:
+- `src/parsing/fixed_scraped_data_parser.py` - Changes broke working system
+- Quality scoring from commit `3dda3b2` - Root cause of regression
+
+**Session Time**: Nearly 5-hour limit reached, auto-compact imminent
+
+---
+*Final Update 2025-08-29: CRITICAL regression identified and analyzed. Revert plan ready for execution. Previous working state documented for restoration.*

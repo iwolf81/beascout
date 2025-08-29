@@ -894,3 +894,67 @@ Implemented all 8 user lessons learned from previous sessions:
 ✅ **Debug Infrastructure**: Comprehensive audit trails with source-specific identification
 ✅ **Quality Reporting**: Professional Excel reports ready for commissioner distribution
 ✅ **Documentation**: Complete with pipeline execution steps and data flow architecture
+
+---
+
+## Phase 18: Critical System Regression Analysis (Aug 29, 2025)
+
+### Emergency Session: Production System Breakdown
+
+**Crisis Situation**: User discovered that the production system had regressed from a working state to producing duplicates, missing valid units, and incorrect town assignments.
+
+### Root Cause Investigation
+
+**Working Baseline Identified**: `unit_identifier_debug_scraped_20250828_085755_u.log`
+- System was functioning perfectly with clean, single entries for all units
+- Only missing unit: Troop 0132 (correctly discarded due to Mendon meeting location outside HNE territory)
+
+**Regression Source**: Git commit `3dda3b2` (2025-08-28 10:05:44)  
+- Commit message: "Implement quality scoring improvements and debug enhancements"
+- **Critical Change**: "Added QUALITY_ADDRESS_EMPTY penalty logic (50% credit)"
+- **Impact**: Quality scoring logic interfered with core unit town parsing
+
+### Regression Symptoms Documented
+
+**Missing Units**:
+- Westminster Pack 0033 ❌ (was working in baseline)
+- Sterling Pack 0034 ❌ (was working in baseline)
+
+**Duplicate Entries**:  
+- Pack 0031: Both Ayer and Shirley versions (baseline had single clean Shirley entry)
+- Pack 0148: Both Brookfield and East Brookfield (baseline had single East Brookfield)  
+- Pack 0151: Both Boylston and West Boylston (baseline had single West Boylston)
+
+**Incorrect Town Assignments**:
+- Pack 0025: Showing as "Athol" instead of being filtered out as non-HNE unit
+
+### User Insight: Architecture Separation Critical
+
+**Key Learning**: User clarified that Shirley is a full HNE town (visible on HNE_council_map.png), not a village as initially assumed. The working system was correctly handling this.
+
+**Critical Design Principle**: Quality scoring logic (quality_scorer.py) must remain completely separate from unit parsing logic (fixed_scraped_data_parser.py) to prevent cross-contamination.
+
+### Session End: Time Constraint
+
+**Status**: 5-hour session limit reached during analysis phase
+**State**: Regression fully analyzed, revert plan documented in SESSION_HANDOFF.md
+**Next Session Priority**: Execute systematic revert and minimal fix approach
+
+### Developer Insights
+
+**Quality Feature Implementation Risk**: Adding address quality checking functionality interfered with the core parsing that was working perfectly. This demonstrates the importance of keeping quality analysis separate from data extraction.
+
+**Working State Documentation Critical**: Having the `unit_identifier_debug_scraped_20250828_085755_u.log` file provided exact reference point for what "working" looked like, enabling precise regression analysis.
+
+**User Course Correction**: User's guidance to "disregard my preference to change one variable at a time" and plan comprehensive revert showed expert understanding of regression severity requiring immediate systematic approach.
+
+**Planned Recovery Strategy**:
+1. Revert quality scoring commit
+2. Test against known working reference  
+3. Add only Troop 0132 Mendon→Upton exception
+4. Re-implement quality features without breaking parsing
+5. Address deferred changes (debug formatting, single debug files) incrementally
+
+### Critical Methodology Insight
+
+**Regression Analysis Pattern**: When production system breaks, immediate priority is identifying the last known working state and systematic revert rather than attempting targeted fixes. User's recognition of this pattern prevented further system degradation through attempted incremental repairs.
