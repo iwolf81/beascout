@@ -25,8 +25,8 @@ def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_c
     print(f"  Processing JoinExploring: {joinexploring_file}")
 
     try:
-        # Use legacy HTML parser to extract units to JSON
-        cmd = f'python3 src/legacy/extract_all_units.py "{beascout_file}" "{joinexploring_file}"'
+        # Use HTML parser to extract units to JSON
+        cmd = f'python3 src/parsing/html_extractor.py "{beascout_file}" "{joinexploring_file}"'
         result = os.system(cmd)
 
         if result == 0:

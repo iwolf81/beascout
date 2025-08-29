@@ -12,7 +12,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
 # Import district assignment function
-from prototype.extract_all_units import get_district_for_town
+from src.mapping.district_mapping import get_district_for_town
 
 def normalize_identifier(identifier):
     """Normalize identifier for consistent comparison"""

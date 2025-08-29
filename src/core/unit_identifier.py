@@ -50,10 +50,14 @@ class UnitIdentifierNormalizer:
                     full_timestamp = f'{datestamp}_{timestamp}'
                 else:
                     source = getattr(cls, '_debug_source', 'scraped')
-                    full_timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                    # Use shared timestamp from environment if available
+                    shared_timestamp = os.environ.get('UNIT_DEBUG_TIMESTAMP')
+                    full_timestamp = shared_timestamp if shared_timestamp else datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             else:
                 source = getattr(cls, '_debug_source', 'scraped')
-                full_timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                # Use shared timestamp from environment if available  
+                shared_timestamp = os.environ.get('UNIT_DEBUG_TIMESTAMP')
+                full_timestamp = shared_timestamp if shared_timestamp else datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             
             cls._discarded_debug_filename = f'data/debug/discarded_unit_identifier_debug_{source}_{full_timestamp}.log'
             
@@ -83,13 +87,46 @@ class UnitIdentifierNormalizer:
         # Normalize unit type (capitalize first letter)
         clean_type = str(unit_type).strip().capitalize()
 
-        # Normalize unit number (remove leading zeros, keep at least '0')
-        clean_number = str(unit_number).lstrip('0') or '0'
+        # For unit_key, use display format (no leading zeros)
+        clean_number = UnitIdentifierNormalizer.get_display_unit_number(
+            UnitIdentifierNormalizer._normalize_unit_number(unit_number)
+        )
 
         # Normalize town name (handle variations and aliases)
         clean_town = UnitIdentifierNormalizer._normalize_town_name(str(town).strip())
 
         return f"{clean_type} {clean_number} {clean_town}"
+
+    @staticmethod
+    def _normalize_unit_number(unit_number: str) -> str:
+        """
+        Normalize unit number to 4-digit format with leading zeros for consistent debugging
+        
+        Args:
+            unit_number: Raw unit number (string or number)
+            
+        Returns:
+            4-digit unit number with leading zeros (e.g., "0003", "0070", "1234")
+        """
+        # Convert to string and remove any existing leading zeros
+        clean_number = str(unit_number).lstrip('0') or '0'
+        
+        # Pad to 4 digits with leading zeros
+        return clean_number.zfill(4)
+    
+    @staticmethod
+    def get_display_unit_number(unit_number: str) -> str:
+        """
+        Get display-friendly unit number with leading zeros removed
+        Used for reports, emails, and user-facing output
+        
+        Args:
+            unit_number: Normalized 4-digit unit number
+            
+        Returns:
+            Unit number without leading zeros (e.g., "3", "70", "1234")
+        """
+        return str(unit_number).lstrip('0') or '0'
 
     @staticmethod
     def _normalize_town_name(town: str) -> str:
@@ -102,12 +139,24 @@ class UnitIdentifierNormalizer:
 
         # Handle common abbreviations and variations
         town_map = {
+            # Standard abbreviation expansions for HNE towns
             "E Brookfield": "East Brookfield",
-            "W Brookfield": "West Brookfield",
+            "W Brookfield": "West Brookfield", 
             "N Brookfield": "North Brookfield",
             "W Boylston": "West Boylston",
-            # Fiskdale: No mapping needed - treated as separate town for unit correlation
-            # Whitinsville: No mapping needed - treated as separate town for unit correlation
+            
+            # Additional common variations
+            "East Brookfield": "East Brookfield",  # Already correct
+            "West Brookfield": "West Brookfield",  # Already correct
+            "North Brookfield": "North Brookfield", # Already correct
+            "West Boylston": "West Boylston",      # Already correct
+            
+            # Villages with separate ZIP codes - NO MAPPING to parent towns
+            # These are treated as independent HNE towns for unit correlation:
+            # "Fiskdale" stays "Fiskdale" (village within Sturbridge, ZIP 01518)
+            # "Jefferson" stays "Jefferson" (village within Holden, ZIP 01522) 
+            # "Whitinsville" stays "Whitinsville" (village within Northbridge, ZIP 01588)
+            # This preserves village identity while maintaining HNE territory recognition
         }
 
         # Direct mapping first
@@ -122,6 +171,60 @@ class UnitIdentifierNormalizer:
         return town
 
     @staticmethod
+    def _extract_town_from_chartered_org(chartered_org: str) -> str:
+        """
+        Extract town name from chartered organization name
+        
+        Args:
+            chartered_org: Chartered organization name
+            
+        Returns:
+            Extracted town name or empty string if not found
+        """
+        if not chartered_org:
+            return ""
+        
+        import re
+        
+        # Try to get HNE towns list
+        try:
+            from src.mapping.district_mapping import get_district_for_town
+            
+            # Define HNE towns (from district mapping)
+            hne_towns = [
+                "Ashby", "Townsend", "Pepperell", "Groton", "Ayer", "Littleton", "Acton", "Boxborough",
+                "Fitchburg", "Lunenburg", "Shirley", "Harvard", "Bolton", "Berlin", "Lancaster", "Leominster",
+                "Sterling", "Clinton", "West Boylston", "Boylston", "Shrewsbury", "Worcester", 
+                "Holden", "Rutland", "Princeton", "Paxton", "Leicester", "Auburn", "Millbury",
+                "Royalston", "Winchendon", "Ashburnham", "Gardner", "Templeton", "Phillipston", "Athol", "Orange",
+                "Westminster", "Hubbardston", "Barre", "Petersham", "Hardwick", "New Braintree",
+                "Oakham", "Ware", "West Brookfield", "East Brookfield", "North Brookfield", "Brookfield", "Spencer",
+                "Warren", "Sturbridge", "Charlton", "Oxford", "Dudley", "Webster", "Douglas", "Sutton", "Grafton", 
+                "Upton", "Northbridge", "Southbridge", "Jefferson", "Whitinsville", "Fiskdale"
+            ]
+            
+            org_lower = chartered_org.lower()
+            
+            # Look for town names in the organization name
+            # Sort by length (longest first) to match "West Boylston" before "Boylston"
+            sorted_towns = sorted(hne_towns, key=len, reverse=True)
+            
+            for town in sorted_towns:
+                town_lower = town.lower()
+                if town_lower in org_lower:
+                    # Additional check: make sure it's not part of a person's name
+                    # Look for patterns like "FirstName TownName" which indicate a person
+                    if re.search(rf'\b[A-Z][a-z]+\s+{re.escape(town)}\b', chartered_org):
+                        continue  # Skip this match - likely a person's name
+                    return town
+                        
+        except ImportError:
+            pass  # Fallback if district mapping not available
+            
+        # Could not determine town
+        return ""
+
+    @staticmethod
     def create_unit_record(unit_type: str, unit_number: str, town: str,
                           chartered_org: str = "", **additional_fields) -> Dict[str, Any]:
         """
@@ -130,33 +233,26 @@ class UnitIdentifierNormalizer:
         Args:
             unit_type: Unit type
             unit_number: Unit number
-            town: Town name
+            town: Town name (if empty, will be extracted from chartered_org)
             chartered_org: Chartered organization name
             **additional_fields: Additional unit data
 
         Returns:
             Standardized unit record dictionary
         """
-        # Debug logging before creating unit_key with session timestamp
-        import datetime
-        import os
-
-        # Use a session-based timestamp (created once per execution)
-        if not hasattr(UnitIdentifierNormalizer, '_debug_filename'):
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            source = getattr(UnitIdentifierNormalizer, '_debug_source', 'scraped')
-            UnitIdentifierNormalizer._debug_filename = f'data/debug/unit_identifier_debug_{source}_{timestamp}.log'
-
-            # Ensure debug directory exists
-            os.makedirs('data/debug', exist_ok=True)
-
-        with open(UnitIdentifierNormalizer._debug_filename, 'a', encoding='utf-8') as f:
-            f.write(f"  unit_type: '{unit_type}', ")
-            f.write(f"  unit_number: '{unit_number}', ")
-            f.write(f"  unit_town: '{town}', ")
-            f.write(f"  chartered_org: '{chartered_org}'\n")
-
-        # Create normalized identifier
+        # Extract town from chartered org if town is empty
+        if not town or not town.strip():
+            town = UnitIdentifierNormalizer._extract_town_from_chartered_org(chartered_org)
+        
+        # Final check: if town is still empty after all extraction attempts, discard unit
+        if not town or not town.strip():
+            UnitIdentifierNormalizer.log_discarded_unit(
+                unit_type, unit_number, 'Unknown', chartered_org,
+                'Could not extract town'
+            )
+            return None
+        
+        # Create normalized identifier (automatically uses display format)
         unit_key = UnitIdentifierNormalizer.normalize_unit_identifier(unit_type, unit_number, town)
 
         # Get district assignment
@@ -166,7 +262,7 @@ class UnitIdentifierNormalizer:
         record = {
             'unit_key': unit_key,
             'unit_type': unit_type.strip().capitalize(),
-            'unit_number': str(unit_number).lstrip('0') or '0',
+            'unit_number': UnitIdentifierNormalizer._normalize_unit_number(unit_number),
             'unit_town': UnitIdentifierNormalizer._normalize_town_name(town),
             'chartered_organization': chartered_org.strip() if chartered_org else "",
             'district': district,
@@ -174,6 +270,31 @@ class UnitIdentifierNormalizer:
 
         # Add additional fields
         record.update(additional_fields)
+
+        # Debug logging AFTER normalization with session timestamp
+        import datetime
+        import os
+
+        # Use a session-based timestamp (created once per execution)
+        if not hasattr(UnitIdentifierNormalizer, '_debug_filename'):
+            # Use shared timestamp from environment if available (for subprocess coordination)
+            import os
+            shared_timestamp = os.environ.get('UNIT_DEBUG_TIMESTAMP')
+            if shared_timestamp:
+                timestamp = shared_timestamp
+            else:
+                timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            source = getattr(UnitIdentifierNormalizer, '_debug_source', 'scraped')
+            UnitIdentifierNormalizer._debug_filename = f'data/debug/unit_identifier_debug_{source}_{timestamp}.log'
+
+            # Ensure debug directory exists
+            os.makedirs('data/debug', exist_ok=True)
+
+        with open(UnitIdentifierNormalizer._debug_filename, 'a', encoding='utf-8') as f:
+            f.write(f"  unit_type: '{record['unit_type']}', ")
+            f.write(f"  unit_number: '{record['unit_number']}', ")
+            f.write(f"  unit_town: '{record['unit_town']}', ")
+            f.write(f"  chartered_org: '{record['chartered_organization']}'\n")
 
         return record
 

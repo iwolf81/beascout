@@ -330,10 +330,13 @@ class FixedScrapedDataParser:
         desc_fields = ['description', 'desc', 'unit_desc']
         for field in desc_fields:
             if field in unit and unit[field]:
-                town = self._parse_town_from_text(str(unit[field]))
-                if town and self._validate_hne_town(town):
-                    self.parsing_stats['town_extraction_methods']['unit_description'] += 1
-                    return town
+                description_text = str(unit[field])
+                # Skip description if it primarily contains contact information to avoid extracting person names as towns
+                if not re.search(r'Contact:\s*[A-Za-z\s]+\s*Email:', description_text, re.IGNORECASE):
+                    town = self._parse_town_from_text(description_text)
+                    if town and self._validate_hne_town(town):
+                        self.parsing_stats['town_extraction_methods']['unit_description'] += 1
+                        return town
         
         # Priority 4: Chartered organization parsing (fallback)
         if 'chartered_organization' in unit and unit['chartered_organization']:

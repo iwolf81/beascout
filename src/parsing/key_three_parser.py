@@ -77,7 +77,7 @@ class KeyThreeParser:
             potential_town = match.group(1).strip()
             # Validate it's actually a town name
             if self._is_valid_town(potential_town):
-                return self._normalize_town_name(potential_town)
+                return UnitIdentifierNormalizer._normalize_town_name(potential_town)
         
         # Pattern 2: "Pepperell-Fire Firefighters Association" or "Acton-Church Name"
         # Town before dash (no spaces), this is the most common pattern
@@ -85,7 +85,7 @@ class KeyThreeParser:
         if match:
             potential_town = match.group(1).strip()
             if self._is_valid_town(potential_town):
-                return self._normalize_town_name(potential_town)
+                return UnitIdentifierNormalizer._normalize_town_name(potential_town)
         
         # Pattern 3: "Clinton Heart of New England Council"
         # Town at start, no separating dash
@@ -94,25 +94,25 @@ class KeyThreeParser:
             # Try first word as town
             potential_town = words[0]
             if self._is_valid_town(potential_town):
-                return self._normalize_town_name(potential_town)
+                return UnitIdentifierNormalizer._normalize_town_name(potential_town)
             
             # Try first two words as compound town
             potential_town = f"{words[0]} {words[1]}"
             if self._is_valid_town(potential_town):
-                return self._normalize_town_name(potential_town)
+                return UnitIdentifierNormalizer._normalize_town_name(potential_town)
         
         # Pattern 4: "Acton-Group Of Citizens, Inc"
         # Town matches chartered org name
         for word in words:
             if self._is_valid_town(word):
-                return self._normalize_town_name(word)
+                return UnitIdentifierNormalizer._normalize_town_name(word)
         
         # Pattern 5: "Acton-Boxborough Rotary Club"
         # Multiple towns in org name - need fallback logic
         town_candidates = []
         for word in words:
             if self._is_valid_town(word):
-                town_candidates.append(self._normalize_town_name(word))
+                town_candidates.append(UnitIdentifierNormalizer._normalize_town_name(word))
         
         if len(town_candidates) == 1:
             return town_candidates[0]
@@ -130,20 +130,20 @@ class KeyThreeParser:
             direction_map = {'N': 'North', 'S': 'South', 'E': 'East', 'W': 'West'}
             full_town = f"{direction_map[direction]} {town_part}"
             if self._is_valid_town(full_town):
-                return self._normalize_town_name(full_town)
+                return UnitIdentifierNormalizer._normalize_town_name(full_town)
         
         # Pattern 7: "Oxford First Congregational Church of Oxford"
         # Missing separating dash, town repeated
         if clean_orgname.count(' ') >= 2:
             first_word = words[0]
             if self._is_valid_town(first_word):
-                return self._normalize_town_name(first_word)
+                return UnitIdentifierNormalizer._normalize_town_name(first_word)
         
         # Pattern 8: "Veterans Of Foreign Wars Westminster Post"
         # Town embedded near end
         for i, word in enumerate(words):
             if self._is_valid_town(word):
-                return self._normalize_town_name(word)
+                return UnitIdentifierNormalizer._normalize_town_name(word)
         
         # Pattern 9: Village name handling
         # Villages are now treated as separate towns for unit correlation
@@ -152,7 +152,7 @@ class KeyThreeParser:
             potential_village = village_match.group(1)
             # Check if it's a valid HNE town (including villages)
             if self._is_valid_town(potential_village):
-                return self._normalize_town_name(potential_village)
+                return UnitIdentifierNormalizer._normalize_town_name(potential_village)
         
         # If no pattern matches, return empty - will be flagged for manual review
         return ""
@@ -162,24 +162,6 @@ class KeyThreeParser:
         from src.mapping.district_mapping import get_district_for_town
         return get_district_for_town(town_candidate) != "Unknown"
     
-    def _normalize_town_name(self, town: str) -> str:
-        """Normalize town name to canonical form"""
-        # Handle common variations and village mappings
-        town_map = {
-            "E Brookfield": "East Brookfield",
-            "W Brookfield": "West Brookfield", 
-            "N Brookfield": "North Brookfield",
-            "W Boylston": "West Boylston",
-            "Jefferson": "Jefferson",  # Village within Holden, treated as separate HNE town
-            # Fiskdale: No mapping needed - treated as separate HNE town
-        }
-        normalized = town_map.get(town, town)
-        
-        # Handle Boxborough compound name issue
-        if "Boxborough" in town:
-            return "Boxborough" 
-            
-        return normalized
     
     def extract_unit_info_from_unitcommorgname(self, unitcommorgname: str) -> dict:
         """
@@ -200,7 +182,7 @@ class KeyThreeParser:
             return {}
         
         unit_type = unit_match.group(1)
-        unit_number = unit_match.group(2).lstrip('0') or '0'  # Remove leading zeros, keep at least '0'
+        unit_number = unit_match.group(2).zfill(4)  # Preserve 4-digit format with leading zeros
         
         # Extract town using sophisticated logic
         town = self.extract_town_from_unitcommorgname(orgname)

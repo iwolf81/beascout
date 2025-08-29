@@ -54,7 +54,7 @@ class EnhancedValidator:
         """Load town name aliases and variations"""
         return {
             # Villages and neighborhoods that map to main towns
-            "fiskdale": "sturbridge",
+            "fiskdale": "sturbridge", ## @claude verify this is correct
             "whitinsville": "northbridge", 
             "east brookfield": "brookfield",
             "west brookfield": "brookfield",
