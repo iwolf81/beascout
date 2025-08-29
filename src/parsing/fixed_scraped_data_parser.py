@@ -250,6 +250,21 @@ class FixedScrapedDataParser:
         4. Chartered organization parsing (fallback)
         """
         
+        # CRITICAL EXCEPTION: Troop 0132 meets in Mendon but is chartered in Upton (HNE territory)
+        # Must be checked BEFORE standard precedence to avoid incorrect filtering
+        unit_type = self._extract_unit_type(unit)
+        unit_number = self._extract_unit_number(unit)
+        
+        if (unit_type == 'Troop' and unit_number == '0132' and 
+            'chartered_organization' in unit and unit['chartered_organization'] and
+            'Upton' in str(unit['chartered_organization'])):
+            # Override meeting location town with chartered organization town
+            if self._validate_hne_town('Upton'):
+                self.parsing_stats['town_extraction_methods']['special_exception'] = (
+                    self.parsing_stats['town_extraction_methods'].get('special_exception', 0) + 1
+                )
+                return 'Upton'
+        
         # Special Exception: Village priority for Key Three cross-validation
         # Villages: Fiskdale, Jefferson, Whitinsville
         # Check both unit name and chartered organization for villages
@@ -313,11 +328,13 @@ class FixedScrapedDataParser:
                         return town
         
         # Priority 2: unit-name field (standard parsing)
-        if 'unit_name' in unit and unit['unit_name']:
-            town = self._parse_town_from_text(str(unit['unit_name']))
-            if town and self._validate_hne_town(town):
-                self.parsing_stats['town_extraction_methods']['unit_name'] += 1
-                return town
+        name_fields = ['unit_name', 'primary_identifier']
+        for field in name_fields:
+            if field in unit and unit[field]:
+                town = self._parse_town_from_text(str(unit[field]))
+                if town and self._validate_hne_town(town):
+                    self.parsing_stats['town_extraction_methods']['unit_name'] += 1
+                    return town
         
         # Priority 3: unit-description field
         if 'unit_description' in unit and unit['unit_description']:
@@ -349,20 +366,6 @@ class FixedScrapedDataParser:
                 elif self._validate_hne_town(town):
                     self.parsing_stats['town_extraction_methods']['chartered_org'] += 1
                     return town
-        
-        # Special Exception: Troop 0132 meets in Mendon but is chartered in Upton (HNE territory)
-        unit_type = self._extract_unit_type(unit)
-        unit_number = self._extract_unit_number(unit)
-        
-        if (unit_type == 'Troop' and unit_number == '0132' and 
-            'chartered_organization' in unit and unit['chartered_organization'] and
-            'Upton' in str(unit['chartered_organization'])):
-            # Override Mendon meeting location with Upton chartered organization town
-            if self._validate_hne_town('Upton'):
-                self.parsing_stats['town_extraction_methods']['special_exception'] = (
-                    self.parsing_stats['town_extraction_methods'].get('special_exception', 0) + 1
-                )
-                return 'Upton'
         
         return None
     
