@@ -347,6 +347,20 @@ class FixedScrapedDataParser:
                     self.parsing_stats['town_extraction_methods']['chartered_org'] += 1
                     return town
         
+        # Special Exception: Troop 0132 meets in Mendon but is chartered in Upton (HNE territory)
+        unit_type = self._extract_unit_type(unit)
+        unit_number = self._extract_unit_number(unit)
+        
+        if (unit_type == 'Troop' and unit_number == '0132' and 
+            'chartered_organization' in unit and unit['chartered_organization'] and
+            'Upton' in str(unit['chartered_organization'])):
+            # Override Mendon meeting location with Upton chartered organization town
+            if self._validate_hne_town('Upton'):
+                self.parsing_stats['town_extraction_methods']['special_exception'] = (
+                    self.parsing_stats['town_extraction_methods'].get('special_exception', 0) + 1
+                )
+                return 'Upton'
+        
         return None
     
     def _parse_town_from_address(self, address: str) -> Optional[str]:
