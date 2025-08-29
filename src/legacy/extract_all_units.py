@@ -376,61 +376,46 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
             if any(unit_type in parent_text for unit_type in ['Troop', 'Pack', 'Crew', 'Post', 'Club']):
                 unit_data['unit_composition'] = parent_text
         
-        # Meeting location from address - prioritize unit-address div first
-        address_containers = unit_body.find_all('div', class_='unit-address')
-        raw_location = ""
-        address_div_empty = False
-        
-        if address_containers:
-            raw_location = address_containers[0].get_text(strip=True)
-            if not raw_location:
-                address_div_empty = True
-        else:
-            address_div_empty = True
-            
-        # If unit-address div is empty or missing, try description first
-        if not raw_location and unit_data['description']:
+        # Meeting info extraction from description - prioritize over address extraction
+        if unit_data['description']:
             day, time, location = extract_meeting_info(unit_data['description'])
             if day:
                 unit_data['meeting_day'] = day
             if time:
                 unit_data['meeting_time'] = time
             if location:
-                raw_location = location
-                
-        # If still no location, search full text patterns
-        if not raw_location:
-            # Look for address patterns in full unit text
-            full_text = unit_body.get_text()
-            address_patterns = [
-                r'\d+\s+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd)[^,]*',
-                r'[A-Za-z\s]+\d+\s+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd)[^,]*'
-            ]
-            for pattern in address_patterns:
-                match = re.search(pattern, full_text)
-                if match:
-                    raw_location = match.group().strip()
-                    break
+                unit_data['meeting_location'] = location
         
-        # Process the extracted location
-        if raw_location and not re.match(r'(?i)p\.?o\.?\s*box', raw_location):
-            # Check if location starts with unit number (invalid pattern)
-            unit_num = unit_data.get('unit_number', '')
-            if unit_num and raw_location.startswith(unit_num):
-                # Invalid location - likely just unit number + org name
-                unit_data['meeting_location'] = ""
+        # Meeting location from address - only if not already found in description
+        if not unit_data['meeting_location']:
+            address_containers = unit_body.find_all('div', class_='unit-address')
+            raw_location = ""
+            
+            if address_containers:
+                raw_location = address_containers[0].get_text(strip=True)
             else:
-                # Format location with proper separators
-                formatted_location = format_meeting_location(raw_location)
-                unit_data['meeting_location'] = formatted_location
-                
-                # Set quality flag if address div was empty but location found elsewhere
-                if address_div_empty and formatted_location:
-                    if 'quality_flags' not in unit_data:
-                        unit_data['quality_flags'] = []
-                    unit_data['quality_flags'].append('QUALITY_ADDRESS_EMPTY')
-        
-        # If no meeting location found at all, this will be caught by quality scorer as REQUIRED_MISSING_LOCATION
+                # Look for address patterns in text
+                full_text = unit_body.get_text()
+                address_patterns = [
+                    r'\d+\s+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd)[^,]*',
+                    r'[A-Za-z\s]+\d+\s+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd)[^,]*'
+                ]
+                for pattern in address_patterns:
+                    match = re.search(pattern, full_text)
+                    if match:
+                        raw_location = match.group().strip()
+                        break
+            
+            if raw_location and not re.match(r'(?i)p\.?o\.?\s*box', raw_location):
+                # Check if location starts with unit number (invalid pattern)
+                unit_num = unit_data.get('unit_number', '')
+                if unit_num and raw_location.startswith(unit_num):
+                    # Invalid location - likely just unit number + org name
+                    unit_data['meeting_location'] = ""
+                else:
+                    # Format location with proper separators
+                    formatted_location = format_meeting_location(raw_location)
+                    unit_data['meeting_location'] = formatted_location
         
         # Extract town name - prioritize meeting location address over organization name
         if not unit_data.get('unit_town'):
@@ -447,7 +432,7 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
                     unit_data['unit_town'] = town_from_org
         
         # Raw content for debugging
-        unit_data['raw_content'] = wrapper.get_text()[:400] + "..."
+        unit_data['raw_content'] = wrapper.get_text()[:200] + "..."
         
     except Exception as e:
         print(f"Error processing unit {index}: {e}")

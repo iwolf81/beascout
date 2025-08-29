@@ -10,9 +10,7 @@ Usage:
 """
 
 import json
-import os
 import re
-import datetime
 from typing import Dict, List, Tuple, Any
 from dataclasses import dataclass
 from pathlib import Path
@@ -58,7 +56,7 @@ class UnitQualityScorer:
             'REQUIRED_MISSING_DAY': "Add meeting day",
             'REQUIRED_MISSING_TIME': "Add meeting time",
             'REQUIRED_MISSING_EMAIL': "Add contact email address",
-            'REQUIRED_MISSING_SPECIALTY': "Add specialty information (Crews only)",
+            'REQUIRED_MISSING_SPECIALTY': "Add specialty information for Venturing Crew",
             
             # Recommended field recommendations
             'RECOMMENDED_MISSING_CONTACT': "Add contact person name",
@@ -68,47 +66,15 @@ class UnitQualityScorer:
             # Data quality recommendations
             'QUALITY_POBOX_LOCATION': "Replace PO Box with physical meeting location",
             'QUALITY_PERSONAL_EMAIL': "Use unit-specific email instead of personal email",
-            'QUALITY_ADDRESS_EMPTY': "Unit address field is empty - meeting location found elsewhere",
             
             # Content quality recommendations
-            'RECOMMENDED_MISSING_DESCRIPTION': "Add informative and inviting unit description that includes meeting day(s) and time(s)"
+            'CONTENT_MISSING_DESCRIPTION': "Add informative and inviting unit description that includes meeting day(s) and time(s)"
         }
     
-    @classmethod
-    def log_quality_debug(cls, unit: Dict[str, Any], score: float, grade: str, recommendations: List[str]):
-        """Log quality scoring results for manual verification"""
-        # Use a session-based timestamp (created once per execution)
-        if not hasattr(cls, '_quality_debug_filename'):
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            cls._quality_debug_filename = f'data/debug/quality_debug_{timestamp}.log'
-            
-            # Ensure debug directory exists
-            os.makedirs('data/debug', exist_ok=True)
-        
-        with open(cls._quality_debug_filename, 'a', encoding='utf-8') as f:
-            unit_type = unit.get('unit_type', 'Unknown')
-            unit_number = unit.get('unit_number', 'Unknown')
-            unit_town = unit.get('unit_town', 'Unknown')
-            
-            # Format quality flags - show all recommendations or 'None' if empty
-            quality_flags = ', '.join(recommendations) if recommendations else 'None'
-            
-            f.write(f"  unit_type: '{unit_type}', ")
-            f.write(f"  unit_number: '{unit_number}', ")
-            f.write(f"  unit_town: '{unit_town}', ")
-            f.write(f"  score: {score:.1f}, ")
-            f.write(f"  grade: '{grade}', ")
-            f.write(f"  quality_flags: '{quality_flags}'\n")
-    
     def is_specialized_unit(self, unit: Dict[str, Any]) -> bool:
-        """Check if unit uses specialized scoring weights: Crew, Post, or Club"""
+        """Check if unit is specialized (requires specialty field): Crew, Post, or Club"""
         unit_type = unit.get('unit_type', '').lower()
         return unit_type in ['crew', 'post', 'club']
-    
-    def requires_specialty_field(self, unit: Dict[str, Any]) -> bool:
-        """Check if unit requires specialty field: only Crews"""
-        unit_type = unit.get('unit_type', '').lower()
-        return unit_type == 'crew'
     
     def is_field_present(self, unit: Dict[str, Any], field: str) -> bool:
         """Check if field has meaningful content"""
@@ -248,18 +214,12 @@ class UnitQualityScorer:
         recommendations = []
         is_specialized = self.is_specialized_unit(unit)
         
-        # Check for quality flags from extraction process
-        quality_flags = unit.get('quality_flags', [])
-        for flag in quality_flags:
-            if flag in self.recommendation_map:
-                recommendations.append(flag)
-        
         # Get appropriate required field weights
         required_weights = self.weights.SPECIALIZED_REQUIRED if is_specialized else self.weights.STANDARD_REQUIRED
         
         # Score required fields
         for field, weight in required_weights.items():
-            if field == 'specialty' and not self.requires_specialty_field(unit):
+            if field == 'specialty' and not is_specialized:
                 continue  # Skip specialty for non-crew units
                 
             if not self.is_field_present(unit, field):
@@ -280,9 +240,6 @@ class UnitQualityScorer:
                     if self.is_pobox_location(location):
                         score += weight * 0.5  # Half credit for PO Box
                         recommendations.append('QUALITY_POBOX_LOCATION')
-                    elif 'QUALITY_ADDRESS_EMPTY' in quality_flags:
-                        score += weight * 0.5  # Half credit for empty address div
-                        # Note: QUALITY_ADDRESS_EMPTY already added to recommendations above
                     else:
                         score += weight  # Full credit
                 elif field == 'contact_email':
@@ -305,13 +262,9 @@ class UnitQualityScorer:
                 elif field == 'website':
                     recommendations.append('RECOMMENDED_MISSING_WEBSITE')
                 elif field == 'description':
-                    recommendations.append('RECOMMENDED_MISSING_DESCRIPTION')
+                    recommendations.append('CONTENT_MISSING_DESCRIPTION')
             else:
                 score += weight  # Full credit for present recommended fields
-        
-        # Generate grade and log quality debug info
-        grade = self.get_letter_grade(score)
-        self.log_quality_debug(unit, score, grade, recommendations)
         
         return score, recommendations
     

@@ -76,7 +76,7 @@ def score_units(json_file: str, zip_code: str) -> str:
             units_data = json.load(f)
 
         scorer = UnitQualityScorer()
-        scored_data = scorer.score_all_units({'all_units': units_data})
+        scored_data = scorer.score_all_units({'units': units_data})
 
         scored_file = f"data/raw/all_units_{zip_code}_scored.json"
         with open(scored_file, 'w') as f:
