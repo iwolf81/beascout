@@ -386,14 +386,14 @@ class FixedScrapedDataParser:
         simple_match = re.match(r'^([A-Za-z\s]+)\s+(MA|CT)\s*\d*$', address)
         if simple_match:
             town = simple_match.group(1).strip()
-            normalized = self._normalize_town_name(town)
+            normalized = UnitIdentifierNormalizer._normalize_town_name(town)
             return normalized  # Return without HNE validation to capture CT units
         
         # Pattern 1: "Street, City, State ZIP"
         match = re.search(r',\s*([A-Za-z\s]+),\s*(MA|CT)\s+\d{5}', address)
         if match:
             town = match.group(1).strip()
-            return self._normalize_town_name(town)
+            return UnitIdentifierNormalizer._normalize_town_name(town)
         
         # Pattern 2: "Street, City State ZIP" (no comma before state) 
         # Handle "159 Hartwell St, West, Boylston MA 01583" by looking for last comma group
@@ -404,10 +404,10 @@ class FixedScrapedDataParser:
             if ',' in town_part:
                 parts = [p.strip() for p in town_part.split(',')]
                 if len(parts) == 2 and parts[0].lower() in ['west', 'east', 'north', 'south']:
-                    return self._normalize_town_name(f"{parts[0]} {parts[1]}")
+                    return UnitIdentifierNormalizer._normalize_town_name(f"{parts[0]} {parts[1]}")
                 # Otherwise use the last part
-                return self._normalize_town_name(parts[-1])
-            return self._normalize_town_name(town_part)
+                return UnitIdentifierNormalizer._normalize_town_name(parts[-1])
+            return UnitIdentifierNormalizer._normalize_town_name(town_part)
         
         # Pattern 3: Find "West, Boylston" pattern (comma in middle of town name)
         match = re.search(r',\s*([A-Za-z]+),\s*([A-Za-z]+)\s+(MA|CT)', address)
@@ -417,9 +417,9 @@ class FixedScrapedDataParser:
             # Check if this looks like a directional town name pattern
             if part1.lower() in ['west', 'east', 'north', 'south']:
                 combined = f"{part1} {part2}"
-                return self._normalize_town_name(combined)
+                return UnitIdentifierNormalizer._normalize_town_name(combined)
             # Otherwise use just the second part
-            return self._normalize_town_name(part2)
+            return UnitIdentifierNormalizer._normalize_town_name(part2)
         
         # Pattern 4: Extract concatenated street+town patterns like "159 Hartwell StWest Boylston MA"
         # Look for pattern: StreetName + TownName + MA/CT + ZIP
@@ -428,7 +428,7 @@ class FixedScrapedDataParser:
             potential_town = concatenated_match.group(2).strip()
             # Clean up common concatenated patterns
             if potential_town:
-                return self._normalize_town_name(potential_town)
+                return UnitIdentifierNormalizer._normalize_town_name(potential_town)
         
         # Pattern 5: Extract any MA/CT town names
         ma_ct_match = re.search(r'([A-Za-z\s]+)\s+(MA|CT)\s+\d{5}', address)
@@ -439,7 +439,7 @@ class FixedScrapedDataParser:
             if len(words) >= 2:
                 # Try last two words (handles "West Boylston")
                 town_candidate = ' '.join(words[-2:])
-                normalized = self._normalize_town_name(town_candidate)
+                normalized = UnitIdentifierNormalizer._normalize_town_name(town_candidate)
                 return normalized  # Return without HNE validation to capture CT units
         
         # Pattern 6: Handle building/facility names before town
@@ -448,7 +448,7 @@ class FixedScrapedDataParser:
         if facility_match:
             potential_town = facility_match.group(2).strip()
             if potential_town:
-                return self._normalize_town_name(potential_town)
+                return UnitIdentifierNormalizer._normalize_town_name(potential_town)
         
         return None
     
@@ -488,7 +488,7 @@ class FixedScrapedDataParser:
             # Sort by position first (earliest), then by length descending (longest)
             matches.sort(key=lambda x: (x[0], -x[1]))
             best_match = matches[0][2]  # Get the town name
-            return self._normalize_town_name(best_match)
+            return UnitIdentifierNormalizer._normalize_town_name(best_match)
         
         return None
     
@@ -519,7 +519,7 @@ class FixedScrapedDataParser:
         match = re.match(r'^([A-Za-z\s]+?)\s*-\s*(.+)$', org_name)
         if match:
             potential_town = match.group(1).strip()
-            normalized = self._normalize_town_name(potential_town)
+            normalized = UnitIdentifierNormalizer._normalize_town_name(potential_town)
             if self._validate_hne_town(normalized):
                 return normalized
         
@@ -529,63 +529,23 @@ class FixedScrapedDataParser:
         
         for town in multi_word_towns:
             if town.lower() in org_name.lower():
-                return self._normalize_town_name(town)
+                return UnitIdentifierNormalizer._normalize_town_name(town)
         
         # Pattern 3: Look for single-word HNE town names
         single_word_towns = [town for town in self.hne_towns if ' ' not in town]
         for town in single_word_towns:
             if town.lower() in org_name.lower():
-                return self._normalize_town_name(town)
+                return UnitIdentifierNormalizer._normalize_town_name(town)
         
         return None
     
-    def _normalize_town_name(self, town: str) -> str:
-        """
-        Normalize town name with enhanced rules from user feedback
-        Handles N, S, E, W prefixes properly
-        """
-        if not town:
-            return ""
-        
-        town = town.strip()
-        
-        # Handle directional abbreviations
-        town_map = {
-            "E Brookfield": "East Brookfield",
-            "W Brookfield": "West Brookfield", 
-            "N Brookfield": "North Brookfield",
-            "S Brookfield": "South Brookfield",
-            "W Boylston": "West Boylston",
-            "E Boylston": "East Boylston",
-            "N Worcester": "North Worcester", 
-            "S Worcester": "South Worcester",
-            # Fiskdale: No mapping needed - treated as separate HNE town for Key Three correlation
-            "Whitinsville": "Northbridge",  # Village mapping
-        }
-        
-        # Direct mapping first
-        if town in town_map:
-            return town_map[town]
-        
-        # Case-insensitive matching
-        for variant, canonical in town_map.items():
-            if town.lower() == variant.lower():
-                return canonical
-        
-        # Expand single letter directions
-        town = re.sub(r'^N\s+', 'North ', town)
-        town = re.sub(r'^S\s+', 'South ', town) 
-        town = re.sub(r'^E\s+', 'East ', town)
-        town = re.sub(r'^W\s+', 'West ', town)
-        
-        return town.title()
     
     def _validate_hne_town(self, town: str) -> bool:
         """Validate that town is a recognized HNE Council town"""
         if not town:
             return False
         
-        normalized = self._normalize_town_name(town)
+        normalized = UnitIdentifierNormalizer._normalize_town_name(town)
         return normalized.lower() in self.hne_towns or get_district_for_town(normalized) != "Unknown"
     
     def _is_outside_hne_territory(self, town: str) -> bool:

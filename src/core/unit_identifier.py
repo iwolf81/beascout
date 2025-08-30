@@ -131,40 +131,26 @@ class UnitIdentifierNormalizer:
     @staticmethod
     def _normalize_town_name(town: str) -> str:
         """
-        Normalize town name to canonical form
-        Handles common variations and aliases
+        Normalize town name to canonical form using centralized TOWN_ALIASES
         """
         if not town:
             return ""
 
-        # Handle common abbreviations and variations
-        town_map = {
-            # Standard abbreviation expansions for HNE towns
-            "E Brookfield": "East Brookfield",
-            "W Brookfield": "West Brookfield", 
-            "N Brookfield": "North Brookfield",
-            "W Boylston": "West Boylston",
-            
-            # No-op mappings removed - only necessary normalizations kept
-            
-            # Villages with separate ZIP codes - NO MAPPING to parent towns
-            # These are treated as independent HNE towns for unit correlation:
-            # "Fiskdale" stays "Fiskdale" (village within Sturbridge, ZIP 01518)
-            # "Jefferson" stays "Jefferson" (village within Holden, ZIP 01522) 
-            # "Whitinsville" stays "Whitinsville" (village within Northbridge, ZIP 01588)
-            # This preserves village identity while maintaining HNE territory recognition
-        }
+        # Import centralized town aliases
+        from src.mapping.district_mapping import TOWN_ALIASES
+        
+        town = town.strip()
 
         # Direct mapping first
-        if town in town_map:
-            return town_map[town]
+        if town in TOWN_ALIASES:
+            return TOWN_ALIASES[town]
 
         # Handle case variations
-        for variant, canonical in town_map.items():
+        for variant, canonical in TOWN_ALIASES.items():
             if town.lower() == variant.lower():
                 return canonical
 
-        return town
+        return town.title()
 
     @staticmethod
     def _extract_town_from_chartered_org(chartered_org: str) -> str:

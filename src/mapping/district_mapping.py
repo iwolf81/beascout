@@ -86,6 +86,9 @@ TOWN_ALIASES = {
     "W Brookfield": "West Brookfield",
     "N Brookfield": "North Brookfield",
     
+    # Handle geographic variations within HNE towns
+    "North Grafton": "Grafton",  # North Grafton is part of Grafton
+    
     # Handle Key Three formatting variations
     "West Boylston": "West Boylston",
     "East Brookfield": "East Brookfield",
