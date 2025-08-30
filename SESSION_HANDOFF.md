@@ -4,44 +4,47 @@
 **Objective**: Improve Scouting America unit information quality for Heart of New England Council (Massachusetts) by scraping, analyzing, and reporting on unit completeness from beascout.scouting.org and joinexploring.org.
 
 **Repository**: https://github.com/iwolf81/beascout  
-**Current Status**: Extraction system refined and ready for scaling  
-**Date**: August 22, 2025
+**Current Status**: Production-ready system with consolidated data layer and regression fixes  
+**Date**: August 30, 2025
 
 ## Current State Summary
 
-### ✅ Completed This Session
-1. **Documentation Architecture Established**
-   - **README.md**: Public-facing project introduction with quick start guide
-   - **CLAUDE.md**: AI development context with technical constraints and patterns
-   - **SYSTEM_DESIGN.md**: Comprehensive 60+ page master requirements document
-   - **ARCHITECTURE.md**: Technical implementation details and system design
-   - **COLLABORATION_LOG.md**: AI-human interaction patterns and best practices
+### ✅ Completed This Session (Data Layer Consolidation & Regression Fixes)
+1. **Critical Regression Analysis & Resolution**
+   - **Identified Regressions**: Troop 7012 Acton missing, Troop 284 showing "Boxborough" instead of "Acton"
+   - **Root Cause**: Redundant town definitions across multiple files causing data inconsistencies
+   - **Resolution**: Consolidated all mappings to single source of truth in `src/mapping/district_mapping.py`
 
-2. **Data Extraction System Refined**
-   - Fixed critical time formatting corruption (6:30:00:00 PM → 6:30:00 PM)
-   - Enhanced meeting pattern recognition (Monday nights, 2nd & 4th Tuesday)
-   - Improved time range handling (7:00:00 PM - 8:30:00 PM)
-   - Added specialty parsing for Venturing Crews (HIGH ADVENTURE, etc.)
-   - Implemented proper location formatting with comma separators
+2. **Data Layer Consolidation (Single Source of Truth)**
+   - **TOWN_TO_DISTRICT Dictionary**: 65 HNE towns with district assignments in centralized location
+   - **TOWN_ALIASES Dictionary**: Common variations and abbreviations handling
+   - **Validation Functions**: `get_district_for_town()`, `get_all_hne_towns()`, coverage statistics
+   - **Import Path Resolution**: Enhanced error handling for different execution contexts
 
-3. **Manual Review Process Established**
-   - User direct annotation method in output files (## prefixed comments)
-   - Systematic address of extraction issues indices 0-26
-   - Quality verification loop: extract → review → fix → regenerate
-   - Significantly improved extraction accuracy through iterative refinement
+3. **Position-First Town Extraction Enhancement**
+   - **Algorithm Fix**: First occurrence in text beats longer matches for hyphenated towns
+   - **Critical Fix**: "Acton-Boxborough Rotary Club" → "Acton" (not "Boxborough")
+   - **4-Source Precedence**: unit_address → unit_name → unit_description → chartered_org
+   - **Length Tiebreaker**: When positions equal, longer town name wins
 
-4. **Council Scope Analysis Complete**
-   - **Total Coverage Required**: 72 zip codes across 62 towns
-   - **Districts**: QUINAPOXET (blue) and SOARING EAGLE (red) 
-   - **Estimated Units**: 124-248 units (2-4 per town average)
-   - **Authority Established**: User is HNE Council Board member with legitimate access
+4. **Reference Testing Framework Established**
+   - **Reference Files**: `tests/reference/units/` with expected results for regression testing
+   - **Verification Aliases**: `verify_units` and `verify_units_discards` for quick diff comparison
+   - **Manual Validation Tools**: Streamlined workflow for detecting processing changes
+   - **Archive Management**: Deprecated files moved to `archive/` directory with clear rationale
 
-### 📊 Current Data Quality (ZIP 01720)
-- **Units Processed**: 62 unique units (from 66 HTML containers)
-- **Meeting Day Extraction**: Significantly improved pattern coverage
-- **Meeting Time Extraction**: Clean formatting with range support
-- **Specialty Fields**: Proper separation for Crews
-- **Location Formatting**: Standardized address format with validation
+5. **Comprehensive Documentation Updates**
+   - **ARCHITECTURE.md**: Updated with consolidated data layer and position-first parsing details
+   - **SYSTEM_DESIGN.md**: Added detailed unit town extraction processing rules (4-source precedence)
+   - **README.md**: Updated file structure and consolidated mapping information
+   - **All Documentation**: Reflects current system architecture with consolidated data layer
+
+### 📊 Current System Status (Post-Regression Fixes)
+- **Critical Regressions Resolved**: Troop 7012 Acton restored, Troop 284 correctly shows "Acton", Troop 0132 moved to main log with "Upton"
+- **Data Layer**: Single source of truth established with zero redundant town definitions
+- **Processing Logic**: Position-first extraction prevents hyphenated town parsing errors
+- **Reference Testing**: Comprehensive validation framework for future changes
+- **Archive Management**: Deprecated code properly archived with clear documentation
 
 ## Key Technical Achievements
 
@@ -383,7 +386,113 @@ All parsing errors resolved, territory validation complete, comprehensive docume
 - `src/parsing/fixed_scraped_data_parser.py` - Changes broke working system
 - Quality scoring from commit `3dda3b2` - Root cause of regression
 
-**Session Time**: Nearly 5-hour limit reached, auto-compact imminent
+---
+
+### August 29, 2025 Session Completion - Regression RESOLVED
+
+**🎯 CRITICAL SUCCESS: All Regressions Fixed**
+
+**Problem Resolved**: Town extraction precedence logic completely fixed after identifying root cause in `_parse_town_from_text()` function.
+
+**Root Cause Analysis**: 
+The issue was NOT in parsing transformation logic but in **data layer inconsistencies** across multiple mapping files:
+
+1. **Duplicate District Logic**: `html_extractor.py:9` hardcoded district mappings conflicting with `district_mapping.py`
+2. **Incorrect Village Mappings**: `enhanced_validator.py` incorrectly mapped East/West Brookfield to Brookfield
+3. **Substring Matching Bug**: `_parse_town_from_text()` found "Brookfield" in "E Brookfield" before normalization
+
+**✅ Technical Fixes Applied**:
+
+**Fixed Town Extraction Issues**:
+- Pack 0148: "Brookfield" → "East Brookfield" ✅
+- Troop 0238: "Brookfield" → "East Brookfield" ✅  
+- Pack 0316: "Athol" → "Douglas" ✅
+- Troop 0316: "Douglas" (maintained) ✅
+- Troop 0132: Now appears as "Upton" ✅
+
+**Enhanced `_parse_town_from_text()` Function**:
+```python
+# Added abbreviation pattern matching BEFORE substring matching
+abbreviated_patterns = [
+    (r'\be\s+brookfield\b', 'East Brookfield'),
+    (r'\bw\s+brookfield\b', 'West Brookfield'),
+    (r'\bw\s+boylston\b', 'West Boylston'),
+    # ... etc
+]
+
+# Then prioritized longer town names in HNE matching
+sorted_towns = sorted(self.hne_towns, key=len, reverse=True)
+```
+
+**User District Mapping Corrections**:
+- Added Fiskdale as separate HNE town (was missing)
+- Identified Shrewsbury district assignment issue (should be Quinapoxet)
+- Fixed inconsistent village handling across files
+
+**🎓 CRITICAL LESSON LEARNED**: 
+**"Fix Data Mappings Before Debugging Transformations"**
+
+Documented in COLLABORATION_LOG.md: Always audit data layer consistency (mappings, aliases, duplicates) before debugging parsing logic. Data inconsistencies masquerade as transformation bugs.
+
+**✅ Production Files Updated**:
+- `src/parsing/fixed_scraped_data_parser.py`: Enhanced town extraction with abbreviation handling
+- `src/mapping/district_mapping_iwolf.py`: Added Fiskdale, noted Shrewsbury issue
+- `COLLABORATION_LOG.md`: Critical debugging methodology lesson added
+
+**📊 Validation Results**:
+- Tested on East Brookfield (01515): Pack 0148 and Troop 0238 correctly show "East Brookfield"
+- Tested on Douglas (01516): Pack 0316 and Troop 0316 correctly show "Douglas"
+- All regression cases confirmed fixed in production testing
+
+**🚀 FINAL STATUS**: 
+All town extraction regressions resolved. System working correctly with proper precedence order and data consistency. Ready for full pipeline processing with fixed mapping logic.
+
+**⏰ Session Time**: 5-hour limit reached - successful completion with all issues resolved
 
 ---
-*Final Update 2025-08-29: CRITICAL regression identified and analyzed. Revert plan ready for execution. Previous working state documented for restoration.*
+
+### ✅ COMPLETED: Systematic Data-First Regression Fix
+
+**CRITICAL INSIGHT APPLIED**: The town extraction regressions were caused by **data layer inconsistencies** across multiple files with redundant town mappings. The systematic fix approach successfully resolved the root cause.
+
+**SUCCESSFULLY EXECUTED**:
+
+#### ✅ Phase 1: Data Layer Consolidation (Root Cause Fix)
+1. **Consolidated district mappings**:
+   - ✅ Removed duplicate logic from `html_extractor.py` and `unit_identifier.py`
+   - ✅ Established `src/mapping/district_mapping.py` as single source of truth
+   - ✅ Enhanced import handling for different execution contexts
+
+2. **Enhanced town extraction logic**:
+   - ✅ Fixed position-first parsing in `_parse_town_from_text()`
+   - ✅ Resolved "Acton-Boxborough Rotary Club" → "Acton" (not "Boxborough")
+   - ✅ Maintained 4-source precedence: unit_address → unit_name → unit_description → chartered_org
+
+3. **Cleaned up redundant mappings**:
+   - ✅ Removed no-op identity mappings from multiple files
+   - ✅ Consolidated all HNE town definitions to centralized dictionary
+   - ✅ Added TOWN_ALIASES for common variations and abbreviations
+
+#### ✅ Phase 2: Regression Resolution
+1. **All Critical Regressions Fixed**:
+   - ✅ **Troop 7012 Acton**: Now properly extracted and processed
+   - ✅ **Troop 284**: Correctly shows "Acton" instead of "Boxborough"
+   - ✅ **Troop 0132**: Moved from discarded log to main log with correct "Upton" town
+
+2. **Reference Testing Established**:
+   - ✅ Updated reference logs with verified correct results
+   - ✅ Created verification aliases for rapid regression testing
+   - ✅ Comprehensive validation framework for future changes
+
+#### ✅ Phase 3: Archive and Documentation
+1. **Code Management**:
+   - ✅ Moved deprecated files to `archive/` directory with clear rationale
+   - ✅ Committed and pushed all changes with comprehensive documentation
+   - ✅ Updated all technical documentation to reflect consolidated architecture
+
+**ACHIEVED OUTCOME**: Clean system with single source of truth for all mappings, position-first extraction logic prevents parsing errors, comprehensive reference testing prevents future regressions, ready for production scaling.
+
+**Critical Lesson Successfully Applied**: **Fix Data Mappings Before Debugging Transformations** - This approach eliminated the need for complex transformation logic and prevented future data inconsistencies.
+
+---
+*Final Update 2025-08-30: All critical regressions RESOLVED via data layer consolidation. System now has single source of truth for all mappings with position-first extraction logic. Ready for production scaling across all HNE zip codes.*

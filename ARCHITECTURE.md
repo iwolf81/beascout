@@ -1,10 +1,10 @@
 # BeAScout Unit Data Quality Monitoring System - Technical Architecture
 
-**Version**: 4.0 | **Last Updated**: 2025-08-27 | **Status**: Production-Ready with Village-Aware Processing
+**Version**: 5.0 | **Last Updated**: 2025-08-30 | **Status**: Production-Ready with Consolidated Data Layer
 
 ## System Overview
 
-The BeAScout system is a production-ready data quality monitoring platform that processes three primary data sources to generate comprehensive unit quality reports for the Heart of New England Council. The system features village-aware processing, comprehensive debug logging, and automated report generation.
+The BeAScout system is a production-ready data quality monitoring platform that processes three primary data sources to generate comprehensive unit quality reports for the Heart of New England Council. The system features consolidated data mappings with single source of truth, position-first town extraction logic, comprehensive debug logging, and automated report generation.
 
 ## Core Components
 
@@ -28,20 +28,21 @@ src/                                 # All production code (organized by functio
 ├── core/                           # ✅ Core system components
 │   └── unit_identifier.py         # Unit normalization with debug logging
 │                                   # - Creates standardized unit_key format
-│                                   # - Handles village extraction (Fiskdale, Whitinsville, Jefferson)
+│                                   # - Uses centralized HNE town mapping (TOWN_TO_DISTRICT)
 │                                   # - Source-specific debug file generation
 │                                   # - Discarded unit logging with audit trails
-├── mapping/                        # ✅ Geographic data management  
-│   └── district_mapping.py        # HNE territory definitions
+├── mapping/                        # ✅ Geographic data management (SINGLE SOURCE OF TRUTH)
+│   └── district_mapping.py        # HNE territory definitions & town mappings
 │                                   # - 65 towns across Quinapoxet/Soaring Eagle districts
 │                                   # - Centralized TOWN_TO_DISTRICT dictionary
 │                                   # - Village definitions as separate towns
+│                                   # - Town alias handling and validation functions
 ├── parsing/                        # ✅ Data parsing engines
 │   ├── fixed_scraped_data_parser.py # Scraped HTML processor
-│   │                               # - Village-priority extraction logic
-│   │                               # - 6-pattern address parsing
-│   │                               # - HNE territory filtering
-│   │                               # - Comprehensive error handling
+│   │                               # - Position-first town extraction (fixes hyphenated towns)
+│   │                               # - 4-precedence rule: unit_address → unit_name → unit_description → chartered_org
+│   │                               # - Uses centralized mapping for HNE territory filtering
+│   │                               # - Comprehensive error handling with debug logging
 │   └── key_three_parser.py        # Excel spreadsheet processor  
 │                                   # - 169 unit processing with edge case handling
 │                                   # - Sophisticated town extraction (9 patterns)
@@ -63,9 +64,24 @@ src/                                 # All production code (organized by functio
 └── legacy/                         # ✅ Legacy tools (still used)
     └── extract_all_units.py       # HTML → JSON conversion
 
+archive/                            # ✅ Deprecated code (historical reference)
+├── html_extractor.py              # Archived: had redundant town mappings
+├── process_full_dataset.py        # Archived: superseded by process_full_dataset_v2.py
+└── [other archived files]         # Legacy processing scripts
+
 scripts/                            # Utility & testing scripts
 ├── search_strings.py              # Multi-file search tool
 └── test_key_three_debug.py        # Key Three parser validation
+
+tests/                            # ✅ Testing & validation
+├── reference/                    # Reference files for regression testing
+│   ├── units/                    # Unit extraction reference logs
+│   │   ├── unit_identifier_debug_scraped_reference_u.log    # Expected scraped results
+│   │   └── discarded_unit_identifier_debug_scraped_reference_u.log # Expected discards
+│   ├── key_three/               # Key Three processing reference files
+│   └── towns/                   # Town extraction test cases
+├── verify_all.py                # Comprehensive validation runner
+└── README.md                    # Testing documentation
 
 data/                              # All data files (organized by stage)
 ├── input/                         # Source data files
@@ -82,17 +98,23 @@ data/                              # All data files (organized by stage)
 │   ├── reports/                  # Excel district reports
 │   └── emails/                   # Generated Key Three emails
 └── feedback/                     # Analysis & documentation
-
-archive/                          # Deprecated code (historical reference)
 ```
 
 ## Key Technical Features
 
-### Village-Aware Processing
-The system correctly identifies and processes village units that were causing cross-validation failures:
-- **Fiskdale** (within Sturbridge) - 2-3 units
-- **Whitinsville** (within Northbridge) - 2 units  
-- **Jefferson** (within Holden) - 1 unit
+### Consolidated Data Layer (Single Source of Truth)
+All town and district mappings consolidated to `src/mapping/district_mapping.py`:
+- **TOWN_TO_DISTRICT**: 65 HNE towns with district assignments
+- **TOWN_ALIASES**: Handles common variations and abbreviations
+- **Validation Functions**: Town lookup, alias resolution, coverage statistics
+- **Village Support**: Fiskdale, Whitinsville, Jefferson as distinct towns
+
+### Position-First Town Extraction
+Enhanced text parsing logic in `fixed_scraped_data_parser.py`:
+- **Position Priority**: First occurrence in text beats longer matches
+- **Hyphenated Town Fix**: "Acton-Boxborough" → "Acton" (not "Boxborough")
+- **4-Source Precedence**: unit_address → unit_name → unit_description → chartered_org
+- **Length Tiebreaker**: When positions equal, longer town name wins
 
 ### Debug Logging System
 Comprehensive audit trails distinguish between data sources:
@@ -141,14 +163,16 @@ Comprehensive audit trails distinguish between data sources:
 │    • Legacy parser processes HTML to structured JSON                      │
 │    • Unit container identification and data extraction                    │
 │                                                                            │
-│ 2. Unit Normalization & Village Processing                               │
+│ 2. Unit Normalization & Town Extraction                                  │
 │    • Standardized unit_key creation: "Pack 3 Leominster"                │
-│    • Village-priority extraction (Fiskdale, Whitinsville, Jefferson)     │
+│    • Position-first town extraction with 4-source precedence rule       │
+│    • Uses centralized TOWN_TO_DISTRICT mapping for consistency          │
 │    • Debug logging with source identification                             │
 │                                                                            │
 │ 3. Territory Filtering                                                    │
-│    • HNE boundary validation using TOWN_TO_DISTRICT mapping              │
-│    • Non-HNE unit exclusion with logging                                 │
+│    • HNE boundary validation using consolidated district mapping         │
+│    • Village-aware processing (Fiskdale, Whitinsville, Jefferson)       │
+│    • Non-HNE unit exclusion with comprehensive logging                   │
 │                                                                            │
 │ 4. Quality Scoring                                                        │
 │    • Weighted field analysis (70% required, 30% recommended)             │

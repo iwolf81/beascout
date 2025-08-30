@@ -1,6 +1,6 @@
 # BeAScout Unit Information System - Design Document
 
-**Version:** 2.0 | **Last Updated:** 2025-08-24 | **Status:** Production-Ready System
+**Version:** 3.0 | **Last Updated:** 2025-08-30 | **Status:** Production-Ready with Data Layer Consolidation
 
 ## Document Control
 - **Author:** Claude Code + Board Member
@@ -86,33 +86,80 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 ### 2.4 Town Extraction and HNE Filtering System
 **Challenge:** Accurately identifying unit towns for Heart of New England Council territory filtering.
 
-**Initial Approach:** Extract town names from chartered organization names using pattern matching and HNE town list comparison.
+**Initial Approach:** Multiple files contained redundant town definitions that could get out of sync, causing inconsistent data layer behavior.
 
-**Discovered Issues:**
-- Organization names containing historical figures' names caused incorrect extractions (e.g., "Joseph Warren Soley Lodge" incorrectly extracted "Warren" instead of meeting location "Lincoln")
-- Units meeting outside their chartered organization's town were misclassified
-- Personal names in organizations (e.g., "Joseph Warren") were matched as town names
+**Data Layer Issues Discovered:**
+- Duplicate town mappings in `src/core/unit_identifier.py`, `src/parsing/html_extractor.py`, and `src/mapping/district_mapping.py`
+- Redundant HNE town lists that could diverge over time
+- Import path issues when accessing mappings from different execution contexts
 
-**Enhanced Solution:** Multi-method town extraction with address prioritization:
-1. **Primary method:** Extract from meeting location address (most reliable)
-2. **Fallback method:** Extract from organization name with historical name pattern detection
-3. **Person name filtering:** Detect patterns like "FirstName TownName" to avoid false matches
-4. **Address parsing:** Multiple regex patterns for various address formats
+**Critical Regressions Fixed:**
+- **Troop 7012 Acton**: Missing from processed results due to data inconsistencies
+- **Troop 284**: Incorrectly showing "Boxborough" instead of "Acton" from "Acton-Boxborough Rotary Club"
+- **Troop 0132**: Discarded as "Mendon" instead of correctly processed as "Upton"
 
-**Implementation:**
-- `extract_town_from_address()`: Parses meeting location addresses for town names
-- Enhanced `extract_town_from_org()`: Avoids historical figure name conflicts  
-- Priority-based extraction: Address-based extraction takes precedence over organization parsing
-- HNE territory validation: Cross-references extracted towns against official HNE Council boundaries
+**Consolidated Solution - Single Source of Truth:**
+1. **Centralized Mapping**: All town/district data consolidated to `src/mapping/district_mapping.py`
+2. **TOWN_TO_DISTRICT Dictionary**: 65 HNE towns with district assignments
+3. **TOWN_ALIASES Dictionary**: Handles common variations and abbreviations
+4. **Validation Functions**: `get_district_for_town()`, `get_all_hne_towns()`, etc.
 
-**Results:**
-- Troop 127 Lincoln correctly classified as non-HNE (Lincoln not in HNE territory)
-- Improved from 24 incorrectly included units to 23 accurate HNE units
-- 39 non-HNE units properly excluded from email generation
+**Position-First Text Parsing Enhancement:**
+```python
+# Fixed in _parse_town_from_text() - fixed_scraped_data_parser.py:
+# Sort by position first (earliest), then by length descending (longest)  
+matches.sort(key=lambda x: (x[0], -x[1]))
+```
+- **Priority Rule**: First occurrence in text beats longer matches
+- **Hyphenated Town Fix**: "Acton-Boxborough" → "Acton" (not "Boxborough")
+- **4-Source Precedence**: unit_address → unit_name → unit_description → chartered_org
+- **Length Tiebreaker**: When positions equal, longer town name wins
 
-**Key Learning:** Geographic classification requires address-based validation, not just organization name parsing.
+**Import Path Resolution:**
+```python
+# Enhanced import handling in html_extractor.py:
+try:
+    from src.mapping.district_mapping import TOWN_TO_DISTRICT
+except ImportError:
+    # Fallback for different execution contexts
+    import sys
+    from pathlib import Path
+    sys.path.append(str(Path(__file__).parent.parent.parent))
+    from src.mapping.district_mapping import TOWN_TO_DISTRICT
+```
 
-### 2.5 Production Readiness Validation
+**Results After Data Layer Consolidation:**
+- Troop 7012 Acton now properly extracted and processed
+- Troop 284 correctly shows "Acton" instead of "Boxborough" 
+- Troop 0132 moved from discarded log to regular log with correct "Upton" town
+- Zero redundant town definitions across codebase
+- Single source of truth established for all geographic data
+
+**Key Learning:** Fix data layer inconsistencies before debugging transformation logic. Consolidation prevents regression issues and ensures consistent behavior across all processing components.
+
+### 2.5 Reference Testing and Validation Framework
+**Challenge:** Ensuring town extraction and unit processing remains consistent after code changes.
+
+**Solution - Reference File Testing:**
+```bash
+# ~/.zshrc aliases for regression testing
+alias verify_units='f() { code --diff ~/Repos/beascout/tests/reference/units/unit_identifier_debug_scraped_reference_u.log "$1"; }; f'
+alias verify_units_discards='f() { code --diff ~/Repos/beascout/tests/reference/units/discarded_unit_identifier_debug_scraped_reference_u.log "$1"; }; f'
+```
+
+**Reference Files Maintained:**
+- `tests/reference/units/unit_identifier_debug_scraped_reference_u.log`: Expected scraped results
+- `tests/reference/units/discarded_unit_identifier_debug_scraped_reference_u.log`: Expected discarded units
+
+**Validation Process:**
+1. Run processing pipeline on test data
+2. Compare debug logs to reference files using diff tools
+3. Identify any unit extraction changes or regressions
+4. Update reference files when changes are intentional improvements
+
+**Key Learning:** Reference file testing enables rapid regression detection and confident code changes.
+
+### 2.6 Production Readiness Validation
 **Metrics Achieved:**
 - 98%+ Key Three cross-referencing accuracy (1 miss out of 62 units)
 - 61.0% average unit completeness score
@@ -130,9 +177,116 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 
 ---
 
-## 3. System Architecture
+## 3. Unit Town Extraction Processing Rules
 
-### 3.1 Data Collection Pipeline
+### 3.1 Town Determination Precedence (4-Source Rule)
+Unit town extraction follows a strict precedence order in `fixed_scraped_data_parser.py`:
+
+1. **unit_address** (Highest Priority)
+   - Parsed from meeting location address fields
+   - Most reliable source for actual meeting location
+   - Example: "12 Concord Rd, Acton Congregational Church, Acton MA 01720" → "Acton"
+
+2. **unit_name** (Second Priority)  
+   - Extracted from unit name/title if address unavailable
+   - Often contains location context
+   - Example: "Acton Scout Troop 284" → "Acton"
+
+3. **unit_description** (Third Priority)
+   - Parsed from unit description text if name/address insufficient
+   - May contain meeting location details
+   - Example: "We meet in Boxborough at..." → "Boxborough"
+
+4. **chartered_org** (Lowest Priority)
+   - Fallback extraction from chartered organization name
+   - Least reliable due to historical names and complex organization structures
+   - Example: "Acton-Boxborough Rotary Club" → "Acton" (position-first rule)
+
+### 3.2 Position-First Text Parsing Algorithm
+Enhanced parsing logic prioritizes first occurrence in text for same-precedence matches:
+
+```python
+# Core algorithm in _parse_town_from_text()
+matches = []
+for town in self.hne_towns:
+    town_lower = town.lower()
+    position = text.find(town_lower)
+    if position != -1:
+        matches.append((position, len(town), town))
+
+if matches:
+    # Sort by position first (earliest), then by length descending (longest)
+    matches.sort(key=lambda x: (x[0], -x[1]))
+    best_match = matches[0][2]  # Get the town name
+    return self._normalize_town_name(best_match)
+```
+
+**Critical Fix Examples:**
+- **"Acton-Boxborough Rotary Club"**: Position-first logic extracts "Acton" (position 0) instead of "Boxborough" (position 6)
+- **"East Brookfield Community Center"**: Length tiebreaker extracts "East Brookfield" instead of "Brookfield"
+- **"Worcester County Council"**: Extracts "Worcester" as the first valid HNE town match
+
+### 3.3 HNE Territory Validation
+All extracted towns validated against centralized mapping in `src/mapping/district_mapping.py`:
+
+```python
+# Single source of truth for HNE territory
+TOWN_TO_DISTRICT = {
+    # Quinapoxet District (32 towns)
+    "Acton": "Quinapoxet",
+    "Auburn": "Quinapoxet", 
+    # ... full mapping
+    
+    # Soaring Eagle District (33 towns)  
+    "Gardner": "Soaring Eagle",
+    "Grafton": "Soaring Eagle",
+    # ... full mapping
+}
+```
+
+**Validation Process:**
+1. Extract town using 4-source precedence rule
+2. Normalize town name (handle case variations)
+3. Check against TOWN_TO_DISTRICT dictionary
+4. Apply TOWN_ALIASES for common variations
+5. Assign district or mark as "Unknown" if not in HNE territory
+
+### 3.4 Special Cases and Edge Handling
+
+**Village Processing:**
+- **Fiskdale**: Treated as separate town (within Sturbridge)
+- **Whitinsville**: Treated as separate town (within Northbridge)  
+- **Jefferson**: Treated as separate town (within Holden)
+
+**Town Alias Resolution:**
+```python
+TOWN_ALIASES = {
+    "W Boylston": "West Boylston",
+    "E Brookfield": "East Brookfield",
+    "N Brookfield": "North Brookfield",
+    # ... additional aliases
+}
+```
+
+**Error Handling:**
+- Invalid or missing town data logged to discarded unit files
+- Debug logging captures extraction source and reasoning
+- Comprehensive audit trail for manual verification
+
+### 3.5 Processing Flow Integration
+Town extraction integrates with the complete processing pipeline:
+
+```
+HTML Input → Unit Extraction → Town Determination → HNE Validation → District Assignment → Quality Scoring → Final Output
+```
+
+Each step logged to debug files with source identification for regression testing and validation.
+
+---
+
+## 4. System Architecture
+
+### 4.1 Data Collection Pipeline
 
 **Input Sources:**
 - beascout.scouting.org (10-mile radius searches)
@@ -146,7 +300,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - Board member authority for legitimate data access
 - Automated monitoring with manual backup procedures
 
-### 3.2 Processing Components
+### 4.2 Processing Components
 
 **Data Extraction:**
 - HTML parsing using BeautifulSoup
@@ -166,7 +320,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - Quality improvement tracking
 - Anomaly detection for unusual changes
 
-### 2.3 Monitoring & Reporting
+### 4.3 Monitoring & Reporting
 
 **Automated Monitoring:**
 - Periodic re-scraping of all zip codes
@@ -176,9 +330,9 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 
 ---
 
-## 3. Technical Requirements
+## 5. Technical Requirements
 
-### 3.1 Scraping Strategy
+### 5.1 Scraping Strategy
 
 **Rate Limiting & Respect:**
 - 8-12 second delays between requests (randomized)
@@ -199,7 +353,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - 24-hour cooling periods for blocked requests
 - Manual intervention protocols
 
-### 3.3 Data Quality Standards
+### 5.2 Data Quality Standards
 
 **Required Fields (Must Have):**
 - Unit primary identifier (type, number, organization)
@@ -230,7 +384,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - Stored persistently with unit data for tracking over time
 - Mapped to actionable improvement descriptions for Key Three emails
 
-### 3.4 Deduplication Logic
+### 5.3 Deduplication Logic
 
 **Primary Matching:**
 - Exact primary identifier string comparison
@@ -248,9 +402,9 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 
 ---
 
-## 4. Operational Workflows
+## 6. Operational Workflows
 
-### 4.1 Initial Data Collection (Weeks 1-6)
+### 6.1 Initial Data Collection (Weeks 1-6)
 
 **Phase 1: Testing & Validation (Week 1)**
 - Test scraping approach with 3 representative zip codes
@@ -268,7 +422,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - Complete deduplication and data validation
 - Generate baseline report for Council
 
-### 4.2 Ongoing Monitoring System
+### 6.2 Ongoing Monitoring System
 
 **Re-scraping Schedule:**
 - **Biweekly**: Complete re-scraping of all 72 zip codes
@@ -287,7 +441,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - **Monthly**: Strategic analysis and recommendations
 - **Quarterly**: Executive summary and system metrics
 
-### 4.3 Council Integration & Key Three Outreach
+### 6.3 Council Integration & Key Three Outreach
 
 **Report Distribution:**
 - Automated delivery to Council office
@@ -302,9 +456,9 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 
 ---
 
-## 5. Success Metrics & KPIs
+## 7. Success Metrics & KPIs
 
-### 5.1 Primary Objectives (Non-negotiable)
+### 7.1 Primary Objectives (Non-negotiable)
 
 **Coverage Requirements:**
 - 100% zip code processing success rate
@@ -316,7 +470,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - 80%+ units with valid contact email addresses
 - 90%+ reduction in duplicate unit entries
 
-### 5.2 Operational Excellence
+### 7.2 Operational Excellence
 
 **System Performance:**
 - 99%+ uptime for monitoring system
@@ -328,7 +482,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - +50% units reaching "complete" status within 6 months
 - Positive feedback on report utility from Council office
 
-### 5.3 Long-term Sustainability
+### 7.3 Long-term Sustainability
 
 **Maintenance Requirements:**
 - Automated processing requiring <2 hours/week oversight
@@ -337,7 +491,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 
 ---
 
-## 6. Implementation Timeline (Revised: Recommendation-First Strategy)
+## 8. Implementation Timeline (Revised: Recommendation-First Strategy)
 
 ### Phase 1: Recommendation System (Days 1-3) ✅ COMPLETED
 - [x] Complete data extraction system (62 units from ZIP 01720)
@@ -373,9 +527,9 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 
 ---
 
-## 7. Risk Management
+## 9. Risk Management
 
-### 7.1 Technical Risks
+### 9.1 Technical Risks
 
 **Website Blocking:**
 - **Mitigation**: Conservative approach, respectful implementation
@@ -392,7 +546,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - **Recovery**: Resume capability from last successful state
 - **Backup**: Manual processes for critical deadlines
 
-### 7.2 Operational Risks
+### 9.2 Operational Risks
 
 **Timeline Delays:**
 - **Mitigation**: Conservative planning, early testing
@@ -404,7 +558,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - **Recovery**: Enhanced documentation and support
 - **Success factors**: Clear value demonstration
 
-### 7.3 Legal/Ethical Considerations
+### 9.3 Legal/Ethical Considerations
 
 **Terms of Service Compliance:**
 - **Authority**: Board member status for legitimate use
@@ -413,9 +567,9 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 
 ---
 
-## 8. Decisions & Rationale
+## 10. Decisions & Rationale
 
-### 8.1 Technology Choices
+### 10.1 Technology Choices
 
 **Playwright vs Requests Library:**
 - **Decision**: Playwright for JavaScript-heavy sites
@@ -429,7 +583,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - **Decision**: JSON for raw data, SQLite for processed
 - **Rationale**: Simplicity for development, structure for analysis
 
-### 8.2 Process Decisions
+### 10.2 Process Decisions
 
 **Conservative vs Aggressive Scraping:**
 - **Decision**: Conservative approach (8-12s delays)
@@ -441,20 +595,20 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 
 ---
 
-## 9. Open Questions & Action Items
+## 11. Open Questions & Action Items
 
-### 9.1 Pending Decisions
+### 11.1 Pending Decisions
 - [ ] **Report Format**: Dashboard vs PDF vs Email preferences?
 - [ ] **Alert Thresholds**: What changes warrant immediate notification?
 - [ ] **Volunteer Integration**: How to coordinate manual collection backup?
 - [ ] **Data Retention**: How long to maintain historical change data?
 
-### 9.2 Research Required
+### 11.2 Research Required
 - [ ] **BSA Contact Protocol**: Best approach for official permission request
 - [ ] **Council Systems**: Integration with existing databases/workflows
 - [ ] **Key Three Communication**: Preferred channels and messaging
 
-### 9.3 Technical Validation
+### 11.3 Technical Validation
 - [ ] **Extraction Accuracy**: Validate regex patterns against larger dataset
 - [ ] **Performance Testing**: Confirm system can handle full 72-zip processing
 - [ ] **Error Handling**: Test recovery procedures under various failure modes

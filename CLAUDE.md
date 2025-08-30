@@ -72,9 +72,12 @@ Improve Scouting America unit information quality for the Heart of New England C
 - joinexploring.org example: `?zip=01720&program[0]=post&program[1]=club&miles=20`
 
 ## Project Documentation Structure
-- **[README.md](README.md)**: Usage examples, getting started, system overview
-- **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical system design and component architecture  
-- **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Business requirements, success metrics, operational workflows
-- **[PRODUCTION_STATUS.md](PRODUCTION_STATUS.md)**: Current deployment status, achievements, and next priorities
-- **[COLLABORATION_LOG.md](COLLABORATION_LOG.md)**: AI-human collaboration insights and lessons learned
-- **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Current session state and context preservation
+Review and process the following markdown files **in their entirety** in the listed order:
+1. **[CLAUDE.md](CLAUDE.md)**: AI development context and technical constraints
+1. **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Current session state and context preservation
+1. **[README.md](README.md)**: Usage examples, getting started, system overview
+1. **[COLLABORATION_LOG.md](COLLABORATION_LOG.md)**: AI-human collaboration insights and lessons learned
+1. **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Business requirements, success metrics, operational workflows
+1. **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical system design and component architecture
+1. **[PRODUCTION_STATUS.md](PRODUCTION_STATUS.md)**: Current deployment status and achievements
+

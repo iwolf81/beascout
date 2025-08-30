@@ -9,7 +9,7 @@ The BeAScout system processes three primary data sources to generate comprehensi
 - **BeAScout/JoinExploring Web Data** (308+ units across 71 zip codes) - Public unit information with contact details
 - **HNE Council Territory Map** (65 towns across 2 districts) - Authoritative geographic boundaries
 
-The system features production-ready parsing with village extraction (Fiskdale, Whitinsville, Jefferson), quality scoring, and automated generation of district reports and personalized Key Three emails.
+The system features consolidated data layer with single source of truth for town mappings, position-first town extraction logic, comprehensive debug logging, and automated generation of district reports and personalized Key Three emails.
 
 ## Data Flow Architecture
 
@@ -30,8 +30,8 @@ The system features production-ready parsing with village extraction (Fiskdale, 
 │                   DATA PROCESSING PIPELINE                        │
 ├───────────────────────────────────────────────────────────────────┤
 │ 1. HTML → JSON Extraction (Legacy Parser)                       │
-│ 2. Unit Normalization (Village-Aware: Fiskdale, Whitinsville)     │
-│ 3. Territory Filtering (65 HNE Towns)                             │
+│ 2. Unit Town Extraction (4-source precedence with position-first) │
+│ 3. Territory Filtering (65 HNE Towns using consolidated mapping)  │
 │ 4. Quality Scoring (Required vs Recommended Fields)               │
 │ 5. Deduplication (unit_key matching)                              │
 │ 6. District Assignment (Quinapoxet vs Soaring Eagle)              │
@@ -52,7 +52,7 @@ The system features production-ready parsing with village extraction (Fiskdale, 
 ## Key Features
 
 - **Automated Data Collection**: Browser automation for dual-source scraping (BeAScout + JoinExploring) with retry logic and rate limiting
-- **Village-Aware Processing**: Correctly identifies villages (Fiskdale, Whitinsville, Jefferson) from chartered organization names for accurate cross-validation
+- **Position-First Town Extraction**: Enhanced text parsing prioritizes first occurrence for hyphenated towns (fixes "Acton-Boxborough" → "Acton")
 - **Quality Scoring System**: Professional grading (A-F) with weighted scoring for required vs recommended fields
 - **Territory Validation**: Precise HNE boundary filtering across 65 towns in Quinapoxet and Soaring Eagle districts
 - **Comprehensive Debug Logging**: Source-specific debug files distinguish Key Three vs scraped data parsing with full audit trails
@@ -90,10 +90,10 @@ beascout/
 ├── src/                          # All production code
 │   ├── core/                     # Core system components
 │   │   └── unit_identifier.py    # Unit normalization & debug logging
-│   ├── mapping/                  # Geographic data
-│   │   └── district_mapping.py   # HNE territory definitions (65 towns)
+│   ├── mapping/                  # Geographic data (SINGLE SOURCE OF TRUTH)
+│   │   └── district_mapping.py   # HNE territory definitions & town mappings
 │   ├── parsing/                  # Data parsing engines
-│   │   ├── fixed_scraped_data_parser.py  # Scraped HTML processor
+│   │   ├── fixed_scraped_data_parser.py  # Scraped HTML with position-first parsing
 │   │   └── key_three_parser.py   # Excel spreadsheet processor
 │   ├── scraping/                 # Data collection
 │   │   ├── browser_scraper.py    # Playwright automation
@@ -124,7 +124,15 @@ beascout/
 │   │   ├── reports/              # Excel district reports
 │   │   └── emails/               # Generated Key Three emails
 │   └── feedback/                 # Analysis & documentation
-└── archive/                      # Deprecated code (kept for reference)
+├── tests/                        # Testing & validation
+│   ├── reference/                # Reference files for regression testing
+│   │   ├── units/                # Unit extraction reference logs  
+│   │   ├── key_three/            # Key Three processing reference files
+│   │   └── towns/                # Town extraction test cases
+│   └── verify_all.py             # Comprehensive validation runner
+└── archive/                      # Deprecated code (archived for reference)
+    ├── html_extractor.py         # Archived: had redundant town mappings
+    └── process_full_dataset.py   # Archived: superseded by v2
 ```
 
 ## Debug and Monitoring
@@ -149,16 +157,19 @@ sort -u data/debug/unit_identifier_debug_scraped_*.log | wc -l
 python scripts/search_strings.py search_terms.txt data/debug/*.log
 ```
 
-### Village Processing Verification
-Verify village units are correctly identified:
+### Reference Testing and Regression Validation
+Compare current processing results against known good references:
 ```bash
-# Check village extraction from debug logs
-grep -i 'fiskdale\|whitinsville\|jefferson' data/debug/unit_identifier_debug_*.log
+# Set up verification aliases (add to ~/.zshrc)
+alias verify_units='f() { code --diff ~/Repos/beascout/tests/reference/units/unit_identifier_debug_scraped_reference_u.log "$1"; }; f'
+alias verify_units_discards='f() { code --diff ~/Repos/beascout/tests/reference/units/discarded_unit_identifier_debug_scraped_reference_u.log "$1"; }; f'
 
-# Should show units like:
-# unit_town: 'Fiskdale', chartered_org: 'Fiskdale-American Legion Post 109'
-# unit_town: 'Whitinsville', chartered_org: 'Whitinsville - Village Congregational Church'  
-# unit_town: 'Jefferson', chartered_org: 'Jefferson - Saint Marys Church'
+# Run regression testing after processing
+python src/scripts/process_full_dataset_v2.py data/scraped/20250830_123456/
+verify_units data/debug/unit_identifier_debug_scraped_20250830_164237_u.log
+
+# Should show no differences if processing is consistent
+# Any differences indicate potential regressions or improvements
 ```
 
 ### Required Input Files
@@ -269,16 +280,17 @@ beascout/
 ├── ARCHITECTURE.md                            # Technical system design
 ├── PRODUCTION_STATUS.md                       # Current deployment status
 └── README.md                                  # This overview
-```
+
 
 ## Project Documentation
 
-Review and process the following markdown files in the listed order:
+Review and process the following markdown files **in their entirety** in the listed order:
 1. **[CLAUDE.md](CLAUDE.md)**: AI development context and technical constraints
-2. **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical system design and component architecture
-3. **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Business requirements, success metrics, operational workflows
-4. **[PRODUCTION_STATUS.md](PRODUCTION_STATUS.md)**: Current deployment status and achievements
-5. **[COLLABORATION_LOG.md](COLLABORATION_LOG.md)**: AI-human collaboration insights and lessons learned
+1. **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Current session state and context preservation
+1. **[COLLABORATION_LOG.md](COLLABORATION_LOG.md)**: AI-human collaboration insights and lessons learned
+1. **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Business requirements, success metrics, operational workflows
+1. **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical system design and component architecture
+1. **[PRODUCTION_STATUS.md](PRODUCTION_STATUS.md)**: Current deployment status and achievements
 
 ## Data Sources
 
