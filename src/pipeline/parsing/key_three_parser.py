@@ -8,13 +8,15 @@ Creates definitive 169-unit registry as source of truth
 import pandas as pd
 import re
 import sys
+import json
 from pathlib import Path
+from datetime import datetime
 
 # Add project root to path for imports
-sys.path.append(str(Path(__file__).parent.parent.parent))
+sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
-from src.mapping.district_mapping import get_district_for_town
-from src.core.unit_identifier import UnitIdentifierNormalizer
+from src.config.district_mapping import get_district_for_town
+from src.pipeline.core.unit_identifier import UnitIdentifierNormalizer
 
 class KeyThreeParser:
     """
@@ -159,7 +161,7 @@ class KeyThreeParser:
     
     def _is_valid_town(self, town_candidate: str) -> bool:
         """Check if candidate is a valid HNE Council town"""
-        from src.mapping.district_mapping import get_district_for_town
+        from src.config.district_mapping import get_district_for_town
         return get_district_for_town(town_candidate) != "Unknown"
     
     
@@ -199,6 +201,40 @@ class KeyThreeParser:
             'original_unitcommorgname': orgname
         }
     
+    def get_key_three_members_for_unit(self, org_name: str) -> list:
+        """
+        Get Key Three member details for a specific unit
+        Returns list of up to 3 members with contact information
+        """
+        if self.raw_data is None:
+            return []
+        
+        # Filter records for this specific unit
+        unit_records = self.raw_data[self.raw_data['unitcommorgname'] == org_name]
+        
+        members = []
+        for _, record in unit_records.head(3).iterrows():  # Get first 3 members
+            member_info = {
+                'fullname': str(record.get('fullname', 'Unknown')).strip(),
+                'email': str(record.get('email', 'None')).strip(),
+                'phone': str(record.get('phone', 'None')).strip(),
+                'position': str(record.get('position', 'None')).strip(),
+                'status': str(record.get('status', 'None')).strip()
+            }
+            members.append(member_info)
+        
+        # Pad with "None" entries if fewer than 3 members
+        while len(members) < 3:
+            members.append({
+                'fullname': 'None',
+                'email': 'None', 
+                'phone': 'None',
+                'position': 'None',
+                'status': 'None'
+            })
+        
+        return members
+
     def parse_all_units(self) -> list:
         """
         Parse all unique units from Key Three database
@@ -221,13 +257,17 @@ class KeyThreeParser:
             unit_info = self.extract_unit_info_from_unitcommorgname(org_name)
             
             if unit_info and unit_info.get('unit_town'):
-                # Create standardized unit record using normalizer (generates debug log)
+                # Get Key Three member details for this unit
+                members = self.get_key_three_members_for_unit(org_name)
+                
+                # Create standardized unit record using normalizer (generates debug log with members)
                 standardized_record = UnitIdentifierNormalizer.create_unit_record(
                     unit_info['unit_type'],
                     unit_info['unit_number'], 
                     unit_info['unit_town'],
                     unit_info.get('chartered_org', ''),
-                    original_unitcommorgname=unit_info.get('original_unitcommorgname', '')
+                    original_unitcommorgname=unit_info.get('original_unitcommorgname', ''),
+                    key_three_members=members
                 )
                 
                 self.parsed_units.append(standardized_record)
@@ -289,11 +329,24 @@ class KeyThreeParser:
         }
 
 def main():
-    """Test the Key Three parser"""
+    """Test the Key Three parser and save enhanced data"""
     parser = KeyThreeParser('data/input/Key 3 08-22-2025.xlsx')
     
     # Parse all units
     units = parser.parse_all_units()
+    
+    # Save enhanced unit data with member information for validation pipeline
+    enhanced_data = {
+        "total_units": len(units),
+        "parsing_timestamp": datetime.now().isoformat(),
+        "key_three_units": units
+    }
+    
+    output_file = "data/raw/key_three_enhanced_with_members.json"
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(enhanced_data, f, indent=2, ensure_ascii=False)
+    
+    print(f"\n💾 Enhanced Key Three data saved: {output_file}")
     
     # Validate parsing
     validation = parser.validate_parsing()

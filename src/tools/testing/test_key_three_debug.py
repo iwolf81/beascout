@@ -8,9 +8,9 @@ import sys
 from pathlib import Path
 
 # Add project root to path
-sys.path.append(str(Path(__file__).parent.parent))
+sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
-from src.parsing.key_three_parser import KeyThreeParser
+from src.pipeline.parsing.key_three_parser import KeyThreeParser
 
 def test_key_three_parsing():
     """Test Key Three parsing with debug logging"""

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Fixed Scraped Data Parser
-Fixes town extraction issues identified in user feedback
-Implements proper address parsing and HNE territory filtering
+Scraped Data Parser
+Processes scraped HTML data with proper address parsing and HNE territory filtering
+Implements sophisticated town extraction and data normalization
 """
 
 import json
@@ -12,12 +12,12 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional, Set
 
 # Add project root to path for imports
-sys.path.append(str(Path(__file__).parent.parent.parent))
+sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
-from src.mapping.district_mapping import get_district_for_town
-from src.core.unit_identifier import UnitIdentifierNormalizer
+from src.config.district_mapping import get_district_for_town
+from src.pipeline.core.unit_identifier import UnitIdentifierNormalizer
 
-class FixedScrapedDataParser:
+class ScrapedDataParser:
     """
     Fixed parser addressing critical town extraction issues:
     1. Proper priority: unit-address -> unit-name -> unit-description -> chartered org

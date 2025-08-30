@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Process Full Dataset - Current Version
-Process scraped HTML files using current FixedScrapedDataParser pipeline to generate debug logs
+Process scraped HTML files using current ScrapedDataParser pipeline to generate debug logs
 """
 
 import os
@@ -11,10 +11,10 @@ from pathlib import Path
 from datetime import datetime
 
 # Add project root to path
-sys.path.append(str(Path(__file__).parent.parent.parent))
+sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
-from src.parsing.fixed_scraped_data_parser import FixedScrapedDataParser
-from src.analysis.quality_scorer import UnitQualityScorer
+from src.pipeline.parsing.scraped_data_parser import ScrapedDataParser
+from src.pipeline.analysis.quality_scorer import UnitQualityScorer
 
 def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_code: str) -> str:
     """
@@ -47,12 +47,12 @@ def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_c
 
 def process_with_current_pipeline(json_file: str, zip_code: str) -> str:
     """
-    Process raw JSON through current FixedScrapedDataParser pipeline
+    Process raw JSON through current ScrapedDataParser pipeline
     This will generate debug logs via UnitIdentifierNormalizer.create_unit_record()
     """
     try:
-        # Use FixedScrapedDataParser to create standardized records with debug logging
-        parser = FixedScrapedDataParser()
+        # Use ScrapedDataParser to create standardized records with debug logging
+        parser = ScrapedDataParser()
         units = parser.parse_json_file(json_file)
 
         print(f"    Processed {len(units)} units through current pipeline")

@@ -11,9 +11,9 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 
 # Add project root to path for imports
-sys.path.append(str(Path(__file__).parent.parent.parent))
+sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
-from src.mapping.district_mapping import get_district_for_town
+from src.config.district_mapping import get_district_for_town
 
 class UnitIdentifierNormalizer:
     """
@@ -137,7 +137,7 @@ class UnitIdentifierNormalizer:
             return ""
 
         # Import centralized town aliases
-        from src.mapping.district_mapping import TOWN_ALIASES
+        from src.config.district_mapping import TOWN_ALIASES
         
         town = town.strip()
 
@@ -170,7 +170,7 @@ class UnitIdentifierNormalizer:
         
         # Use centralized HNE towns mapping
         try:
-            from src.mapping.district_mapping import TOWN_TO_DISTRICT
+            from src.config.district_mapping import TOWN_TO_DISTRICT
             
             # Get HNE towns from centralized mapping
             hne_towns = list(TOWN_TO_DISTRICT.keys())
@@ -267,6 +267,16 @@ class UnitIdentifierNormalizer:
             f.write(f"  unit_number: '{record['unit_number']}', ")
             f.write(f"  unit_town: '{record['unit_town']}', ")
             f.write(f"  chartered_org: '{record['chartered_organization']}'\n")
+            
+            # Add Key Three member details if available
+            if 'key_three_members' in additional_fields:
+                members = additional_fields['key_three_members']
+                for i, member in enumerate(members, 1):
+                    f.write(f"    Member {i}: {member['fullname']} | ")
+                    f.write(f"Email: {member['email']} | ")
+                    f.write(f"Phone: {member['phone']} | ")
+                    f.write(f"Position: {member['position']} | ")
+                    f.write(f"Status: {member['status']}\n")
 
         return record
 

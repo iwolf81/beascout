@@ -183,36 +183,43 @@ Place these files in `data/input/` before running the pipeline:
 #### Option 1: Full Pipeline from Fresh Scraping
 ```bash
 # Step 1: Fresh Data Scraping (30-45 minutes for all 71 zip codes)
-python src/scraping/browser_scraper.py --all-zipcodes --output data/scraped/$(date +%Y%m%d_%H%M%S)/
+python src/pipeline/scraping/browser_scraper.py --all-zipcodes --output data/scraped/$(date +%Y%m%d_%H%M%S)/
 
 # Step 2: Process Scraped Data Through Complete Pipeline
-python src/scripts/process_full_dataset_v2.py data/scraped/YYYYMMDD_HHMMSS/
+python src/tools/utilities/process_full_dataset_v2.py data/scraped/YYYYMMDD_HHMMSS/
 
-# Step 3: Generate District Reports  
-python src/scripts/generate_district_reports.py data/raw/all_units_comprehensive_scored.json --output-dir data/output/reports/
+# Step 3: Generate Three-Way Validation
+python src/pipeline/validation/three_way_validator.py
 
-# Step 4: Generate Key Three Emails (optional)
-python src/scripts/generate_key_three_emails.py data/raw/all_units_comprehensive_scored.json
+# Step 4: Generate Commissioner Report  
+python src/pipeline/reporting/generate_commissioner_report.py
+
+# Step 5: Generate District Reports (optional)  
+python src/pipeline/reporting/generate_district_reports.py data/raw/all_units_comprehensive_scored.json --output-dir data/output/reports/
+
+# Step 6: Generate Key Three Emails (optional)
+python src/pipeline/reporting/generate_key_three_emails.py data/raw/all_units_comprehensive_scored.json
 ```
 
 #### Option 2: Process Existing Scraped Data
 ```bash
 # Use existing scraped HTML files
-python src/scripts/process_full_dataset_v2.py data/scraped/20250824_220843/
-python src/scripts/generate_district_reports.py data/raw/all_units_comprehensive_scored.json --output-dir data/output/reports/
+python src/tools/utilities/process_full_dataset_v2.py data/scraped/20250824_220843/
+python src/pipeline/validation/three_way_validator.py
+python src/pipeline/reporting/generate_commissioner_report.py
 ```
 
 #### Option 3: Test Key Three Parsing Only
 ```bash
 # Generate debug logs for Key Three parsing verification
-python scripts/test_key_three_debug.py
+python src/tools/testing/test_key_three_debug.py
 ```
 
 # Stage E: Three-Way Cross-Validation
-python src/validation/three_way_validator.py  # BOTH/KEY_THREE_ONLY/WEB_ONLY classification
+python src/pipeline/validation/three_way_validator.py  # BOTH/KEY_THREE_ONLY/WEB_ONLY classification
 
 # Stage F: Professional Reporting
-python scripts/generate_commissioner_report.py  # Excel reports with action flags
+python src/pipeline/reporting/generate_commissioner_report.py  # Excel reports with action flags
 ```
 
 ## Quality Scoring System

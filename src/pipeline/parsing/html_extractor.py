@@ -9,13 +9,13 @@ import json
 def get_district_for_town(town):
     """Assign district based on town name using centralized mapping"""
     try:
-        from src.mapping.district_mapping import TOWN_TO_DISTRICT
+        from src.config.district_mapping import TOWN_TO_DISTRICT
     except ImportError:
         # Fallback for when called from different contexts
         import sys
         from pathlib import Path
-        sys.path.append(str(Path(__file__).parent.parent.parent))
-        from src.mapping.district_mapping import TOWN_TO_DISTRICT
+        sys.path.append(str(Path(__file__).parent.parent.parent.parent))
+        from src.config.district_mapping import TOWN_TO_DISTRICT
     
     return TOWN_TO_DISTRICT.get(town, "Unknown")
 

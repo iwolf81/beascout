@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 # Add project root to path for imports
-sys.path.append(str(Path(__file__).parent.parent.parent))
+sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
 class ValidationStatus(Enum):
     """Unit validation status categories"""
@@ -45,24 +45,24 @@ class ThreeWayValidator:
         self.scraped_units = []
         self.validation_results = []
         
-    def load_key_three_data(self, file_path: str = 'data/raw/key_three_foundation_units.json') -> bool:
+    def load_key_three_data(self, file_path: str = 'data/raw/key_three_enhanced_with_members.json') -> bool:
         """Load Key Three foundation data (169 units)"""
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-                self.key_three_units = data.get('units', [])
-                print(f"📋 Loaded {len(self.key_three_units)} Key Three units")
+                self.key_three_units = data.get('key_three_units', [])
+                print(f"📋 Loaded {len(self.key_three_units)} Key Three units with member data")
                 return True
         except Exception as e:
             print(f"❌ Failed to load Key Three data: {e}")
             return False
     
-    def load_scraped_data(self, file_path: str = 'data/raw/scraped_units_comprehensive.json') -> bool:
-        """Load comprehensive scraped data (163 units)"""
+    def load_scraped_data(self, file_path: str = 'data/raw/all_units_comprehensive_scored.json') -> bool:
+        """Load comprehensive scraped data (165 units)"""
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-                self.scraped_units = data.get('scraped_units', [])
+                self.scraped_units = data.get('units_with_scores', [])
                 print(f"🌐 Loaded {len(self.scraped_units)} scraped units")
                 return True
         except Exception as e:
@@ -74,6 +74,9 @@ class ThreeWayValidator:
         Perform comprehensive three-way validation
         Returns list of validation results for all units
         """
+        from datetime import datetime
+        import os
+        
         print(f"\n🔍 Starting Three-Way Validation")
         print(f"   Key Three units: {len(self.key_three_units)}")
         print(f"   Scraped units: {len(self.scraped_units)}")
@@ -85,6 +88,57 @@ class ThreeWayValidator:
         # Create lookup dictionaries for detailed data
         key_three_dict = {unit['unit_key']: unit for unit in self.key_three_units}
         scraped_dict = {unit['unit_key']: unit for unit in self.scraped_units}
+        
+        # Create debug log file
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        debug_file = f'data/debug/cross_reference_validation_debug_{timestamp}.log'
+        os.makedirs('data/debug', exist_ok=True)
+        
+        with open(debug_file, 'w', encoding='utf-8') as f:
+            f.write("=== CROSS-REFERENCE VALIDATION DEBUG LOG ===\n\n")
+            f.write(f"Key Three units loaded: {len(self.key_three_units)}\n")
+            f.write(f"Scraped units loaded: {len(self.scraped_units)}\n\n")
+            
+            # Log all Key Three unit keys
+            f.write("KEY THREE UNIT KEYS:\n")
+            for unit_key in sorted(key_three_keys):
+                f.write(f"  {unit_key}\n")
+            
+            f.write(f"\nSCRAPED UNIT KEYS:\n")
+            for unit_key in sorted(scraped_keys):
+                f.write(f"  {unit_key}\n")
+            
+            # Log units only in Key Three
+            key_three_only = key_three_keys - scraped_keys
+            f.write(f"\nUNITS ONLY IN KEY THREE ({len(key_three_only)}):\n")
+            for unit_key in sorted(key_three_only):
+                f.write(f"  {unit_key}\n")
+            
+            # Log units only in scraped data
+            scraped_only = scraped_keys - key_three_keys
+            f.write(f"\nUNITS ONLY IN SCRAPED DATA ({len(scraped_only)}):\n")
+            for unit_key in sorted(scraped_only):
+                f.write(f"  {unit_key}\n")
+            
+            # Log matching units
+            matches = key_three_keys & scraped_keys
+            f.write(f"\nMATCHING UNITS ({len(matches)}):\n")
+            for unit_key in sorted(matches):
+                f.write(f"  {unit_key}\n")
+            
+            f.write(f"\nCROSS-REFERENCE SUMMARY:\n")
+            f.write(f"  Expected Key Three: 169 units\n")
+            f.write(f"  Expected Scraped: 165 units\n")
+            f.write(f"  Expected Matches: 165 units\n")
+            f.write(f"  Expected Key Three Only: 4 units\n")
+            f.write(f"  Expected Scraped Only: 0 units\n\n")
+            f.write(f"  Actual Key Three: {len(key_three_keys)} units\n")
+            f.write(f"  Actual Scraped: {len(scraped_keys)} units\n")
+            f.write(f"  Actual Matches: {len(matches)} units\n")
+            f.write(f"  Actual Key Three Only: {len(key_three_only)} units\n")
+            f.write(f"  Actual Scraped Only: {len(scraped_only)} units\n")
+        
+        print(f"📋 Cross-reference debug log saved: {debug_file}")
         
         validation_results = []
         
@@ -109,11 +163,15 @@ class ThreeWayValidator:
                 # This shouldn't happen but included for completeness
                 continue
             
-            # Create validation result
+            # Create validation result with enhanced Key Three data
+            key_three_data = key_three_dict.get(unit_key)
+            if key_three_data:
+                key_three_data = self._enhance_key_three_data_with_members(key_three_data)
+            
             result = ValidationResult(
                 unit_key=unit_key,
                 status=status,
-                key_three_data=key_three_dict.get(unit_key),
+                key_three_data=key_three_data,
                 scraped_data=scraped_dict.get(unit_key),
                 issues=[]
             )
@@ -125,6 +183,46 @@ class ThreeWayValidator:
         
         self.validation_results = validation_results
         return validation_results
+    
+    def _enhance_key_three_data_with_members(self, key_three_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Enhance Key Three data with formatted member information for reporting
+        """
+        enhanced_data = key_three_data.copy()
+        members = key_three_data.get('key_three_members', [])
+        
+        # Extract specific roles from members for commissioner report
+        for member in members:
+            position = member.get('position', '').lower()
+            
+            if 'committee chair' in position:
+                enhanced_data['committee_chair_name'] = member.get('fullname', 'N/A')
+                enhanced_data['committee_chair_email'] = member.get('email', 'N/A')
+                enhanced_data['committee_chair_phone'] = member.get('phone', 'N/A')
+            elif 'cubmaster' in position or 'scoutmaster' in position:
+                enhanced_data['unit_leader_name'] = member.get('fullname', 'N/A')
+                enhanced_data['unit_leader_email'] = member.get('email', 'N/A')
+                enhanced_data['unit_leader_phone'] = member.get('phone', 'N/A')
+            elif 'chartered org' in position:
+                enhanced_data['chartered_org_rep_name'] = member.get('fullname', 'N/A')
+                enhanced_data['chartered_org_rep_email'] = member.get('email', 'N/A')
+                enhanced_data['chartered_org_rep_phone'] = member.get('phone', 'N/A')
+        
+        # Map chartered_organization to expected field name for commissioner report  
+        enhanced_data['chartered_org_name'] = enhanced_data.get('chartered_organization', 'Unknown')
+        
+        # Ensure all expected fields exist for the commissioner report
+        if 'committee_chair_name' not in enhanced_data:
+            enhanced_data['committee_chair_name'] = 'N/A'
+            enhanced_data['committee_chair_email'] = 'N/A'
+            enhanced_data['committee_chair_phone'] = 'N/A'
+            
+        if 'unit_leader_name' not in enhanced_data:
+            enhanced_data['unit_leader_name'] = 'N/A'
+            enhanced_data['unit_leader_email'] = 'N/A'
+            enhanced_data['unit_leader_phone'] = 'N/A'
+        
+        return enhanced_data
     
     def _analyze_unit_issues(self, result: ValidationResult):
         """Analyze specific issues for a unit validation result"""
