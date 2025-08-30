@@ -39,12 +39,12 @@ def get_hne_towns_and_zipcodes():
         "Groton": ["01450"],
         "Harvard": ["01451"],
         "Holden": ["01520"],
+        "Jefferson": ["01522"],  # Village within Holden
         "Lancaster": ["01523"],
         "Leicester": ["01524"],
         "Leominster": ["01453"],
         "Littleton": ["01460"],
         "Lunenburg": ["01462"],
-        "Millbury": ["01527"],
         "Paxton": ["01612"],
         "Pepperell": ["01463"],
         "Princeton": ["01541"],
@@ -65,10 +65,12 @@ def get_hne_towns_and_zipcodes():
         "Douglas": ["01516"], 
         "Dudley": ["01571"],
         "East Brookfield": ["01515"],
+        "Fiskdale": ["01518"],  # Village within Sturbridge
         "Gardner": ["01440"],
         "Grafton": ["01519"],
         "Hardwick": ["01037"],
         "Hubbardston": ["01452"],
+        "Millbury": ["01527"],
         "New Braintree": ["01531"],
         "North Brookfield": ["01535"],
         "Northbridge": ["01534"],
@@ -81,11 +83,6 @@ def get_hne_towns_and_zipcodes():
         "Southbridge": ["01550"],
         "Spencer": ["01562"],
         "Sturbridge": ["01566"],
-        
-        # Villages with separate ZIP codes
-        "Fiskdale": ["01518"],  # Village within Sturbridge
-        "Jefferson": ["01522"],  # Village within Holden
-        "Whitinsville": ["01588"],  # Village within Northbridge
         "Sutton": ["01590"],
         "Templeton": ["01468"],
         "Upton": ["01568"],
@@ -94,6 +91,7 @@ def get_hne_towns_and_zipcodes():
         "Webster": ["01570"],
         "West Brookfield": ["01585"],
         "Westminster": ["01473"],
+        "Whitinsville": ["01588"],  # Village within Northbridge
         "Winchendon": ["01475"]
     }
     

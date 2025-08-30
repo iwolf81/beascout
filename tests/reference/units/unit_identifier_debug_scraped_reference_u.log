@@ -108,6 +108,7 @@
   unit_type: 'Troop',   unit_number: '0123',   unit_town: 'Shirley',   chartered_org: 'Shirley-Rod & Gun Club Inc'
   unit_type: 'Troop',   unit_number: '0125',   unit_town: 'Leicester',   chartered_org: 'Leicester - St Aloysius/ St. Jude'
   unit_type: 'Troop',   unit_number: '0131',   unit_town: 'Sutton',   chartered_org: 'Sutton - St Marks Roman Catholic Church'
+  unit_type: 'Troop',   unit_number: '0132',   unit_town: 'Upton',   chartered_org: 'Upton - St. Gabriel the Archangel Parish'
   unit_type: 'Troop',   unit_number: '0134',   unit_town: 'Douglas',   chartered_org: 'Douglas - Fire Fighters Association'
   unit_type: 'Troop',   unit_number: '0141',   unit_town: 'Rutland',   chartered_org: 'Rutland - Fire Brigade'
   unit_type: 'Troop',   unit_number: '0142',   unit_town: 'Warren',   chartered_org: 'Warren - Firemans Association'

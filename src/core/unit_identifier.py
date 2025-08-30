@@ -145,11 +145,7 @@ class UnitIdentifierNormalizer:
             "N Brookfield": "North Brookfield",
             "W Boylston": "West Boylston",
             
-            # Additional common variations
-            "East Brookfield": "East Brookfield",  # Already correct
-            "West Brookfield": "West Brookfield",  # Already correct
-            "North Brookfield": "North Brookfield", # Already correct
-            "West Boylston": "West Boylston",      # Already correct
+            # No-op mappings removed - only necessary normalizations kept
             
             # Villages with separate ZIP codes - NO MAPPING to parent towns
             # These are treated as independent HNE towns for unit correlation:
@@ -186,22 +182,12 @@ class UnitIdentifierNormalizer:
         
         import re
         
-        # Try to get HNE towns list
+        # Use centralized HNE towns mapping
         try:
-            from src.mapping.district_mapping import get_district_for_town
+            from src.mapping.district_mapping import TOWN_TO_DISTRICT
             
-            # Define HNE towns (from district mapping)
-            hne_towns = [
-                "Ashby", "Townsend", "Pepperell", "Groton", "Ayer", "Littleton", "Acton", "Boxborough",
-                "Fitchburg", "Lunenburg", "Shirley", "Harvard", "Bolton", "Berlin", "Lancaster", "Leominster",
-                "Sterling", "Clinton", "West Boylston", "Boylston", "Shrewsbury", "Worcester", 
-                "Holden", "Rutland", "Princeton", "Paxton", "Leicester", "Auburn", "Millbury",
-                "Royalston", "Winchendon", "Ashburnham", "Gardner", "Templeton", "Phillipston", "Athol", "Orange",
-                "Westminster", "Hubbardston", "Barre", "Petersham", "Hardwick", "New Braintree",
-                "Oakham", "Ware", "West Brookfield", "East Brookfield", "North Brookfield", "Brookfield", "Spencer",
-                "Warren", "Sturbridge", "Charlton", "Oxford", "Dudley", "Webster", "Douglas", "Sutton", "Grafton", 
-                "Upton", "Northbridge", "Southbridge", "Jefferson", "Whitinsville", "Fiskdale"
-            ]
+            # Get HNE towns from centralized mapping
+            hne_towns = list(TOWN_TO_DISTRICT.keys())
             
             org_lower = chartered_org.lower()
             

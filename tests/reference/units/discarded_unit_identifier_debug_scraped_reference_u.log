@@ -119,7 +119,6 @@
   unit_type: 'Troop',   unit_number: '0127',   unit_town: 'Lincoln',   chartered_org: 'Joseph Warren Soley Lodge',   reason: 'Invalid town: Lincoln not in HNE territory'
   unit_type: 'Troop',   unit_number: '0130',   unit_town: 'Maynard',   chartered_org: 'Maynard Rod and Gun Club Inc.',   reason: 'Invalid town: Maynard not in HNE territory'
   unit_type: 'Troop',   unit_number: '0132',   unit_town: 'Concord',   chartered_org: 'Concord Scout House, Inc.',   reason: 'Invalid town: Concord not in HNE territory'
-  unit_type: 'Troop',   unit_number: '0132',   unit_town: 'Mendon',   chartered_org: 'Upton - St. Gabriel the Archangel Parish',   reason: 'Invalid town: Mendon not in HNE territory'
   unit_type: 'Troop',   unit_number: '0135',   unit_town: 'Unknown',   chartered_org: 'Friends of Carlisle Scouting',   reason: 'Could not extract town'
   unit_type: 'Troop',   unit_number: '0159',   unit_town: 'Westford',   chartered_org: 'First Parish Church United',   reason: 'Invalid town: Westford not in HNE territory'
   unit_type: 'Troop',   unit_number: '0164',   unit_town: 'Rivers',   chartered_org: 'Divine Mercy Parish',   reason: 'Invalid town: Rivers not in HNE territory'

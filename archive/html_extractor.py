@@ -7,17 +7,28 @@ from bs4 import BeautifulSoup
 import json
 
 def get_district_for_town(town):
-    """Assign district based on town name using centralized mapping"""
-    try:
-        from src.mapping.district_mapping import TOWN_TO_DISTRICT
-    except ImportError:
-        # Fallback for when called from different contexts
-        import sys
-        from pathlib import Path
-        sys.path.append(str(Path(__file__).parent.parent.parent))
-        from src.mapping.district_mapping import TOWN_TO_DISTRICT
+    """Assign district based on town name"""
+    quinapoxet_towns = [
+        "Ashby", "Townsend", "Pepperell", "Groton", "Ayer", "Littleton", "Acton", "Boxborough",
+        "Fitchburg", "Lunenburg", "Shirley", "Harvard", "Bolton", "Berlin", "Lancaster", "Leominster",
+        "Sterling", "Clinton", "West Boylston", "Boylston", "Shrewsbury", "Worcester", 
+        "Holden", "Rutland", "Princeton", "Paxton", "Leicester", "Auburn", "Millbury"
+    ]
     
-    return TOWN_TO_DISTRICT.get(town, "Unknown")
+    soaring_eagle_towns = [
+        "Royalston", "Winchendon", "Ashburnham", "Gardner", "Templeton", "Phillipston", "Athol", "Orange",
+        "Westminster", "Hubbardston", "Barre", "Petersham", "Hardwick", "New Braintree",
+        "Oakham", "Ware", "West Brookfield", "East Brookfield", "North Brookfield", "Brookfield", "Spencer",
+        "Warren", "Sturbridge", "Charlton", "Oxford", "Dudley", "Webster", "Douglas", "Sutton", "Grafton", 
+        "Upton", "Northbridge", "Southbridge"
+    ]
+    
+    if town in quinapoxet_towns:
+        return "Quinapoxet"
+    elif town in soaring_eagle_towns:
+        return "Soaring Eagle"
+    else:
+        return "Unknown"
 
 def format_meeting_location(raw_location):
     """Format meeting location with proper comma separators"""
@@ -406,31 +417,15 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
                     formatted_location = format_meeting_location(raw_location)
                     unit_data['meeting_location'] = formatted_location
         
-        # Extract town name with proper precedence order - STOP once a town is found
+        # Extract town name - prioritize meeting location address over organization name
         if not unit_data.get('unit_town'):
-            # Method 1: Extract from unit-address field (meeting_location) - highest priority
+            # Method 1: Extract from meeting location address (most reliable)
             if unit_data.get('meeting_location'):
                 town_from_address = extract_town_from_address(unit_data['meeting_location'])
                 if town_from_address:
                     unit_data['unit_town'] = town_from_address
             
-            # Method 2: Extract from unit-name field (primary_identifier) - stop processing if found
-            if not unit_data.get('unit_town') and unit_data.get('primary_identifier'):
-                town_from_name = extract_town_from_org(unit_data['primary_identifier'])
-                if town_from_name:
-                    unit_data['unit_town'] = town_from_name
-            
-            # Method 3: Extract from unit-description field - stop processing if found  
-            if not unit_data.get('unit_town') and unit_data.get('description'):
-                # Filter out contact information patterns to avoid extracting person names as towns
-                description_text = unit_data['description']
-                # Skip description if it primarily contains contact information  
-                if not re.search(r'Contact:\s*[A-Za-z\s]+\s*Email:', description_text, re.IGNORECASE):
-                    town_from_description = extract_town_from_org(description_text)
-                    if town_from_description:
-                        unit_data['unit_town'] = town_from_description
-            
-            # Method 4: Fallback to chartered organization extraction (lowest priority)
+            # Method 2: Fallback to organization name extraction (less reliable)
             if not unit_data.get('unit_town') and unit_data.get('chartered_organization'):
                 town_from_org = extract_town_from_org(unit_data['chartered_organization'])
                 if town_from_org:
@@ -591,10 +586,10 @@ def main():
     import sys
     
     if len(sys.argv) < 2:
-        print("Usage: python src/parsing/html_extractor.py <html_file> [additional_html_files...]")
+        print("Usage: python prototype/extract_all_units.py <html_file> [additional_html_files...]")
         print("Examples:")
-        print("  python src/parsing/html_extractor.py data/scraped/20250824_220843/beascout_01720.html")
-        print("  python src/parsing/html_extractor.py data/scraped/20250824_220843/beascout_01720.html data/scraped/20250824_220843/joinexploring_01720.html")
+        print("  python prototype/extract_all_units.py data/raw/debug_page_01720.html")
+        print("  python prototype/extract_all_units.py data/raw/beascout_01720.html data/raw/joinexploring_01720.html")
         sys.exit(1)
     
     html_files = sys.argv[1:]

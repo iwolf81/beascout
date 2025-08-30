@@ -54,14 +54,14 @@ class EnhancedValidator:
         """Load town name aliases and variations"""
         return {
             # Villages and neighborhoods that map to main towns
-            "fiskdale": "sturbridge", ## @claude verify this is correct
-            "whitinsville": "northbridge", 
-            "east brookfield": "brookfield",
-            "west brookfield": "brookfield",
+            "fiskdale": "sturbridge", ## @claude is this is correct as the village of jefferson maps to jefferson further below?
+            "whitinsville": "northbridge",## @claude is this is correct as the village of jefferson maps to jefferson further below?
+            "east brookfield": "brookfield", ## @claude this is incorrect, brookfield is a separate town
+            "west brookfield": "brookfield", ## @claude this is incorrect, brookfield is a separate town
             "west boylston": "west boylston",  # Normalize spelling
             "west boyston": "west boylston",   # Common misspelling
             
-            # Common alternate spellings
+            # Common alternate spellings ## @claude these mapping seem unnecessary
             "gardner": "gardner",
             "leominster": "leominster",
             "worcester": "worcester",
@@ -70,7 +70,7 @@ class EnhancedValidator:
             "boylston": "boylston",
             
             # Villages within HNE towns
-            "jefferson": "jefferson",  # Verify this is correct
+            "jefferson": "jefferson",  ## @claude is this is correct as the villages of fiskdate and whitinsville map to their towns futher above
         }
     
     def _load_hne_towns(self) -> Set[str]:

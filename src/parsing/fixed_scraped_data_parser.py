@@ -456,10 +456,39 @@ class FixedScrapedDataParser:
         """Parse town name from general text (name/description fields)"""
         text = text.strip().lower()
         
-        # Look for HNE town names in the text
+        # First check for abbreviated patterns that need normalization
+        # Handle "E Brookfield", "W Boylston", etc. before general matching
+        abbreviated_patterns = [
+            (r'\be\s+brookfield\b', 'East Brookfield'),
+            (r'\bw\s+brookfield\b', 'West Brookfield'),
+            (r'\bn\s+brookfield\b', 'North Brookfield'),
+            (r'\bs\s+brookfield\b', 'South Brookfield'),
+            (r'\bw\s+boylston\b', 'West Boylston'),
+            (r'\be\s+boylston\b', 'East Boylston'),
+        ]
+        
+        import re
+        for pattern, normalized_town in abbreviated_patterns:
+            if re.search(pattern, text):
+                if self._validate_hne_town(normalized_town):
+                    return normalized_town
+        
+        # Look for HNE town names in the text, prioritizing:
+        # 1. First occurrence in text (handles "Acton-Boxborough" → "Acton")
+        # 2. Longer names when positions are equal (handles "East Brookfield" vs "Brookfield")
+        
+        matches = []
         for town in self.hne_towns:
-            if town.lower() in text:
-                return self._normalize_town_name(town)
+            town_lower = town.lower()
+            position = text.find(town_lower)
+            if position != -1:
+                matches.append((position, len(town), town))
+        
+        if matches:
+            # Sort by position first (earliest), then by length descending (longest)
+            matches.sort(key=lambda x: (x[0], -x[1]))
+            best_match = matches[0][2]  # Get the town name
+            return self._normalize_town_name(best_match)
         
         return None
     
