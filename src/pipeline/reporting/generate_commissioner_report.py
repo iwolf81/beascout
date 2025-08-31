@@ -374,8 +374,11 @@ class BeAScoutQualityReportGenerator:
         for col_num, width in enumerate(column_widths, 1):
             ws.column_dimensions[get_column_letter(col_num)].width = width
         
-        # Freeze header rows
-        ws.freeze_panes = 'A10'
+        # Freeze columns A and B (and header rows)
+        ws.freeze_panes = 'C10'
+        
+        # Apply professional formatting to all data cells
+        self._apply_district_sheet_formatting(ws, len(sorted_units), len(headers))
     
     def _populate_unit_row(self, ws, row_num: int, unit: Dict):
         """Populate a single unit row with all required information"""
@@ -485,9 +488,16 @@ class BeAScoutQualityReportGenerator:
             # Handle 0 values explicitly (don't convert to empty string)
             if value is None or value == '':
                 cell.value = ""
+            elif col_num == 4:  # Quality Score column - use numeric format, left-aligned
+                cell.value = float(value) if isinstance(value, (int, float)) else value
             else:
                 cell.value = str(value)
-            cell.alignment = Alignment(wrap_text=True, vertical='top')
+            
+            # Set alignment - left-aligned for Quality Score, default for others
+            if col_num == 4:
+                cell.alignment = Alignment(horizontal='left', wrap_text=True, vertical='top')
+            else:
+                cell.alignment = Alignment(wrap_text=True, vertical='top')
             
             # Color code quality grades including N/A for missing units
             if col_num == 5:  # Quality Grade column
@@ -505,6 +515,28 @@ class BeAScoutQualityReportGenerator:
                 elif grade == 'N/A':
                     cell.fill = PatternFill(start_color="FF0000", end_color="FF0000", fill_type="solid")  # Red for missing units
     
+    def _apply_district_sheet_formatting(self, ws, num_data_rows: int, num_columns: int):
+        """Apply professional formatting to district sheet with borders"""
+        from openpyxl.styles import Border, Side
+        
+        # Define border styles
+        thin_border = Border(
+            left=Side(style='thin'),
+            right=Side(style='thin'), 
+            top=Side(style='thin'),
+            bottom=Side(style='thin')
+        )
+        
+        # Apply formatting to header row (row 9)
+        for col_num in range(1, num_columns + 1):
+            cell = ws.cell(row=9, column=col_num)
+            cell.border = thin_border
+            
+        # Apply formatting to data rows (starting from row 10)
+        for row_num in range(10, 10 + num_data_rows):
+            for col_num in range(1, num_columns + 1):
+                cell = ws.cell(row=row_num, column=col_num)
+                cell.border = thin_border
 
 def main():
     """Generate BeAScout Quality Report organized by districts"""
