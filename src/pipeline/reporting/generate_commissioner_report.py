@@ -482,7 +482,11 @@ class BeAScoutQualityReportGenerator:
         
         for col_num, value in enumerate(row_data, 1):
             cell = ws.cell(row=row_num, column=col_num)
-            cell.value = str(value) if value else ""
+            # Handle 0 values explicitly (don't convert to empty string)
+            if value is None or value == '':
+                cell.value = ""
+            else:
+                cell.value = str(value)
             cell.alignment = Alignment(wrap_text=True, vertical='top')
             
             # Color code quality grades including N/A for missing units
