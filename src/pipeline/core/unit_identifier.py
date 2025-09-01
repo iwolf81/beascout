@@ -24,11 +24,18 @@ class UnitIdentifierNormalizer:
     @classmethod
     def reset_debug_session(cls, source='scraped'):
         """Reset debug session for new execution"""
+        import datetime
+        import os
+        
         if hasattr(cls, '_debug_filename'):
             delattr(cls, '_debug_filename')
         if hasattr(cls, '_discarded_debug_filename'):
             delattr(cls, '_discarded_debug_filename')
         cls._debug_source = source
+        
+        # Create and set shared timestamp for entire session to ensure single log file
+        shared_timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        os.environ['UNIT_DEBUG_TIMESTAMP'] = shared_timestamp
     
     @classmethod
     def log_discarded_unit(cls, unit_type: str, unit_number: str, town: str, 
@@ -39,12 +46,10 @@ class UnitIdentifierNormalizer:
         
         # Use consistent timestamp across entire run
         if not hasattr(cls, '_discarded_debug_filename'):
-            # Always use shared timestamp from environment to ensure single log file per run
+            # Always use shared timestamp from environment (set by reset_debug_session)
             shared_timestamp = os.environ.get('UNIT_DEBUG_TIMESTAMP')
             if not shared_timestamp:
-                # Create shared timestamp once and set it for entire run
-                shared_timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-                os.environ['UNIT_DEBUG_TIMESTAMP'] = shared_timestamp
+                raise RuntimeError("UNIT_DEBUG_TIMESTAMP not set. Call reset_debug_session() first.")
             
             source = getattr(cls, '_debug_source', 'scraped')
             cls._discarded_debug_filename = f'data/debug/discarded_unit_identifier_debug_{source}_{shared_timestamp}.log'
@@ -237,15 +242,13 @@ class UnitIdentifierNormalizer:
 
         # Use a session-based timestamp (created once per execution)
         if not hasattr(UnitIdentifierNormalizer, '_debug_filename'):
-            # Use shared timestamp from environment if available (for subprocess coordination)
+            # Use shared timestamp from environment (set by reset_debug_session)
             import os
             shared_timestamp = os.environ.get('UNIT_DEBUG_TIMESTAMP')
-            if shared_timestamp:
-                timestamp = shared_timestamp
-            else:
-                timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            if not shared_timestamp:
+                raise RuntimeError("UNIT_DEBUG_TIMESTAMP not set. Call reset_debug_session() first.")
             source = getattr(UnitIdentifierNormalizer, '_debug_source', 'scraped')
-            UnitIdentifierNormalizer._debug_filename = f'data/debug/unit_identifier_debug_{source}_{timestamp}.log'
+            UnitIdentifierNormalizer._debug_filename = f'data/debug/unit_identifier_debug_{source}_{shared_timestamp}.log'
 
             # Ensure debug directory exists
             os.makedirs('data/debug', exist_ok=True)

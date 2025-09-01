@@ -112,19 +112,34 @@ def extract_town_from_org(chartered_org):
     if not chartered_org:
         return ""
     
-    # Method 1: Dash-based extraction (most reliable)
+    # Skip if this looks like description text instead of an organization name
+    description_indicators = [
+        'we meet', 'meet on', 'meet at', 'meeting', 'active pack', 'active troop',
+        'accepting children', 'established', 'dedicated to', 'contact:', 'phone:'
+    ]
+    
+    org_lower = chartered_org.lower()
+    if any(indicator in org_lower for indicator in description_indicators):
+        return ""
+    
+    # Method 1: Dash-based extraction (most reliable for organizational names)
     if '-' in chartered_org:
-        town = chartered_org.split('-')[0].strip()
-        # Check if the extracted town is an alias and resolve it
-        try:
-            from src.config.district_mapping import TOWN_ALIASES, TOWN_TO_DISTRICT
-            if town in TOWN_ALIASES:
-                canonical_town = TOWN_ALIASES[town]
-                if canonical_town in TOWN_TO_DISTRICT:
-                    return canonical_town
-        except ImportError:
-            pass
-        return town
+        # Only use dash-based extraction for organizational naming patterns
+        # Skip if this looks like a time range (e.g., "7:00pm-8:30pm") or description text
+        if not re.search(r'\d{1,2}:\d{2}\s*[ap]?m?\s*-\s*\d{1,2}:\d{2}\s*[ap]?m?', chartered_org, re.IGNORECASE):
+            # Also skip if the text is too long to be an organization name (likely description)
+            if len(chartered_org) < 200:  # Reasonable organization name length limit
+                town = chartered_org.split('-')[0].strip()
+                # Check if the extracted town is an alias and resolve it
+                try:
+                    from src.config.district_mapping import TOWN_ALIASES, TOWN_TO_DISTRICT
+                    if town in TOWN_ALIASES:
+                        canonical_town = TOWN_ALIASES[town]
+                        if canonical_town in TOWN_TO_DISTRICT:
+                            return canonical_town
+                except ImportError:
+                    pass
+                return town
     
     # Method 2: Search for HNE town names in organization
     # Use centralized district mapping for HNE towns and aliases
@@ -209,13 +224,19 @@ def filter_hne_units(units):
         # Check if unit town is in HNE territory
         is_hne = False
         
-        if unit_town and unit_town in hne_towns_lower:
-            # Unit town is clearly identified and is in HNE territory
-            is_hne = True
-        elif unit_town:
-            # Unit town is clearly identified but is NOT in HNE territory
-            # Do not override with chartered org matching - trust the extracted location
-            is_hne = False
+        if unit_town:
+            # Use centralized town normalization to resolve aliases
+            from src.pipeline.core.unit_identifier import UnitIdentifierNormalizer
+            normalized_town = UnitIdentifierNormalizer._normalize_town_name(unit_town)
+            normalized_town_lower = normalized_town.lower()
+            
+            if normalized_town_lower in hne_towns_lower:
+                # Unit town (after alias resolution) is in HNE territory
+                is_hne = True
+            else:
+                # Unit town is clearly identified but is NOT in HNE territory
+                # Do not override with chartered org matching - trust the extracted location
+                is_hne = False
         else:
             # No unit town identified - use chartered organization as fallback
             # Sort by length (longest first) to match "West Boylston" before "Boylston"
