@@ -77,9 +77,9 @@ if unit_type == 'Crew':
 ## Files & Current Implementation
 
 ### Core Scripts
-- **`prototype/extract_all_units.py`** - Main extraction script with refined patterns
-- **`prototype/extract_hne_towns.py`** - Council territory analysis (62 towns, 72 zip codes)
-- **`prototype/`** - 8 working prototype files organized for clear development phases
+- **`src/legacy/extract_all_units.py`** - Main extraction script with refined patterns
+- **`src/mapping/district_mapping.py`** - Council territory definitions (65 towns, 2 districts)
+- **`src/scripts/`** - Production pipeline scripts organized for clear execution phases
 
 ### Data Assets
 - **`data/raw/debug_page_01720.html`** - Source HTML (66 units from beascout.scouting.org)
@@ -138,8 +138,8 @@ Raw HTML → JSON extraction → SQLite deduplication → Quality analysis → K
 ```bash
 # Current working state
 cd beascout/
-python prototype/extract_all_units.py  # Generate refined unit data
-python prototype/extract_hne_towns.py  # Council analysis
+python src/tools/utilities/process_full_dataset_v2.py  # Generate refined unit data
+python src/pipeline/reporting/generate_commissioner_report.py  # BeAScout Quality Reports
 
 # Dependencies installed
 pip install beautifulsoup4 lxml --break-system-packages
@@ -495,4 +495,250 @@ All town extraction regressions resolved. System working correctly with proper p
 **Critical Lesson Successfully Applied**: **Fix Data Mappings Before Debugging Transformations** - This approach eliminated the need for complex transformation logic and prevented future data inconsistencies.
 
 ---
-*Final Update 2025-08-30: All critical regressions RESOLVED via data layer consolidation. System now has single source of truth for all mappings with position-first extraction logic. Ready for production scaling across all HNE zip codes.*
+
+### August 31, 2025 Session - Quality Report Enhancements & Architectural Insight
+
+**🎯 MAJOR ARCHITECTURAL DISCOVERY: Quality Scoring Should Happen During HTML Parsing**
+
+**User Insight**: "The quality scoring calculation for a unit should occur only once, after all the HTML data for that unit has been parsed. It should be stored with the unit, readily available for debug logging, if needed, and read during report and email generation."
+
+**Current Problem Identified**: Quality tags (QUALITY_PERSONAL_EMAIL, REQUIRED_MISSING_LOCATION, etc.) are calculated in a separate step instead of being integrated into the HTML parsing pipeline. This breaks the intended architecture and causes the Quinapoxet quality issues to persist.
+
+**✅ Feedback 9 Issues Partially Resolved**:
+
+1. **✅ Zip Code Population**: 
+   - Added town-to-zip mapping from `data/zipcodes/hne_council_zipcodes.json`
+   - Created `load_town_zip_mapping()` and `get_zip_code_for_town()` functions
+   - Zip codes now populate correctly based on unit towns
+
+2. **✅ Key Three Email Linking**: 
+   - Removed problematic full-text hyperlinks (Excel limitation - can't link partial cell content)
+   - Email addresses remain visible for manual copying
+
+3. **✅ Column Freeze Settings**: 
+   - Updated freeze panes from A-B to A-D (Unit Identifier through Zip Code)
+
+4. **✅ Report Column Management Refactor**: 
+   - Created `ReportColumns` class with centralized column definitions
+   - Eliminated hard-coded column numbers throughout codebase
+   - Enhanced maintainability for future column changes
+
+**⚠️ CRITICAL ARCHITECTURAL ISSUE DISCOVERED**:
+
+**Root Cause of Persistent Quality Issues**: The quality scoring logic was updated (enhanced email detection for BSA.TROOP patterns, personal domain detection, improved PO Box logic), but it's not being applied because quality tags are calculated separately from HTML parsing.
+
+**Correct Architecture Should Be**:
+```
+HTML Parsing (extract_unit_fields) → Quality Scoring → Store with Unit Data → Report Generation (display tags)
+```
+
+**Current Broken Architecture**:
+```
+HTML Parsing → Store Raw Data → Separate Quality Scoring → Report Generation
+```
+
+**🔧 Technical Improvements Made**:
+
+1. **Enhanced Email Detection Logic** (in quality_scorer.py):
+   - Added BSA.TROOP patterns, pack/troop number patterns
+   - Better personal domain detection (@grindleyfamily.com, @currier.us)
+   - Unit context awareness (town names, unit numbers)
+
+2. **Improved PO Box Detection**:
+   - Only flags locations that are ONLY PO Boxes
+   - Locations with both street address AND PO Box are not flagged
+
+3. **Column Management System**:
+   - `ReportColumns` class with named constants
+   - Centralized headers, widths, and category definitions
+   - Eliminated column number maintenance issues
+
+**📋 IMMEDIATE NEXT SESSION PLAN**:
+
+**Priority 1: Fix Quality Scoring Architecture**
+1. **Integrate quality scoring into `extract_unit_fields()`** (html_extractor.py line 489)
+2. **Add quality tags directly to unit data** during HTML parsing
+3. **Remove separate quality scoring step** from pipeline
+4. **Update report generator** to simply read existing quality tags
+
+**Implementation Location**: 
+```python
+# In src/pipeline/parsing/html_extractor.py at line 489, before return unit_data:
+def extract_unit_fields(wrapper, index, unit_name_elem=None):
+    # ... existing field extraction code ...
+    
+    # ADD QUALITY SCORING HERE (line 489)
+    from src.pipeline.analysis.quality_scorer import UnitQualityScorer
+    scorer = UnitQualityScorer()
+    
+    # Score this individual unit
+    score, recommendations = scorer.score_unit(unit_data)
+    
+    # Add scoring results to unit data
+    unit_data['completeness_score'] = round(score, 1)
+    unit_data['completeness_grade'] = scorer.get_letter_grade(score)
+    unit_data['quality_tags'] = recommendations
+    
+    return unit_data
+```
+
+**Files Modified This Session**:
+- `src/pipeline/reporting/generate_commissioner_report.py`: Added ReportColumns class, zip code mapping, fixed column references
+- `src/pipeline/analysis/quality_scorer.py`: Enhanced email detection and PO Box logic
+- Various column formatting fixes and freeze pane updates
+
+**Current Report Status**: All Feedback 9 display issues resolved, but underlying quality scoring issues persist because architectural fix is needed.
+
+**Session Limit Reached**: 5-hour limit approaching - architectural insight documented for next session implementation.
+
+---
+
+### September 1, 2025 Session - HNE Town Parsing Fixes & HTML Field Extraction Bug Discovery
+
+**🎯 CRITICAL SUCCESS: HNE Town Parsing Completely Fixed**
+
+**✅ Major Architectural Issues Resolved**:
+
+1. **Fixed False Positive Substring Matching**: 
+   - **Root Cause**: "athol" was matching within "c**athol**ic" in "St Marys Roman Catholic Church"
+   - **Solution**: Added word boundary matching `\b{re.escape(town_lower)}\b` to prevent false substring matches
+   - **Result**: Pack/Troop 0025 no longer incorrectly assigned to Athol
+
+2. **Restored TOWN_ALIASES Support**:
+   - **Root Cause**: TOWN_ALIASES ("E Brookfield" → "East Brookfield") were being ignored during extraction
+   - **Solution**: Enhanced both dash-based (Method 1) and substring (Method 2) extraction to resolve aliases
+   - **Result**: Units like Pack 0151 "W Boylston" now correctly resolve to "West Boylston"
+
+3. **Fixed HNE Filtering Import Path**:
+   - **Root Cause**: HTML extractor trying to import obsolete `extract_hne_towns` module
+   - **Solution**: Updated import to use `src.config.hne_towns.get_hne_towns_and_zipcodes`
+   - **Result**: Eliminated "Could not load HNE towns data" warnings
+
+4. **Enhanced Discarded Units Logging**:
+   - **Added logging to HTML extractor filtering** for better debugging visibility
+   - **Fixed logging timestamps** to use shared timestamp across entire pipeline run
+   - **Result**: Single discarded units log per run with comprehensive debug information
+
+**🎯 FINAL PIPELINE RESULTS**:
+- **Target achieved**: 165 HNE units (matches reference data exactly)
+- **Quality assured**: No false positives, no missing legitimate units  
+- **Architecture preserved**: Single source of truth for unit_town determination during HTML extraction
+
+**🔧 Files Modified**:
+- `src/pipeline/parsing/html_extractor.py`: Enhanced town extraction with alias support and word boundaries
+- `src/pipeline/core/unit_identifier.py`: Fixed logging timestamp consistency
+- `archive/html_extractor_obsolete.py`: Renamed from archive/html_extractor.py to prevent confusion
+
+**⚠️ CRITICAL BUG DISCOVERED: HTML Field Extraction Issue**
+
+**Problem Identified**: Catastrophic town parsing where entire description text appears as `unit_town`:
+```
+unit_town: 'Troop 27 meets at the First Congregational Church of Woodstock (on the common) Wednesday nights from 7:00pm'
+```
+
+**✅ Investigation Results**:
+
+1. **Root Cause Located**: The issue is **NOT** in town extraction functions (they work correctly)
+2. **Problem Source**: HTML field extraction during BeautifulSoup parsing assigns description content to unit fields
+3. **Evidence**: Town extraction methods return empty strings for these descriptions, but description text is already assigned to `unit_town` before extraction runs
+4. **Scope**: Affects units like Troop 27 Woodstock, Troop 12 Hollis, Pack 19 Nashua - all non-HNE units with malformed HTML parsing
+
+**🎯 IMMEDIATE NEXT SESSION PRIORITIES**:
+
+**Priority 1: Debug HTML Field Extraction Bug**
+1. **Investigate BeautifulSoup parsing** in `extract_unit_fields()` function
+2. **Check field assignment logic** where description content gets mixed with other fields
+3. **Add field validation** to prevent description text assignment to unit_town/chartered_org
+4. **Test with specific problematic units** to trace exact parsing flow
+
+**Priority 2: Implement Quality Scoring Architecture (from previous session)**
+1. **Integrate quality scoring into HTML parsing** (postponed due to field extraction bug priority)
+2. **Move quality tag assignment** to HTML extraction phase for single source of truth
+
+**Technical Context**:
+- **HTML extractor path**: `src/pipeline/parsing/html_extractor.py` line 281 (`extract_unit_fields()`)
+- **Current pipeline**: Uses correct HTML extractor (not obsolete version)
+- **Debugging approach**: Need specific unit HTML examples to trace field extraction bug
+
+**Files for Next Session Focus**:
+- `src/pipeline/parsing/html_extractor.py`: BeautifulSoup field extraction logic  
+- Test with discarded units log examples: Troop 27 Woodstock, Troop 12 Hollis, Pack 19 Nashua
+
+**Current System Status**: Production-ready for HNE unit processing (165 units correctly identified), but HTML field extraction bug affects non-HNE unit parsing accuracy in debug logs.
+
+---
+
+### September 1, 2025 Session - Part 2: HTML Parsing Optimization & Pre-filtering Enhancement
+
+**🎯 CRITICAL SUCCESS: Complete HTML Data Parsing Optimization**
+
+**✅ Major Optimizations Completed**:
+
+1. **Enhanced Non-HNE Pre-filtering**: 
+   - **Root Cause**: Ship 0375 Groton incorrectly filtered due to "Nashua **Ri**ver" matching ` ri` pattern
+   - **Solution**: Comprehensive state pattern matching with word boundaries
+   - **Patterns**: `[' nh ', ' ct ', ' ri ', ',nh', ',ct', ',ri', ', nh', ', ct', ', ri', ' n.h.', ' r.i.', ',n.h.', ',r.i.', ', n.h.', ', r.i.']`
+   - **Result**: Ship 0375 Groton now correctly passes pre-filtering and is recognized as HNE unit
+
+2. **Optimized Pattern Architecture**:
+   - **Replaced hardcoded patterns** with efficient state-based filtering (NH, CT, RI)
+   - **Comprehensive coverage**: Space-bounded, comma-separated, period abbreviations
+   - **Word boundaries**: Prevent false matches while maintaining complete coverage
+   - **Consolidated logic**: Unified field validation across chartered_org, meeting_location, address
+
+3. **Enhanced Debug Logging**:
+   - **Fixed empty town names in discard reasons**: Now shows actual determined town names
+   - **Example**: `reason: 'Non-HNE unit filtered out (town: North Smithfield)'` instead of `(town: )`
+   - **Town extraction from orgs**: Analyzes chartered organization names to identify geographic locations
+   - **Filtered common org words**: Department, Police, Fire, Church, etc.
+
+4. **Fixed Description Text Detection**:
+   - **Added description text filtering** in `extract_town_from_org()` to prevent extraction from meeting descriptions
+   - **Indicators**: 'we meet', 'meet on', 'active pack', 'accepting children', 'contact:', 'phone:'
+   - **Result**: Prevents description text from being extracted as town names
+
+**🎯 REFERENCE BASELINE UPDATED**:
+- **Updated** `tests/reference/units/discarded_unit_identifier_debug_scraped_reference_u.log`
+- **143 insertions, 165 deletions**: More efficient filtering with better town information
+- **Uniquely sorted output**: Consistent format for regression testing
+- **Comprehensive state coverage**: All common NH/CT/RI abbreviation formats
+
+**🔧 Files Modified**:
+- `src/pipeline/parsing/scraped_data_parser.py`: Optimized pre-filtering with comprehensive state patterns
+- `src/pipeline/parsing/html_extractor.py`: Enhanced debug logging and description text detection
+- `tests/reference/units/discarded_unit_identifier_debug_scraped_reference_u.log`: Updated baseline
+
+**📋 IMMEDIATE NEXT SESSION PRIORITIES**:
+
+**Priority 1: Quality Scoring Architecture Implementation**
+1. **Integrate quality scoring into `extract_unit_fields()`** (html_extractor.py line 489)
+2. **Add quality tags directly to unit data** during HTML parsing
+3. **Remove separate quality scoring step** from pipeline (process_full_dataset_v2.py)
+4. **Update report generator** to read existing quality tags (generate_commissioner_report.py)
+
+**Architecture Change Required**:
+```python
+# In src/pipeline/parsing/html_extractor.py at line 489, before return unit_data:
+from src.pipeline.analysis.quality_scorer import UnitQualityScorer
+scorer = UnitQualityScorer()
+
+# Score this individual unit
+score, recommendations = scorer.score_unit(unit_data)
+
+# Add scoring results to unit data
+unit_data['completeness_score'] = round(score, 1)
+unit_data['completeness_grade'] = scorer.get_letter_grade(score)
+unit_data['quality_tags'] = recommendations
+
+return unit_data
+```
+
+**Priority 2: Apply Enhanced Quality Scoring Logic**
+1. **Enhanced email detection**: BSA.TROOP patterns, personal domain detection
+2. **Improved PO Box logic**: Only flag locations that are ONLY PO Boxes
+3. **Unit context awareness**: Town names, unit numbers in scoring decisions
+
+**Current System Status**: HTML parsing is production-ready with optimized pre-filtering, comprehensive state pattern coverage, and accurate HNE unit identification. Ready for quality scoring architecture implementation.
+
+---
+*Final Update 2025-09-01: HTML data parsing completely optimized with comprehensive state-based pre-filtering. Ship 0375 Groton issue resolved. Reference baseline updated. Ready for quality scoring architecture implementation in next session.*
