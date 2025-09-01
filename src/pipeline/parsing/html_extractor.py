@@ -223,6 +223,7 @@ def filter_hne_units(units):
         
         # Check if unit town is in HNE territory
         is_hne = False
+        determined_town = unit_town  # Track the town name used for determination
         
         if unit_town:
             # Use centralized town normalization to resolve aliases
@@ -237,10 +238,12 @@ def filter_hne_units(units):
                 # Unit town is clearly identified but is NOT in HNE territory
                 # Do not override with chartered org matching - trust the extracted location
                 is_hne = False
+                determined_town = normalized_town  # Use normalized name for logging
         else:
             # No unit town identified - use chartered organization as fallback
             # Sort by length (longest first) to match "West Boylston" before "Boylston"
             sorted_towns = sorted(hne_towns, key=len, reverse=True)
+            found_org_town = None
             for town in sorted_towns:
                 town_lower = town.lower()
                 if town_lower in chartered_org:
@@ -248,9 +251,21 @@ def filter_hne_units(units):
                     # Make sure it's a word boundary match
                     if re.search(rf'\b{re.escape(town_lower)}\b', chartered_org):
                         is_hne = True
+                        found_org_town = town
                         # Update unit_town with the detected town
                         unit['unit_town'] = town
                         break
+            
+            # If no HNE town found in org, determine what non-HNE town might be there
+            if not is_hne:
+                # Look for any recognizable town patterns in the org name
+                town_words = re.findall(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b', unit.get('chartered_organization', ''))
+                # Filter out common organization words
+                org_words = {'Department', 'Police', 'Fire', 'School', 'Church', 'Catholic', 'Baptist', 
+                           'Methodist', 'United', 'First', 'Second', 'Third', 'Memorial', 'Association',
+                           'Club', 'Post', 'American', 'Legion', 'Veterans', 'Youth', 'Families'}
+                potential_towns = [w for w in town_words if w not in org_words and len(w) > 2]
+                determined_town = potential_towns[0] if potential_towns else 'chartered org analysis'
         
         if is_hne:
             hne_units.append(unit)
@@ -262,7 +277,7 @@ def filter_hne_units(units):
                 unit.get('unit_number', 'Unknown'),
                 unit.get('unit_town', 'Unknown'),
                 unit.get('chartered_organization', 'Unknown'),
-                f'Non-HNE unit filtered out (town: {unit_town})'
+                f'Non-HNE unit filtered out (town: {determined_town})'
             )
             non_hne_units.append(unit)
     
