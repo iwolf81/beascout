@@ -29,10 +29,17 @@ class ScrapedDataParser:
     def __init__(self):
         self.parsed_units = []
         self.hne_towns = self._load_hne_towns()
-        self.non_hne_patterns = [
-            'daniel webster council', 'nashua nh', 'hudson nh', 'putnam ct',
-            'bellingham', 'holliston', 'uxbridge', 'manchester nh'
+        
+        # Optimized non-HNE detection patterns - use boundaries to avoid false matches
+        self.NON_HNE_STATE_PATTERNS = [
+            ' nh ', ' ct ', ' ri ',     # Space-bounded abbreviations
+            ',nh', ',ct', ',ri',        # Comma-separated abbreviations (no space)
+            ', nh', ', ct', ', ri',     # Comma-separated abbreviations (with space)
+            ' n.h.', ' r.i.',           # Period-separated abbreviations with spaces
+            ',n.h.', ',r.i.',           # Period-separated abbreviations with commas (no space)
+            ', n.h.', ', r.i.'          # Period-separated abbreviations with commas (with space)
         ]
+        self.SPECIFIC_NON_HNE_ORGS = ['daniel webster council']  # Specific organizational exceptions
         self.parsing_stats = {
             'total_processed': 0,
             'successfully_parsed': 0,
@@ -48,7 +55,7 @@ class ScrapedDataParser:
     
     def _load_hne_towns(self) -> Set[str]:
         """Load HNE town names from centralized source"""
-        from src.mapping.district_mapping import get_all_hne_towns
+        from src.config.district_mapping import get_all_hne_towns
         return get_all_hne_towns()
     
     def parse_json_file(self, file_path: str) -> List[Dict[str, Any]]:
@@ -76,7 +83,7 @@ class ScrapedDataParser:
                 if self._is_non_hne_unit(unit):
                     self.parsing_stats['excluded_non_hne'] += 1
                     # Log discarded non-HNE unit
-                    UnitIdentifierNormalizer.log_discarded_unit(
+                    UnitIdentifierNormalizer.log_discarded_unit( ## @claude, ahh there's pre-filtering to remove likely non-HNE towns before attempting to extract unit_town name from likely HNE towns.
                         str(unit.get('unit_type', 'Unknown')),
                         str(unit.get('unit_number', 'Unknown')), 
                         str(unit.get('chartered_organization', 'Unknown')),
@@ -100,23 +107,23 @@ class ScrapedDataParser:
     
     def _is_non_hne_unit(self, unit: Dict[str, Any]) -> bool:
         """Check if unit is clearly outside HNE territory"""
-        # Check chartered organization for non-HNE indicators
+        # Check chartered organization for specific non-HNE organizations
         chartered_org = str(unit.get('chartered_organization', '')).lower()
-        for pattern in self.non_hne_patterns:
+        for pattern in self.SPECIFIC_NON_HNE_ORGS:
             if pattern in chartered_org:
                 return True
         
-        # Check meeting location for non-HNE indicators  
-        meeting_location = str(unit.get('meeting_location', '')).lower()
-        for pattern in ['nashua nh', 'hudson nh', 'putnam ct']:
-            if pattern in meeting_location:
-                return True
+        # Check all relevant fields for state-based non-HNE indicators
+        fields_to_check = [
+            str(unit.get('chartered_organization', '')).lower(),
+            str(unit.get('meeting_location', '')).lower(),
+            str(unit.get('address', '')).lower()
+        ]
         
-        # Check address field for non-HNE indicators
-        address = str(unit.get('address', '')).lower()
-        for pattern in ['nashua nh', 'hudson nh', 'putnam ct', ' nh ', ' ct ']:
-            if pattern in address:
-                return True
+        for field_content in fields_to_check:
+            for state_pattern in self.NON_HNE_STATE_PATTERNS:
+                if state_pattern in field_content:
+                    return True
         
         return False
     
@@ -240,15 +247,22 @@ class ScrapedDataParser:
     def _extract_town_from_unit_fixed(self, unit: Dict[str, Any]) -> Optional[str]:
         """
         Fixed town extraction with village priority handling:
-        Special case: If unit name contains village names (Fiskdale, Jefferson), 
-        prioritize unit name over address for cross-validation with Key Three.
         
-        Standard priority order:
-        1. <div class="unit-address"> (from HTML parsing)
-        2. <div class="unit-name"> (from HTML parsing)  
-        3. <div class="unit-description"> (from HTML parsing)
-        4. Chartered organization parsing (fallback)
+        Priority order:
+        1. Trust unit_town from HTML extractor (highest priority)
+        2. Special case handling for villages (Fiskdale, Jefferson)
+        3. Fallback extraction from various fields if unit_town missing
+        4. Chartered organization parsing (lowest priority)
         """
+        
+        # Priority 1: Trust HTML extractor's unit_town field if present and valid
+        if unit.get('unit_town'):
+            town = str(unit['unit_town']).strip()
+            if town and self._validate_hne_town(town):
+                return town
+            elif town and not self._is_outside_hne_territory(town):
+                # Accept non-HNE towns for filtering at higher level
+                return town
         
         # CRITICAL EXCEPTION: Troop 0132 meets in Mendon but is chartered in Upton (HNE territory)
         # Must be checked BEFORE standard precedence to avoid incorrect filtering
@@ -456,22 +470,17 @@ class ScrapedDataParser:
         """Parse town name from general text (name/description fields)"""
         text = text.strip().lower()
         
-        # First check for abbreviated patterns that need normalization
-        # Handle "E Brookfield", "W Boylston", etc. before general matching
-        abbreviated_patterns = [
-            (r'\be\s+brookfield\b', 'East Brookfield'),
-            (r'\bw\s+brookfield\b', 'West Brookfield'),
-            (r'\bn\s+brookfield\b', 'North Brookfield'),
-            (r'\bs\s+brookfield\b', 'South Brookfield'),
-            (r'\bw\s+boylston\b', 'West Boylston'),
-            (r'\be\s+boylston\b', 'East Boylston'),
-        ]
-        
+        # First check for town aliases using centralized TOWN_ALIASES
+        from src.config.district_mapping import TOWN_ALIASES
         import re
-        for pattern, normalized_town in abbreviated_patterns:
-            if re.search(pattern, text):
-                if self._validate_hne_town(normalized_town):
-                    return normalized_town
+        
+        # Check all alias patterns from centralized configuration
+        for alias, canonical_town in TOWN_ALIASES.items():
+            # Create regex pattern for the alias with word boundaries
+            alias_pattern = r'\b' + re.escape(alias.lower()) + r'\b'
+            if re.search(alias_pattern, text):
+                if self._validate_hne_town(canonical_town):
+                    return canonical_town
         
         # Look for HNE town names in the text, prioritizing:
         # 1. First occurrence in text (handles "Acton-Boxborough" → "Acton")
@@ -568,41 +577,49 @@ class ScrapedDataParser:
         return self.parsing_stats.copy()
 
 def main():
-    """Test the fixed scraped data parser"""
-    parser = FixedScrapedDataParser()
+    """Test the scraped data parser with meeting location formatting"""
+    parser = ScrapedDataParser()
     
-    # Test with problematic units from user feedback
+    # Test with problematic meeting location examples from Feedback 4
+    test_locations = [
+        "St. Pius X Church 759 Main ST, Leicester MA 01524",  # Should become: St. Pius X Church, 759 Main ST, Leicester MA 01524
+        "First Baptist Church1216 Main STHolden MA 01520",    # Should become: First Baptist Church, 1216 Main ST, Holden MA 01520  
+        "Lancaster RD, Shirley MA 01464",                     # Already correct
+        "Kittridge Rd, Shirley MA 01464"                     # Already correct
+    ]
+    
+    print("🔧 Testing Meeting Location Formatting")
+    
+    for i, location in enumerate(test_locations, 1):
+        formatted = parser._format_meeting_location(location)
+        print(f"\n{i}. Original: {location}")
+        print(f"   Formatted: {formatted}")
+        
+    # Test complete unit parsing
     test_units = [
         {
-            'unit_type': 'Pack',
-            'unit_number': '106',
-            'chartered_organization': 'Grafton - Our Lady of Hope Parish Grafton @ St. Mary',
-            'meeting_location': "St Mary's Catholic Church, 17 Waterville St, North, Grafton MA 01536",
-            'unit_address': 'Grafton MA'
+            'unit_type': 'Troop',
+            'unit_number': '123', 
+            'chartered_organization': 'Leicester - St. Pius X Church',
+            'meeting_location': 'St. Pius X Church 759 Main ST, Leicester MA 01524',
+            'unit_address': 'Leicester MA'
         },
         {
-            'unit_type': 'Pack', 
-            'unit_number': '158',
-            'chartered_organization': 'Shrewsbury - St. Marys Roman Catholic Church',
-            'meeting_location': 'St. Marys Roman Catholic Church, 20 Summer St., Shrewsbury MA 01545',
-            'unit_address': 'Shrewsbury MA'
-        },
-        {
-            'unit_type': 'Crew',
-            'unit_number': '204',
-            'chartered_organization': 'West Boylston-American Legion Post 204',
-            'meeting_location': '159 Hartwell St, West, Boylston MA 01583',
-            'unit_address': 'West Boylston MA'
+            'unit_type': 'Troop',
+            'unit_number': '182',
+            'chartered_organization': 'Holden - First Baptist Church',
+            'meeting_location': 'First Baptist Church1216 Main STHolden MA 01520',
+            'unit_address': 'Holden MA'
         }
     ]
     
-    print("🔧 Testing Fixed Scraped Data Parser")
+    print("\n🔧 Testing Complete Unit Processing")
     
     for i, unit in enumerate(test_units, 1):
         parsed = parser.parse_unit_record(unit)
         if parsed:
-            print(f"\n✅ Unit {i}: {parsed['unit_key']} → {parsed['district']}")
-            print(f"   Original town issue should be fixed")
+            print(f"\n✅ Unit {i}: {parsed['unit_key']}")
+            print(f"   Meeting Location: {parsed.get('meeting_location', 'N/A')}")
         else:
             print(f"\n❌ Unit {i}: Failed to parse")
     
