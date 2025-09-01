@@ -7,17 +7,28 @@ from bs4 import BeautifulSoup
 import json
 
 def get_district_for_town(town):
-    """Assign district based on town name using centralized mapping"""
-    try:
-        from src.config.district_mapping import TOWN_TO_DISTRICT
-    except ImportError:
-        # Fallback for when called from different contexts
-        import sys
-        from pathlib import Path
-        sys.path.append(str(Path(__file__).parent.parent.parent.parent))
-        from src.config.district_mapping import TOWN_TO_DISTRICT
+    """Assign district based on town name"""
+    quinapoxet_towns = [
+        "Ashby", "Townsend", "Pepperell", "Groton", "Ayer", "Littleton", "Acton", "Boxborough",
+        "Fitchburg", "Lunenburg", "Shirley", "Harvard", "Bolton", "Berlin", "Lancaster", "Leominster",
+        "Sterling", "Clinton", "West Boylston", "Boylston", "Shrewsbury", "Worcester", 
+        "Holden", "Rutland", "Princeton", "Paxton", "Leicester", "Auburn", "Millbury"
+    ]
     
-    return TOWN_TO_DISTRICT.get(town, "Unknown")
+    soaring_eagle_towns = [
+        "Royalston", "Winchendon", "Ashburnham", "Gardner", "Templeton", "Phillipston", "Athol", "Orange",
+        "Westminster", "Hubbardston", "Barre", "Petersham", "Hardwick", "New Braintree",
+        "Oakham", "Ware", "West Brookfield", "East Brookfield", "North Brookfield", "Brookfield", "Spencer",
+        "Warren", "Sturbridge", "Charlton", "Oxford", "Dudley", "Webster", "Douglas", "Sutton", "Grafton", 
+        "Upton", "Northbridge", "Southbridge"
+    ]
+    
+    if town in quinapoxet_towns:
+        return "Quinapoxet"
+    elif town in soaring_eagle_towns:
+        return "Soaring Eagle"
+    else:
+        return "Unknown"
 
 def format_meeting_location(raw_location):
     """Format meeting location with proper comma separators"""
@@ -26,21 +37,14 @@ def format_meeting_location(raw_location):
     # Remove extra spaces and normalize
     location = re.sub(r'\s+', ' ', raw_location.strip())
     
-    # Add comma before city/state/zip pattern but handle periods properly
-    # Pattern: "word Townname MA 12345" -> "word, Townname MA 12345" (but not if word ends with period)
-    # First handle the normal case (no period before city/state)
-    location = re.sub(r'([A-Za-z0-9])\s+([A-Z][a-z]+\s+[A-Z]{2}\s+\d{5})', r'\1, \2', location)
-    # Then handle the period case: "E. Townname MA 12345" -> "E. Townname, MA 12345" 
-    location = re.sub(r'(\.\s+)([A-Z][a-z]+)(\s+[A-Z]{2}\s+\d{5})', r'\1\2,\3', location)
+    # Add comma before city/state/zip pattern (e.g., "Littleton MA 01460")
+    location = re.sub(r'([^,\s])\s*([A-Z][a-z]+\s+[A-Z]{2}\s+\d{5})', r'\1, \2', location)
     
     # Add comma and space between building name and street address
     # Handle two patterns: Building Name + Street Address OR Street Address + Building Name
     
-    # Pattern 1: Building name followed by street number - use more specific patterns for common building types
-    location = re.sub(r'([A-Za-z][A-Za-z\s\.\'&-]+(?:Church|Building|Hall|Center|School|Library))\s+(\d+\s+[A-Za-z\s]+(?:ST|St|Street|Rd|Road|Ave|Avenue|Ln|Lane|Dr|Drive|Blvd|Boulevard|Way|Place|Court|Ct))', r'\1, \2', location)
-    
-    # Pattern 1b: General building name pattern (fallback for other building types)
-    location = re.sub(r'([A-Za-z][A-Za-z\s\'&.-]+[A-Za-z])\s+(\d+\s+[A-Za-z\s]+(?:St|Street|Rd|Road|Ave|Avenue|Ln|Lane|Dr|Drive|Blvd|Boulevard|Way|Place|Court|Ct))', r'\1, \2', location)
+    # Pattern 1: Building name followed by street number (Building NameSTREET)
+    location = re.sub(r'([A-Za-z][A-Za-z\s\'&.-]+[A-Za-z])(\d+\s+[A-Za-z\s]+(?:St|Street|Rd|Road|Ave|Avenue|Ln|Lane|Dr|Drive|Blvd|Boulevard|Way|Place|Court|Ct))', r'\1, \2', location)
     
     # Pattern 2: Street address followed by building name (435 Central StreetSt. Matthew's Church)
     location = re.sub(r'(\d+\s+[A-Za-z\s]+(?:St|Street|Rd|Road|Ave|Avenue|Ln|Lane|Dr|Drive|Blvd|Boulevard|Way|Place|Court|Ct))([A-Z][A-Za-z\s\'&.-]+)', r'\1, \2', location)
@@ -115,34 +119,20 @@ def extract_town_from_org(chartered_org):
     # Method 1: Dash-based extraction (most reliable)
     if '-' in chartered_org:
         town = chartered_org.split('-')[0].strip()
-        # Check if the extracted town is an alias and resolve it
-        try:
-            from src.config.district_mapping import TOWN_ALIASES, TOWN_TO_DISTRICT
-            if town in TOWN_ALIASES:
-                canonical_town = TOWN_ALIASES[town]
-                if canonical_town in TOWN_TO_DISTRICT:
-                    return canonical_town
-        except ImportError:
-            pass
         return town
     
     # Method 2: Search for HNE town names in organization
-    # Use centralized district mapping for HNE towns and aliases
+    # Import HNE towns data
     try:
-        from src.config.district_mapping import TOWN_TO_DISTRICT, TOWN_ALIASES
-        hne_towns = list(TOWN_TO_DISTRICT.keys())
+        import sys
+        import os
+        sys.path.append(os.path.dirname(__file__))
+        from extract_hne_towns import get_hne_towns_and_zipcodes
+        hne_towns, _ = get_hne_towns_and_zipcodes()
         
         org_lower = chartered_org.lower()
         
-        # First check TOWN_ALIASES for abbreviated forms (e.g., "W Boylston" -> "West Boylston")
-        for alias, canonical_town in TOWN_ALIASES.items():
-            alias_lower = alias.lower()
-            if re.search(rf'\b{re.escape(alias_lower)}\b', org_lower):
-                # Verify the canonical town is actually an HNE town
-                if canonical_town in TOWN_TO_DISTRICT:
-                    return canonical_town
-        
-        # Then check full HNE town names
+        # Look for town names in the organization name
         # Sort by length (longest first) to match "West Boylston" before "Boylston"
         sorted_towns = sorted(hne_towns, key=len, reverse=True)
         
@@ -150,20 +140,11 @@ def extract_town_from_org(chartered_org):
             # Avoid matching names that are part of historical figures
             # e.g., "Joseph Warren" should not match "Warren" the town
             town_lower = town.lower()
-            # Use word boundary matching to prevent false positives like "athol" in "catholic"
-            if re.search(rf'\b{re.escape(town_lower)}\b', org_lower):
+            if town_lower in org_lower:
                 # Additional check: make sure it's not part of a person's name
-                # Look for patterns like "FirstName LastName" where LastName is a town name
-                # But exclude common organizational words that precede town names
-                person_pattern = rf'\b[A-Z][a-z]+\s+{re.escape(town)}\b'
-                if re.search(person_pattern, chartered_org):
-                    # Check if it's preceded by common org words - if so, it's NOT a person
-                    org_words = ['veterans', 'foreign', 'wars', 'american', 'legion', 'post', 'vfw']
-                    preceding_text = chartered_org[:chartered_org.lower().find(town_lower)].lower()
-                    if any(word in preceding_text for word in org_words):
-                        return town  # Valid organizational context
-                    else:
-                        continue  # Likely a person's name
+                # Look for patterns like "FirstName TownName" which indicate a person
+                if re.search(rf'\b[A-Z][a-z]+\s+{re.escape(town)}\b', chartered_org):
+                    continue  # Skip this match - likely a person's name
                 return town
         
     except ImportError:
@@ -192,7 +173,10 @@ def filter_hne_units(units):
     """
     # Load HNE towns list
     try:
-        from src.config.hne_towns import get_hne_towns_and_zipcodes
+        import sys
+        import os
+        sys.path.append(os.path.dirname(__file__))
+        from extract_hne_towns import get_hne_towns_and_zipcodes
         hne_towns, _ = get_hne_towns_and_zipcodes()
         hne_towns_lower = [town.lower() for town in hne_towns]
     except ImportError:
@@ -234,15 +218,6 @@ def filter_hne_units(units):
         if is_hne:
             hne_units.append(unit)
         else:
-            # Log discarded non-HNE unit for debugging
-            from src.pipeline.core.unit_identifier import UnitIdentifierNormalizer
-            UnitIdentifierNormalizer.log_discarded_unit(
-                unit.get('unit_type', 'Unknown'),
-                unit.get('unit_number', 'Unknown'),
-                unit.get('unit_town', 'Unknown'),
-                unit.get('chartered_organization', 'Unknown'),
-                f'Non-HNE unit filtered out (town: {unit_town})'
-            )
             non_hne_units.append(unit)
     
     # Print filtering summary
@@ -391,10 +366,7 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
                     unit_data['description'] = text
                     break
         else:
-            # Replace <br> tags with spaces in description to preserve line breaks
-            for br in desc_container.find_all("br"):
-                br.replace_with(" ")
-            unit_data['description'] = desc_container.get_text(separator=' ', strip=True)
+            unit_data['description'] = desc_container.get_text(strip=True)
         
         # Unit composition (Boy Troop, Girl Troop, etc.)
         composition_elem = unit_body.find(string=re.compile(r'(Boy|Girl|Boys|Girls|Coed)'))
@@ -404,24 +376,7 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
             if any(unit_type in parent_text for unit_type in ['Troop', 'Pack', 'Crew', 'Post', 'Club']):
                 unit_data['unit_composition'] = parent_text
         
-        # Check if unit-address div is empty/missing for QUALITY_UNIT_ADDRESS logic
-        address_containers = unit_body.find_all('div', class_='unit-address')
-        unit_address_div_empty = not address_containers or not address_containers[0].get_text(strip=True)
-        
-        
-        # Meeting location extraction - try address field first, then description
-        raw_location_from_address = ""
-        raw_location_from_description = ""
-        
-        # 1. Try to extract from unit-address div
-        if address_containers:
-            # Replace <br> tags with spaces before extracting text to fix concatenation
-            container = address_containers[0]
-            for br in container.find_all("br"):
-                br.replace_with(" ")
-            raw_location_from_address = container.get_text(separator=' ', strip=True)
-        
-        # 2. Try to extract from description
+        # Meeting info extraction from description - prioritize over address extraction
         if unit_data['description']:
             day, time, location = extract_meeting_info(unit_data['description'])
             if day:
@@ -429,76 +384,48 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
             if time:
                 unit_data['meeting_time'] = time
             if location:
-                raw_location_from_description = location
+                unit_data['meeting_location'] = location
         
-        # 3. If no location in address div, try address patterns in full text
-        if not raw_location_from_address:
-            # Look for address patterns in text
-            # Replace <br> tags with spaces before extracting full text
-            body_copy = unit_body.__copy__()
-            for br in body_copy.find_all("br"):
-                br.replace_with(" ")
-            full_text = body_copy.get_text(separator=' ')
-            address_patterns = [
-                r'\d+\s+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd)[^,]*',
-                r'[A-Za-z\s]+\d+\s+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd)[^,]*'
-            ]
-            for pattern in address_patterns:
-                match = re.search(pattern, full_text)
-                if match:
-                    raw_location_from_address = match.group().strip()
-                    break
-        
-        # Prioritize address field, fall back to description
-        final_raw_location = ""
-        location_from_description = False
-        
-        if raw_location_from_address and not re.match(r'(?i)p\.?o\.?\s*box', raw_location_from_address):
-            # Check if location starts with unit number (invalid pattern)
-            unit_num = unit_data.get('unit_number', '')
-            if not (unit_num and raw_location_from_address.startswith(unit_num)):
-                final_raw_location = raw_location_from_address
-        
-        if not final_raw_location and raw_location_from_description:
-            final_raw_location = raw_location_from_description
-            location_from_description = True
-        
-        # Set meeting location with proper formatting
-        if final_raw_location:
-            formatted_location = format_meeting_location(final_raw_location)
-            unit_data['meeting_location'] = formatted_location
+        # Meeting location from address - only if not already found in description
+        if not unit_data['meeting_location']:
+            address_containers = unit_body.find_all('div', class_='unit-address')
+            raw_location = ""
             
-            # Apply QUALITY_UNIT_ADDRESS logic:
-            # If unit-address div was empty but we found location in description, this is a quality issue
-            if unit_address_div_empty and location_from_description:
-                # We'll handle the tag logic in the calling function after all extraction is complete
-                unit_data['_quality_unit_address'] = True
+            if address_containers:
+                raw_location = address_containers[0].get_text(strip=True)
+            else:
+                # Look for address patterns in text
+                full_text = unit_body.get_text()
+                address_patterns = [
+                    r'\d+\s+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd)[^,]*',
+                    r'[A-Za-z\s]+\d+\s+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd)[^,]*'
+                ]
+                for pattern in address_patterns:
+                    match = re.search(pattern, full_text)
+                    if match:
+                        raw_location = match.group().strip()
+                        break
+            
+            if raw_location and not re.match(r'(?i)p\.?o\.?\s*box', raw_location):
+                # Check if location starts with unit number (invalid pattern)
+                unit_num = unit_data.get('unit_number', '')
+                if unit_num and raw_location.startswith(unit_num):
+                    # Invalid location - likely just unit number + org name
+                    unit_data['meeting_location'] = ""
+                else:
+                    # Format location with proper separators
+                    formatted_location = format_meeting_location(raw_location)
+                    unit_data['meeting_location'] = formatted_location
         
-        # Extract town name with proper precedence order - STOP once a town is found
+        # Extract town name - prioritize meeting location address over organization name
         if not unit_data.get('unit_town'):
-            # Method 1: Extract from unit-address field (meeting_location) - highest priority
+            # Method 1: Extract from meeting location address (most reliable)
             if unit_data.get('meeting_location'):
                 town_from_address = extract_town_from_address(unit_data['meeting_location'])
                 if town_from_address:
                     unit_data['unit_town'] = town_from_address
             
-            # Method 2: Extract from unit-name field (primary_identifier) - stop processing if found
-            if not unit_data.get('unit_town') and unit_data.get('primary_identifier'):
-                town_from_name = extract_town_from_org(unit_data['primary_identifier'])
-                if town_from_name:
-                    unit_data['unit_town'] = town_from_name
-            
-            # Method 3: Extract from unit-description field - stop processing if found  
-            if not unit_data.get('unit_town') and unit_data.get('description'):
-                # Filter out contact information patterns to avoid extracting person names as towns
-                description_text = unit_data['description']
-                # Skip description if it primarily contains contact information  
-                if not re.search(r'Contact:\s*[A-Za-z\s]+\s*Email:', description_text, re.IGNORECASE):
-                    town_from_description = extract_town_from_org(description_text)
-                    if town_from_description:
-                        unit_data['unit_town'] = town_from_description
-            
-            # Method 4: Fallback to chartered organization extraction (lowest priority)
+            # Method 2: Fallback to organization name extraction (less reliable)
             if not unit_data.get('unit_town') and unit_data.get('chartered_organization'):
                 town_from_org = extract_town_from_org(unit_data['chartered_organization'])
                 if town_from_org:
@@ -659,10 +586,10 @@ def main():
     import sys
     
     if len(sys.argv) < 2:
-        print("Usage: python src/parsing/html_extractor.py <html_file> [additional_html_files...]")
+        print("Usage: python prototype/extract_all_units.py <html_file> [additional_html_files...]")
         print("Examples:")
-        print("  python src/parsing/html_extractor.py data/scraped/20250824_220843/beascout_01720.html")
-        print("  python src/parsing/html_extractor.py data/scraped/20250824_220843/beascout_01720.html data/scraped/20250824_220843/joinexploring_01720.html")
+        print("  python prototype/extract_all_units.py data/raw/debug_page_01720.html")
+        print("  python prototype/extract_all_units.py data/raw/beascout_01720.html data/raw/joinexploring_01720.html")
         sys.exit(1)
     
     html_files = sys.argv[1:]

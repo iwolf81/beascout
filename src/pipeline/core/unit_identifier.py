@@ -37,29 +37,17 @@ class UnitIdentifierNormalizer:
         import datetime
         import os
         
-        # Use same timestamp as main debug file
+        # Use consistent timestamp across entire run
         if not hasattr(cls, '_discarded_debug_filename'):
-            # Get timestamp from main debug file or create new one
-            if hasattr(cls, '_debug_filename'):
-                # Extract source and timestamp from existing debug filename
-                filename_parts = cls._debug_filename.split('_')
-                if len(filename_parts) >= 4:
-                    source = filename_parts[-3]  # e.g., 'scraped' or 'keythree'
-                    datestamp = filename_parts[-2]  # e.g., '20250827'
-                    timestamp = filename_parts[-1].replace('.log', '')  # e.g., '145748'
-                    full_timestamp = f'{datestamp}_{timestamp}'
-                else:
-                    source = getattr(cls, '_debug_source', 'scraped')
-                    # Use shared timestamp from environment if available
-                    shared_timestamp = os.environ.get('UNIT_DEBUG_TIMESTAMP')
-                    full_timestamp = shared_timestamp if shared_timestamp else datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            else:
-                source = getattr(cls, '_debug_source', 'scraped')
-                # Use shared timestamp from environment if available  
-                shared_timestamp = os.environ.get('UNIT_DEBUG_TIMESTAMP')
-                full_timestamp = shared_timestamp if shared_timestamp else datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            # Always use shared timestamp from environment to ensure single log file per run
+            shared_timestamp = os.environ.get('UNIT_DEBUG_TIMESTAMP')
+            if not shared_timestamp:
+                # Create shared timestamp once and set it for entire run
+                shared_timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                os.environ['UNIT_DEBUG_TIMESTAMP'] = shared_timestamp
             
-            cls._discarded_debug_filename = f'data/debug/discarded_unit_identifier_debug_{source}_{full_timestamp}.log'
+            source = getattr(cls, '_debug_source', 'scraped')
+            cls._discarded_debug_filename = f'data/debug/discarded_unit_identifier_debug_{source}_{shared_timestamp}.log'
             
             # Ensure debug directory exists
             os.makedirs('data/debug', exist_ok=True)
