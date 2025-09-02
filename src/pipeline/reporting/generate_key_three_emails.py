@@ -285,7 +285,7 @@ class KeyThreeEmailGenerator:
                     f"**{action_num}. Meeting Location** *(Missing - Required)*",
                     f"- Families need to know where your {unit_type} meets to attend meetings and events",
                     f"- **Action**: Please provide your meeting location with full street address (e.g., \"123 Main St, Community Center, {unit_data.get('chartered_organization', 'Your Town')}\")",
-                    "- **Where to Update**: Update directly through BeAScout.org using your Key Three login credentials",
+                    "- **Where to Update**: Log into BeAScout.org, search for your unit, and update the meeting location field",
                     ""
                 ])
                 action_num += 1
@@ -295,7 +295,7 @@ class KeyThreeEmailGenerator:
                     f"**{action_num}. Meeting Day & Time** *(Missing - Required)*" if 'REQUIRED_MISSING_TIME' in recommendations else f"**{action_num}. Meeting Day** *(Missing - Required)*",
                     f"- Families searching for Scouting need to know when your {unit_data.get('unit_type', 'unit').lower()} meets to plan their schedule",
                     "- **Action**: Please provide your regular meeting day and time (e.g., \"Every Thursday, 7:00 PM - 8:30 PM\")",
-                    "- **Where to Update**: Update directly through BeAScout.org using your Key Three login credentials",
+                    "- **Where to Update**: Log into BeAScout.org, search for your unit, and update the meeting time field",
                     ""
                 ])
                 action_num += 1
@@ -304,7 +304,7 @@ class KeyThreeEmailGenerator:
                     f"**{action_num}. Meeting Time** *(Missing - Required)*",
                     f"- Families searching for Scouting need to know what time your {unit_data.get('unit_type', 'unit').lower()} meets",
                     "- **Action**: Please provide your regular meeting time (e.g., \"7:00 PM - 8:30 PM\")",
-                    "- **Where to Update**: Update directly through BeAScout.org using your Key Three login credentials",
+                    "- **Where to Update**: Log into BeAScout.org, search for your unit, and update the meeting time field",
                     ""
                 ])
                 action_num += 1
@@ -320,7 +320,7 @@ class KeyThreeEmailGenerator:
                     "- Families need a way to ask questions and get information about joining",
                     f"- **Action**: Please provide a {unit_type} email address (preferably unit-specific like {example_email})",
                     "- **Best Practice**: Use a unit-specific email that can be monitored by multiple unit leaders",
-                    "- **Where to Update**: Update directly through BeAScout.org using your Key Three login credentials",
+                    "- **Where to Update**: Log into BeAScout.org, search for your unit, and update the contact email field",
                     ""
                 ])
                 action_num += 1
@@ -377,7 +377,8 @@ class KeyThreeEmailGenerator:
     
     def generate_email(self, unit_data: Dict[str, Any]) -> str:
         """Generate a personalized Key Three email for a unit"""
-        primary_identifier = unit_data.get('primary_identifier', '')
+        # Support both primary_identifier and unit_key fields for compatibility
+        primary_identifier = unit_data.get('primary_identifier', unit_data.get('unit_key', ''))
         unit_type = unit_data.get('unit_type', 'Unit')
         unit_number = unit_data.get('unit_number', '').lstrip('0') or 'XXX'
         
@@ -445,7 +446,12 @@ The Heart of New England Council periodically reviews unit information on BeASco
 ## Next Steps
 
 1. **Update Missing Information**: Please provide the critical missing information identified above
-2. **Review During Rechartering**: Recommend reviewing information during the annual rechartering process
+2. **How to Update BeAScout**: 
+   - Visit beascout.scouting.org and click "Sign In" in the top right
+   - Log in using your my.scouting.org credentials (same as ScoutBook)
+   - Search for your unit and click "Manage Unit Information"
+   - Update the missing fields and click "Save"
+3. **Review During Rechartering**: Recommend reviewing information during the annual rechartering process
 
 ## Questions or Need Help?
 
@@ -513,7 +519,8 @@ Yours in Scouting,
                 return True
         
         # Fallback to primary_identifier parsing (for backward compatibility)
-        primary_identifier = unit_data.get('primary_identifier', '')
+        # Support both primary_identifier and unit_key fields
+        primary_identifier = unit_data.get('primary_identifier', unit_data.get('unit_key', ''))
         if not primary_identifier:
             return False
             
