@@ -334,7 +334,7 @@ class BeAScoutQualityReportGenerator:
         # Data sources - include Key Three spreadsheet name
         key_three_filename = "Key 3 08-22-2025.xlsx"  # TODO: Extract from actual filename
         ws['A4'] = f"Data Sources: BeAScout.org (10-mile search radius per zip code) + JoinExploring.org (20-mile search radius per zip code) + {key_three_filename}"
-        ws['A4'].font = Font(size=10)
+        ws['A4'].font = Font(size=12)
         
         # Extract and format original scraping timestamp with date and time
         scraping_timestamp = self.quality_data.get('scraping_timestamp', '')
@@ -349,10 +349,15 @@ class BeAScoutQualityReportGenerator:
             formatted_date = 'Date Unknown'
         
         ws['A5'] = f"Last Complete BeAScout Data Retrieval: {formatted_date}"
-        ws['A5'].font = Font(size=10)
+        ws['A5'].font = Font(size=12)
         
+        ws['A7'] = "This information within this document is to be used only for authorized purposes on behalf of the Scouting America."
+        ws['A7'].font = Font(size=12, bold=True)
+        ws['A8'] = "Disclosing, copying, or making any inappropriate use of this information is strictly prohibited."
+        ws['A8'].font = Font(size=12, bold=True)
+
         # Quality metrics - remove extra spacing
-        row = 7
+        row = 10
         ws[f'A{row}'] = "QUALITY OVERVIEW"
         ws[f'A{row}'].font = Font(size=14, bold=True)
         
