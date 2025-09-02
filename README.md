@@ -87,28 +87,35 @@ python scripts/test_key_three_debug.py  # Test Key Three parsing
 
 ```
 beascout/
-├── src/                          # All production code
+├── src/                          # All production code (organized by function)
 │   ├── core/                     # Core system components
-│   │   └── unit_identifier.py    # Unit normalization & debug logging
-│   ├── mapping/                  # Geographic data (SINGLE SOURCE OF TRUTH)
-│   │   └── district_mapping.py   # HNE territory definitions & town mappings
-│   ├── parsing/                  # Data parsing engines
-│   │   ├── fixed_scraped_data_parser.py  # Scraped HTML with position-first parsing
-│   │   └── key_three_parser.py   # Excel spreadsheet processor
+│   │   └── unit_identifier.py           # Unit normalization & debug logging
+│   ├── mapping/                  # Configuration and territory mappings
+│   │   └── district_mapping.py          # HNE territory definitions & town mappings (SINGLE SOURCE OF TRUTH)
 │   ├── scraping/                 # Data collection
-│   │   ├── browser_scraper.py    # Playwright automation
-│   │   └── url_generator.py      # Search URL creation
+│   │   ├── browser_scraper.py           # Playwright automation
+│   │   └── url_generator.py             # Search URL creation
+│   ├── parsing/                  # Data parsing engines
+│   │   ├── fixed_scraped_data_parser.py # Scraped HTML with position-first parsing
+│   │   └── key_three_parser.py          # Excel spreadsheet processor
 │   ├── analysis/                 # Data quality assessment
-│   │   └── quality_scorer.py     # Unit completeness scoring
-│   ├── scripts/                  # Production pipeline scripts
-│   │   ├── process_full_dataset_v2.py    # Main pipeline
-│   │   ├── generate_district_reports.py  # Excel report generation
-│   │   └── generate_key_three_emails.py  # Email generation
-│   └── legacy/                   # Legacy extraction tools
-│       └── extract_all_units.py  # HTML → JSON converter
-├── scripts/                      # Utility scripts
-│   ├── search_strings.py         # Multi-file search tool
-│   └── test_key_three_debug.py   # Key Three parser testing
+│   │   └── quality_scorer.py            # Unit completeness scoring
+│   ├── pipeline/                 # Production pipeline components
+│   │   ├── reporting/               # Report generation
+│   │   │   ├── generate_commissioner_report.py # BeAScout Quality Reports (primary)
+│   │   │   ├── generate_district_reports.py    # District-specific reports (legacy)
+│   │   │   └── generate_key_three_emails.py    # Personalized email generation
+│   │   └── validation/              # Data validation
+│   │       └── three_way_validator.py       # Cross-source validation
+│   ├── tools/                    # Development and testing tools
+│   │   ├── utilities/               # Utility scripts
+│   │   │   └── process_full_dataset_v2.py   # Main pipeline orchestration
+│   │   └── testing/                 # Testing utilities
+│   │       └── test_key_three_debug.py      # Key Three parser testing
+│   └── legacy/                   # Legacy tools (still used)
+│       └── extract_all_units.py         # HTML → JSON conversion
+├── scripts/                      # Project-level utility scripts
+│   └── search_strings.py         # Multi-file search tool
 ├── data/                         # All data files
 │   ├── input/                    # Source data
 │   │   └── Key 3 08-22-2025.xlsx  # Monthly Key Three export
@@ -183,21 +190,18 @@ Place these files in `data/input/` before running the pipeline:
 #### Option 1: Full Pipeline from Fresh Scraping
 ```bash
 # Step 1: Fresh Data Scraping (30-45 minutes for all 71 zip codes)
-python src/pipeline/scraping/browser_scraper.py --all-zipcodes --output data/scraped/$(date +%Y%m%d_%H%M%S)/
+python src/scraping/browser_scraper.py --all-zipcodes --output data/scraped/$(date +%Y%m%d_%H%M%S)/
 
 # Step 2: Process Scraped Data Through Complete Pipeline
 python src/tools/utilities/process_full_dataset_v2.py data/scraped/YYYYMMDD_HHMMSS/
 
-# Step 3: Generate Three-Way Validation
-python src/pipeline/validation/three_way_validator.py
-
-# Step 4: Generate Commissioner Report  
+# Step 3: Generate BeAScout Quality Report (Commissioner Report)
 python src/pipeline/reporting/generate_commissioner_report.py
 
-# Step 5: Generate District Reports (optional)  
+# Step 4: Generate District Reports (legacy format - optional)  
 python src/pipeline/reporting/generate_district_reports.py data/raw/all_units_comprehensive_scored.json --output-dir data/output/reports/
 
-# Step 6: Generate Key Three Emails (optional)
+# Step 5: Generate Key Three Emails (optional)
 python src/pipeline/reporting/generate_key_three_emails.py data/raw/all_units_comprehensive_scored.json
 ```
 
@@ -205,21 +209,17 @@ python src/pipeline/reporting/generate_key_three_emails.py data/raw/all_units_co
 ```bash
 # Use existing scraped HTML files
 python src/tools/utilities/process_full_dataset_v2.py data/scraped/20250824_220843/
-python src/pipeline/validation/three_way_validator.py
 python src/pipeline/reporting/generate_commissioner_report.py
 ```
 
 #### Option 3: Test Key Three Parsing Only
 ```bash
 # Generate debug logs for Key Three parsing verification
-python src/tools/testing/test_key_three_debug.py
+python scripts/test_key_three_debug.py
 ```
 
-# Stage E: Three-Way Cross-Validation
-python src/pipeline/validation/three_way_validator.py  # BOTH/KEY_THREE_ONLY/WEB_ONLY classification
-
-# Stage F: Professional Reporting
-python src/pipeline/reporting/generate_commissioner_report.py  # Excel reports with action flags
+# Professional Reporting
+python src/pipeline/reporting/generate_commissioner_report.py  # Excel reports with BeAScout Quality analysis
 ```
 
 ## Quality Scoring System
@@ -248,45 +248,6 @@ python src/pipeline/reporting/generate_commissioner_report.py  # Excel reports w
 - **Parsing Accuracy**: 100% success rate with enhanced edge case handling
 - **System Status**: Production-ready with comprehensive end-to-end validation
 
-## File Hierarchy
-
-```
-beascout/
-├── data/
-│   ├── raw/
-│   │   ├── all_units_{zipcode}.json           # Raw scraped data (72 files)
-│   │   ├── scraped_units_comprehensive.json   # 152 unique units, 92% deduplication
-│   │   └── key_three_comparison.json          # 169 Key Three units with cross-reference
-│   ├── output/
-│   │   ├── reports/                           # Professional Excel reports for commissioners
-│   │   └── emails/                            # Personalized Key Three improvement emails
-│   ├── feedback/                              # Edge case analysis and user feedback
-│   └── debug/                                 # Unit identifier debug logs
-├── src/
-│   ├── core/
-│   │   └── unit_identifier.py                # Consistent normalization (unit_key format)
-│   ├── mapping/
-│   │   └── district_mapping.py               # Visual HNE council map → town assignments
-│   ├── parsing/
-│   │   ├── key_three_parser.py               # 169 active units with edge cases
-│   │   └── fixed_scraped_data_parser.py      # Enhanced 6-pattern address parsing
-│   ├── processing/
-│   │   └── comprehensive_scraped_parser.py   # All 72 zip codes with deduplication
-│   ├── validation/
-│   │   └── three_way_validator.py            # BOTH/KEY_THREE_ONLY/WEB_ONLY classification
-│   └── analysis/
-│       └── quality_scorer.py                 # A-F grading with recommendation IDs
-├── scripts/
-│   ├── generate_commissioner_report.py       # Professional Excel reporting
-│   └── process_full_dataset.py               # End-to-end pipeline orchestration
-├── prototype/
-│   └── conservative_multi_zip_scraper.py     # Browser automation for all zip codes
-├── requirements.txt                           # Python + Playwright dependencies
-├── CLAUDE.md                                  # AI development context
-├── SYSTEM_DESIGN.md                           # Complete business requirements
-├── ARCHITECTURE.md                            # Technical system design
-├── PRODUCTION_STATUS.md                       # Current deployment status
-└── README.md                                  # This overview
 
 
 ## Project Documentation

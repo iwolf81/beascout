@@ -18,30 +18,30 @@ from pathlib import Path
 
 @dataclass
 class ScoringWeights:
-    """Scoring weights by unit type"""
-    # Non-specialized units (Packs, Troops, Ships): 4 required fields at 17.5% each
+    """Scoring weights by unit type - 100% from required fields only"""
+    # Standard units (Packs, Troops, Ships, Posts, Clubs): 4 required fields at 25% each
     STANDARD_REQUIRED = {
-        'meeting_location': 17.5,
-        'meeting_day': 17.5,
-        'meeting_time': 17.5,
-        'contact_email': 17.5
+        'meeting_location': 25.0,
+        'meeting_day': 25.0,
+        'meeting_time': 25.0,
+        'contact_email': 25.0
     }
     
-    # Specialized units (Crews, Posts, Clubs): 5 required fields at 14% each
+    # Specialized units (Crews only): 5 required fields at 20% each
     SPECIALIZED_REQUIRED = {
-        'meeting_location': 14.0,
-        'meeting_day': 14.0,
-        'meeting_time': 14.0,
-        'contact_email': 14.0,
-        'specialty': 14.0
+        'meeting_location': 20.0,
+        'meeting_day': 20.0,
+        'meeting_time': 20.0,
+        'contact_email': 20.0,
+        'specialty': 20.0
     }
     
-    # Recommended fields (same for all unit types): 4 fields at 7.5% each
+    # Recommended fields are now informational only (no scoring impact)
     RECOMMENDED = {
-        'contact_person': 7.5,
-        'phone_number': 7.5,
-        'website': 7.5,
-        'description': 7.5
+        'contact_person': 0.0,
+        'phone_number': 0.0,
+        'website': 0.0,
+        'description': 0.0
     }
 
 
@@ -52,29 +52,30 @@ class UnitQualityScorer:
         self.weights = ScoringWeights()
         self.recommendation_map = {
             # Required field recommendations
-            'REQUIRED_MISSING_LOCATION': "Add meeting location with street address",
-            'REQUIRED_MISSING_DAY': "Add meeting day",
-            'REQUIRED_MISSING_TIME': "Add meeting time",
-            'REQUIRED_MISSING_EMAIL': "Add contact email address",
-            'REQUIRED_MISSING_SPECIALTY': "Add specialty information for Venturing Crew",
+            'REQUIRED_MISSING_LOCATION': "Add meeting location with street address.",
+            'REQUIRED_MISSING_DAY': "Add meeting day(s) to description.",
+            'REQUIRED_MISSING_TIME': "Add meeting time(s) to description.",
+            'REQUIRED_MISSING_EMAIL': "Add contact email address.",
+            'REQUIRED_MISSING_SPECIALTY': "Add specialty information for Venturing Crew.",
             
             # Recommended field recommendations
-            'RECOMMENDED_MISSING_CONTACT': "Add contact person name",
-            'RECOMMENDED_MISSING_PHONE': "Add contact phone number",
-            'RECOMMENDED_MISSING_WEBSITE': "Add unit-specific website",
+            'RECOMMENDED_MISSING_CONTACT': "Add contact person name.",
+            'RECOMMENDED_MISSING_PHONE': "Add contact phone number.",
+            'RECOMMENDED_MISSING_WEBSITE': "Add unit-specific website.",
             
             # Data quality recommendations
-            'QUALITY_POBOX_LOCATION': "Replace PO Box with physical meeting location",
-            'QUALITY_PERSONAL_EMAIL': "Use unit-specific email instead of personal email",
+            'QUALITY_POBOX_LOCATION': "Replace PO Box with physical meeting location.",
+            'QUALITY_PERSONAL_EMAIL': "Use unit-specific email instead of personal email.",
+            'QUALITY_UNIT_ADDRESS': "Meeting location should be in address field, not description.",
             
             # Content quality recommendations
-            'CONTENT_MISSING_DESCRIPTION': "Add informative and inviting unit description that includes meeting day(s) and time(s)"
+            'CONTENT_MISSING_DESCRIPTION': "Add informative and inviting unit description."
         }
     
     def is_specialized_unit(self, unit: Dict[str, Any]) -> bool:
-        """Check if unit is specialized (requires specialty field): Crew, Post, or Club"""
+        """Check if unit is specialized (requires specialty field): Crew only"""
         unit_type = unit.get('unit_type', '').lower()
-        return unit_type in ['crew', 'post', 'club']
+        return unit_type == 'crew'
     
     def is_field_present(self, unit: Dict[str, Any], field: str) -> bool:
         """Check if field has meaningful content"""
@@ -84,19 +85,32 @@ class UnitQualityScorer:
         return bool(value.strip())
     
     def is_pobox_location(self, location: str) -> bool:
-        """Check if location is a PO Box"""
+        """Check if location is ONLY a PO Box (no street address)"""
         if not location:
             return False
+        
         # Common PO Box patterns
         pobox_patterns = [
             r'\bP\.?O\.?\s*Box\b',
             r'\bPO\s*Box\b',
             r'\bPost\s*Office\s*Box\b'
         ]
-        for pattern in pobox_patterns:
-            if re.search(pattern, location, re.IGNORECASE):
-                return True
-        return False
+        
+        has_pobox = any(re.search(pattern, location, re.IGNORECASE) for pattern in pobox_patterns)
+        
+        if not has_pobox:
+            return False  # No PO Box found
+        
+        # Check if there's also a street address (number + street name)
+        street_patterns = [
+            r'\d+\s+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd|Way|Circle|Cir)',
+            r'\d+\s+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd|Way|Circle|Cir)\b'
+        ]
+        
+        has_street_address = any(re.search(pattern, location, re.IGNORECASE) for pattern in street_patterns)
+        
+        # Only flag as PO Box location if there's NO street address
+        return not has_street_address
     
     def is_personal_email(self, email: str, unit_data: Dict[str, Any] = None) -> bool:
         """Check if email appears to be personal rather than unit-specific"""
@@ -126,6 +140,15 @@ class UnitQualityScorer:
             r'^secretary',
             r'^info',
             r'^admin',
+            r'bsa[\.\w]*troop',      # BSA.TROOP patterns
+            r'pack\d+',              # pack + number patterns
+            r'troop\d+',             # troop + number patterns  
+            r'crew\d+',              # crew + number patterns
+            r'ship\d+',              # ship + number patterns
+            r'den\.leader',          # den.leader patterns
+            r'gardnerscouting',      # specific unit patterns like GardnerScouting
+            r'\w*troop\d+\w*',       # general troop + number patterns
+            r'\w*pack\d+\w*',        # general pack + number patterns
         ]
         
         is_unit_role = any(re.search(pattern, local_part) 
@@ -137,15 +160,28 @@ class UnitQualityScorer:
         # SECOND: Check for personal identifier patterns FIRST (they override unit patterns)
         personal_patterns = [
             r'[a-z]+\.[a-z]+',             # first.last format anywhere (overrides unit context)
-            r'[a-z]+\.[a-z]+\.[a-z]+',     # first.middle.last anywhere
+            r'[a-z]+\.[a-z]+\.[a-z]+',     # first.middle.last anywhere  
             r'^[a-z]{3}$',                 # 3-letter initials (like DRD)
+            r'[a-z]+[a-z]+rose',           # compound personal names like "carlsuzannerose"
         ]
         
         has_personal_identifier = any(re.search(pattern, local_part) 
                                     for pattern in personal_patterns)
         
-        # If has clear personal identifiers, it's personal regardless of unit context
-        if has_personal_identifier:
+        # Also check for obvious personal/family domain names
+        full_email_lower = email.lower()
+        personal_domain_patterns = [
+            r'@.*family\.com$',            # @grindleyfamily.com 
+            r'@.*currier\.us$',            # @currier.us
+            r'@.*boutwellowens\.com$',     # @boutwellowens.com
+            r'@.*micro-monkey\.com$',      # @micro-monkey.com
+        ]
+        
+        has_personal_domain = any(re.search(pattern, full_email_lower) 
+                                for pattern in personal_domain_patterns)
+        
+        # If has clear personal identifiers or personal domains, it's personal regardless of unit context
+        if has_personal_identifier or has_personal_domain:
             return True
         
         # THIRD: Check for unit-only identifiers (no personal names mixed in)
@@ -166,7 +202,7 @@ class UnitQualityScorer:
         if has_unit_only_identifier:
             return False  # Clear unit-only identifier - not personal
             
-        # FOURTH: Check remaining personal patterns (for ambiguous cases)
+        # FOURTH: Check for unit context (unit numbers and town names) to avoid false positives
         # First check for unit numbers in the email to avoid false positives
         if unit_number:
             # Look for unit number anywhere in email (with or without leading zeros)
@@ -179,6 +215,15 @@ class UnitQualityScorer:
             has_unit_number = any(re.search(pattern, local_part) for pattern in unit_patterns)
             if has_unit_number:
                 return False  # Contains unit number - not personal
+        
+        # Check for unit town name in email to avoid false positives
+        if unit_data:
+            unit_town = unit_data.get('unit_town', '').lower()
+            if unit_town and len(unit_town) >= 4:  # Only check meaningful town names
+                # Look for town name in email local part
+                town_pattern = rf'\b{re.escape(unit_town)}\b'
+                if re.search(town_pattern, local_part):
+                    return False  # Contains unit town name - likely unit-specific
         
         ambiguous_personal_patterns = [
             r'^[a-z]{2,3}[a-z]{4,8}$',     # initials + name (2-3 chars + 4-8 chars)
@@ -210,19 +255,24 @@ class UnitQualityScorer:
     
     def score_unit(self, unit: Dict[str, Any]) -> Tuple[float, List[str]]:
         """Score a single unit and return score and recommendations"""
-        score = 0.0
         recommendations = []
         is_specialized = self.is_specialized_unit(unit)
         
         # Get appropriate required field weights
         required_weights = self.weights.SPECIALIZED_REQUIRED if is_specialized else self.weights.STANDARD_REQUIRED
         
-        # Score required fields
+        # Start with 100% base score (sum of all required field weights)
+        base_score = sum(required_weights.values())
+        score = base_score
+        
+        # Process required fields - deduct for missing fields
         for field, weight in required_weights.items():
             if field == 'specialty' and not is_specialized:
                 continue  # Skip specialty for non-crew units
                 
             if not self.is_field_present(unit, field):
+                # Missing required field - deduct full weight
+                score -= weight
                 if field == 'meeting_location':
                     recommendations.append('REQUIRED_MISSING_LOCATION')
                 elif field == 'meeting_day':
@@ -234,26 +284,29 @@ class UnitQualityScorer:
                 elif field == 'specialty':
                     recommendations.append('REQUIRED_MISSING_SPECIALTY')
             else:
-                # Field is present - check quality
+                # Field is present - check for quality issues that deduct 50%
+                quality_deduction = 0
+                
                 if field == 'meeting_location':
                     location = unit.get(field, '')
                     if self.is_pobox_location(location):
-                        score += weight * 0.5  # Half credit for PO Box
+                        quality_deduction = weight * 0.5  # Deduct 50% for PO Box
                         recommendations.append('QUALITY_POBOX_LOCATION')
-                    else:
-                        score += weight  # Full credit
+                    elif unit.get('_quality_unit_address', False):
+                        quality_deduction = weight * 0.5  # Deduct 50% for location in description
+                        recommendations.append('QUALITY_UNIT_ADDRESS')
+                        
                 elif field == 'contact_email':
                     email = unit.get(field, '')
                     if self.is_personal_email(email, unit):
-                        score += weight * 0.5  # Half credit for personal email
+                        quality_deduction = weight * 0.5  # Deduct 50% for personal email
                         recommendations.append('QUALITY_PERSONAL_EMAIL')
-                    else:
-                        score += weight  # Full credit
-                else:
-                    score += weight  # Full credit for other fields
+                
+                # Apply quality deduction
+                score -= quality_deduction
         
-        # Score recommended fields
-        for field, weight in self.weights.RECOMMENDED.items():
+        # Add recommended field issues (informational only - no scoring impact)
+        for field in self.weights.RECOMMENDED.keys():
             if not self.is_field_present(unit, field):
                 if field == 'contact_person':
                     recommendations.append('RECOMMENDED_MISSING_CONTACT')
@@ -263,8 +316,9 @@ class UnitQualityScorer:
                     recommendations.append('RECOMMENDED_MISSING_WEBSITE')
                 elif field == 'description':
                     recommendations.append('CONTENT_MISSING_DESCRIPTION')
-            else:
-                score += weight  # Full credit for present recommended fields
+        
+        # Ensure score doesn't go below 0
+        score = max(0.0, score)
         
         return score, recommendations
     

@@ -1,0 +1,1358 @@
+{
+  "total_units": 169,
+  "source_file": "data/input/Key 3 08-22-2025.xlsx",
+  "parsed_units": [
+    {
+      "unit_type": "Pack",
+      "unit_number": "0001",
+      "town": "Acton",
+      "chartered_org": "The Church of The Good Shepherd",
+      "original_string": "Pack 0001 (F) - Acton-The Church of The Good Shepherd",
+      "primary_identifier": "Pack 0001 Acton-The Church of The Good Shepherd"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0003",
+      "town": "Leominster",
+      "chartered_org": "Our Lady Of The Lake Church",
+      "original_string": "Pack 0003 (F) - Leominster-Our Lady Of The Lake Church",
+      "primary_identifier": "Pack 0003 Leominster-Our Lady Of The Lake Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0007",
+      "town": "Clinton",
+      "chartered_org": "Heart of New England Council",
+      "original_string": "Pack 0007 (F) - Clinton Heart of New England Council",
+      "primary_identifier": "Pack 0007 Clinton-Heart of New England Council"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0009",
+      "town": "Worcester",
+      "chartered_org": "Greendale Peoples Church",
+      "original_string": "Pack 0009 (F) - Worcester - Greendale Peoples Church",
+      "primary_identifier": "Pack 0009 Worcester-Greendale Peoples Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0009",
+      "town": "Lancaster",
+      "chartered_org": "First Church of Christ Unitarian",
+      "original_string": "Pack 0009 (B) - Lancaster-First Church of Christ Unitarian",
+      "primary_identifier": "Pack 0009 Lancaster-First Church of Christ Unitarian"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0010",
+      "town": "Harvard",
+      "chartered_org": "Boy Scouts Inc",
+      "original_string": "Pack 0010 (F) - Harvard-Boy Scouts Inc",
+      "primary_identifier": "Pack 0010 Harvard-Boy Scouts Inc"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0012",
+      "town": "Groton",
+      "chartered_org": "Police Association Inc",
+      "original_string": "Pack 0012 (F) - Groton-Police Association Inc",
+      "primary_identifier": "Pack 0012 Groton-Police Association Inc"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0015",
+      "town": "Berlin",
+      "chartered_org": "Lions Club",
+      "original_string": "Pack 0015 (F) - Berlin-Lions Club",
+      "primary_identifier": "Pack 0015 Berlin-Lions Club"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0016",
+      "town": "Leominster",
+      "chartered_org": "Sportsmens Association",
+      "original_string": "Pack 0016 (F) - Leominster-Sportsmens Association",
+      "primary_identifier": "Pack 0016 Leominster-Sportsmens Association"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0017",
+      "town": "Fitchburg",
+      "chartered_org": "Saint Bernards Elementary School",
+      "original_string": "Pack 0017 (F) - Fitchburg-Saint Bernards Elementary School",
+      "primary_identifier": "Pack 0017 Fitchburg-Saint Bernards Elementary School"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0021",
+      "town": "Littleton",
+      "chartered_org": "Congregational Church",
+      "original_string": "Pack 0021 (F) - Littleton-Congregational Church",
+      "primary_identifier": "Pack 0021 Littleton-Congregational Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0022",
+      "town": "Worcester",
+      "chartered_org": "Hadwen Park Congregational Church",
+      "original_string": "Pack 0022 (F) - Worcester - Hadwen Park Congregational Church",
+      "primary_identifier": "Pack 0022 Worcester-Hadwen Park Congregational Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0025",
+      "town": "Princeton",
+      "chartered_org": "Norco Sportsmans Club",
+      "original_string": "Pack 0025 (F) - Princeton-Norco Sportsmans Club",
+      "primary_identifier": "Pack 0025 Princeton-Norco Sportsmans Club"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0026",
+      "town": "Boxborough",
+      "chartered_org": "District Minutemen Inc",
+      "original_string": "Pack 0026 (F) - Boxborough-District Minutemen Inc",
+      "primary_identifier": "Pack 0026 Boxborough-District Minutemen Inc"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0031",
+      "town": "Shirley",
+      "chartered_org": "Ayer Shirley Parent Teacher Org",
+      "original_string": "Pack 0031 (F) - Shirley - Ayer Shirley Parent Teacher Org",
+      "primary_identifier": "Pack 0031 Shirley-Ayer Shirley Parent Teacher Org"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0032",
+      "town": "Ayer",
+      "chartered_org": "St Andrews Church",
+      "original_string": "Pack 0032 (F) - Ayer-St Andrews Church",
+      "primary_identifier": "Pack 0032 Ayer-St Andrews Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0034",
+      "town": "Sterling",
+      "chartered_org": "First Church In Sterling",
+      "original_string": "Pack 0034 (F) - Sterling-First Church In Sterling",
+      "primary_identifier": "Pack 0034 Sterling-First Church In Sterling"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0037",
+      "town": "Bolton",
+      "chartered_org": "The First Parish of Bolton",
+      "original_string": "Pack 0037 (F) - Bolton-The First Parish of Bolton",
+      "primary_identifier": "Pack 0037 Bolton-The First Parish of Bolton"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0037",
+      "town": "Worcester",
+      "chartered_org": "Christ The King Church",
+      "original_string": "Pack 0037 (B) - Worcester - Christ The King Church",
+      "primary_identifier": "Pack 0037 Worcester-Christ The King Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0041",
+      "town": "Fitchburg",
+      "chartered_org": "Fitchburg Friends of Scouting",
+      "original_string": "Pack 0041 (F) - Fitchburg-Fitchburg Friends of Scouting",
+      "primary_identifier": "Pack 0041 Fitchburg-Fitchburg Friends of Scouting"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0046",
+      "town": "Jefferson",
+      "chartered_org": "Saint Marys Church",
+      "original_string": "Pack 0046 (F) - Jefferson - Saint Marys Church",
+      "primary_identifier": "Pack 0046 Jefferson-Saint Marys Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0053",
+      "town": "Auburn",
+      "chartered_org": "Faith Baptist Church",
+      "original_string": "Pack 0053 (F) - Auburn - Faith Baptist Church",
+      "primary_identifier": "Pack 0053 Auburn-Faith Baptist Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0062",
+      "town": "Shrewsbury",
+      "chartered_org": "American Legion Ray Stone Post #238",
+      "original_string": "Pack 0062 (F) - Shrewsbury - American Legion Ray Stone Post #238",
+      "primary_identifier": "Pack 0062 Shrewsbury-American Legion Ray Stone Post #238"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0070",
+      "town": "Acton",
+      "chartered_org": "Congregational Church",
+      "original_string": "Pack 0070 (F) - Acton-Congregational Church",
+      "primary_identifier": "Pack 0070 Acton-Congregational Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0101",
+      "town": "Auburn",
+      "chartered_org": "First Congregational Church",
+      "original_string": "Pack 0101 (F) - Auburn - First Congregational Church",
+      "primary_identifier": "Pack 0101 Auburn-First Congregational Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0114",
+      "town": "Shrewsbury",
+      "chartered_org": "First Congregational Church",
+      "original_string": "Pack 0114 (F) - Shrewsbury - First Congregational Church",
+      "primary_identifier": "Pack 0114 Shrewsbury-First Congregational Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0123",
+      "town": "Leicester",
+      "chartered_org": "Saint Pius X Catholic Parish",
+      "original_string": "Pack 0123 (F) - Leicester - Saint Pius X Catholic Parish",
+      "primary_identifier": "Pack 0123 Leicester-Saint Pius X Catholic Parish"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0141",
+      "town": "Rutland",
+      "chartered_org": "Congregational Church",
+      "original_string": "Pack 0141 (F) - Rutland - Congregational Church",
+      "primary_identifier": "Pack 0141 Rutland-Congregational Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0151",
+      "town": "W Boylston",
+      "chartered_org": "Masonic Charityand Education Assoc. Inc",
+      "original_string": "Pack 0151 (B) - W Boylston - Masonic Charityand Education Assoc. Inc",
+      "primary_identifier": "Pack 0151 W Boylston-Masonic Charityand Education Assoc. Inc"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0158",
+      "town": "Shrewsbury",
+      "chartered_org": "St. Marys Roman Catholic Church",
+      "original_string": "Pack 0158 (B) - Shrewsbury - St. Marys Roman Catholic Church",
+      "primary_identifier": "Pack 0158 Shrewsbury-St. Marys Roman Catholic Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0180",
+      "town": "Holden",
+      "chartered_org": "First Congregational Church",
+      "original_string": "Pack 0180 (F) - Holden - First Congregational Church",
+      "primary_identifier": "Pack 0180 Holden-First Congregational Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0306",
+      "town": "Paxton",
+      "chartered_org": "American Legion Post 306",
+      "original_string": "Pack 0306 (F) - Paxton - American Legion Post 306",
+      "primary_identifier": "Pack 0306 Paxton-American Legion Post 306"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "1455",
+      "town": "Veterans",
+      "chartered_org": "Of Foreign Wars Pepperell Post #3291",
+      "original_string": "Pack 1455 (F) - Veterans Of Foreign Wars Pepperell Post #3291",
+      "primary_identifier": "Pack 1455 Veterans-Of Foreign Wars Pepperell Post #3291"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "1728",
+      "town": "Lunenburg",
+      "chartered_org": "Lions Club",
+      "original_string": "Pack 1728 (F) - Lunenburg-Lions Club",
+      "primary_identifier": "Pack 1728 Lunenburg-Lions Club"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0001",
+      "town": "Lancaster",
+      "chartered_org": "Fire Fighters Association",
+      "original_string": "Troop 0001 (B) - Lancaster-Fire Fighters Association",
+      "primary_identifier": "Troop 0001 Lancaster-Fire Fighters Association"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0001",
+      "town": "Acton",
+      "chartered_org": "Group Of Citizens, Inc",
+      "original_string": "Troop 0001 (B) - Acton-Group Of Citizens, Inc",
+      "primary_identifier": "Troop 0001 Acton-Group Of Citizens, Inc"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0001",
+      "town": "Berlin",
+      "chartered_org": "Board Of Trade",
+      "original_string": "Troop 0001 (B) - Berlin-Board Of Trade",
+      "primary_identifier": "Troop 0001 Berlin-Board Of Trade"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0001",
+      "town": "Princeton",
+      "chartered_org": "First Congregational Church Of Princeton",
+      "original_string": "Troop 0001 (B) - Princeton-First Congregational Church Of Princeton",
+      "primary_identifier": "Troop 0001 Princeton-First Congregational Church Of Princeton"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0001",
+      "town": "Groton",
+      "chartered_org": "Firefighters Association",
+      "original_string": "Troop 0001 (B) - Groton-Firefighters Association",
+      "primary_identifier": "Troop 0001 Groton-Firefighters Association"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0001",
+      "town": "Littleton",
+      "chartered_org": "Congregational Church",
+      "original_string": "Troop 0001 (B) - Littleton-Congregational Church",
+      "primary_identifier": "Troop 0001 Littleton-Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0001",
+      "town": "Bolton",
+      "chartered_org": "The First Parish of Bolton",
+      "original_string": "Troop 0001 (B) - Bolton-The First Parish of Bolton",
+      "primary_identifier": "Troop 0001 Bolton-The First Parish of Bolton"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0001",
+      "town": "Sterling",
+      "chartered_org": "First Church In Sterling",
+      "original_string": "Troop 0001 (B) - Sterling-First Church In Sterling",
+      "primary_identifier": "Troop 0001 Sterling-First Church In Sterling"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0001",
+      "town": "Harvard",
+      "chartered_org": "Boy Scouts Inc",
+      "original_string": "Troop 0001 (B) - Harvard-Boy Scouts Inc",
+      "primary_identifier": "Troop 0001 Harvard-Boy Scouts Inc"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0001",
+      "town": "Boxborough",
+      "chartered_org": "District Minutemen Inc",
+      "original_string": "Troop 0001 (B) - Boxborough-District Minutemen Inc",
+      "primary_identifier": "Troop 0001 Boxborough-District Minutemen Inc"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0002",
+      "town": "Ayer",
+      "chartered_org": "Gun & Sportsmen Club Inc",
+      "original_string": "Troop 0002 (B) - Ayer-Gun & Sportsmen Club Inc",
+      "primary_identifier": "Troop 0002 Ayer-Gun & Sportsmen Club Inc"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0003",
+      "town": "Ayer",
+      "chartered_org": "Volunteer Fire AuxiliariesCombinatioin Co #1",
+      "original_string": "Troop 0003 (B) - Ayer-Volunteer Fire AuxiliariesCombinatioin Co #1",
+      "primary_identifier": "Troop 0003 Ayer-Volunteer Fire AuxiliariesCombinatioin Co #1"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0003",
+      "town": "Groton",
+      "chartered_org": "Group Of Citizens",
+      "original_string": "Troop 0003 (B) - Groton-Group Of Citizens",
+      "primary_identifier": "Troop 0003 Groton-Group Of Citizens"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0009",
+      "town": "Worcester",
+      "chartered_org": "St Christophers Catholic Church",
+      "original_string": "Troop 0009 (B) - Worcester - St Christophers Catholic Church",
+      "primary_identifier": "Troop 0009 Worcester-St Christophers Catholic Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0010",
+      "town": "Clinton",
+      "chartered_org": "Presbyterian Church",
+      "original_string": "Troop 0010 (B) - Clinton-Presbyterian Church",
+      "primary_identifier": "Troop 0010 Clinton-Presbyterian Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0010",
+      "town": "Townsend",
+      "chartered_org": "Rod & Gun Club",
+      "original_string": "Troop 0010 (B) - Townsend-Rod & Gun Club",
+      "primary_identifier": "Troop 0010 Townsend-Rod & Gun Club"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0011",
+      "town": "Leominster",
+      "chartered_org": "St Leos Parish",
+      "original_string": "Troop 0011 (B) - Leominster-St Leos Parish",
+      "primary_identifier": "Troop 0011 Leominster-St Leos Parish"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0012",
+      "town": "Leominster",
+      "chartered_org": "Our Lady Of The Lake Church",
+      "original_string": "Troop 0012 (B) - Leominster-Our Lady Of The Lake Church",
+      "primary_identifier": "Troop 0012 Leominster-Our Lady Of The Lake Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0013",
+      "town": "Pepperell",
+      "chartered_org": "Fire Firefighters Association",
+      "original_string": "Troop 0013 (B) - Pepperell-Fire Firefighters Association",
+      "primary_identifier": "Troop 0013 Pepperell-Fire Firefighters Association"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0017",
+      "town": "Fitchburg",
+      "chartered_org": "K of C Home Association",
+      "original_string": "Troop 0017 (B) - Fitchburg-K of C Home Association",
+      "primary_identifier": "Troop 0017 Fitchburg-K of C Home Association"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0020",
+      "town": "Littleton",
+      "chartered_org": "Scouting Trust",
+      "original_string": "Troop 0020 (B) - Littleton-Scouting Trust",
+      "primary_identifier": "Troop 0020 Littleton-Scouting Trust"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0022",
+      "town": "Worcester",
+      "chartered_org": "Hadwen Park Congregational Church",
+      "original_string": "Troop 0022 (B) - Worcester - Hadwen Park Congregational Church",
+      "primary_identifier": "Troop 0022 Worcester-Hadwen Park Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0026",
+      "town": "Pepperell",
+      "chartered_org": "Lions Club",
+      "original_string": "Troop 0026 (B) - Pepperell-Lions Club",
+      "primary_identifier": "Troop 0026 Pepperell-Lions Club"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0032",
+      "town": "Acton",
+      "chartered_org": "Group Of Citizens, Inc",
+      "original_string": "Troop 0032 (B) - Acton-Group Of Citizens, Inc",
+      "primary_identifier": "Troop 0032 Acton-Group Of Citizens, Inc"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0037",
+      "town": "Worcester",
+      "chartered_org": "Christ The King Church",
+      "original_string": "Troop 0037 (B) - Worcester - Christ The King Church",
+      "primary_identifier": "Troop 0037 Worcester-Christ The King Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0041",
+      "town": "Fitchburg",
+      "chartered_org": "Fitchburg Friends of Scouting",
+      "original_string": "Troop 0041 (B) - Fitchburg-Fitchburg Friends of Scouting",
+      "primary_identifier": "Troop 0041 Fitchburg-Fitchburg Friends of Scouting"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0053",
+      "town": "Auburn",
+      "chartered_org": "Faith Baptist Church",
+      "original_string": "Troop 0053 (B) - Auburn - Faith Baptist Church",
+      "primary_identifier": "Troop 0053 Auburn-Faith Baptist Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0054",
+      "town": "Worcester",
+      "chartered_org": "Heart of New England Council",
+      "original_string": "Troop 0054 (B) - Worcester-Heart of New England Council",
+      "primary_identifier": "Troop 0054 Worcester-Heart of New England Council"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0099",
+      "town": "Fitchburg",
+      "chartered_org": "Knights of Columbus Home Association",
+      "original_string": "Troop 0099 (B) - Fitchburg - Knights of Columbus Home Association",
+      "primary_identifier": "Troop 0099 Fitchburg-Knights of Columbus Home Association"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0101",
+      "town": "Auburn",
+      "chartered_org": "First Congregational Church",
+      "original_string": "Troop 0101 (B) - Auburn - First Congregational Church",
+      "primary_identifier": "Troop 0101 Auburn-First Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0105",
+      "town": "Paxton",
+      "chartered_org": "First Congregational Church",
+      "original_string": "Troop 0105 (B) - Paxton - First Congregational Church",
+      "primary_identifier": "Troop 0105 Paxton-First Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0114",
+      "town": "Shrewsbury",
+      "chartered_org": "First Congregational Church",
+      "original_string": "Troop 0114 (B) - Shrewsbury - First Congregational Church",
+      "primary_identifier": "Troop 0114 Shrewsbury-First Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0121",
+      "town": "Auburn",
+      "chartered_org": "North American Martyrs",
+      "original_string": "Troop 0121 (B) - Auburn - North American Martyrs",
+      "primary_identifier": "Troop 0121 Auburn-North American Martyrs"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0123",
+      "town": "Leicester",
+      "chartered_org": "Saint Pius X Catholic Parish",
+      "original_string": "Troop 0123 (B) - Leicester - Saint Pius X Catholic Parish",
+      "primary_identifier": "Troop 0123 Leicester-Saint Pius X Catholic Parish"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0123",
+      "town": "Shirley",
+      "chartered_org": "Rod & Gun Club Inc",
+      "original_string": "Troop 0123 (B) - Shirley-Rod & Gun Club Inc",
+      "primary_identifier": "Troop 0123 Shirley-Rod & Gun Club Inc"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0125",
+      "town": "Leicester",
+      "chartered_org": "St Aloysius/ St. Jude",
+      "original_string": "Troop 0125 (B) - Leicester - St Aloysius/ St. Jude",
+      "primary_identifier": "Troop 0125 Leicester-St Aloysius/ St. Jude"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0141",
+      "town": "Rutland",
+      "chartered_org": "Fire Brigade",
+      "original_string": "Troop 0141 (B) - Rutland - Fire Brigade",
+      "primary_identifier": "Troop 0141 Rutland-Fire Brigade"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0151",
+      "town": "Leominster",
+      "chartered_org": "Amercan Legion Post # 151",
+      "original_string": "Troop 0151 (B) - Leominster-Amercan Legion Post # 151",
+      "primary_identifier": "Troop 0151 Leominster-Amercan Legion Post # 151"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0151",
+      "town": "W Boylston",
+      "chartered_org": "Masonic Charityand Education Assoc. Inc",
+      "original_string": "Troop 0151 (B) - W Boylston - Masonic Charityand Education Assoc. Inc",
+      "primary_identifier": "Troop 0151 W Boylston-Masonic Charityand Education Assoc. Inc"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0175",
+      "town": "Holden",
+      "chartered_org": "Immanuel Lutheran Church",
+      "original_string": "Troop 0175 (B) - Holden - Immanuel Lutheran Church",
+      "primary_identifier": "Troop 0175 Holden-Immanuel Lutheran Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0180",
+      "town": "Holden",
+      "chartered_org": "First Congregational Church",
+      "original_string": "Troop 0180 (B) - Holden - First Congregational Church",
+      "primary_identifier": "Troop 0180 Holden-First Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0182",
+      "town": "Holden",
+      "chartered_org": "First Baptist Church",
+      "original_string": "Troop 0182 (B) - Holden - First Baptist Church",
+      "primary_identifier": "Troop 0182 Holden-First Baptist Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0227",
+      "town": "Shrewsbury",
+      "chartered_org": "St Anne Roman Catholic",
+      "original_string": "Troop 0227 (B) - Shrewsbury - St Anne Roman Catholic",
+      "primary_identifier": "Troop 0227 Shrewsbury-St Anne Roman Catholic"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0284",
+      "town": "Acton",
+      "chartered_org": "Boxborough Rotary Club",
+      "original_string": "Troop 0284 (B) - Acton-Boxborough Rotary Club",
+      "primary_identifier": "Troop 0284 Acton-Boxborough Rotary Club"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0477",
+      "town": "Leominster",
+      "chartered_org": "Sportsmens Association",
+      "original_string": "Troop 0477 (B) - Leominster-Sportsmens Association",
+      "primary_identifier": "Troop 0477 Leominster-Sportsmens Association"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "1004",
+      "town": "Shrewsbury",
+      "chartered_org": "Ray Stone Post 238 AL",
+      "original_string": "Troop 1004 (B) - Shrewsbury - Ray Stone Post 238 AL",
+      "primary_identifier": "Troop 1004 Shrewsbury-Ray Stone Post 238 AL"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "1728",
+      "town": "Lunenburg",
+      "chartered_org": "United Parish of Lunenburg",
+      "original_string": "Troop 1728 (B) - Lunenburg-United Parish of Lunenburg",
+      "primary_identifier": "Troop 1728 Lunenburg-United Parish of Lunenburg"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7001",
+      "town": "Harvard",
+      "chartered_org": "Boy Scouts Inc",
+      "original_string": "Troop 7001 (G) - Harvard-Boy Scouts Inc",
+      "primary_identifier": "Troop 7001 Harvard-Boy Scouts Inc"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7012",
+      "town": "Leominster",
+      "chartered_org": "Our Lady Of The Lake Church",
+      "original_string": "Troop 7012 (G) - Leominster-Our Lady Of The Lake Church",
+      "primary_identifier": "Troop 7012 Leominster-Our Lady Of The Lake Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7012",
+      "town": "Acton",
+      "chartered_org": "Group Of Citizens, Inc",
+      "original_string": "Troop 7012 (G) - Acton-Group Of Citizens, Inc",
+      "primary_identifier": "Troop 7012 Acton-Group Of Citizens, Inc"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7013",
+      "town": "Groton",
+      "chartered_org": "Firefighters Association",
+      "original_string": "Troop 7013 (G) - Groton-Firefighters Association",
+      "primary_identifier": "Troop 7013 Groton-Firefighters Association"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7013",
+      "town": "Pepperell",
+      "chartered_org": "Fire Firefighters Association",
+      "original_string": "Troop 7013 (G) - Pepperell-Fire Firefighters Association",
+      "primary_identifier": "Troop 7013 Pepperell-Fire Firefighters Association"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7019",
+      "town": "Littleton",
+      "chartered_org": "Congregational Church",
+      "original_string": "Troop 7019 (G) - Littleton-Congregational Church",
+      "primary_identifier": "Troop 7019 Littleton-Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7054",
+      "town": "Worcester",
+      "chartered_org": "Heart of New England Council",
+      "original_string": "Troop 7054 (G) - Worcester-Heart of New England Council",
+      "primary_identifier": "Troop 7054 Worcester-Heart of New England Council"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7099",
+      "town": "Fitchburg",
+      "chartered_org": "Knights of Columbus Home Association",
+      "original_string": "Troop 7099 (G) - Fitchburg - Knights of Columbus Home Association",
+      "primary_identifier": "Troop 7099 Fitchburg-Knights of Columbus Home Association"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7114",
+      "town": "Shrewsbury",
+      "chartered_org": "First Congregational Church",
+      "original_string": "Troop 7114 (G) - Shrewsbury - First Congregational Church",
+      "primary_identifier": "Troop 7114 Shrewsbury-First Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7123",
+      "town": "Shirley",
+      "chartered_org": "Rod & Gun Club Inc",
+      "original_string": "Troop 7123 (G) - Shirley-Rod & Gun Club Inc",
+      "primary_identifier": "Troop 7123 Shirley-Rod & Gun Club Inc"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7128",
+      "town": "Lunenburg",
+      "chartered_org": "United Parish of Lunenburg",
+      "original_string": "Troop 7128 (G) - Lunenburg-United Parish of Lunenburg",
+      "primary_identifier": "Troop 7128 Lunenburg-United Parish of Lunenburg"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7180",
+      "town": "Holden",
+      "chartered_org": "First Congregational Church",
+      "original_string": "Troop 7180 (G) - Holden - First Congregational Church",
+      "primary_identifier": "Troop 7180 Holden-First Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7530",
+      "town": "Auburn",
+      "chartered_org": "Faith Baptist Church",
+      "original_string": "Troop 7530 (G) - Auburn - Faith Baptist Church",
+      "primary_identifier": "Troop 7530 Auburn-Faith Baptist Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7740",
+      "town": "Leominster",
+      "chartered_org": "Sportsmens Association",
+      "original_string": "Troop 7740 (G) - Leominster-Sportsmens Association",
+      "primary_identifier": "Troop 7740 Leominster-Sportsmens Association"
+    },
+    {
+      "unit_type": "Crew",
+      "unit_number": "0204",
+      "town": "West Boylston",
+      "chartered_org": "American Legion Post 204",
+      "original_string": "Crew 0204 - West Boylston-American Legion Post 204",
+      "primary_identifier": "Crew 0204 West Boylston-American Legion Post 204"
+    },
+    {
+      "unit_type": "Crew",
+      "unit_number": "0250",
+      "town": "Harvard",
+      "chartered_org": "Sportsmens Club",
+      "original_string": "Crew 0250 - Harvard-Sportsmens Club",
+      "primary_identifier": "Crew 0250 Harvard-Sportsmens Club"
+    },
+    {
+      "unit_type": "Ship",
+      "unit_number": "0375",
+      "town": "Groton",
+      "chartered_org": "Nashua River Watershed Association",
+      "original_string": "Ship 0375 - Groton Nashua River Watershed Association",
+      "primary_identifier": "Ship 0375 Groton-Nashua River Watershed Association"
+    },
+    {
+      "unit_type": "Club",
+      "unit_number": "1129",
+      "town": "Worcester",
+      "chartered_org": "Heart of New England Council",
+      "original_string": "Club 1129 - Worcester-Heart of New England Council",
+      "primary_identifier": "Club 1129 Worcester-Heart of New England Council"
+    },
+    {
+      "unit_type": "Post",
+      "unit_number": "2012",
+      "town": "Holden",
+      "chartered_org": "Fire Department",
+      "original_string": "Post 2012 - Holden - Fire Department",
+      "primary_identifier": "Post 2012 Holden-Fire Department"
+    },
+    {
+      "unit_type": "Post",
+      "unit_number": "4879",
+      "town": "Groton",
+      "chartered_org": "Fire Service Local 4879",
+      "original_string": "Post 4879 - Groton-Fire Service Local 4879",
+      "primary_identifier": "Post 4879 Groton-Fire Service Local 4879"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0016",
+      "town": "Athol",
+      "chartered_org": "American Legion Post #102",
+      "original_string": "Pack 0016 (F) - Athol-American Legion Post #102",
+      "primary_identifier": "Pack 0016 Athol-American Legion Post #102"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0026",
+      "town": "Barre",
+      "chartered_org": "American Legion Post #2",
+      "original_string": "Pack 0026 (F) - Barre-American Legion Post #2",
+      "primary_identifier": "Pack 0026 Barre-American Legion Post #2"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0027",
+      "town": "Templeton",
+      "chartered_org": "Holy Cross Church",
+      "original_string": "Pack 0027 (F) - Templeton-Holy Cross Church",
+      "primary_identifier": "Pack 0027 Templeton-Holy Cross Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0033",
+      "town": "Veterans",
+      "chartered_org": "Of Foreign Wars Westminster Post",
+      "original_string": "Pack 0033 (F) - Veterans Of Foreign Wars Westminster Post",
+      "primary_identifier": "Pack 0033 Veterans-Of Foreign Wars Westminster Post"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0039",
+      "town": "Phillipston",
+      "chartered_org": "Congregational Church",
+      "original_string": "Pack 0039 (F) - Phillipston-Congregational Church",
+      "primary_identifier": "Pack 0039 Phillipston-Congregational Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0040",
+      "town": "Orange",
+      "chartered_org": "St Marys Roman Catholic Church",
+      "original_string": "Pack 0040 (F) - Orange-St Marys Roman Catholic Church",
+      "primary_identifier": "Pack 0040 Orange-St Marys Roman Catholic Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0106",
+      "town": "Grafton",
+      "chartered_org": "Our Lady of Hope Parish Grafton @ St. Mary",
+      "original_string": "Pack 0106 (F) - Grafton - Our Lady of Hope Parish Grafton @ St. Mary",
+      "primary_identifier": "Pack 0106 Grafton-Our Lady of Hope Parish Grafton @ St. Mary"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0107",
+      "town": "Grafton",
+      "chartered_org": "Congregational Church",
+      "original_string": "Pack 0107 (F) - Grafton - Congregational Church",
+      "primary_identifier": "Pack 0107 Grafton-Congregational Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0109",
+      "town": "Millbury",
+      "chartered_org": "Federated Church",
+      "original_string": "Pack 0109 (F) - Millbury - Federated Church",
+      "primary_identifier": "Pack 0109 Millbury-Federated Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0134",
+      "town": "Douglas",
+      "chartered_org": "Fire Fighters Association",
+      "original_string": "Pack 0134 (F) - Douglas - Fire Fighters Association",
+      "primary_identifier": "Pack 0134 Douglas-Fire Fighters Association"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0138",
+      "town": "Spencer",
+      "chartered_org": "Gaudette-Kirk Post 138-American Legion",
+      "original_string": "Pack 0138 (F) - Spencer - Gaudette-Kirk Post 138-American Legion",
+      "primary_identifier": "Pack 0138 Spencer-Gaudette-Kirk Post 138-American Legion"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0144",
+      "town": "Oakham",
+      "chartered_org": "Congregational Church",
+      "original_string": "Pack 0144 (F) - Oakham - Congregational Church",
+      "primary_identifier": "Pack 0144 Oakham-Congregational Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0148",
+      "town": "E Brookfield",
+      "chartered_org": "Baptist Church",
+      "original_string": "Pack 0148 (B) - E Brookfield - Baptist Church",
+      "primary_identifier": "Pack 0148 E Brookfield-Baptist Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0150",
+      "town": "Whitinsville",
+      "chartered_org": "St Patricks Roman Catholic Church",
+      "original_string": "Pack 0150 (F) - Whitinsville - St Patricks Roman Catholic Church",
+      "primary_identifier": "Pack 0150 Whitinsville-St Patricks Roman Catholic Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0159",
+      "town": "Brookfield",
+      "chartered_org": "Congregational Church",
+      "original_string": "Pack 0159 (F) - Brookfield - Congregational Church",
+      "primary_identifier": "Pack 0159 Brookfield-Congregational Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0161",
+      "town": "Sturbridge",
+      "chartered_org": "American Legion Post 109",
+      "original_string": "Pack 0161 (F) - Fiskdale-American Legion Post 109",
+      "primary_identifier": "Pack 0161 Sturbridge-American Legion Post 109"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0165",
+      "town": "Charlton",
+      "chartered_org": "Federated Church",
+      "original_string": "Pack 0165 (F) - Charlton - Federated Church",
+      "primary_identifier": "Pack 0165 Charlton-Federated Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0193",
+      "town": "Winchendon",
+      "chartered_org": "American Legion Post  # 193",
+      "original_string": "Pack 0193 (F) - Winchendon-American Legion Post  # 193",
+      "primary_identifier": "Pack 0193 Winchendon-American Legion Post  # 193"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0243",
+      "town": "Sutton",
+      "chartered_org": "First Congregational Church",
+      "original_string": "Pack 0243 (F) - Sutton - First Congregational Church",
+      "primary_identifier": "Pack 0243 Sutton-First Congregational Church"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0274",
+      "town": "Dudley",
+      "chartered_org": "St Anthony Of Padua R.C. Parish",
+      "original_string": "Pack 0274 (F) - Dudley - St Anthony Of Padua R.C. Parish",
+      "primary_identifier": "Pack 0274 Dudley-St Anthony Of Padua R.C. Parish"
+    },
+    {
+      "unit_type": "Pack",
+      "unit_number": "0316",
+      "town": "Douglas",
+      "chartered_org": "St Denis Catholic Church",
+      "original_string": "Pack 0316 (F) - Douglas - St Denis Catholic Church",
+      "primary_identifier": "Pack 0316 Douglas-St Denis Catholic Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0004",
+      "town": "Gardner",
+      "chartered_org": "Annunciation Parish",
+      "original_string": "Troop 0004 (B) - Gardner-Annunciation Parish",
+      "primary_identifier": "Troop 0004 Gardner-Annunciation Parish"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0006",
+      "town": "Gardner",
+      "chartered_org": "American Legion Post #129",
+      "original_string": "Troop 0006 (B) - Gardner-American Legion Post #129",
+      "primary_identifier": "Troop 0006 Gardner-American Legion Post #129"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0009",
+      "town": "Gardner",
+      "chartered_org": "Annunciation Parish",
+      "original_string": "Troop 0009 (B) - Gardner-Annunciation Parish",
+      "primary_identifier": "Troop 0009 Gardner-Annunciation Parish"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0016",
+      "town": "Athol",
+      "chartered_org": "American Legion Post #102",
+      "original_string": "Troop 0016 (B) - Athol-American Legion Post #102",
+      "primary_identifier": "Troop 0016 Athol-American Legion Post #102"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0022",
+      "town": "Hubbardston",
+      "chartered_org": "Ron Burton Training Village",
+      "original_string": "Troop 0022 (B) - Hubbardston-Ron Burton Training Village",
+      "primary_identifier": "Troop 0022 Hubbardston-Ron Burton Training Village"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0027",
+      "town": "Templeton",
+      "chartered_org": "Holy Cross Church",
+      "original_string": "Troop 0027 (B) - Templeton-Holy Cross Church",
+      "primary_identifier": "Troop 0027 Templeton-Holy Cross Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0033",
+      "town": "Westminster",
+      "chartered_org": "First Congregational Church",
+      "original_string": "Troop 0033 (B) - Westminster - First Congregational Church",
+      "primary_identifier": "Troop 0033 Westminster-First Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0039",
+      "town": "Phillipston",
+      "chartered_org": "Congregational Church",
+      "original_string": "Troop 0039 (B) - Phillipston-Congregational Church",
+      "primary_identifier": "Troop 0039 Phillipston-Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0040",
+      "town": "Orange",
+      "chartered_org": "St Marys Roman Catholic Church",
+      "original_string": "Troop 0040 (B) - Orange-St Marys Roman Catholic Church",
+      "primary_identifier": "Troop 0040 Orange-St Marys Roman Catholic Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0106",
+      "town": "Grafton",
+      "chartered_org": "Our Lady of Hope Parish Grafton @ St. Mary",
+      "original_string": "Troop 0106 (B) - Grafton - Our Lady of Hope Parish Grafton @ St. Mary",
+      "primary_identifier": "Troop 0106 Grafton-Our Lady of Hope Parish Grafton @ St. Mary"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0107",
+      "town": "Grafton",
+      "chartered_org": "Congregational Church",
+      "original_string": "Troop 0107 (B) - Grafton - Congregational Church",
+      "primary_identifier": "Troop 0107 Grafton-Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0109",
+      "town": "Millbury",
+      "chartered_org": "Federated Church",
+      "original_string": "Troop 0109 (B) - Millbury - Federated Church",
+      "primary_identifier": "Troop 0109 Millbury-Federated Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0116",
+      "town": "Spencer",
+      "chartered_org": "Gaudette-Kirk Post 138-American Legion",
+      "original_string": "Troop 0116 (B) - Spencer - Gaudette-Kirk Post 138-American Legion",
+      "primary_identifier": "Troop 0116 Spencer-Gaudette-Kirk Post 138-American Legion"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0118",
+      "town": "W Brookfield",
+      "chartered_org": "Our Lady of The Sacred Heart",
+      "original_string": "Troop 0118 (B) - W Brookfield - Our Lady of The Sacred Heart",
+      "primary_identifier": "Troop 0118 W Brookfield-Our Lady of The Sacred Heart"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0131",
+      "town": "Sutton",
+      "chartered_org": "St Marks Roman Catholic Church",
+      "original_string": "Troop 0131 (B) - Sutton - St Marks Roman Catholic Church",
+      "primary_identifier": "Troop 0131 Sutton-St Marks Roman Catholic Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0132",
+      "town": "Upton",
+      "chartered_org": "St. Gabriel the Archangel Parish",
+      "original_string": "Troop 0132 (B) - Upton - St. Gabriel the Archangel Parish",
+      "primary_identifier": "Troop 0132 Upton-St. Gabriel the Archangel Parish"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0134",
+      "town": "Douglas",
+      "chartered_org": "Fire Fighters Association",
+      "original_string": "Troop 0134 (B) - Douglas - Fire Fighters Association",
+      "primary_identifier": "Troop 0134 Douglas-Fire Fighters Association"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0142",
+      "town": "Warren",
+      "chartered_org": "Firemans Association",
+      "original_string": "Troop 0142 (B) - Warren - Firemans Association",
+      "primary_identifier": "Troop 0142 Warren-Firemans Association"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0144",
+      "town": "Oakham",
+      "chartered_org": "Police Association",
+      "original_string": "Troop 0144 (B) - Oakham - Police Association",
+      "primary_identifier": "Troop 0144 Oakham-Police Association"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0147",
+      "town": "Oxford",
+      "chartered_org": "First Congregational Church of Oxford",
+      "original_string": "Troop 0147 (B) - Oxford First Congregational Church of Oxford",
+      "primary_identifier": "Troop 0147 Oxford-First Congregational Church of Oxford"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0155",
+      "town": "Whitinsville",
+      "chartered_org": "Village Congregational Church",
+      "original_string": "Troop 0155 (B) - Whitinsville - Village Congregational Church",
+      "primary_identifier": "Troop 0155 Whitinsville-Village Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0161",
+      "town": "Sturbridge",
+      "chartered_org": "American Legion Post 109",
+      "original_string": "Troop 0161 (B) - Fiskdale-American Legion Post 109",
+      "primary_identifier": "Troop 0161 Sturbridge-American Legion Post 109"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0165",
+      "town": "Charlton",
+      "chartered_org": "American Legion Post 391",
+      "original_string": "Troop 0165 (B) - Charlton - American Legion Post 391",
+      "primary_identifier": "Troop 0165 Charlton-American Legion Post 391"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0173",
+      "town": "Webster",
+      "chartered_org": "St Joseph Basilica",
+      "original_string": "Troop 0173 (B) - Webster - St Joseph Basilica",
+      "primary_identifier": "Troop 0173 Webster-St Joseph Basilica"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0193",
+      "town": "Winchendon",
+      "chartered_org": "American Legion Post  # 193",
+      "original_string": "Troop 0193 (B) - Winchendon-American Legion Post  # 193",
+      "primary_identifier": "Troop 0193 Winchendon-American Legion Post  # 193"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0238",
+      "town": "E Brookfield",
+      "chartered_org": "Howe Lumber Co Inc",
+      "original_string": "Troop 0238 (B) - E Brookfield - Howe Lumber Co Inc",
+      "primary_identifier": "Troop 0238 E Brookfield-Howe Lumber Co Inc"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0243",
+      "town": "Sutton",
+      "chartered_org": "First Congregational Church",
+      "original_string": "Troop 0243 (B) - Sutton - First Congregational Church",
+      "primary_identifier": "Troop 0243 Sutton-First Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0273",
+      "town": "Dudley",
+      "chartered_org": "St Anthony Of Padua R.C. Parish",
+      "original_string": "Troop 0273 (B) - Dudley - St Anthony Of Padua R.C. Parish",
+      "primary_identifier": "Troop 0273 Dudley-St Anthony Of Padua R.C. Parish"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0281",
+      "town": "Ware",
+      "chartered_org": "AMVETS Post 2577",
+      "original_string": "Troop 0281 (B) - Ware - AMVETS Post 2577",
+      "primary_identifier": "Troop 0281 Ware-AMVETS Post 2577"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0316",
+      "town": "Douglas",
+      "chartered_org": "St Denis Catholic Church",
+      "original_string": "Troop 0316 (B) - Douglas - St Denis Catholic Church",
+      "primary_identifier": "Troop 0316 Douglas-St Denis Catholic Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "0338",
+      "town": "Charlton",
+      "chartered_org": "St Josephs Church",
+      "original_string": "Troop 0338 (B) - Charlton - St Josephs Church",
+      "primary_identifier": "Troop 0338 Charlton-St Josephs Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "1026",
+      "town": "Barre",
+      "chartered_org": "Friends of Troop 1026",
+      "original_string": "Troop 1026 (B) - Barre - Friends of Troop 1026",
+      "primary_identifier": "Troop 1026 Barre-Friends of Troop 1026"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7006",
+      "town": "Gardner",
+      "chartered_org": "American Legion Post #129",
+      "original_string": "Troop 7006 (G) - Gardner-American Legion Post #129",
+      "primary_identifier": "Troop 7006 Gardner-American Legion Post #129"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7027",
+      "town": "Templeton",
+      "chartered_org": "Holy Cross Church",
+      "original_string": "Troop 7027 (G) - Templeton-Holy Cross Church",
+      "primary_identifier": "Troop 7027 Templeton-Holy Cross Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7039",
+      "town": "Phillipston",
+      "chartered_org": "Congregational Church",
+      "original_string": "Troop 7039 (G) - Phillipston-Congregational Church",
+      "primary_identifier": "Troop 7039 Phillipston-Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7040",
+      "town": "Orange",
+      "chartered_org": "St Marys Roman Catholic Church",
+      "original_string": "Troop 7040 (G) - Orange-St Marys Roman Catholic Church",
+      "primary_identifier": "Troop 7040 Orange-St Marys Roman Catholic Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7049",
+      "town": "Gardner",
+      "chartered_org": "Annunciation Parish",
+      "original_string": "Troop 7049 (G) - Gardner-Annunciation Parish",
+      "primary_identifier": "Troop 7049 Gardner-Annunciation Parish"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7138",
+      "town": "Spencer",
+      "chartered_org": "Gaudette-Kirk Post 138-American Legion",
+      "original_string": "Troop 7138 (G) - Spencer - Gaudette-Kirk Post 138-American Legion",
+      "primary_identifier": "Troop 7138 Spencer-Gaudette-Kirk Post 138-American Legion"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7163",
+      "town": "Sturbridge",
+      "chartered_org": "American Legion Post 109",
+      "original_string": "Troop 7163 (G) - Fiskdale-American Legion Post 109",
+      "primary_identifier": "Troop 7163 Sturbridge-American Legion Post 109"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7165",
+      "town": "Charlton",
+      "chartered_org": "American Legion Post 391",
+      "original_string": "Troop 7165 (G) - Charlton - American Legion Post 391",
+      "primary_identifier": "Troop 7165 Charlton-American Legion Post 391"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7193",
+      "town": "Winchendon",
+      "chartered_org": "American Legion Post  # 193",
+      "original_string": "Troop 7193 (G) - Winchendon-American Legion Post  # 193",
+      "primary_identifier": "Troop 7193 Winchendon-American Legion Post  # 193"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7219",
+      "town": "Grafton",
+      "chartered_org": "Congregational Church",
+      "original_string": "Troop 7219 (G) - Grafton - Congregational Church",
+      "primary_identifier": "Troop 7219 Grafton-Congregational Church"
+    },
+    {
+      "unit_type": "Troop",
+      "unit_number": "7338",
+      "town": "Charlton",
+      "chartered_org": "St Josephs Church",
+      "original_string": "Troop 7338 (G) - Charlton - St Josephs Church",
+      "primary_identifier": "Troop 7338 Charlton-St Josephs Church"
+    },
+    {
+      "unit_type": "Crew",
+      "unit_number": "0006",
+      "town": "Gardner",
+      "chartered_org": "American Legion Post #129",
+      "original_string": "Crew 0006 - Gardner-American Legion Post #129",
+      "primary_identifier": "Crew 0006 Gardner-American Legion Post #129"
+    },
+    {
+      "unit_type": "Ship",
+      "unit_number": "1935",
+      "town": "Webster",
+      "chartered_org": "Sailing Association",
+      "original_string": "Ship 1935 - Webster - Sailing Association",
+      "primary_identifier": "Ship 1935 Webster-Sailing Association"
+    },
+    {
+      "unit_type": "Crew",
+      "unit_number": "1924",
+      "town": "Rutland",
+      "chartered_org": "Heart of New England Council",
+      "original_string": "Crew 1924 - Rutland-Heart of New England Council",
+      "primary_identifier": "Crew 1924 Rutland-Heart of New England Council"
+    },
+    {
+      "unit_type": "Crew",
+      "unit_number": "2254",
+      "town": "Rutland",
+      "chartered_org": "Heart of New England Council",
+      "original_string": "Crew 2254 - Rutland-Heart of New England Council",
+      "primary_identifier": "Crew 2254 Rutland-Heart of New England Council"
+    }
+  ]
+}

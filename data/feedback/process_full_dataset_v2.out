@@ -1,0 +1,2068 @@
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01005.html
+Found 12 unit containers
+Found 24 unit names
+Extracted 12 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01005.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 14
+  BeAScout: 12 units
+  JoinExploring: 2 units
+After deduplication: 14 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 14 HNE Council units
+Saved all 14 units to data/raw/all_units_01005.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01037.html
+Found 5 unit containers
+Found 10 unit names
+Extracted 5 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01037.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 7
+  BeAScout: 5 units
+  JoinExploring: 2 units
+After deduplication: 7 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 7 HNE Council units
+Saved all 7 units to data/raw/all_units_01037.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01068.html
+Found 24 unit containers
+Found 48 unit names
+Extracted 24 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01068.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 26
+  BeAScout: 24 units
+  JoinExploring: 2 units
+After deduplication: 26 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 26 HNE Council units
+Saved all 26 units to data/raw/all_units_01068.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01082.html
+Found 15 unit containers
+Found 30 unit names
+Extracted 15 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01082.html
+Found 5 unit containers
+Found 10 unit names
+Extracted 5 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 20
+  BeAScout: 15 units
+  JoinExploring: 5 units
+After deduplication: 20 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 20 HNE Council units
+Saved all 20 units to data/raw/all_units_01082.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01083.html
+Found 16 unit containers
+Found 32 unit names
+Extracted 16 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01083.html
+Found 5 unit containers
+Found 10 unit names
+Extracted 5 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 21
+  BeAScout: 16 units
+  JoinExploring: 5 units
+After deduplication: 21 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 21 HNE Council units
+Saved all 21 units to data/raw/all_units_01083.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01331.html
+Found 11 unit containers
+Found 22 unit names
+Extracted 11 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01331.html
+Found 1 unit containers
+Found 2 unit names
+Extracted 1 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 12
+  BeAScout: 11 units
+  JoinExploring: 1 units
+After deduplication: 12 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 12 HNE Council units
+Saved all 12 units to data/raw/all_units_01331.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01364.html
+Found 8 unit containers
+Found 16 unit names
+Extracted 8 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01364.html
+Found 1 unit containers
+Found 2 unit names
+Extracted 1 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 9
+  BeAScout: 8 units
+  JoinExploring: 1 units
+After deduplication: 9 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 9 HNE Council units
+Saved all 9 units to data/raw/all_units_01364.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01366.html
+Found 10 unit containers
+Found 20 unit names
+Extracted 10 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01366.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 12
+  BeAScout: 10 units
+  JoinExploring: 2 units
+After deduplication: 12 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 12 HNE Council units
+Saved all 12 units to data/raw/all_units_01366.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01368.html
+Found 16 unit containers
+Found 32 unit names
+Extracted 16 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01368.html
+Found 1 unit containers
+Found 2 unit names
+Extracted 1 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 17
+  BeAScout: 16 units
+  JoinExploring: 1 units
+After deduplication: 17 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 17 HNE Council units
+Saved all 17 units to data/raw/all_units_01368.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01420.html
+Found 28 unit containers
+Found 56 unit names
+Extracted 28 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01420.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 31
+  BeAScout: 28 units
+  JoinExploring: 3 units
+After deduplication: 31 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 31 HNE Council units
+Saved all 31 units to data/raw/all_units_01420.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01421.html
+Found 0 unit containers
+Found 0 unit names
+Extracted 0 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01421.html
+Found 0 unit containers
+Found 0 unit names
+Extracted 0 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 0
+After deduplication: 0 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 0 HNE Council units
+Saved all 0 units to data/raw/all_units_01421.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01430.html
+Found 23 unit containers
+Found 46 unit names
+Extracted 23 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01430.html
+Found 1 unit containers
+Found 2 unit names
+Extracted 1 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 24
+  BeAScout: 23 units
+  JoinExploring: 1 units
+After deduplication: 24 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 24 HNE Council units
+Saved all 24 units to data/raw/all_units_01430.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01431.html
+Found 15 unit containers
+Found 30 unit names
+Extracted 15 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01431.html
+Found 1 unit containers
+Found 2 unit names
+Extracted 1 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 16
+  BeAScout: 15 units
+  JoinExploring: 1 units
+After deduplication: 16 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 16 HNE Council units
+Saved all 16 units to data/raw/all_units_01431.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01432.html
+Found 53 unit containers
+Found 106 unit names
+Extracted 53 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01432.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 56
+  BeAScout: 53 units
+  JoinExploring: 3 units
+After deduplication: 55 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 55 HNE Council units
+Saved all 55 units to data/raw/all_units_01432.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01440.html
+Found 21 unit containers
+Found 42 unit names
+Extracted 21 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01440.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 23
+  BeAScout: 21 units
+  JoinExploring: 2 units
+After deduplication: 23 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 23 HNE Council units
+Saved all 23 units to data/raw/all_units_01440.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01450.html
+Found 45 unit containers
+Found 90 unit names
+Extracted 45 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01450.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 47
+  BeAScout: 45 units
+  JoinExploring: 2 units
+After deduplication: 47 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 47 HNE Council units
+Saved all 47 units to data/raw/all_units_01450.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01451.html
+Found 57 unit containers
+Found 114 unit names
+Extracted 57 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01451.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 60
+  BeAScout: 57 units
+  JoinExploring: 3 units
+After deduplication: 59 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 59 HNE Council units
+Saved all 59 units to data/raw/all_units_01451.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01452.html
+Found 22 unit containers
+Found 44 unit names
+Extracted 22 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01452.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 24
+  BeAScout: 22 units
+  JoinExploring: 2 units
+After deduplication: 24 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 24 HNE Council units
+Saved all 24 units to data/raw/all_units_01452.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01453.html
+Found 37 unit containers
+Found 74 unit names
+Extracted 37 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01453.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 40
+  BeAScout: 37 units
+  JoinExploring: 3 units
+After deduplication: 40 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 40 HNE Council units
+Saved all 40 units to data/raw/all_units_01453.json
+Found 71 BeAScout files
+Found 71 JoinExploring files
+Processing 71 unique zip codes...
+Processing ZIP 01005...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01005.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01005.html
+    ✅ HTML extraction completed
+Processing 14 units from data/raw/all_units_01005.json
+Successfully parsed 14 units
+Excluded 0 non-HNE units
+    Processed 14 units through current pipeline
+    Quality scored 14 units
+✅ 01005 completed successfully
+Processing ZIP 01037...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01037.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01037.html
+    ✅ HTML extraction completed
+Processing 7 units from data/raw/all_units_01037.json
+Successfully parsed 7 units
+Excluded 0 non-HNE units
+    Processed 7 units through current pipeline
+    Quality scored 7 units
+✅ 01037 completed successfully
+Processing ZIP 01068...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01068.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01068.html
+    ✅ HTML extraction completed
+Processing 26 units from data/raw/all_units_01068.json
+Successfully parsed 26 units
+Excluded 0 non-HNE units
+    Processed 26 units through current pipeline
+    Quality scored 26 units
+✅ 01068 completed successfully
+Processing ZIP 01082...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01082.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01082.html
+    ✅ HTML extraction completed
+Processing 20 units from data/raw/all_units_01082.json
+Successfully parsed 8 units
+Excluded 9 non-HNE units
+    Processed 8 units through current pipeline
+    Quality scored 8 units
+✅ 01082 completed successfully
+Processing ZIP 01083...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01083.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01083.html
+    ✅ HTML extraction completed
+Processing 21 units from data/raw/all_units_01083.json
+Successfully parsed 8 units
+Excluded 10 non-HNE units
+    Processed 8 units through current pipeline
+    Quality scored 8 units
+✅ 01083 completed successfully
+Processing ZIP 01331...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01331.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01331.html
+    ✅ HTML extraction completed
+Processing 12 units from data/raw/all_units_01331.json
+Successfully parsed 11 units
+Excluded 0 non-HNE units
+    Processed 11 units through current pipeline
+    Quality scored 11 units
+✅ 01331 completed successfully
+Processing ZIP 01364...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01364.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01364.html
+    ✅ HTML extraction completed
+Processing 9 units from data/raw/all_units_01364.json
+Successfully parsed 8 units
+Excluded 0 non-HNE units
+    Processed 8 units through current pipeline
+    Quality scored 8 units
+✅ 01364 completed successfully
+Processing ZIP 01366...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01366.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01366.html
+    ✅ HTML extraction completed
+Processing 12 units from data/raw/all_units_01366.json
+Successfully parsed 12 units
+Excluded 0 non-HNE units
+    Processed 12 units through current pipeline
+    Quality scored 12 units
+✅ 01366 completed successfully
+Processing ZIP 01368...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01368.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01368.html
+    ✅ HTML extraction completed
+Processing 17 units from data/raw/all_units_01368.json
+Successfully parsed 14 units
+Excluded 0 non-HNE units
+    Processed 14 units through current pipeline
+    Quality scored 14 units
+✅ 01368 completed successfully
+Processing ZIP 01420...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01420.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01420.html
+    ✅ HTML extraction completed
+Processing 31 units from data/raw/all_units_01420.json
+Successfully parsed 31 units
+Excluded 0 non-HNE units
+    Processed 31 units through current pipeline
+    Quality scored 31 units
+✅ 01420 completed successfully
+Processing ZIP 01421...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01421.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01421.html
+    ✅ HTML extraction completed
+Processing 0 units from data/raw/all_units_01421.json
+Successfully parsed 0 units
+Excluded 0 non-HNE units
+    Processed 0 units through current pipeline
+    Quality scored 0 units
+✅ 01421 completed successfully
+Processing ZIP 01430...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01430.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01430.html
+    ✅ HTML extraction completed
+Processing 24 units from data/raw/all_units_01430.json
+Successfully parsed 21 units
+Excluded 0 non-HNE units
+    Processed 21 units through current pipeline
+    Quality scored 21 units
+✅ 01430 completed successfully
+Processing ZIP 01431...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01431.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01431.html
+    ✅ HTML extraction completed
+Processing 16 units from data/raw/all_units_01431.json
+Successfully parsed 13 units
+Excluded 0 non-HNE units
+    Processed 13 units through current pipeline
+    Quality scored 13 units
+✅ 01431 completed successfully
+Processing ZIP 01432...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01432.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01432.html
+    ✅ HTML extraction completed
+Processing 55 units from data/raw/all_units_01432.json
+Successfully parsed 41 units
+Excluded 11 non-HNE units
+    Processed 41 units through current pipeline
+    Quality scored 41 units
+✅ 01432 completed successfully
+Processing ZIP 01440...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01440.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01440.html
+    ✅ HTML extraction completed
+Processing 23 units from data/raw/all_units_01440.json
+Successfully parsed 23 units
+Excluded 0 non-HNE units
+    Processed 23 units through current pipeline
+    Quality scored 23 units
+✅ 01440 completed successfully
+Processing ZIP 01450...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01450.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01450.html
+    ✅ HTML extraction completed
+Processing 47 units from data/raw/all_units_01450.json
+Successfully parsed 38 units
+Excluded 4 non-HNE units
+    Processed 38 units through current pipeline
+    Quality scored 38 units
+✅ 01450 completed successfully
+Processing ZIP 01451...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01451.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01451.html
+    ✅ HTML extraction completed
+Processing 59 units from data/raw/all_units_01451.json
+Successfully parsed 43 units
+Excluded 13 non-HNE units
+    Processed 43 units through current pipeline
+    Quality scored 43 units
+✅ 01451 completed successfully
+Processing ZIP 01452...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01452.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01452.html
+    ✅ HTML extraction completed
+Processing 24 units from data/raw/all_units_01452.json
+Successfully parsed 24 units
+Excluded 0 non-HNE units
+    Processed 24 units through current pipeline
+    Quality scored 24 units
+✅ 01452 completed successfully
+Processing ZIP 01453...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01453.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01453.html
+    ✅ HTML extraction completed
+Processing 40 units from data/raw/all_units_01453.json
+Successfully parsed 40 units
+Excluded 0 non-HNE units
+    Processed 40 units through current pipeline
+    Quality scored 40 units
+Processing BeAScout: data/scraped/20250824_220843/beascout_01460.html
+Found 65 unit containers
+Found 130 unit names
+Extracted 65 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01460.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 68
+  BeAScout: 65 units
+  JoinExploring: 3 units
+After deduplication: 64 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 64 HNE Council units
+Saved all 64 units to data/raw/all_units_01460.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01462.html
+Found 34 unit containers
+Found 68 unit names
+Extracted 34 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01462.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 37
+  BeAScout: 34 units
+  JoinExploring: 3 units
+After deduplication: 37 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 37 HNE Council units
+Saved all 37 units to data/raw/all_units_01462.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01463.html
+Found 46 unit containers
+Found 92 unit names
+Extracted 46 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01463.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 49
+  BeAScout: 46 units
+  JoinExploring: 3 units
+After deduplication: 47 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 47 HNE Council units
+Saved all 47 units to data/raw/all_units_01463.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01464.html
+Found 49 unit containers
+Found 98 unit names
+Extracted 49 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01464.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 52
+  BeAScout: 49 units
+  JoinExploring: 3 units
+After deduplication: 52 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 52 HNE Council units
+Saved all 52 units to data/raw/all_units_01464.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01468.html
+Found 21 unit containers
+Found 42 unit names
+Extracted 21 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01468.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 23
+  BeAScout: 21 units
+  JoinExploring: 2 units
+After deduplication: 23 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 23 HNE Council units
+Saved all 23 units to data/raw/all_units_01468.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01469.html
+Found 32 unit containers
+Found 64 unit names
+Extracted 32 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01469.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 34
+  BeAScout: 32 units
+  JoinExploring: 2 units
+After deduplication: 34 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 34 HNE Council units
+Saved all 34 units to data/raw/all_units_01469.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01473.html
+Found 30 unit containers
+Found 60 unit names
+Extracted 30 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01473.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 33
+  BeAScout: 30 units
+  JoinExploring: 3 units
+After deduplication: 33 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 33 HNE Council units
+Saved all 33 units to data/raw/all_units_01473.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01475.html
+Found 17 unit containers
+Found 34 unit names
+Extracted 17 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01475.html
+Found 13 unit containers
+Found 26 unit names
+Extracted 13 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 30
+  BeAScout: 17 units
+  JoinExploring: 13 units
+After deduplication: 29 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 29 HNE Council units
+Saved all 29 units to data/raw/all_units_01475.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01501.html
+Found 38 unit containers
+Found 76 unit names
+Extracted 38 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01501.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 40
+  BeAScout: 38 units
+  JoinExploring: 2 units
+After deduplication: 40 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 40 HNE Council units
+Saved all 40 units to data/raw/all_units_01501.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01503.html
+Found 52 unit containers
+Found 104 unit names
+Extracted 52 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01503.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 55
+  BeAScout: 52 units
+  JoinExploring: 3 units
+After deduplication: 54 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 54 HNE Council units
+Saved all 54 units to data/raw/all_units_01503.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01505.html
+Found 53 unit containers
+Found 106 unit names
+Extracted 53 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01505.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 56
+  BeAScout: 53 units
+  JoinExploring: 3 units
+After deduplication: 56 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 56 HNE Council units
+Saved all 56 units to data/raw/all_units_01505.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01506.html
+Found 19 unit containers
+Found 38 unit names
+Extracted 19 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01506.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 21
+  BeAScout: 19 units
+  JoinExploring: 2 units
+After deduplication: 21 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 21 HNE Council units
+Saved all 21 units to data/raw/all_units_01506.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01507.html
+Found 28 unit containers
+Found 56 unit names
+Extracted 28 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01507.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 30
+  BeAScout: 28 units
+  JoinExploring: 2 units
+After deduplication: 30 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 30 HNE Council units
+Saved all 30 units to data/raw/all_units_01507.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01510.html
+Found 49 unit containers
+Found 98 unit names
+Extracted 49 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01510.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 52
+  BeAScout: 49 units
+  JoinExploring: 3 units
+After deduplication: 51 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 51 HNE Council units
+Saved all 51 units to data/raw/all_units_01510.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01515.html
+Found 23 unit containers
+Found 46 unit names
+Extracted 23 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01515.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 25
+  BeAScout: 23 units
+  JoinExploring: 2 units
+After deduplication: 25 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 25 HNE Council units
+Saved all 25 units to data/raw/all_units_01515.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01516.html
+Found 28 unit containers
+Found 56 unit names
+Extracted 28 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01516.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 31
+  BeAScout: 28 units
+  JoinExploring: 3 units
+After deduplication: 31 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 31 HNE Council units
+Saved all 31 units to data/raw/all_units_01516.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01519.html
+Found 57 unit containers
+Found 114 unit names
+Extracted 57 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01519.html
+Found 5 unit containers
+Found 10 unit names
+Extracted 5 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 62
+  BeAScout: 57 units
+  JoinExploring: 5 units
+After deduplication: 62 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 62 HNE Council units
+Saved all 62 units to data/raw/all_units_01519.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01520.html
+Found 40 unit containers
+Found 80 unit names
+Extracted 40 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01520.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 42
+  BeAScout: 40 units
+  JoinExploring: 2 units
+After deduplication: 42 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 42 HNE Council units
+Saved all 42 units to data/raw/all_units_01520.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01523.html
+Found 47 unit containers
+Found 94 unit names
+Extracted 47 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01523.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 50
+  BeAScout: 47 units
+  JoinExploring: 3 units
+After deduplication: 49 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 49 HNE Council units
+Saved all 49 units to data/raw/all_units_01523.json
+
+✅ 01453 completed successfully
+Processing ZIP 01460...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01460.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01460.html
+    ✅ HTML extraction completed
+Processing 64 units from data/raw/all_units_01460.json
+Successfully parsed 30 units
+Excluded 26 non-HNE units
+    Processed 30 units through current pipeline
+    Quality scored 30 units
+✅ 01460 completed successfully
+Processing ZIP 01462...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01462.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01462.html
+    ✅ HTML extraction completed
+Processing 37 units from data/raw/all_units_01462.json
+Successfully parsed 35 units
+Excluded 0 non-HNE units
+    Processed 35 units through current pipeline
+    Quality scored 35 units
+✅ 01462 completed successfully
+Processing ZIP 01463...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01463.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01463.html
+    ✅ HTML extraction completed
+Processing 47 units from data/raw/all_units_01463.json
+Successfully parsed 22 units
+Excluded 17 non-HNE units
+    Processed 22 units through current pipeline
+    Quality scored 22 units
+✅ 01463 completed successfully
+Processing ZIP 01464...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01464.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01464.html
+    ✅ HTML extraction completed
+Processing 52 units from data/raw/all_units_01464.json
+Successfully parsed 46 units
+Excluded 4 non-HNE units
+    Processed 46 units through current pipeline
+    Quality scored 46 units
+✅ 01464 completed successfully
+Processing ZIP 01468...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01468.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01468.html
+    ✅ HTML extraction completed
+Processing 23 units from data/raw/all_units_01468.json
+Successfully parsed 23 units
+Excluded 0 non-HNE units
+    Processed 23 units through current pipeline
+    Quality scored 23 units
+✅ 01468 completed successfully
+Processing ZIP 01469...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01469.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01469.html
+    ✅ HTML extraction completed
+Processing 34 units from data/raw/all_units_01469.json
+Successfully parsed 28 units
+Excluded 1 non-HNE units
+    Processed 28 units through current pipeline
+    Quality scored 28 units
+✅ 01469 completed successfully
+Processing ZIP 01473...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01473.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01473.html
+    ✅ HTML extraction completed
+Processing 33 units from data/raw/all_units_01473.json
+Successfully parsed 33 units
+Excluded 0 non-HNE units
+    Processed 33 units through current pipeline
+    Quality scored 33 units
+✅ 01473 completed successfully
+Processing ZIP 01475...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01475.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01475.html
+    ✅ HTML extraction completed
+Processing 29 units from data/raw/all_units_01475.json
+Successfully parsed 15 units
+Excluded 1 non-HNE units
+    Processed 15 units through current pipeline
+    Quality scored 15 units
+✅ 01475 completed successfully
+Processing ZIP 01501...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01501.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01501.html
+    ✅ HTML extraction completed
+Processing 40 units from data/raw/all_units_01501.json
+Successfully parsed 38 units
+Excluded 2 non-HNE units
+    Processed 38 units through current pipeline
+    Quality scored 38 units
+✅ 01501 completed successfully
+Processing ZIP 01503...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01503.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01503.html
+    ✅ HTML extraction completed
+Processing 54 units from data/raw/all_units_01503.json
+Successfully parsed 29 units
+Excluded 23 non-HNE units
+    Processed 29 units through current pipeline
+    Quality scored 29 units
+✅ 01503 completed successfully
+Processing ZIP 01505...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01505.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01505.html
+    ✅ HTML extraction completed
+Processing 56 units from data/raw/all_units_01505.json
+Successfully parsed 36 units
+Excluded 19 non-HNE units
+    Processed 36 units through current pipeline
+    Quality scored 36 units
+✅ 01505 completed successfully
+Processing ZIP 01506...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01506.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01506.html
+    ✅ HTML extraction completed
+Processing 21 units from data/raw/all_units_01506.json
+Successfully parsed 18 units
+Excluded 3 non-HNE units
+    Processed 18 units through current pipeline
+    Quality scored 18 units
+✅ 01506 completed successfully
+Processing ZIP 01507...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01507.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01507.html
+    ✅ HTML extraction completed
+Processing 30 units from data/raw/all_units_01507.json
+Successfully parsed 30 units
+Excluded 0 non-HNE units
+    Processed 30 units through current pipeline
+    Quality scored 30 units
+✅ 01507 completed successfully
+Processing ZIP 01510...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01510.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01510.html
+    ✅ HTML extraction completed
+Processing 51 units from data/raw/all_units_01510.json
+Successfully parsed 35 units
+Excluded 15 non-HNE units
+    Processed 35 units through current pipeline
+    Quality scored 35 units
+✅ 01510 completed successfully
+Processing ZIP 01515...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01515.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01515.html
+    ✅ HTML extraction completed
+Processing 25 units from data/raw/all_units_01515.json
+Successfully parsed 25 units
+Excluded 0 non-HNE units
+    Processed 25 units through current pipeline
+    Quality scored 25 units
+✅ 01515 completed successfully
+Processing ZIP 01516...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01516.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01516.html
+    ✅ HTML extraction completed
+Processing 31 units from data/raw/all_units_01516.json
+Successfully parsed 16 units
+Excluded 2 non-HNE units
+    Processed 16 units through current pipeline
+    Quality scored 16 units
+✅ 01516 completed successfully
+Processing ZIP 01519...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01519.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01519.html
+    ✅ HTML extraction completed
+Processing 62 units from data/raw/all_units_01519.json
+Successfully parsed 33 units
+Excluded 21 non-HNE units
+    Processed 33 units through current pipeline
+    Quality scored 33 units
+✅ 01519 completed successfully
+Processing ZIP 01520...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01520.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01520.html
+    ✅ HTML extraction completed
+Processing 42 units from data/raw/all_units_01520.json
+Successfully parsed 41 units
+Excluded 1 non-HNE units
+    Processed 41 units through current pipeline
+    Quality scored 41 units
+✅ 01520 completed successfully
+Processing ZIP 01523...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01523.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01523.html
+    ✅ HTML extraction completed
+Processing 49 units from data/raw/all_units_01523.json
+Successfully parsed 43 units
+Excluded 5 non-HNE units
+    Processed 43 units through current pipeline
+    Quality scored 43 units
+✅ 01523 completed successfully
+Processing BeAScout: data/scraped/20250824_220843/beascout_01524.html
+Found 46 unit containers
+Found 92 unit names
+Extracted 46 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01524.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 48
+  BeAScout: 46 units
+  JoinExploring: 2 units
+After deduplication: 48 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 48 HNE Council units
+Saved all 48 units to data/raw/all_units_01524.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01527.html
+Found 48 unit containers
+Found 96 unit names
+Extracted 48 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01527.html
+Found 4 unit containers
+Found 8 unit names
+Extracted 4 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 52
+  BeAScout: 48 units
+  JoinExploring: 4 units
+After deduplication: 52 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 52 HNE Council units
+Saved all 52 units to data/raw/all_units_01527.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01531.html
+Found 17 unit containers
+Found 34 unit names
+Extracted 17 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01531.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 19
+  BeAScout: 17 units
+  JoinExploring: 2 units
+After deduplication: 19 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 19 HNE Council units
+Saved all 19 units to data/raw/all_units_01531.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01534.html
+Found 38 unit containers
+Found 76 unit names
+Extracted 38 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01534.html
+Found 4 unit containers
+Found 8 unit names
+Extracted 4 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 42
+  BeAScout: 38 units
+  JoinExploring: 4 units
+After deduplication: 42 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 42 HNE Council units
+Saved all 42 units to data/raw/all_units_01534.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01535.html
+Found 21 unit containers
+Found 42 unit names
+Extracted 21 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01535.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 23
+  BeAScout: 21 units
+  JoinExploring: 2 units
+After deduplication: 23 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 23 HNE Council units
+Saved all 23 units to data/raw/all_units_01535.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01540.html
+Found 31 unit containers
+Found 62 unit names
+Extracted 31 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01540.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 34
+  BeAScout: 31 units
+  JoinExploring: 3 units
+After deduplication: 34 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 34 HNE Council units
+Saved all 34 units to data/raw/all_units_01540.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01541.html
+Found 35 unit containers
+Found 70 unit names
+Extracted 35 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01541.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 38
+  BeAScout: 35 units
+  JoinExploring: 3 units
+After deduplication: 38 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 38 HNE Council units
+Saved all 38 units to data/raw/all_units_01541.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01543.html
+Found 29 unit containers
+Found 58 unit names
+Extracted 29 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01543.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 31
+  BeAScout: 29 units
+  JoinExploring: 2 units
+After deduplication: 31 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 31 HNE Council units
+Saved all 31 units to data/raw/all_units_01543.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01545.html
+Found 58 unit containers
+Found 116 unit names
+Extracted 58 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01545.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 60
+  BeAScout: 58 units
+  JoinExploring: 2 units
+After deduplication: 60 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 60 HNE Council units
+Saved all 60 units to data/raw/all_units_01545.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01550.html
+Found 17 unit containers
+Found 34 unit names
+Extracted 17 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01550.html
+Found 1 unit containers
+Found 2 unit names
+Extracted 1 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 18
+  BeAScout: 17 units
+  JoinExploring: 1 units
+After deduplication: 18 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 18 HNE Council units
+Saved all 18 units to data/raw/all_units_01550.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01562.html
+Found 34 unit containers
+Found 68 unit names
+Extracted 34 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01562.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 36
+  BeAScout: 34 units
+  JoinExploring: 2 units
+After deduplication: 36 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 36 HNE Council units
+Saved all 36 units to data/raw/all_units_01562.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01564.html
+Found 37 unit containers
+Found 74 unit names
+Extracted 37 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01564.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 40
+  BeAScout: 37 units
+  JoinExploring: 3 units
+After deduplication: 40 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 40 HNE Council units
+Saved all 40 units to data/raw/all_units_01564.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01566.html
+Found 16 unit containers
+Found 32 unit names
+Extracted 16 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01566.html
+Found 1 unit containers
+Found 2 unit names
+Extracted 1 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 17
+  BeAScout: 16 units
+  JoinExploring: 1 units
+After deduplication: 17 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 17 HNE Council units
+Saved all 17 units to data/raw/all_units_01566.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01568.html
+Found 47 unit containers
+Found 94 unit names
+Extracted 47 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01568.html
+Found 4 unit containers
+Found 8 unit names
+Extracted 4 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 51
+  BeAScout: 47 units
+  JoinExploring: 4 units
+After deduplication: 51 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 51 HNE Council units
+Saved all 51 units to data/raw/all_units_01568.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01570.html
+Found 32 unit containers
+Found 64 unit names
+Extracted 32 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01570.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 34
+  BeAScout: 32 units
+  JoinExploring: 2 units
+After deduplication: 34 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 34 HNE Council units
+Saved all 34 units to data/raw/all_units_01570.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01571.html
+Found 23 unit containers
+Found 46 unit names
+Extracted 23 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01571.html
+Found 1 unit containers
+Found 2 unit names
+Extracted 1 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 24
+  BeAScout: 23 units
+  JoinExploring: 1 units
+After deduplication: 24 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 24 HNE Council units
+Saved all 24 units to data/raw/all_units_01571.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01583.html
+Found 45 unit containers
+Found 90 unit names
+Extracted 45 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01583.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 48
+  BeAScout: 45 units
+  JoinExploring: 3 units
+After deduplication: 48 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 48 HNE Council units
+Saved all 48 units to data/raw/all_units_01583.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01585.html
+Found 17 unit containers
+Found 34 unit names
+Extracted 17 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01585.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 19
+  BeAScout: 17 units
+  JoinExploring: 2 units
+After deduplication: 19 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 19 HNE Council units
+Saved all 19 units to data/raw/all_units_01585.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01590.html
+Found 38 unit containers
+Found 76 unit names
+Extracted 38 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01590.html
+Found 5 unit containers
+Found 10 unit names
+Extracted 5 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 43
+  BeAScout: 38 units
+  JoinExploring: 5 units
+After deduplication: 43 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 43 HNE Council units
+Saved all 43 units to data/raw/all_units_01590.json
+
+Processing ZIP 01524...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01524.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01524.html
+    ✅ HTML extraction completed
+Processing 48 units from data/raw/all_units_01524.json
+Successfully parsed 48 units
+Excluded 0 non-HNE units
+    Processed 48 units through current pipeline
+    Quality scored 48 units
+✅ 01524 completed successfully
+Processing ZIP 01527...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01527.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01527.html
+    ✅ HTML extraction completed
+Processing 52 units from data/raw/all_units_01527.json
+Successfully parsed 47 units
+Excluded 2 non-HNE units
+    Processed 47 units through current pipeline
+    Quality scored 47 units
+✅ 01527 completed successfully
+Processing ZIP 01531...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01531.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01531.html
+    ✅ HTML extraction completed
+Processing 19 units from data/raw/all_units_01531.json
+Successfully parsed 19 units
+Excluded 0 non-HNE units
+    Processed 19 units through current pipeline
+    Quality scored 19 units
+✅ 01531 completed successfully
+Processing ZIP 01534...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01534.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01534.html
+    ✅ HTML extraction completed
+Processing 42 units from data/raw/all_units_01534.json
+Successfully parsed 16 units
+Excluded 18 non-HNE units
+    Processed 16 units through current pipeline
+    Quality scored 16 units
+✅ 01534 completed successfully
+Processing ZIP 01535...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01535.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01535.html
+    ✅ HTML extraction completed
+Processing 23 units from data/raw/all_units_01535.json
+Successfully parsed 23 units
+Excluded 0 non-HNE units
+    Processed 23 units through current pipeline
+    Quality scored 23 units
+✅ 01535 completed successfully
+Processing ZIP 01540...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01540.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01540.html
+    ✅ HTML extraction completed
+Processing 34 units from data/raw/all_units_01540.json
+Successfully parsed 32 units
+Excluded 1 non-HNE units
+    Processed 32 units through current pipeline
+    Quality scored 32 units
+✅ 01540 completed successfully
+Processing ZIP 01541...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01541.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01541.html
+    ✅ HTML extraction completed
+Processing 38 units from data/raw/all_units_01541.json
+Successfully parsed 38 units
+Excluded 0 non-HNE units
+    Processed 38 units through current pipeline
+    Quality scored 38 units
+✅ 01541 completed successfully
+Processing ZIP 01543...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01543.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01543.html
+    ✅ HTML extraction completed
+Processing 31 units from data/raw/all_units_01543.json
+Successfully parsed 31 units
+Excluded 0 non-HNE units
+    Processed 31 units through current pipeline
+    Quality scored 31 units
+✅ 01543 completed successfully
+Processing ZIP 01545...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01545.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01545.html
+    ✅ HTML extraction completed
+Processing 60 units from data/raw/all_units_01545.json
+Successfully parsed 46 units
+Excluded 13 non-HNE units
+    Processed 46 units through current pipeline
+    Quality scored 46 units
+✅ 01545 completed successfully
+Processing ZIP 01550...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01550.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01550.html
+    ✅ HTML extraction completed
+Processing 18 units from data/raw/all_units_01550.json
+Successfully parsed 12 units
+Excluded 6 non-HNE units
+    Processed 12 units through current pipeline
+    Quality scored 12 units
+✅ 01550 completed successfully
+Processing ZIP 01562...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01562.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01562.html
+    ✅ HTML extraction completed
+Processing 36 units from data/raw/all_units_01562.json
+Successfully parsed 36 units
+Excluded 0 non-HNE units
+    Processed 36 units through current pipeline
+    Quality scored 36 units
+✅ 01562 completed successfully
+Processing ZIP 01564...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01564.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01564.html
+    ✅ HTML extraction completed
+Processing 40 units from data/raw/all_units_01564.json
+Successfully parsed 40 units
+Excluded 0 non-HNE units
+    Processed 40 units through current pipeline
+    Quality scored 40 units
+✅ 01564 completed successfully
+Processing ZIP 01566...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01566.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01566.html
+    ✅ HTML extraction completed
+Processing 17 units from data/raw/all_units_01566.json
+Successfully parsed 14 units
+Excluded 3 non-HNE units
+    Processed 14 units through current pipeline
+    Quality scored 14 units
+✅ 01566 completed successfully
+Processing ZIP 01568...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01568.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01568.html
+    ✅ HTML extraction completed
+Processing 51 units from data/raw/all_units_01568.json
+Successfully parsed 15 units
+Excluded 28 non-HNE units
+    Processed 15 units through current pipeline
+    Quality scored 15 units
+✅ 01568 completed successfully
+Processing ZIP 01570...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01570.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01570.html
+    ✅ HTML extraction completed
+Processing 34 units from data/raw/all_units_01570.json
+Successfully parsed 22 units
+Excluded 6 non-HNE units
+    Processed 22 units through current pipeline
+    Quality scored 22 units
+✅ 01570 completed successfully
+Processing ZIP 01571...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01571.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01571.html
+    ✅ HTML extraction completed
+Processing 24 units from data/raw/all_units_01571.json
+Successfully parsed 18 units
+Excluded 6 non-HNE units
+    Processed 18 units through current pipeline
+    Quality scored 18 units
+✅ 01571 completed successfully
+Processing ZIP 01583...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01583.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01583.html
+    ✅ HTML extraction completed
+Processing 48 units from data/raw/all_units_01583.json
+Successfully parsed 43 units
+Excluded 5 non-HNE units
+    Processed 43 units through current pipeline
+    Quality scored 43 units
+✅ 01583 completed successfully
+Processing ZIP 01585...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01585.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01585.html
+    ✅ HTML extraction completed
+Processing 19 units from data/raw/all_units_01585.json
+Successfully parsed 13 units
+Excluded 6 non-HNE units
+    Processed 13 units through current pipeline
+    Quality scored 13 units
+✅ 01585 completed successfully
+Processing ZIP 01590...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01590.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01590.html
+    ✅ HTML extraction completed
+Processing 43 units from data/raw/all_units_01590.json
+Successfully parsed 31 units
+Excluded 5 non-HNE units
+    Processed 31 units through current pipeline
+    Quality scored 31 units
+✅ 01590 completed successfully
+Processing ZIP 01601...
+Processing BeAScout: data/scraped/20250824_220843/beascout_01601.html
+Found 58 unit containers
+Found 116 unit names
+Extracted 58 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01601.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 60
+  BeAScout: 58 units
+  JoinExploring: 2 units
+After deduplication: 60 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 60 HNE Council units
+Saved all 60 units to data/raw/all_units_01601.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01602.html
+Found 51 unit containers
+Found 102 unit names
+Extracted 51 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01602.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 53
+  BeAScout: 51 units
+  JoinExploring: 2 units
+After deduplication: 53 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 53 HNE Council units
+Saved all 53 units to data/raw/all_units_01602.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01603.html
+Found 54 unit containers
+Found 108 unit names
+Extracted 54 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01603.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 56
+  BeAScout: 54 units
+  JoinExploring: 2 units
+After deduplication: 56 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 56 HNE Council units
+Saved all 56 units to data/raw/all_units_01603.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01604.html
+Found 55 unit containers
+Found 110 unit names
+Extracted 55 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01604.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 57
+  BeAScout: 55 units
+  JoinExploring: 2 units
+After deduplication: 57 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 57 HNE Council units
+Saved all 57 units to data/raw/all_units_01604.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01605.html
+Found 55 unit containers
+Found 110 unit names
+Extracted 55 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01605.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 57
+  BeAScout: 55 units
+  JoinExploring: 2 units
+After deduplication: 57 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 57 HNE Council units
+Saved all 57 units to data/raw/all_units_01605.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01606.html
+Found 59 unit containers
+Found 118 unit names
+Extracted 59 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01606.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 61
+  BeAScout: 59 units
+  JoinExploring: 2 units
+After deduplication: 61 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 61 HNE Council units
+Saved all 61 units to data/raw/all_units_01606.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01607.html
+Found 55 unit containers
+Found 110 unit names
+Extracted 55 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01607.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 57
+  BeAScout: 55 units
+  JoinExploring: 2 units
+After deduplication: 57 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 57 HNE Council units
+Saved all 57 units to data/raw/all_units_01607.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01608.html
+Found 58 unit containers
+Found 116 unit names
+Extracted 58 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01608.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 60
+  BeAScout: 58 units
+  JoinExploring: 2 units
+After deduplication: 60 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 60 HNE Council units
+Saved all 60 units to data/raw/all_units_01608.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01609.html
+Found 48 unit containers
+Found 96 unit names
+Extracted 48 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01609.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 50
+  BeAScout: 48 units
+  JoinExploring: 2 units
+After deduplication: 50 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 50 HNE Council units
+Saved all 50 units to data/raw/all_units_01609.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01610.html
+Found 51 unit containers
+Found 102 unit names
+Extracted 51 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01610.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 53
+  BeAScout: 51 units
+  JoinExploring: 2 units
+After deduplication: 53 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 53 HNE Council units
+Saved all 53 units to data/raw/all_units_01610.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01612.html
+Found 36 unit containers
+Found 72 unit names
+Extracted 36 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01612.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 38
+  BeAScout: 36 units
+  JoinExploring: 2 units
+After deduplication: 38 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 38 HNE Council units
+Saved all 38 units to data/raw/all_units_01612.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01719.html
+Found 58 unit containers
+Found 116 unit names
+Extracted 58 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01719.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 61
+  BeAScout: 58 units
+  JoinExploring: 3 units
+After deduplication: 59 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 59 HNE Council units
+Saved all 59 units to data/raw/all_units_01719.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01720.html
+Found 66 unit containers
+Found 132 unit names
+Extracted 66 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01720.html
+Found 3 unit containers
+Found 6 unit names
+Extracted 3 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 69
+  BeAScout: 66 units
+  JoinExploring: 3 units
+After deduplication: 65 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 65 HNE Council units
+Saved all 65 units to data/raw/all_units_01720.json
+
+Processing BeAScout: data/scraped/20250824_220843/beascout_01740.html
+Found 52 unit containers
+Found 104 unit names
+Extracted 52 units from BeAScout
+
+Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01740.html
+Found 2 unit containers
+Found 4 unit names
+Extracted 2 units from JoinExploring
+
+=== SUMMARY ===
+Total units extracted from all sources: 54
+  BeAScout: 52 units
+  JoinExploring: 2 units
+After deduplication: 53 unique units
+Warning: Could not load HNE towns data - all units will be included
+After HNE filtering: 53 HNE Council units
+Saved all 53 units to data/raw/all_units_01740.json
+
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01601.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01601.html
+    ✅ HTML extraction completed
+Processing 60 units from data/raw/all_units_01601.json
+Successfully parsed 48 units
+Excluded 11 non-HNE units
+    Processed 48 units through current pipeline
+    Quality scored 48 units
+✅ 01601 completed successfully
+Processing ZIP 01602...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01602.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01602.html
+    ✅ HTML extraction completed
+Processing 53 units from data/raw/all_units_01602.json
+Successfully parsed 51 units
+Excluded 2 non-HNE units
+    Processed 51 units through current pipeline
+    Quality scored 51 units
+✅ 01602 completed successfully
+Processing ZIP 01603...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01603.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01603.html
+    ✅ HTML extraction completed
+Processing 56 units from data/raw/all_units_01603.json
+Successfully parsed 54 units
+Excluded 2 non-HNE units
+    Processed 54 units through current pipeline
+    Quality scored 54 units
+✅ 01603 completed successfully
+Processing ZIP 01604...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01604.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01604.html
+    ✅ HTML extraction completed
+Processing 57 units from data/raw/all_units_01604.json
+Successfully parsed 45 units
+Excluded 11 non-HNE units
+    Processed 45 units through current pipeline
+    Quality scored 45 units
+✅ 01604 completed successfully
+Processing ZIP 01605...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01605.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01605.html
+    ✅ HTML extraction completed
+Processing 57 units from data/raw/all_units_01605.json
+Successfully parsed 45 units
+Excluded 11 non-HNE units
+    Processed 45 units through current pipeline
+    Quality scored 45 units
+✅ 01605 completed successfully
+Processing ZIP 01606...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01606.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01606.html
+    ✅ HTML extraction completed
+Processing 61 units from data/raw/all_units_01606.json
+Successfully parsed 49 units
+Excluded 11 non-HNE units
+    Processed 49 units through current pipeline
+    Quality scored 49 units
+✅ 01606 completed successfully
+Processing ZIP 01607...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01607.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01607.html
+    ✅ HTML extraction completed
+Processing 57 units from data/raw/all_units_01607.json
+Successfully parsed 45 units
+Excluded 11 non-HNE units
+    Processed 45 units through current pipeline
+    Quality scored 45 units
+✅ 01607 completed successfully
+Processing ZIP 01608...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01608.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01608.html
+    ✅ HTML extraction completed
+Processing 60 units from data/raw/all_units_01608.json
+Successfully parsed 48 units
+Excluded 11 non-HNE units
+    Processed 48 units through current pipeline
+    Quality scored 48 units
+✅ 01608 completed successfully
+Processing ZIP 01609...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01609.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01609.html
+    ✅ HTML extraction completed
+Processing 50 units from data/raw/all_units_01609.json
+Successfully parsed 45 units
+Excluded 5 non-HNE units
+    Processed 45 units through current pipeline
+    Quality scored 45 units
+✅ 01609 completed successfully
+Processing ZIP 01610...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01610.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01610.html
+    ✅ HTML extraction completed
+Processing 53 units from data/raw/all_units_01610.json
+Successfully parsed 49 units
+Excluded 3 non-HNE units
+    Processed 49 units through current pipeline
+    Quality scored 49 units
+✅ 01610 completed successfully
+Processing ZIP 01612...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01612.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01612.html
+    ✅ HTML extraction completed
+Processing 38 units from data/raw/all_units_01612.json
+Successfully parsed 38 units
+Excluded 0 non-HNE units
+    Processed 38 units through current pipeline
+    Quality scored 38 units
+✅ 01612 completed successfully
+Processing ZIP 01719...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01719.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01719.html
+    ✅ HTML extraction completed
+Processing 59 units from data/raw/all_units_01719.json
+Successfully parsed 32 units
+Excluded 19 non-HNE units
+    Processed 32 units through current pipeline
+    Quality scored 32 units
+✅ 01719 completed successfully
+Processing ZIP 01720...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01720.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01720.html
+    ✅ HTML extraction completed
+Processing 65 units from data/raw/all_units_01720.json
+Successfully parsed 24 units
+Excluded 32 non-HNE units
+    Processed 24 units through current pipeline
+    Quality scored 24 units
+✅ 01720 completed successfully
+Processing ZIP 01740...
+  Processing BeAScout: data/scraped/20250824_220843/beascout_01740.html
+  Processing JoinExploring: data/scraped/20250824_220843/joinexploring_01740.html
+    ✅ HTML extraction completed
+Processing 53 units from data/raw/all_units_01740.json
+Successfully parsed 30 units
+Excluded 20 non-HNE units
+    Processed 30 units through current pipeline
+    Quality scored 30 units
+✅ 01740 completed successfully
+
+📊 Successfully processed 71 zip codes
+Combining all scored datasets with deduplication...
+   Deduplicated from 2105 to 163 unique units
+✅ Combined 71 datasets into comprehensive file
+   Total units: 163
+   Average score: 60.1%
+   Saved to: data/raw/all_units_comprehensive_scored.json

@@ -12,7 +12,7 @@ def get_hne_towns_and_zipcodes():
     
     # QUINAPOXET District (blue on map) - Northern and central Massachusetts
     # Import from authoritative source instead of duplicating
-    from src.mapping.district_mapping import TOWN_TO_DISTRICT
+    from src.config.district_mapping import TOWN_TO_DISTRICT
     quinapoxet_towns = [town for town, district in TOWN_TO_DISTRICT.items() if district == "Quinapoxet"]
     
     # SOARING EAGLE District (red on map) - Southern and western Massachusetts  

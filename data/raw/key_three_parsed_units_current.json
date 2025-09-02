@@ -1,0 +1,1537 @@
+{
+  "total_units": 169,
+  "parsing_timestamp": "2025-08-26_key_three_examination",
+  "key_three_units": [
+    {
+      "unit_key": "Pack 1 Acton",
+      "unit_type": "Pack",
+      "unit_number": "1",
+      "unit_town": "Acton",
+      "chartered_organization": "Acton-The Church of The Good Shepherd",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0001 (F) - Acton-The Church of The Good Shepherd"
+    },
+    {
+      "unit_key": "Pack 3 Leominster",
+      "unit_type": "Pack",
+      "unit_number": "3",
+      "unit_town": "Leominster",
+      "chartered_organization": "Leominster-Our Lady Of The Lake Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0003 (F) - Leominster-Our Lady Of The Lake Church"
+    },
+    {
+      "unit_key": "Pack 7 Clinton",
+      "unit_type": "Pack",
+      "unit_number": "7",
+      "unit_town": "Clinton",
+      "chartered_organization": "Clinton Heart of New England Council",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0007 (F) - Clinton Heart of New England Council"
+    },
+    {
+      "unit_key": "Pack 9 Worcester",
+      "unit_type": "Pack",
+      "unit_number": "9",
+      "unit_town": "Worcester",
+      "chartered_organization": "Worcester - Greendale Peoples Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0009 (F) - Worcester - Greendale Peoples Church"
+    },
+    {
+      "unit_key": "Pack 9 Lancaster",
+      "unit_type": "Pack",
+      "unit_number": "9",
+      "unit_town": "Lancaster",
+      "chartered_organization": "Lancaster-First Church of Christ Unitarian",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0009 (B) - Lancaster-First Church of Christ Unitarian"
+    },
+    {
+      "unit_key": "Pack 10 Harvard",
+      "unit_type": "Pack",
+      "unit_number": "10",
+      "unit_town": "Harvard",
+      "chartered_organization": "Harvard-Boy Scouts Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0010 (F) - Harvard-Boy Scouts Inc"
+    },
+    {
+      "unit_key": "Pack 12 Groton",
+      "unit_type": "Pack",
+      "unit_number": "12",
+      "unit_town": "Groton",
+      "chartered_organization": "Groton-Police Association Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0012 (F) - Groton-Police Association Inc"
+    },
+    {
+      "unit_key": "Pack 15 Berlin",
+      "unit_type": "Pack",
+      "unit_number": "15",
+      "unit_town": "Berlin",
+      "chartered_organization": "Berlin-Lions Club",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0015 (F) - Berlin-Lions Club"
+    },
+    {
+      "unit_key": "Pack 16 Leominster",
+      "unit_type": "Pack",
+      "unit_number": "16",
+      "unit_town": "Leominster",
+      "chartered_organization": "Leominster-Sportsmens Association",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0016 (F) - Leominster-Sportsmens Association"
+    },
+    {
+      "unit_key": "Pack 17 Fitchburg",
+      "unit_type": "Pack",
+      "unit_number": "17",
+      "unit_town": "Fitchburg",
+      "chartered_organization": "Fitchburg-Saint Bernards Elementary School",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0017 (F) - Fitchburg-Saint Bernards Elementary School"
+    },
+    {
+      "unit_key": "Pack 21 Littleton",
+      "unit_type": "Pack",
+      "unit_number": "21",
+      "unit_town": "Littleton",
+      "chartered_organization": "Littleton-Congregational Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0021 (F) - Littleton-Congregational Church"
+    },
+    {
+      "unit_key": "Pack 22 Worcester",
+      "unit_type": "Pack",
+      "unit_number": "22",
+      "unit_town": "Worcester",
+      "chartered_organization": "Worcester - Hadwen Park Congregational Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0022 (F) - Worcester - Hadwen Park Congregational Church"
+    },
+    {
+      "unit_key": "Pack 25 Princeton",
+      "unit_type": "Pack",
+      "unit_number": "25",
+      "unit_town": "Princeton",
+      "chartered_organization": "Princeton-Norco Sportsmans Club",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0025 (F) - Princeton-Norco Sportsmans Club"
+    },
+    {
+      "unit_key": "Pack 26 Boxborough",
+      "unit_type": "Pack",
+      "unit_number": "26",
+      "unit_town": "Boxborough",
+      "chartered_organization": "Boxborough-District Minutemen Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0026 (F) - Boxborough-District Minutemen Inc"
+    },
+    {
+      "unit_key": "Pack 31 Shirley",
+      "unit_type": "Pack",
+      "unit_number": "31",
+      "unit_town": "Shirley",
+      "chartered_organization": "Shirley - Ayer Shirley Parent Teacher Org",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0031 (F) - Shirley - Ayer Shirley Parent Teacher Org"
+    },
+    {
+      "unit_key": "Pack 32 Ayer",
+      "unit_type": "Pack",
+      "unit_number": "32",
+      "unit_town": "Ayer",
+      "chartered_organization": "Ayer-St Andrews Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0032 (F) - Ayer-St Andrews Church"
+    },
+    {
+      "unit_key": "Pack 34 Sterling",
+      "unit_type": "Pack",
+      "unit_number": "34",
+      "unit_town": "Sterling",
+      "chartered_organization": "Sterling-First Church In Sterling",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0034 (F) - Sterling-First Church In Sterling"
+    },
+    {
+      "unit_key": "Pack 37 Bolton",
+      "unit_type": "Pack",
+      "unit_number": "37",
+      "unit_town": "Bolton",
+      "chartered_organization": "Bolton-The First Parish of Bolton",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0037 (F) - Bolton-The First Parish of Bolton"
+    },
+    {
+      "unit_key": "Pack 37 Worcester",
+      "unit_type": "Pack",
+      "unit_number": "37",
+      "unit_town": "Worcester",
+      "chartered_organization": "Worcester - Christ The King Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0037 (B) - Worcester - Christ The King Church"
+    },
+    {
+      "unit_key": "Pack 41 Fitchburg",
+      "unit_type": "Pack",
+      "unit_number": "41",
+      "unit_town": "Fitchburg",
+      "chartered_organization": "Fitchburg-Fitchburg Friends of Scouting",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0041 (F) - Fitchburg-Fitchburg Friends of Scouting"
+    },
+    {
+      "unit_key": "Pack 46 Jefferson",
+      "unit_type": "Pack",
+      "unit_number": "46",
+      "unit_town": "Jefferson",
+      "chartered_organization": "Jefferson - Saint Marys Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0046 (F) - Jefferson - Saint Marys Church"
+    },
+    {
+      "unit_key": "Pack 53 Auburn",
+      "unit_type": "Pack",
+      "unit_number": "53",
+      "unit_town": "Auburn",
+      "chartered_organization": "Auburn - Faith Baptist Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0053 (F) - Auburn - Faith Baptist Church"
+    },
+    {
+      "unit_key": "Pack 62 Shrewsbury",
+      "unit_type": "Pack",
+      "unit_number": "62",
+      "unit_town": "Shrewsbury",
+      "chartered_organization": "Shrewsbury - American Legion Ray Stone Post #238",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0062 (F) - Shrewsbury - American Legion Ray Stone Post #238"
+    },
+    {
+      "unit_key": "Pack 70 Acton",
+      "unit_type": "Pack",
+      "unit_number": "70",
+      "unit_town": "Acton",
+      "chartered_organization": "Acton-Congregational Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0070 (F) - Acton-Congregational Church"
+    },
+    {
+      "unit_key": "Pack 101 Auburn",
+      "unit_type": "Pack",
+      "unit_number": "101",
+      "unit_town": "Auburn",
+      "chartered_organization": "Auburn - First Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0101 (F) - Auburn - First Congregational Church"
+    },
+    {
+      "unit_key": "Pack 114 Shrewsbury",
+      "unit_type": "Pack",
+      "unit_number": "114",
+      "unit_town": "Shrewsbury",
+      "chartered_organization": "Shrewsbury - First Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0114 (F) - Shrewsbury - First Congregational Church"
+    },
+    {
+      "unit_key": "Pack 123 Leicester",
+      "unit_type": "Pack",
+      "unit_number": "123",
+      "unit_town": "Leicester",
+      "chartered_organization": "Leicester - Saint Pius X Catholic Parish",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0123 (F) - Leicester - Saint Pius X Catholic Parish"
+    },
+    {
+      "unit_key": "Pack 141 Rutland",
+      "unit_type": "Pack",
+      "unit_number": "141",
+      "unit_town": "Rutland",
+      "chartered_organization": "Rutland - Congregational Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0141 (F) - Rutland - Congregational Church"
+    },
+    {
+      "unit_key": "Pack 151 West Boylston",
+      "unit_type": "Pack",
+      "unit_number": "151",
+      "unit_town": "West Boylston",
+      "chartered_organization": "W Boylston - Masonic Charityand Education Assoc. Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0151 (B) - W Boylston - Masonic Charityand Education Assoc. Inc"
+    },
+    {
+      "unit_key": "Pack 158 Shrewsbury",
+      "unit_type": "Pack",
+      "unit_number": "158",
+      "unit_town": "Shrewsbury",
+      "chartered_organization": "Shrewsbury - St. Marys Roman Catholic Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0158 (B) - Shrewsbury - St. Marys Roman Catholic Church"
+    },
+    {
+      "unit_key": "Pack 180 Holden",
+      "unit_type": "Pack",
+      "unit_number": "180",
+      "unit_town": "Holden",
+      "chartered_organization": "Holden - First Congregational Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0180 (F) - Holden - First Congregational Church"
+    },
+    {
+      "unit_key": "Pack 306 Paxton",
+      "unit_type": "Pack",
+      "unit_number": "306",
+      "unit_town": "Paxton",
+      "chartered_organization": "Paxton - American Legion Post 306",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 0306 (F) - Paxton - American Legion Post 306"
+    },
+    {
+      "unit_key": "Pack 1455 Pepperell",
+      "unit_type": "Pack",
+      "unit_number": "1455",
+      "unit_town": "Pepperell",
+      "chartered_organization": "Veterans Of Foreign Wars Pepperell Post #3291",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 1455 (F) - Veterans Of Foreign Wars Pepperell Post #3291"
+    },
+    {
+      "unit_key": "Pack 1728 Lunenburg",
+      "unit_type": "Pack",
+      "unit_number": "1728",
+      "unit_town": "Lunenburg",
+      "chartered_organization": "Lunenburg-Lions Club",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Pack 1728 (F) - Lunenburg-Lions Club"
+    },
+    {
+      "unit_key": "Troop 1 Lancaster",
+      "unit_type": "Troop",
+      "unit_number": "1",
+      "unit_town": "Lancaster",
+      "chartered_organization": "Lancaster-Fire Fighters Association",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0001 (B) - Lancaster-Fire Fighters Association"
+    },
+    {
+      "unit_key": "Troop 1 Acton",
+      "unit_type": "Troop",
+      "unit_number": "1",
+      "unit_town": "Acton",
+      "chartered_organization": "Acton-Group Of Citizens, Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0001 (B) - Acton-Group Of Citizens, Inc"
+    },
+    {
+      "unit_key": "Troop 1 Berlin",
+      "unit_type": "Troop",
+      "unit_number": "1",
+      "unit_town": "Berlin",
+      "chartered_organization": "Berlin-Board Of Trade",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0001 (B) - Berlin-Board Of Trade"
+    },
+    {
+      "unit_key": "Troop 1 Princeton",
+      "unit_type": "Troop",
+      "unit_number": "1",
+      "unit_town": "Princeton",
+      "chartered_organization": "Princeton-First Congregational Church Of Princeton",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0001 (B) - Princeton-First Congregational Church Of Princeton"
+    },
+    {
+      "unit_key": "Troop 1 Groton",
+      "unit_type": "Troop",
+      "unit_number": "1",
+      "unit_town": "Groton",
+      "chartered_organization": "Groton-Firefighters Association",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0001 (B) - Groton-Firefighters Association"
+    },
+    {
+      "unit_key": "Troop 1 Littleton",
+      "unit_type": "Troop",
+      "unit_number": "1",
+      "unit_town": "Littleton",
+      "chartered_organization": "Littleton-Congregational Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0001 (B) - Littleton-Congregational Church"
+    },
+    {
+      "unit_key": "Troop 1 Bolton",
+      "unit_type": "Troop",
+      "unit_number": "1",
+      "unit_town": "Bolton",
+      "chartered_organization": "Bolton-The First Parish of Bolton",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0001 (B) - Bolton-The First Parish of Bolton"
+    },
+    {
+      "unit_key": "Troop 1 Sterling",
+      "unit_type": "Troop",
+      "unit_number": "1",
+      "unit_town": "Sterling",
+      "chartered_organization": "Sterling-First Church In Sterling",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0001 (B) - Sterling-First Church In Sterling"
+    },
+    {
+      "unit_key": "Troop 1 Harvard",
+      "unit_type": "Troop",
+      "unit_number": "1",
+      "unit_town": "Harvard",
+      "chartered_organization": "Harvard-Boy Scouts Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0001 (B) - Harvard-Boy Scouts Inc"
+    },
+    {
+      "unit_key": "Troop 1 Boxborough",
+      "unit_type": "Troop",
+      "unit_number": "1",
+      "unit_town": "Boxborough",
+      "chartered_organization": "Boxborough-District Minutemen Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0001 (B) - Boxborough-District Minutemen Inc"
+    },
+    {
+      "unit_key": "Troop 2 Ayer",
+      "unit_type": "Troop",
+      "unit_number": "2",
+      "unit_town": "Ayer",
+      "chartered_organization": "Ayer-Gun & Sportsmen Club Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0002 (B) - Ayer-Gun & Sportsmen Club Inc"
+    },
+    {
+      "unit_key": "Troop 3 Ayer",
+      "unit_type": "Troop",
+      "unit_number": "3",
+      "unit_town": "Ayer",
+      "chartered_organization": "Ayer-Volunteer Fire AuxiliariesCombinatioin Co #1",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0003 (B) - Ayer-Volunteer Fire AuxiliariesCombinatioin Co #1"
+    },
+    {
+      "unit_key": "Troop 3 Groton",
+      "unit_type": "Troop",
+      "unit_number": "3",
+      "unit_town": "Groton",
+      "chartered_organization": "Groton-Group Of Citizens",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0003 (B) - Groton-Group Of Citizens"
+    },
+    {
+      "unit_key": "Troop 9 Worcester",
+      "unit_type": "Troop",
+      "unit_number": "9",
+      "unit_town": "Worcester",
+      "chartered_organization": "Worcester - St Christophers Catholic Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0009 (B) - Worcester - St Christophers Catholic Church"
+    },
+    {
+      "unit_key": "Troop 10 Clinton",
+      "unit_type": "Troop",
+      "unit_number": "10",
+      "unit_town": "Clinton",
+      "chartered_organization": "Clinton-Presbyterian Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0010 (B) - Clinton-Presbyterian Church"
+    },
+    {
+      "unit_key": "Troop 10 Townsend",
+      "unit_type": "Troop",
+      "unit_number": "10",
+      "unit_town": "Townsend",
+      "chartered_organization": "Townsend-Rod & Gun Club",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0010 (B) - Townsend-Rod & Gun Club"
+    },
+    {
+      "unit_key": "Troop 11 Leominster",
+      "unit_type": "Troop",
+      "unit_number": "11",
+      "unit_town": "Leominster",
+      "chartered_organization": "Leominster-St Leos Parish",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0011 (B) - Leominster-St Leos Parish"
+    },
+    {
+      "unit_key": "Troop 12 Leominster",
+      "unit_type": "Troop",
+      "unit_number": "12",
+      "unit_town": "Leominster",
+      "chartered_organization": "Leominster-Our Lady Of The Lake Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0012 (B) - Leominster-Our Lady Of The Lake Church"
+    },
+    {
+      "unit_key": "Troop 13 Pepperell",
+      "unit_type": "Troop",
+      "unit_number": "13",
+      "unit_town": "Pepperell",
+      "chartered_organization": "Pepperell-Fire Firefighters Association",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0013 (B) - Pepperell-Fire Firefighters Association"
+    },
+    {
+      "unit_key": "Troop 17 Fitchburg",
+      "unit_type": "Troop",
+      "unit_number": "17",
+      "unit_town": "Fitchburg",
+      "chartered_organization": "Fitchburg-K of C Home Association",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0017 (B) - Fitchburg-K of C Home Association"
+    },
+    {
+      "unit_key": "Troop 20 Littleton",
+      "unit_type": "Troop",
+      "unit_number": "20",
+      "unit_town": "Littleton",
+      "chartered_organization": "Littleton-Scouting Trust",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0020 (B) - Littleton-Scouting Trust"
+    },
+    {
+      "unit_key": "Troop 22 Worcester",
+      "unit_type": "Troop",
+      "unit_number": "22",
+      "unit_town": "Worcester",
+      "chartered_organization": "Worcester - Hadwen Park Congregational Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0022 (B) - Worcester - Hadwen Park Congregational Church"
+    },
+    {
+      "unit_key": "Troop 26 Pepperell",
+      "unit_type": "Troop",
+      "unit_number": "26",
+      "unit_town": "Pepperell",
+      "chartered_organization": "Pepperell-Lions Club",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0026 (B) - Pepperell-Lions Club"
+    },
+    {
+      "unit_key": "Troop 32 Acton",
+      "unit_type": "Troop",
+      "unit_number": "32",
+      "unit_town": "Acton",
+      "chartered_organization": "Acton-Group Of Citizens, Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0032 (B) - Acton-Group Of Citizens, Inc"
+    },
+    {
+      "unit_key": "Troop 37 Worcester",
+      "unit_type": "Troop",
+      "unit_number": "37",
+      "unit_town": "Worcester",
+      "chartered_organization": "Worcester - Christ The King Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0037 (B) - Worcester - Christ The King Church"
+    },
+    {
+      "unit_key": "Troop 41 Fitchburg",
+      "unit_type": "Troop",
+      "unit_number": "41",
+      "unit_town": "Fitchburg",
+      "chartered_organization": "Fitchburg-Fitchburg Friends of Scouting",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0041 (B) - Fitchburg-Fitchburg Friends of Scouting"
+    },
+    {
+      "unit_key": "Troop 53 Auburn",
+      "unit_type": "Troop",
+      "unit_number": "53",
+      "unit_town": "Auburn",
+      "chartered_organization": "Auburn - Faith Baptist Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0053 (B) - Auburn - Faith Baptist Church"
+    },
+    {
+      "unit_key": "Troop 54 Worcester",
+      "unit_type": "Troop",
+      "unit_number": "54",
+      "unit_town": "Worcester",
+      "chartered_organization": "Worcester-Heart of New England Council",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0054 (B) - Worcester-Heart of New England Council"
+    },
+    {
+      "unit_key": "Troop 99 Fitchburg",
+      "unit_type": "Troop",
+      "unit_number": "99",
+      "unit_town": "Fitchburg",
+      "chartered_organization": "Fitchburg - Knights of Columbus Home Association",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0099 (B) - Fitchburg - Knights of Columbus Home Association"
+    },
+    {
+      "unit_key": "Troop 101 Auburn",
+      "unit_type": "Troop",
+      "unit_number": "101",
+      "unit_town": "Auburn",
+      "chartered_organization": "Auburn - First Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0101 (B) - Auburn - First Congregational Church"
+    },
+    {
+      "unit_key": "Troop 105 Paxton",
+      "unit_type": "Troop",
+      "unit_number": "105",
+      "unit_town": "Paxton",
+      "chartered_organization": "Paxton - First Congregational Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0105 (B) - Paxton - First Congregational Church"
+    },
+    {
+      "unit_key": "Troop 114 Shrewsbury",
+      "unit_type": "Troop",
+      "unit_number": "114",
+      "unit_town": "Shrewsbury",
+      "chartered_organization": "Shrewsbury - First Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0114 (B) - Shrewsbury - First Congregational Church"
+    },
+    {
+      "unit_key": "Troop 121 Auburn",
+      "unit_type": "Troop",
+      "unit_number": "121",
+      "unit_town": "Auburn",
+      "chartered_organization": "Auburn - North American Martyrs",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0121 (B) - Auburn - North American Martyrs"
+    },
+    {
+      "unit_key": "Troop 123 Leicester",
+      "unit_type": "Troop",
+      "unit_number": "123",
+      "unit_town": "Leicester",
+      "chartered_organization": "Leicester - Saint Pius X Catholic Parish",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0123 (B) - Leicester - Saint Pius X Catholic Parish"
+    },
+    {
+      "unit_key": "Troop 123 Shirley",
+      "unit_type": "Troop",
+      "unit_number": "123",
+      "unit_town": "Shirley",
+      "chartered_organization": "Shirley-Rod & Gun Club Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0123 (B) - Shirley-Rod & Gun Club Inc"
+    },
+    {
+      "unit_key": "Troop 125 Leicester",
+      "unit_type": "Troop",
+      "unit_number": "125",
+      "unit_town": "Leicester",
+      "chartered_organization": "Leicester - St Aloysius/ St. Jude",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0125 (B) - Leicester - St Aloysius/ St. Jude"
+    },
+    {
+      "unit_key": "Troop 141 Rutland",
+      "unit_type": "Troop",
+      "unit_number": "141",
+      "unit_town": "Rutland",
+      "chartered_organization": "Rutland - Fire Brigade",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0141 (B) - Rutland - Fire Brigade"
+    },
+    {
+      "unit_key": "Troop 151 Leominster",
+      "unit_type": "Troop",
+      "unit_number": "151",
+      "unit_town": "Leominster",
+      "chartered_organization": "Leominster-Amercan Legion Post # 151",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0151 (B) - Leominster-Amercan Legion Post # 151"
+    },
+    {
+      "unit_key": "Troop 151 West Boylston",
+      "unit_type": "Troop",
+      "unit_number": "151",
+      "unit_town": "West Boylston",
+      "chartered_organization": "W Boylston - Masonic Charityand Education Assoc. Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0151 (B) - W Boylston - Masonic Charityand Education Assoc. Inc"
+    },
+    {
+      "unit_key": "Troop 175 Holden",
+      "unit_type": "Troop",
+      "unit_number": "175",
+      "unit_town": "Holden",
+      "chartered_organization": "Holden - Immanuel Lutheran Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0175 (B) - Holden - Immanuel Lutheran Church"
+    },
+    {
+      "unit_key": "Troop 180 Holden",
+      "unit_type": "Troop",
+      "unit_number": "180",
+      "unit_town": "Holden",
+      "chartered_organization": "Holden - First Congregational Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0180 (B) - Holden - First Congregational Church"
+    },
+    {
+      "unit_key": "Troop 182 Holden",
+      "unit_type": "Troop",
+      "unit_number": "182",
+      "unit_town": "Holden",
+      "chartered_organization": "Holden - First Baptist Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0182 (B) - Holden - First Baptist Church"
+    },
+    {
+      "unit_key": "Troop 227 Shrewsbury",
+      "unit_type": "Troop",
+      "unit_number": "227",
+      "unit_town": "Shrewsbury",
+      "chartered_organization": "Shrewsbury - St Anne Roman Catholic",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0227 (B) - Shrewsbury - St Anne Roman Catholic"
+    },
+    {
+      "unit_key": "Troop 284 Acton",
+      "unit_type": "Troop",
+      "unit_number": "284",
+      "unit_town": "Acton",
+      "chartered_organization": "Acton-Boxborough Rotary Club",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0284 (B) - Acton-Boxborough Rotary Club"
+    },
+    {
+      "unit_key": "Troop 477 Leominster",
+      "unit_type": "Troop",
+      "unit_number": "477",
+      "unit_town": "Leominster",
+      "chartered_organization": "Leominster-Sportsmens Association",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 0477 (B) - Leominster-Sportsmens Association"
+    },
+    {
+      "unit_key": "Troop 1004 Shrewsbury",
+      "unit_type": "Troop",
+      "unit_number": "1004",
+      "unit_town": "Shrewsbury",
+      "chartered_organization": "Shrewsbury - Ray Stone Post 238 AL",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 1004 (B) - Shrewsbury - Ray Stone Post 238 AL"
+    },
+    {
+      "unit_key": "Troop 1728 Lunenburg",
+      "unit_type": "Troop",
+      "unit_number": "1728",
+      "unit_town": "Lunenburg",
+      "chartered_organization": "Lunenburg-United Parish of Lunenburg",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 1728 (B) - Lunenburg-United Parish of Lunenburg"
+    },
+    {
+      "unit_key": "Troop 7001 Harvard",
+      "unit_type": "Troop",
+      "unit_number": "7001",
+      "unit_town": "Harvard",
+      "chartered_organization": "Harvard-Boy Scouts Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 7001 (G) - Harvard-Boy Scouts Inc"
+    },
+    {
+      "unit_key": "Troop 7012 Leominster",
+      "unit_type": "Troop",
+      "unit_number": "7012",
+      "unit_town": "Leominster",
+      "chartered_organization": "Leominster-Our Lady Of The Lake Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 7012 (G) - Leominster-Our Lady Of The Lake Church"
+    },
+    {
+      "unit_key": "Troop 7012 Acton",
+      "unit_type": "Troop",
+      "unit_number": "7012",
+      "unit_town": "Acton",
+      "chartered_organization": "Acton-Group Of Citizens, Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 7012 (G) - Acton-Group Of Citizens, Inc"
+    },
+    {
+      "unit_key": "Troop 7013 Groton",
+      "unit_type": "Troop",
+      "unit_number": "7013",
+      "unit_town": "Groton",
+      "chartered_organization": "Groton-Firefighters Association",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 7013 (G) - Groton-Firefighters Association"
+    },
+    {
+      "unit_key": "Troop 7013 Pepperell",
+      "unit_type": "Troop",
+      "unit_number": "7013",
+      "unit_town": "Pepperell",
+      "chartered_organization": "Pepperell-Fire Firefighters Association",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 7013 (G) - Pepperell-Fire Firefighters Association"
+    },
+    {
+      "unit_key": "Troop 7019 Littleton",
+      "unit_type": "Troop",
+      "unit_number": "7019",
+      "unit_town": "Littleton",
+      "chartered_organization": "Littleton-Congregational Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 7019 (G) - Littleton-Congregational Church"
+    },
+    {
+      "unit_key": "Troop 7054 Worcester",
+      "unit_type": "Troop",
+      "unit_number": "7054",
+      "unit_town": "Worcester",
+      "chartered_organization": "Worcester-Heart of New England Council",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 7054 (G) - Worcester-Heart of New England Council"
+    },
+    {
+      "unit_key": "Troop 7099 Fitchburg",
+      "unit_type": "Troop",
+      "unit_number": "7099",
+      "unit_town": "Fitchburg",
+      "chartered_organization": "Fitchburg - Knights of Columbus Home Association",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7099 (G) - Fitchburg - Knights of Columbus Home Association"
+    },
+    {
+      "unit_key": "Troop 7114 Shrewsbury",
+      "unit_type": "Troop",
+      "unit_number": "7114",
+      "unit_town": "Shrewsbury",
+      "chartered_organization": "Shrewsbury - First Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7114 (G) - Shrewsbury - First Congregational Church"
+    },
+    {
+      "unit_key": "Troop 7123 Shirley",
+      "unit_type": "Troop",
+      "unit_number": "7123",
+      "unit_town": "Shirley",
+      "chartered_organization": "Shirley-Rod & Gun Club Inc",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 7123 (G) - Shirley-Rod & Gun Club Inc"
+    },
+    {
+      "unit_key": "Troop 7128 Lunenburg",
+      "unit_type": "Troop",
+      "unit_number": "7128",
+      "unit_town": "Lunenburg",
+      "chartered_organization": "Lunenburg-United Parish of Lunenburg",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 7128 (G) - Lunenburg-United Parish of Lunenburg"
+    },
+    {
+      "unit_key": "Troop 7180 Holden",
+      "unit_type": "Troop",
+      "unit_number": "7180",
+      "unit_town": "Holden",
+      "chartered_organization": "Holden - First Congregational Church",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 7180 (G) - Holden - First Congregational Church"
+    },
+    {
+      "unit_key": "Troop 7530 Auburn",
+      "unit_type": "Troop",
+      "unit_number": "7530",
+      "unit_town": "Auburn",
+      "chartered_organization": "Auburn - Faith Baptist Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7530 (G) - Auburn - Faith Baptist Church"
+    },
+    {
+      "unit_key": "Troop 7740 Leominster",
+      "unit_type": "Troop",
+      "unit_number": "7740",
+      "unit_town": "Leominster",
+      "chartered_organization": "Leominster-Sportsmens Association",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Troop 7740 (G) - Leominster-Sportsmens Association"
+    },
+    {
+      "unit_key": "Crew 204 West Boylston",
+      "unit_type": "Crew",
+      "unit_number": "204",
+      "unit_town": "West Boylston",
+      "chartered_organization": "West Boylston-American Legion Post 204",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Crew 0204 - West Boylston-American Legion Post 204"
+    },
+    {
+      "unit_key": "Crew 250 Harvard",
+      "unit_type": "Crew",
+      "unit_number": "250",
+      "unit_town": "Harvard",
+      "chartered_organization": "Harvard-Sportsmens Club",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Crew 0250 - Harvard-Sportsmens Club"
+    },
+    {
+      "unit_key": "Ship 375 Groton",
+      "unit_type": "Ship",
+      "unit_number": "375",
+      "unit_town": "Groton",
+      "chartered_organization": "Groton Nashua River Watershed Association",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Ship 0375 - Groton Nashua River Watershed Association"
+    },
+    {
+      "unit_key": "Club 1129 Worcester",
+      "unit_type": "Club",
+      "unit_number": "1129",
+      "unit_town": "Worcester",
+      "chartered_organization": "Worcester-Heart of New England Council",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Club 1129 - Worcester-Heart of New England Council"
+    },
+    {
+      "unit_key": "Post 2012 Holden",
+      "unit_type": "Post",
+      "unit_number": "2012",
+      "unit_town": "Holden",
+      "chartered_organization": "Holden - Fire Department",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Post 2012 - Holden - Fire Department"
+    },
+    {
+      "unit_key": "Post 4879 Groton",
+      "unit_type": "Post",
+      "unit_number": "4879",
+      "unit_town": "Groton",
+      "chartered_organization": "Groton-Fire Service Local 4879",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Post 4879 - Groton-Fire Service Local 4879"
+    },
+    {
+      "unit_key": "Pack 16 Athol",
+      "unit_type": "Pack",
+      "unit_number": "16",
+      "unit_town": "Athol",
+      "chartered_organization": "Athol-American Legion Post #102",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0016 (F) - Athol-American Legion Post #102"
+    },
+    {
+      "unit_key": "Pack 26 Barre",
+      "unit_type": "Pack",
+      "unit_number": "26",
+      "unit_town": "Barre",
+      "chartered_organization": "Barre-American Legion Post #2",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0026 (F) - Barre-American Legion Post #2"
+    },
+    {
+      "unit_key": "Pack 27 Templeton",
+      "unit_type": "Pack",
+      "unit_number": "27",
+      "unit_town": "Templeton",
+      "chartered_organization": "Templeton-Holy Cross Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0027 (F) - Templeton-Holy Cross Church"
+    },
+    {
+      "unit_key": "Pack 33 Westminster",
+      "unit_type": "Pack",
+      "unit_number": "33",
+      "unit_town": "Westminster",
+      "chartered_organization": "Veterans Of Foreign Wars Westminster Post",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0033 (F) - Veterans Of Foreign Wars Westminster Post"
+    },
+    {
+      "unit_key": "Pack 39 Phillipston",
+      "unit_type": "Pack",
+      "unit_number": "39",
+      "unit_town": "Phillipston",
+      "chartered_organization": "Phillipston-Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0039 (F) - Phillipston-Congregational Church"
+    },
+    {
+      "unit_key": "Pack 40 Orange",
+      "unit_type": "Pack",
+      "unit_number": "40",
+      "unit_town": "Orange",
+      "chartered_organization": "Orange-St Marys Roman Catholic Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0040 (F) - Orange-St Marys Roman Catholic Church"
+    },
+    {
+      "unit_key": "Pack 106 Grafton",
+      "unit_type": "Pack",
+      "unit_number": "106",
+      "unit_town": "Grafton",
+      "chartered_organization": "Grafton - Our Lady of Hope Parish Grafton @ St. Mary",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0106 (F) - Grafton - Our Lady of Hope Parish Grafton @ St. Mary"
+    },
+    {
+      "unit_key": "Pack 107 Grafton",
+      "unit_type": "Pack",
+      "unit_number": "107",
+      "unit_town": "Grafton",
+      "chartered_organization": "Grafton - Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0107 (F) - Grafton - Congregational Church"
+    },
+    {
+      "unit_key": "Pack 109 Millbury",
+      "unit_type": "Pack",
+      "unit_number": "109",
+      "unit_town": "Millbury",
+      "chartered_organization": "Millbury - Federated Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0109 (F) - Millbury - Federated Church"
+    },
+    {
+      "unit_key": "Pack 134 Douglas",
+      "unit_type": "Pack",
+      "unit_number": "134",
+      "unit_town": "Douglas",
+      "chartered_organization": "Douglas - Fire Fighters Association",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0134 (F) - Douglas - Fire Fighters Association"
+    },
+    {
+      "unit_key": "Pack 138 Spencer",
+      "unit_type": "Pack",
+      "unit_number": "138",
+      "unit_town": "Spencer",
+      "chartered_organization": "Spencer - Gaudette-Kirk Post 138-American Legion",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0138 (F) - Spencer - Gaudette-Kirk Post 138-American Legion"
+    },
+    {
+      "unit_key": "Pack 144 Oakham",
+      "unit_type": "Pack",
+      "unit_number": "144",
+      "unit_town": "Oakham",
+      "chartered_organization": "Oakham - Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0144 (F) - Oakham - Congregational Church"
+    },
+    {
+      "unit_key": "Pack 148 East Brookfield",
+      "unit_type": "Pack",
+      "unit_number": "148",
+      "unit_town": "East Brookfield",
+      "chartered_organization": "E Brookfield - Baptist Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0148 (B) - E Brookfield - Baptist Church"
+    },
+    {
+      "unit_key": "Pack 150 Whitinsville",
+      "unit_type": "Pack",
+      "unit_number": "150",
+      "unit_town": "Whitinsville",
+      "chartered_organization": "Whitinsville - St Patricks Roman Catholic Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0150 (F) - Whitinsville - St Patricks Roman Catholic Church"
+    },
+    {
+      "unit_key": "Pack 159 Brookfield",
+      "unit_type": "Pack",
+      "unit_number": "159",
+      "unit_town": "Brookfield",
+      "chartered_organization": "Brookfield - Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0159 (F) - Brookfield - Congregational Church"
+    },
+    {
+      "unit_key": "Pack 161 Sturbridge",
+      "unit_type": "Pack",
+      "unit_number": "161",
+      "unit_town": "Sturbridge",
+      "chartered_organization": "Fiskdale-American Legion Post 109",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0161 (F) - Fiskdale-American Legion Post 109"
+    },
+    {
+      "unit_key": "Pack 165 Charlton",
+      "unit_type": "Pack",
+      "unit_number": "165",
+      "unit_town": "Charlton",
+      "chartered_organization": "Charlton - Federated Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0165 (F) - Charlton - Federated Church"
+    },
+    {
+      "unit_key": "Pack 193 Winchendon",
+      "unit_type": "Pack",
+      "unit_number": "193",
+      "unit_town": "Winchendon",
+      "chartered_organization": "Winchendon-American Legion Post  # 193",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0193 (F) - Winchendon-American Legion Post  # 193"
+    },
+    {
+      "unit_key": "Pack 243 Sutton",
+      "unit_type": "Pack",
+      "unit_number": "243",
+      "unit_town": "Sutton",
+      "chartered_organization": "Sutton - First Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0243 (F) - Sutton - First Congregational Church"
+    },
+    {
+      "unit_key": "Pack 274 Dudley",
+      "unit_type": "Pack",
+      "unit_number": "274",
+      "unit_town": "Dudley",
+      "chartered_organization": "Dudley - St Anthony Of Padua R.C. Parish",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0274 (F) - Dudley - St Anthony Of Padua R.C. Parish"
+    },
+    {
+      "unit_key": "Pack 316 Douglas",
+      "unit_type": "Pack",
+      "unit_number": "316",
+      "unit_town": "Douglas",
+      "chartered_organization": "Douglas - St Denis Catholic Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Pack 0316 (F) - Douglas - St Denis Catholic Church"
+    },
+    {
+      "unit_key": "Troop 4 Gardner",
+      "unit_type": "Troop",
+      "unit_number": "4",
+      "unit_town": "Gardner",
+      "chartered_organization": "Gardner-Annunciation Parish",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0004 (B) - Gardner-Annunciation Parish"
+    },
+    {
+      "unit_key": "Troop 6 Gardner",
+      "unit_type": "Troop",
+      "unit_number": "6",
+      "unit_town": "Gardner",
+      "chartered_organization": "Gardner-American Legion Post #129",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0006 (B) - Gardner-American Legion Post #129"
+    },
+    {
+      "unit_key": "Troop 9 Gardner",
+      "unit_type": "Troop",
+      "unit_number": "9",
+      "unit_town": "Gardner",
+      "chartered_organization": "Gardner-Annunciation Parish",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0009 (B) - Gardner-Annunciation Parish"
+    },
+    {
+      "unit_key": "Troop 16 Athol",
+      "unit_type": "Troop",
+      "unit_number": "16",
+      "unit_town": "Athol",
+      "chartered_organization": "Athol-American Legion Post #102",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0016 (B) - Athol-American Legion Post #102"
+    },
+    {
+      "unit_key": "Troop 22 Hubbardston",
+      "unit_type": "Troop",
+      "unit_number": "22",
+      "unit_town": "Hubbardston",
+      "chartered_organization": "Hubbardston-Ron Burton Training Village",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0022 (B) - Hubbardston-Ron Burton Training Village"
+    },
+    {
+      "unit_key": "Troop 27 Templeton",
+      "unit_type": "Troop",
+      "unit_number": "27",
+      "unit_town": "Templeton",
+      "chartered_organization": "Templeton-Holy Cross Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0027 (B) - Templeton-Holy Cross Church"
+    },
+    {
+      "unit_key": "Troop 33 Westminster",
+      "unit_type": "Troop",
+      "unit_number": "33",
+      "unit_town": "Westminster",
+      "chartered_organization": "Westminster - First Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0033 (B) - Westminster - First Congregational Church"
+    },
+    {
+      "unit_key": "Troop 39 Phillipston",
+      "unit_type": "Troop",
+      "unit_number": "39",
+      "unit_town": "Phillipston",
+      "chartered_organization": "Phillipston-Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0039 (B) - Phillipston-Congregational Church"
+    },
+    {
+      "unit_key": "Troop 40 Orange",
+      "unit_type": "Troop",
+      "unit_number": "40",
+      "unit_town": "Orange",
+      "chartered_organization": "Orange-St Marys Roman Catholic Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0040 (B) - Orange-St Marys Roman Catholic Church"
+    },
+    {
+      "unit_key": "Troop 106 Grafton",
+      "unit_type": "Troop",
+      "unit_number": "106",
+      "unit_town": "Grafton",
+      "chartered_organization": "Grafton - Our Lady of Hope Parish Grafton @ St. Mary",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0106 (B) - Grafton - Our Lady of Hope Parish Grafton @ St. Mary"
+    },
+    {
+      "unit_key": "Troop 107 Grafton",
+      "unit_type": "Troop",
+      "unit_number": "107",
+      "unit_town": "Grafton",
+      "chartered_organization": "Grafton - Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0107 (B) - Grafton - Congregational Church"
+    },
+    {
+      "unit_key": "Troop 109 Millbury",
+      "unit_type": "Troop",
+      "unit_number": "109",
+      "unit_town": "Millbury",
+      "chartered_organization": "Millbury - Federated Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0109 (B) - Millbury - Federated Church"
+    },
+    {
+      "unit_key": "Troop 116 Spencer",
+      "unit_type": "Troop",
+      "unit_number": "116",
+      "unit_town": "Spencer",
+      "chartered_organization": "Spencer - Gaudette-Kirk Post 138-American Legion",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0116 (B) - Spencer - Gaudette-Kirk Post 138-American Legion"
+    },
+    {
+      "unit_key": "Troop 118 West Brookfield",
+      "unit_type": "Troop",
+      "unit_number": "118",
+      "unit_town": "West Brookfield",
+      "chartered_organization": "W Brookfield - Our Lady of The Sacred Heart",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0118 (B) - W Brookfield - Our Lady of The Sacred Heart"
+    },
+    {
+      "unit_key": "Troop 131 Sutton",
+      "unit_type": "Troop",
+      "unit_number": "131",
+      "unit_town": "Sutton",
+      "chartered_organization": "Sutton - St Marks Roman Catholic Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0131 (B) - Sutton - St Marks Roman Catholic Church"
+    },
+    {
+      "unit_key": "Troop 132 Upton",
+      "unit_type": "Troop",
+      "unit_number": "132",
+      "unit_town": "Upton",
+      "chartered_organization": "Upton - St. Gabriel the Archangel Parish",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0132 (B) - Upton - St. Gabriel the Archangel Parish"
+    },
+    {
+      "unit_key": "Troop 134 Douglas",
+      "unit_type": "Troop",
+      "unit_number": "134",
+      "unit_town": "Douglas",
+      "chartered_organization": "Douglas - Fire Fighters Association",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0134 (B) - Douglas - Fire Fighters Association"
+    },
+    {
+      "unit_key": "Troop 142 Warren",
+      "unit_type": "Troop",
+      "unit_number": "142",
+      "unit_town": "Warren",
+      "chartered_organization": "Warren - Firemans Association",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0142 (B) - Warren - Firemans Association"
+    },
+    {
+      "unit_key": "Troop 144 Oakham",
+      "unit_type": "Troop",
+      "unit_number": "144",
+      "unit_town": "Oakham",
+      "chartered_organization": "Oakham - Police Association",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0144 (B) - Oakham - Police Association"
+    },
+    {
+      "unit_key": "Troop 147 Oxford",
+      "unit_type": "Troop",
+      "unit_number": "147",
+      "unit_town": "Oxford",
+      "chartered_organization": "Oxford First Congregational Church of Oxford",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0147 (B) - Oxford First Congregational Church of Oxford"
+    },
+    {
+      "unit_key": "Troop 155 Whitinsville",
+      "unit_type": "Troop",
+      "unit_number": "155",
+      "unit_town": "Whitinsville",
+      "chartered_organization": "Whitinsville - Village Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0155 (B) - Whitinsville - Village Congregational Church"
+    },
+    {
+      "unit_key": "Troop 161 Sturbridge",
+      "unit_type": "Troop",
+      "unit_number": "161",
+      "unit_town": "Sturbridge",
+      "chartered_organization": "Fiskdale-American Legion Post 109",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0161 (B) - Fiskdale-American Legion Post 109"
+    },
+    {
+      "unit_key": "Troop 165 Charlton",
+      "unit_type": "Troop",
+      "unit_number": "165",
+      "unit_town": "Charlton",
+      "chartered_organization": "Charlton - American Legion Post 391",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0165 (B) - Charlton - American Legion Post 391"
+    },
+    {
+      "unit_key": "Troop 173 Webster",
+      "unit_type": "Troop",
+      "unit_number": "173",
+      "unit_town": "Webster",
+      "chartered_organization": "Webster - St Joseph Basilica",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0173 (B) - Webster - St Joseph Basilica"
+    },
+    {
+      "unit_key": "Troop 193 Winchendon",
+      "unit_type": "Troop",
+      "unit_number": "193",
+      "unit_town": "Winchendon",
+      "chartered_organization": "Winchendon-American Legion Post  # 193",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0193 (B) - Winchendon-American Legion Post  # 193"
+    },
+    {
+      "unit_key": "Troop 238 East Brookfield",
+      "unit_type": "Troop",
+      "unit_number": "238",
+      "unit_town": "East Brookfield",
+      "chartered_organization": "E Brookfield - Howe Lumber Co Inc",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0238 (B) - E Brookfield - Howe Lumber Co Inc"
+    },
+    {
+      "unit_key": "Troop 243 Sutton",
+      "unit_type": "Troop",
+      "unit_number": "243",
+      "unit_town": "Sutton",
+      "chartered_organization": "Sutton - First Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0243 (B) - Sutton - First Congregational Church"
+    },
+    {
+      "unit_key": "Troop 273 Dudley",
+      "unit_type": "Troop",
+      "unit_number": "273",
+      "unit_town": "Dudley",
+      "chartered_organization": "Dudley - St Anthony Of Padua R.C. Parish",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0273 (B) - Dudley - St Anthony Of Padua R.C. Parish"
+    },
+    {
+      "unit_key": "Troop 281 Ware",
+      "unit_type": "Troop",
+      "unit_number": "281",
+      "unit_town": "Ware",
+      "chartered_organization": "Ware - AMVETS Post 2577",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0281 (B) - Ware - AMVETS Post 2577"
+    },
+    {
+      "unit_key": "Troop 316 Douglas",
+      "unit_type": "Troop",
+      "unit_number": "316",
+      "unit_town": "Douglas",
+      "chartered_organization": "Douglas - St Denis Catholic Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0316 (B) - Douglas - St Denis Catholic Church"
+    },
+    {
+      "unit_key": "Troop 338 Charlton",
+      "unit_type": "Troop",
+      "unit_number": "338",
+      "unit_town": "Charlton",
+      "chartered_organization": "Charlton - St Josephs Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 0338 (B) - Charlton - St Josephs Church"
+    },
+    {
+      "unit_key": "Troop 1026 Barre",
+      "unit_type": "Troop",
+      "unit_number": "1026",
+      "unit_town": "Barre",
+      "chartered_organization": "Barre - Friends of Troop 1026",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 1026 (B) - Barre - Friends of Troop 1026"
+    },
+    {
+      "unit_key": "Troop 7006 Gardner",
+      "unit_type": "Troop",
+      "unit_number": "7006",
+      "unit_town": "Gardner",
+      "chartered_organization": "Gardner-American Legion Post #129",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7006 (G) - Gardner-American Legion Post #129"
+    },
+    {
+      "unit_key": "Troop 7027 Templeton",
+      "unit_type": "Troop",
+      "unit_number": "7027",
+      "unit_town": "Templeton",
+      "chartered_organization": "Templeton-Holy Cross Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7027 (G) - Templeton-Holy Cross Church"
+    },
+    {
+      "unit_key": "Troop 7039 Phillipston",
+      "unit_type": "Troop",
+      "unit_number": "7039",
+      "unit_town": "Phillipston",
+      "chartered_organization": "Phillipston-Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7039 (G) - Phillipston-Congregational Church"
+    },
+    {
+      "unit_key": "Troop 7040 Orange",
+      "unit_type": "Troop",
+      "unit_number": "7040",
+      "unit_town": "Orange",
+      "chartered_organization": "Orange-St Marys Roman Catholic Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7040 (G) - Orange-St Marys Roman Catholic Church"
+    },
+    {
+      "unit_key": "Troop 7049 Gardner",
+      "unit_type": "Troop",
+      "unit_number": "7049",
+      "unit_town": "Gardner",
+      "chartered_organization": "Gardner-Annunciation Parish",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7049 (G) - Gardner-Annunciation Parish"
+    },
+    {
+      "unit_key": "Troop 7138 Spencer",
+      "unit_type": "Troop",
+      "unit_number": "7138",
+      "unit_town": "Spencer",
+      "chartered_organization": "Spencer - Gaudette-Kirk Post 138-American Legion",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7138 (G) - Spencer - Gaudette-Kirk Post 138-American Legion"
+    },
+    {
+      "unit_key": "Troop 7163 Sturbridge",
+      "unit_type": "Troop",
+      "unit_number": "7163",
+      "unit_town": "Sturbridge",
+      "chartered_organization": "Fiskdale-American Legion Post 109",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7163 (G) - Fiskdale-American Legion Post 109"
+    },
+    {
+      "unit_key": "Troop 7165 Charlton",
+      "unit_type": "Troop",
+      "unit_number": "7165",
+      "unit_town": "Charlton",
+      "chartered_organization": "Charlton - American Legion Post 391",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7165 (G) - Charlton - American Legion Post 391"
+    },
+    {
+      "unit_key": "Troop 7193 Winchendon",
+      "unit_type": "Troop",
+      "unit_number": "7193",
+      "unit_town": "Winchendon",
+      "chartered_organization": "Winchendon-American Legion Post  # 193",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7193 (G) - Winchendon-American Legion Post  # 193"
+    },
+    {
+      "unit_key": "Troop 7219 Grafton",
+      "unit_type": "Troop",
+      "unit_number": "7219",
+      "unit_town": "Grafton",
+      "chartered_organization": "Grafton - Congregational Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7219 (G) - Grafton - Congregational Church"
+    },
+    {
+      "unit_key": "Troop 7338 Charlton",
+      "unit_type": "Troop",
+      "unit_number": "7338",
+      "unit_town": "Charlton",
+      "chartered_organization": "Charlton - St Josephs Church",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Troop 7338 (G) - Charlton - St Josephs Church"
+    },
+    {
+      "unit_key": "Crew 6 Gardner",
+      "unit_type": "Crew",
+      "unit_number": "6",
+      "unit_town": "Gardner",
+      "chartered_organization": "Gardner-American Legion Post #129",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Crew 0006 - Gardner-American Legion Post #129"
+    },
+    {
+      "unit_key": "Ship 1935 Webster",
+      "unit_type": "Ship",
+      "unit_number": "1935",
+      "unit_town": "Webster",
+      "chartered_organization": "Webster - Sailing Association",
+      "district": "Soaring Eagle",
+      "original_unitcommorgname": "Ship 1935 - Webster - Sailing Association"
+    },
+    {
+      "unit_key": "Crew 1924 Rutland",
+      "unit_type": "Crew",
+      "unit_number": "1924",
+      "unit_town": "Rutland",
+      "chartered_organization": "Rutland-Heart of New England Council",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Crew 1924 - Rutland-Heart of New England Council"
+    },
+    {
+      "unit_key": "Crew 2254 Rutland",
+      "unit_type": "Crew",
+      "unit_number": "2254",
+      "unit_town": "Rutland",
+      "chartered_organization": "Rutland-Heart of New England Council",
+      "district": "Quinapoxet",
+      "original_unitcommorgname": "Crew 2254 - Rutland-Heart of New England Council"
+    }
+  ],
+  "validation_summary": {
+    "total_units": 169,
+    "expected_units": 169,
+    "district_counts": {
+      "Quinapoxet": 83,
+      "Soaring Eagle": 86
+    },
+    "unknown_towns": [],
+    "parsing_success": true
+  }
+}

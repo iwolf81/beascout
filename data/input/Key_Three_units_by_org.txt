@@ -1,0 +1,172 @@
+"Troop 0001 (B) - Acton-Group Of Citizens
+"Troop 0032 (B) - Acton-Group Of Citizens
+"Troop 7012 (G) - Acton-Group Of Citizens
+Chartered Organization Rep.
+Club 1129 - Worcester-Heart of New England Council
+Committee Chair
+Crew 0006 - Gardner-American Legion Post #129
+Crew 0204 - West Boylston-American Legion Post 204
+Crew 0250 - Harvard-Sportsmens Club
+Crew 1924 - Rutland-Heart of New England Council
+Crew 2254 - Rutland-Heart of New England Council
+Cubmaster
+Pack 0001 (F) - Acton-The Church of The Good Shepherd
+Pack 0003 (F) - Leominster-Our Lady Of The Lake Church
+Pack 0007 (F) - Clinton Heart of New England Council
+Pack 0009 (B) - Lancaster-First Church of Christ Unitarian
+Pack 0009 (F) - Worcester - Greendale Peoples Church
+Pack 0010 (F) - Harvard-Boy Scouts Inc
+Pack 0012 (F) - Groton-Police Association Inc
+Pack 0015 (F) - Berlin-Lions Club
+Pack 0016 (F) - Athol-American Legion Post #102
+Pack 0016 (F) - Leominster-Sportsmens Association
+Pack 0017 (F) - Fitchburg-Saint Bernards Elementary School
+Pack 0021 (F) - Littleton-Congregational Church
+Pack 0022 (F) - Worcester - Hadwen Park Congregational Church
+Pack 0025 (F) - Princeton-Norco Sportsmans Club
+Pack 0026 (F) - Barre-American Legion Post #2
+Pack 0026 (F) - Boxborough-District Minutemen Inc
+Pack 0027 (F) - Templeton-Holy Cross Church
+Pack 0031 (F) - Shirley - Ayer Shirley Parent Teacher Org
+Pack 0032 (F) - Ayer-St Andrews Church
+Pack 0033 (F) - Veterans Of Foreign Wars Westminster Post
+Pack 0034 (F) - Sterling-First Church In Sterling
+Pack 0037 (B) - Worcester - Christ The King Church
+Pack 0037 (F) - Bolton-The First Parish of Bolton
+Pack 0039 (F) - Phillipston-Congregational Church
+Pack 0040 (F) - Orange-St Marys Roman Catholic Church
+Pack 0041 (F) - Fitchburg-Fitchburg Friends of Scouting
+Pack 0046 (F) - Jefferson - Saint Marys Church
+Pack 0053 (F) - Auburn - Faith Baptist Church
+Pack 0062 (F) - Shrewsbury - American Legion Ray Stone Post #238
+Pack 0070 (F) - Acton-Congregational Church
+Pack 0101 (F) - Auburn - First Congregational Church
+Pack 0106 (F) - Grafton - Our Lady of Hope Parish Grafton @ St. Mary
+Pack 0107 (F) - Grafton - Congregational Church
+Pack 0109 (F) - Millbury - Federated Church
+Pack 0114 (F) - Shrewsbury - First Congregational Church
+Pack 0123 (F) - Leicester - Saint Pius X Catholic Parish
+Pack 0134 (F) - Douglas - Fire Fighters Association
+Pack 0138 (F) - Spencer - Gaudette-Kirk Post 138-American Legion
+Pack 0141 (F) - Rutland - Congregational Church
+Pack 0144 (F) - Oakham - Congregational Church
+Pack 0148 (B) - E Brookfield - Baptist Church
+Pack 0150 (F) - Whitinsville - St Patricks Roman Catholic Church
+Pack 0151 (B) - W Boylston - Masonic Charityand Education Assoc. Inc
+Pack 0158 (B) - Shrewsbury - St. Marys Roman Catholic Church
+Pack 0159 (F) - Brookfield - Congregational Church
+Pack 0161 (F) - Fiskdale-American Legion Post 109
+Pack 0165 (F) - Charlton - Federated Church
+Pack 0180 (F) - Holden - First Congregational Church
+Pack 0193 (F) - Winchendon-American Legion Post  # 193
+Pack 0243 (F) - Sutton - First Congregational Church
+Pack 0274 (F) - Dudley - St Anthony Of Padua R.C. Parish
+Pack 0306 (F) - Paxton - American Legion Post 306
+Pack 0316 (F) - Douglas - St Denis Catholic Church
+Pack 1455 (F) - Veterans Of Foreign Wars Pepperell Post #3291
+Pack 1728 (F) - Lunenburg-Lions Club
+Post 2012 - Holden - Fire Department
+Post 4879 - Groton-Fire Service Local 4879
+Ship 0375 - Groton Nashua River Watershed Association
+Ship 1935 - Webster - Sailing Association
+Troop 0001 (B) - Berlin-Board Of Trade
+Troop 0001 (B) - Bolton-The First Parish of Bolton
+Troop 0001 (B) - Boxborough-District Minutemen Inc
+Troop 0001 (B) - Groton-Firefighters Association
+Troop 0001 (B) - Harvard-Boy Scouts Inc
+Troop 0001 (B) - Lancaster-Fire Fighters Association
+Troop 0001 (B) - Littleton-Congregational Church
+Troop 0001 (B) - Princeton-First Congregational Church Of Princeton
+Troop 0001 (B) - Sterling-First Church In Sterling
+Troop 0002 (B) - Ayer-Gun & Sportsmen Club Inc
+Troop 0003 (B) - Ayer-Volunteer Fire AuxiliariesCombinatioin Co #1
+Troop 0003 (B) - Groton-Group Of Citizens
+Troop 0004 (B) - Gardner-Annunciation Parish
+Troop 0006 (B) - Gardner-American Legion Post #129
+Troop 0009 (B) - Gardner-Annunciation Parish
+Troop 0009 (B) - Worcester - St Christophers Catholic Church
+Troop 0010 (B) - Clinton-Presbyterian Church
+Troop 0010 (B) - Townsend-Rod & Gun Club
+Troop 0011 (B) - Leominster-St Leos Parish
+Troop 0012 (B) - Leominster-Our Lady Of The Lake Church
+Troop 0013 (B) - Pepperell-Fire Firefighters Association
+Troop 0016 (B) - Athol-American Legion Post #102
+Troop 0017 (B) - Fitchburg-K of C Home Association
+Troop 0020 (B) - Littleton-Scouting Trust
+Troop 0022 (B) - Hubbardston-Ron Burton Training Village
+Troop 0022 (B) - Worcester - Hadwen Park Congregational Church
+Troop 0026 (B) - Pepperell-Lions Club
+Troop 0027 (B) - Templeton-Holy Cross Church
+Troop 0033 (B) - Westminster - First Congregational Church
+Troop 0037 (B) - Worcester - Christ The King Church
+Troop 0039 (B) - Phillipston-Congregational Church
+Troop 0040 (B) - Orange-St Marys Roman Catholic Church
+Troop 0041 (B) - Fitchburg-Fitchburg Friends of Scouting
+Troop 0053 (B) - Auburn - Faith Baptist Church
+Troop 0054 (B) - Worcester-Heart of New England Council
+Troop 0099 (B) - Fitchburg - Knights of Columbus Home Association
+Troop 0101 (B) - Auburn - First Congregational Church
+Troop 0105 (B) - Paxton - First Congregational Church
+Troop 0106 (B) - Grafton - Our Lady of Hope Parish Grafton @ St. Mary
+Troop 0107 (B) - Grafton - Congregational Church
+Troop 0109 (B) - Millbury - Federated Church
+Troop 0114 (B) - Shrewsbury - First Congregational Church
+Troop 0116 (B) - Spencer - Gaudette-Kirk Post 138-American Legion
+Troop 0118 (B) - W Brookfield - Our Lady of The Sacred Heart
+Troop 0121 (B) - Auburn - North American Martyrs
+Troop 0123 (B) - Leicester - Saint Pius X Catholic Parish
+Troop 0123 (B) - Shirley-Rod & Gun Club Inc
+Troop 0125 (B) - Leicester - St Aloysius/ St. Jude
+Troop 0131 (B) - Sutton - St Marks Roman Catholic Church
+Troop 0132 (B) - Upton - St. Gabriel the Archangel Parish
+Troop 0134 (B) - Douglas - Fire Fighters Association
+Troop 0141 (B) - Rutland - Fire Brigade
+Troop 0142 (B) - Warren - Firemans Association
+Troop 0144 (B) - Oakham - Police Association
+Troop 0147 (B) - Oxford First Congregational Church of Oxford
+Troop 0151 (B) - Leominster-Amercan Legion Post # 151
+Troop 0151 (B) - W Boylston - Masonic Charityand Education Assoc. Inc
+Troop 0155 (B) - Whitinsville - Village Congregational Church
+Troop 0161 (B) - Fiskdale-American Legion Post 109
+Troop 0165 (B) - Charlton - American Legion Post 391
+Troop 0173 (B) - Webster - St Joseph Basilica
+Troop 0175 (B) - Holden - Immanuel Lutheran Church
+Troop 0180 (B) - Holden - First Congregational Church
+Troop 0182 (B) - Holden - First Baptist Church
+Troop 0193 (B) - Winchendon-American Legion Post  # 193
+Troop 0227 (B) - Shrewsbury - St Anne Roman Catholic
+Troop 0238 (B) - E Brookfield - Howe Lumber Co Inc
+Troop 0243 (B) - Sutton - First Congregational Church
+Troop 0273 (B) - Dudley - St Anthony Of Padua R.C. Parish
+Troop 0281 (B) - Ware - AMVETS Post 2577
+Troop 0284 (B) - Acton-Boxborough Rotary Club
+Troop 0316 (B) - Douglas - St Denis Catholic Church
+Troop 0338 (B) - Charlton - St Josephs Church
+Troop 0477 (B) - Leominster-Sportsmens Association
+Troop 1004 (B) - Shrewsbury - Ray Stone Post 238 AL
+Troop 1026 (B) - Barre - Friends of Troop 1026
+Troop 1728 (B) - Lunenburg-United Parish of Lunenburg
+Troop 7001 (G) - Harvard-Boy Scouts Inc
+Troop 7006 (G) - Gardner-American Legion Post #129
+Troop 7012 (G) - Leominster-Our Lady Of The Lake Church
+Troop 7013 (G) - Groton-Firefighters Association
+Troop 7013 (G) - Pepperell-Fire Firefighters Association
+Troop 7019 (G) - Littleton-Congregational Church
+Troop 7027 (G) - Templeton-Holy Cross Church
+Troop 7039 (G) - Phillipston-Congregational Church
+Troop 7040 (G) - Orange-St Marys Roman Catholic Church
+Troop 7049 (G) - Gardner-Annunciation Parish
+Troop 7054 (G) - Worcester-Heart of New England Council
+Troop 7099 (G) - Fitchburg - Knights of Columbus Home Association
+Troop 7114 (G) - Shrewsbury - First Congregational Church
+Troop 7123 (G) - Shirley-Rod & Gun Club Inc
+Troop 7128 (G) - Lunenburg-United Parish of Lunenburg
+Troop 7138 (G) - Spencer - Gaudette-Kirk Post 138-American Legion
+Troop 7163 (G) - Fiskdale-American Legion Post 109
+Troop 7165 (G) - Charlton - American Legion Post 391
+Troop 7180 (G) - Holden - First Congregational Church
+Troop 7193 (G) - Winchendon-American Legion Post  # 193
+Troop 7219 (G) - Grafton - Congregational Church
+Troop 7338 (G) - Charlton - St Josephs Church
+Troop 7530 (G) - Auburn - Faith Baptist Church
+Troop 7740 (G) - Leominster-Sportsmens Association

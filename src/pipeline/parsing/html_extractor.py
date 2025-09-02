@@ -551,6 +551,26 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
     unit_town = unit_data.get('unit_town', '').strip()
     unit_data['district'] = get_district_for_town(unit_town)
     
+    # Integrate quality scoring - calculate score, grade, and quality tags during HTML parsing
+    try:
+        from src.pipeline.analysis.quality_scorer import UnitQualityScorer
+        scorer = UnitQualityScorer()
+        
+        # Score this individual unit
+        score, recommendations = scorer.score_unit(unit_data)
+        
+        # Add scoring results to unit data for single source of truth
+        unit_data['completeness_score'] = round(score, 1)
+        unit_data['completeness_grade'] = scorer.get_letter_grade(score)
+        unit_data['quality_tags'] = recommendations
+        
+    except Exception as e:
+        # Fallback if quality scoring fails - don't break HTML parsing
+        print(f"Warning: Quality scoring failed for unit {index}: {e}")
+        unit_data['completeness_score'] = 0.0
+        unit_data['completeness_grade'] = 'F'
+        unit_data['quality_tags'] = []
+    
     return unit_data
 
 def extract_meeting_info(description):

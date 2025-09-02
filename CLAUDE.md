@@ -45,10 +45,10 @@ Improve Scouting America unit information quality for the Heart of New England C
 - ✅ **Explorer unit integration**: Posts and Clubs fully supported alongside traditional units (Packs, Troops, Crews, Ships)
 - ✅ **Robust HNE filtering**: Enhanced territory classification with unit_town prioritization over chartered org matching
 - ✅ **Production-ready data pipeline**: End-to-end processing from fresh scraping through final reports
-- ✅ **Quality scoring system**: Specialized unit scoring with 165 HNE units at 60.2% average completeness
-- ✅ **BeAScout Quality Reports**: District-organized Excel reports with 18-column format, quality grades, and Key Three contacts
+- ✅ **Quality scoring system**: Specialized unit scoring with A-F grading and recommendation categorization
+- ✅ **BeAScout Quality Reports**: District-organized Excel reports with professional formatting, quality grades, and Key Three contacts
 - ✅ **Key Three email generation**: Personalized emails with actual contact information and improvement recommendations
-- ✅ **Directory reorganization**: Clean separation between production pipeline and development tools
+- ✅ **Production pipeline**: Main scripts consolidated to `src/scripts/` with single source of truth mapping in `src/mapping/`
 - ✅ **Exponential backoff retry**: Common retry logic for both websites with jitter and fresh page contexts
 - 🎯 **Ready for multi-zip deployment**: System validated end-to-end with fresh data
 - ⏳ **Feedback integration phase**: Review emails/reports with unit leaders and council commissioner
@@ -58,9 +58,9 @@ Improve Scouting America unit information quality for the Heart of New England C
 **Key Technical Patterns:**
 - **Dual-source scraping**: `src/scraping/browser_scraper.py` with common retry logic for both BeAScout and JoinExploring
 - **URL generation**: `src/scraping/url_generator.py` handles proper parameter encoding for both platforms
-- **HNE filtering**: Enhanced `prototype/extract_all_units.py` with unit_town prioritization over org name matching
+- **HNE filtering**: Enhanced `src/legacy/extract_all_units.py` with unit_town prioritization over org name matching
 - **Quality scoring**: `src/analysis/quality_scorer.py` with specialized unit support (Crews, Posts, Clubs at 14% vs 17.5%)
-- **Data flow**: Browser automation → HTML → JSON → Quality scoring → Personalized emails → District reports
+- **Data flow**: Browser automation → HTML → JSON → Quality scoring → BeAScout Quality Reports → Personalized emails
 
 **Quality Scoring Implementation:**
 - **Required Fields (70% weight)**: Non-Crews: 17.5% each (location, day, time, email); Crews: 14% each (+ specialty)

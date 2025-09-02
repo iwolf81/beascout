@@ -12,7 +12,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
 # Import district assignment function
-from src.mapping.district_mapping import get_district_for_town
+from src.config.district_mapping import get_district_for_town
 
 def create_complete_dataset():
     """Create complete dataset by adding missing Key Three units with 0 scores"""

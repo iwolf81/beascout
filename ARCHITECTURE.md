@@ -44,7 +44,7 @@ src/                                 # All production code (organized by functio
 │   │                               # - Uses centralized mapping for HNE territory filtering
 │   │                               # - Comprehensive error handling with debug logging
 │   └── key_three_parser.py        # Excel spreadsheet processor  
-│                                   # - 169 unit processing with edge case handling
+│                                   # - Active unit processing with edge case handling
 │                                   # - Sophisticated town extraction (9 patterns)
 │                                   # - Debug logging integration
 ├── scraping/                       # ✅ Data collection (when needed)
@@ -57,10 +57,10 @@ src/                                 # All production code (organized by functio
 │                                   # - Specialized scoring for unit types
 ├── scripts/                        # ✅ Production pipeline scripts
 │   ├── process_full_dataset_v2.py      # Main pipeline orchestration
-│   ├── generate_district_reports.py    # Excel report generation
+│   ├── generate_district_reports.py    # District-specific Excel reports (legacy)
 │   ├── generate_key_three_emails.py    # Personalized email creation
 │   ├── create_authoritative_dataset.py # Dataset consolidation
-│   └── generate_commissioner_report.py # Executive summary reports
+│   └── generate_commissioner_report.py # BeAScout Quality Reports (primary)
 └── legacy/                         # ✅ Legacy tools (still used)
     └── extract_all_units.py       # HTML → JSON conversion
 
@@ -216,20 +216,23 @@ Comprehensive audit trails distinguish between data sources:
 python src/scraping/browser_scraper.py --all-zipcodes --output data/scraped/$(date +%Y%m%d_%H%M%S)/
 
 # Step 2: Complete processing pipeline
-python src/scripts/process_full_dataset_v2.py data/scraped/YYYYMMDD_HHMMSS/
+python src/tools/utilities/process_full_dataset_v2.py data/scraped/YYYYMMDD_HHMMSS/
 
-# Step 3: Generate district reports  
-python src/scripts/generate_district_reports.py data/raw/all_units_comprehensive_scored.json --output-dir data/output/reports/
+# Step 3: Generate BeAScout Quality Report (primary)
+python src/pipeline/reporting/generate_commissioner_report.py
 
-# Step 4: Generate personalized emails (optional)
-python src/scripts/generate_key_three_emails.py data/raw/all_units_comprehensive_scored.json
+# Step 4: Generate district reports (legacy format - optional)  
+python src/pipeline/reporting/generate_district_reports.py data/raw/all_units_comprehensive_scored.json --output-dir data/output/reports/
+
+# Step 5: Generate personalized emails (optional)
+python src/pipeline/reporting/generate_key_three_emails.py data/raw/all_units_comprehensive_scored.json
 ```
 
 ### Process Existing Data
 ```bash
 # Use existing scraped data
-python src/scripts/process_full_dataset_v2.py data/scraped/20250824_220843/
-python src/scripts/generate_district_reports.py data/raw/all_units_comprehensive_scored.json --output-dir data/output/reports/
+python src/tools/utilities/process_full_dataset_v2.py data/scraped/20250824_220843/
+python src/pipeline/reporting/generate_commissioner_report.py
 ```
 
 ### Debug & Validation  
@@ -248,18 +251,19 @@ ls -la data/debug/unit_identifier_debug_*$(date +%Y%m%d)*.log
 
 ### Current Data Processing
 - **Total Units Processed**: 308 units from dual-source scraping
-- **HNE Units After Filtering**: 156 units (territory validation)
-- **Average Quality Score**: 62.8%
-- **Grade Distribution**: A(57), B(48), C(32), D(25), F(146)
+- **HNE Units After Filtering**: ~150 units (territory validation)
+- **Quality Assessment**: A-F grading with professional Excel reports
+- **Report Format**: BeAScout Quality Reports with district organization, Key Three integration
 
 ### District Distribution  
-- **Quinapoxet District**: 96 units across 29 towns
-- **Soaring Eagle District**: 55 units across 36 towns (includes 5 units from unknown district classification)
+- **Quinapoxet District**: Northern and central Massachusetts towns
+- **Soaring Eagle District**: Southern and western Massachusetts towns
+- **Professional Formatting**: Excel reports with borders, frozen panes, numeric quality scores
 
 ### Processing Performance
 - **Zip Codes Processed**: 71 of 72 HNE zip codes (98.6% coverage)
 - **Village Extraction**: 100% accurate for Fiskdale, Whitinsville, Jefferson
 - **Debug Logging**: Complete audit trail with source-specific identification
-- **Report Generation**: Professional Excel reports with Key Three integration
+- **Report Generation**: BeAScout Quality Reports with professional formatting and multi-line cell support
 
 The system is production-ready and successfully processes the complete HNE Council unit dataset with comprehensive quality assessment and reporting capabilities.
