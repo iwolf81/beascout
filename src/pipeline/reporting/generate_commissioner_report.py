@@ -116,12 +116,25 @@ def load_town_zip_mapping():
         return {}
 
 def get_zip_code_for_town(town_name: str, town_zip_mapping: dict) -> str:
-    """Get primary zip code for a town name"""
+    """Get primary zip code for a town name, including village-to-town mappings"""
     if not town_name or not town_zip_mapping:
         return ""
     
     # Clean up town name variations
     clean_town = town_name.strip()
+    
+    # Village-to-town mappings for HNE Council
+    village_to_town = {
+        "Fiskdale": "Sturbridge",  # Fiskdale is a village within Sturbridge
+        "Whitinsville": "Northbridge",  # Whitinsville is a village within Northbridge
+    }
+    
+    # Check if this is a known village
+    if clean_town in village_to_town:
+        parent_town = village_to_town[clean_town]
+        if parent_town in town_zip_mapping:
+            zip_codes = town_zip_mapping[parent_town]
+            return zip_codes[0] if zip_codes else ""
     
     # Direct lookup
     if clean_town in town_zip_mapping:
@@ -168,12 +181,31 @@ class BeAScoutQualityReportGenerator:
                 units = raw_data.get('scraped_units', raw_data.get('units_with_scores', []))
                 print(f"📊 Loaded {len(units)} units with quality data")
             
+            # Load original scraping timestamp from session_summary.json
+            scraping_timestamp = ''
+            try:
+                # Look for session_summary.json in data/scraped/*/session_summary.json
+                scraped_dir = Path('data/scraped')
+                for session_dir in scraped_dir.glob('*/'):
+                    session_summary_file = session_dir / 'session_summary.json'
+                    if session_summary_file.exists():
+                        with open(session_summary_file, 'r', encoding='utf-8') as f:
+                            session_data = json.load(f)
+                            scraping_timestamp = session_data.get('start_time', '')
+                            print(f"📅 Found scraping timestamp: {scraping_timestamp}")
+                            break  # Use the first (most recent) session found
+            except Exception as e:
+                print(f"⚠️ Could not load scraping timestamp: {e}")
+                scraping_timestamp = ''
+            
             # Quality data is now integrated - no need for separate scoring
             self.quality_data = {
                 'total_units': len(units),
                 'units_with_scores': units,
                 'average_score': 0.0,
-                'scoring_summary': {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0}
+                'scoring_summary': {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0},
+                'extraction_timestamp': raw_data.get('extraction_timestamp', ''),  # Processing timestamp
+                'scraping_timestamp': scraping_timestamp  # Original scraping timestamp from session_summary.json
             }
             
             # Calculate summary statistics from integrated quality data
@@ -301,18 +333,18 @@ class BeAScoutQualityReportGenerator:
         
         # Data sources - include Key Three spreadsheet name
         key_three_filename = "Key 3 08-22-2025.xlsx"  # TODO: Extract from actual filename
-        ws['A4'] = f"Data Sources: BeAScout.org (10-mile radius) + JoinExploring.org (20-mile) + {key_three_filename}"
+        ws['A4'] = f"Data Sources: BeAScout.org (10-mile search radius per zip code) + JoinExploring.org (20-mile search radius per zip code) + {key_three_filename}"
         ws['A4'].font = Font(size=10)
         
-        # Extract and format extraction timestamp
-        extraction_timestamp = self.quality_data.get('extraction_timestamp', '')
-        if extraction_timestamp and extraction_timestamp != 'Unknown':
-            # Parse ISO timestamp and format as readable date
+        # Extract and format original scraping timestamp with date and time
+        scraping_timestamp = self.quality_data.get('scraping_timestamp', '')
+        if scraping_timestamp and scraping_timestamp != 'Unknown':
+            # Parse ISO timestamp and format as readable date and time
             try:
-                extraction_date = datetime.fromisoformat(extraction_timestamp.replace('Z', '+00:00'))
-                formatted_date = extraction_date.strftime('%B %d, %Y')
+                scraping_date = datetime.fromisoformat(scraping_timestamp.replace('Z', '+00:00'))
+                formatted_date = scraping_date.strftime('%B %d, %Y at %I:%M %p')
             except (ValueError, AttributeError):
-                formatted_date = extraction_timestamp[:10] if len(extraction_timestamp) >= 10 else 'Date Unknown'
+                formatted_date = scraping_timestamp[:10] if len(scraping_timestamp) >= 10 else 'Date Unknown'
         else:
             formatted_date = 'Date Unknown'
         
@@ -471,10 +503,21 @@ class BeAScoutQualityReportGenerator:
         ws['A4'].font = Font(size=10)
         
         key_three_filename = "Key 3 08-22-2025.xlsx"  # TODO: Extract from actual filename
-        ws['A5'] = f"Data Sources: BeAScout.org (10-mile radius) + JoinExploring.org (20-mile) + {key_three_filename}"
+        ws['A5'] = f"Data Sources: BeAScout.org (10-mile search radius per zip code) + JoinExploring.org (20-mile search radius per zip code) + {key_three_filename}"
         ws['A5'].font = Font(size=10)
         
-        ws['A6'] = f"Last Complete BeAScout Data Retrieval: {self.quality_data.get('extraction_timestamp', 'Unknown')[:10]}"
+        # Extract and format original scraping timestamp with date and time (same logic as Executive Summary)
+        scraping_timestamp = self.quality_data.get('scraping_timestamp', '')
+        if scraping_timestamp and scraping_timestamp != 'Unknown':
+            try:
+                scraping_date = datetime.fromisoformat(scraping_timestamp.replace('Z', '+00:00'))
+                formatted_date = scraping_date.strftime('%B %d, %Y at %I:%M %p')
+            except (ValueError, AttributeError):
+                formatted_date = scraping_timestamp[:10] if len(scraping_timestamp) >= 10 else 'Date Unknown'
+        else:
+            formatted_date = 'Date Unknown'
+        
+        ws['A6'] = f"Last Complete BeAScout Data Retrieval: {formatted_date}"
         ws['A6'].font = Font(size=10)
         
         # Count units and towns for this district

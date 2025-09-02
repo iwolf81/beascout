@@ -1,7 +1,7 @@
 {
   "council": "Heart of New England",
   "total_towns": 62,
-  "total_zipcodes": 72,
+  "total_zipcodes": 71,
   "estimated_units_range": "124-248",
   "estimation_method": "2-4 units per town average",
   "towns": [
@@ -325,7 +325,6 @@
     "01364",
     "01540",
     "01366",
-    "01331",
     "01368",
     "01550",
     "01562",
