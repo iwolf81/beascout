@@ -595,16 +595,27 @@ def extract_meeting_info(description):
         r'(Tues|Thurs)\.?',  # Common abbreviations "Tues." or "Thurs."
     ]
     
-    # Meeting time patterns - enhanced for more formats
+    # Meeting time patterns - enhanced with boundary checks to avoid email/unit number contamination
+    # while still capturing legitimate meeting times from descriptions
     time_patterns = [
         r'(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})\s*([ap])\.?m?\.?',  # "7:00 - 8:30 p.m."
         r'(\d{1,2}:\d{2})\s*([ap])\.?m?\.?\s*-\s*(\d{1,2}:\d{2})\s*([ap])\.?m?\.?',  # "6:30 p.m. - 8:00 p.m."
         r'(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})',  # "7:00 - 8:30" (full time range, no AM/PM)
         r'(?:\s|,)\s*(\d{1,2})\s*-\s*(\d{1,2}:\d{2})',  # " 7 - 8:30" (simple time range after space/comma)
         r'(?:at\s+)?(\d{1,2}:\d{2})\s*([ap])\.?m?\.?',  # "at 6:30pm", "7:00 PM"
-        r'(?:at\s+)?(\d{3,4})\s*([ap])\.?m?\.?',  # "at 330pm", "1230 PM" (3-4 digit times)
-        r'(?:at\s+)?(\d{1,2})\s*([ap])\.?m?\.?',  # "at 7pm"
+        r'(?:at\s+)(\d{3,4})\s*([ap])\.?m?\.?',  # "at 330pm", "at 1230 PM" - requires "at" context
+        
+        # ENHANCED: Legitimate time patterns with proper context to avoid unit identifier contamination
+        r'(?:at|meets?)\s+(\d{1,2})\s*([ap])\.?m?\.?',  # "at 7pm" or "meets 6am" - requires context word
         r'(?:from\s+)?(\d{1,2}:\d{2})\s*(?:to\s+(\d{1,2}:\d{2}))?\s*([ap])\.?m?\.?',  # "from 7:00 to 8:30 PM"
+        
+        # NEW: Additional legitimate patterns for meeting descriptions
+        r'(?:from\s+)(\d{1,2})\s*([ap])m?\s*-\s*(\d{1,2})\s*([ap])m?',  # "from 6pm - 7pm"
+        r'(?:nights?\s+from\s+)(\d{1,2})\s*([ap])m?\s*-\s*(\d{1,2})\s*([ap])m?',  # "nights from 6pm - 7pm"
+        r'(?:meetings?\s*-\s*)(\d{1,2})\s*-\s*(\d{1,2})\s*([ap])m?',  # "meetings - 7-8pm"  
+        r'(?:on\s+\w+days?\s+)(\d{1,2})\s*([ap])m?(?:\s+at)',  # "on Tuesdays 6PM at"
+        r'(?:meet(?:s|ing)?.*?)(\d{1,2}:\d{2})\s*-\s*(\d{1,2})\s*([ap])m?',  # "meets from 6:30-8 pm"
+        r'(?:from\s+)(\d{1,2})\s*-\s*(\d{1,2})\s*([ap])m?',  # "from 4-6 pm"
     ]
     
     # Extract day
@@ -635,7 +646,8 @@ def extract_meeting_info(description):
         match = re.search(pattern, description, re.IGNORECASE)
         if match:
             groups = match.groups()
-            # Handle different pattern types based on number of groups
+            
+            # Handle different pattern types based on number of groups and content
             if len(groups) == 2 and ':' in groups[0] and ':' in groups[1]:
                 # Full time range without AM/PM: "7:00 - 8:30"
                 # Assume PM for evening times (6 PM or later)
@@ -652,11 +664,22 @@ def extract_meeting_info(description):
                 time1 = format_meeting_time(f"{groups[0]} {groups[1]}M")
                 time2 = format_meeting_time(f"{groups[2]} {groups[3]}M")
                 time = f"{time1} - {time2}"
-            elif len(groups) >= 3 and groups[2]:  # Range format
-                time1 = format_meeting_time(f"{groups[0]} {groups[2]}M")
-                time2 = format_meeting_time(f"{groups[1]} {groups[2]}M")
+            elif len(groups) == 4 and groups[3]:  # New patterns: "from 6pm - 7pm" style
+                time1 = format_meeting_time(f"{groups[0]} {groups[1]}M")
+                time2 = format_meeting_time(f"{groups[2]} {groups[3]}M") 
                 time = f"{time1} - {time2}"
-            elif len(groups) >= 2 and groups[1]:  # Single time with AM/PM
+            elif len(groups) == 3 and groups[2]:  # "meetings - 7-8pm" or "from 4-6 pm" style  
+                if ':' in groups[0]:
+                    # "meets from 6:30-8 pm" style
+                    time1 = format_meeting_time(f"{groups[0]} {groups[2]}M")
+                    time2 = format_meeting_time(f"{groups[1]} {groups[2]}M")
+                    time = f"{time1} - {time2}"
+                else:
+                    # "from 4-6 pm" or "7-8pm" style
+                    time1 = format_meeting_time(f"{groups[0]}:00 {groups[2]}M")
+                    time2 = format_meeting_time(f"{groups[1]}:00 {groups[2]}M")
+                    time = f"{time1} - {time2}"
+            elif len(groups) >= 2 and groups[1]:  # Single time with AM/PM: "6PM", "at 7pm"
                 time = format_meeting_time(f"{groups[0]} {groups[1]}M")
             else:
                 time = format_meeting_time(groups[0])
