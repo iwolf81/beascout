@@ -198,6 +198,9 @@ class ScrapedDataParser:
             original_scraped_data=unit
         )
         
+        # Propagate structural description flag from scraped data to top level
+        record['_has_description_div'] = unit.get('_has_description_div', False)
+        
         # Integrate quality scoring - calculate score, grade, and quality tags during parsing
         try:
             from src.pipeline.analysis.quality_scorer import UnitQualityScorer

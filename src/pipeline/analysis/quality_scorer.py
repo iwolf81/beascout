@@ -62,16 +62,14 @@ class UnitQualityScorer:
             'RECOMMENDED_MISSING_CONTACT': "Add contact person name.",
             'RECOMMENDED_MISSING_PHONE': "Add contact phone number.",
             'RECOMMENDED_MISSING_WEBSITE': "Add unit-specific website.",
+            'RECOMMENDED_MISSING_DESCRIPTION': "Add unit description.",
             
             # Data quality recommendations
             'QUALITY_POBOX_LOCATION': "Replace PO Box with physical meeting location.",
             'QUALITY_PERSONAL_EMAIL': "Use unit-specific email instead of personal email.",
             'QUALITY_UNIT_ADDRESS': "Meeting location should be in address field, not description.",
-            
-            # Content quality recommendations
-            'CONTENT_MISSING_DESCRIPTION': "Add informative and inviting unit description."
         }
-    
+
     def is_specialized_unit(self, unit: Dict[str, Any]) -> bool:
         """Check if unit is specialized (requires specialty field): Crew only"""
         unit_type = unit.get('unit_type', '').lower()
@@ -307,15 +305,17 @@ class UnitQualityScorer:
         
         # Add recommended field issues (informational only - no scoring impact)
         for field in self.weights.RECOMMENDED.keys():
-            if not self.is_field_present(unit, field):
+            if field == 'description':
+                # Use structural detection - check if unit-description div was present
+                if not unit.get('_has_description_div', False):
+                    recommendations.append('RECOMMENDED_MISSING_DESCRIPTION')
+            elif not self.is_field_present(unit, field):
                 if field == 'contact_person':
                     recommendations.append('RECOMMENDED_MISSING_CONTACT')
                 elif field == 'phone_number':
                     recommendations.append('RECOMMENDED_MISSING_PHONE')
                 elif field == 'website':
                     recommendations.append('RECOMMENDED_MISSING_WEBSITE')
-                elif field == 'description':
-                    recommendations.append('CONTENT_MISSING_DESCRIPTION')
         
         # Ensure score doesn't go below 0
         score = max(0.0, score)
@@ -351,7 +351,7 @@ class UnitQualityScorer:
         }
         
         total_score = 0.0
-        units = units_data.get('all_units', [])
+        units = units_data.get('all_units', []) or units_data.get('units_with_scores', [])
         
         for unit in units:
             score, recommendations = self.score_unit(unit)

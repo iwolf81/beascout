@@ -416,21 +416,17 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
                 unit_data['website'] = href
                 break
         
-        # Description - usually in a larger text block
+        # Description - only from unit-description div (no fallback to administrative text)
         desc_container = unit_body.find('div', class_='unit-description')
-        if not desc_container:
-            # Look for any div or p with substantial text content
-            text_containers = unit_body.find_all(['div', 'p'])
-            for container in text_containers:
-                text = container.get_text(strip=True)
-                if len(text) > 50:  # Substantial text
-                    unit_data['description'] = text
-                    break
-        else:
+        unit_data['_has_description_div'] = desc_container is not None
+        
+        if desc_container:
             # Replace <br> tags with spaces in description to preserve line breaks
             for br in desc_container.find_all("br"):
                 br.replace_with(" ")
             unit_data['description'] = desc_container.get_text(separator=' ', strip=True)
+        else:
+            unit_data['description'] = ""
         
         # Unit composition (Boy Troop, Girl Troop, etc.)
         composition_elem = unit_body.find(string=re.compile(r'(Boy|Girl|Boys|Girls|Coed)'))

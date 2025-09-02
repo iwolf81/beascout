@@ -304,7 +304,19 @@ class BeAScoutQualityReportGenerator:
         ws['A4'] = f"Data Sources: BeAScout.org (10-mile radius) + JoinExploring.org (20-mile) + {key_three_filename}"
         ws['A4'].font = Font(size=10)
         
-        ws['A5'] = f"Last Complete BeAScout Data Retrieval: {self.quality_data.get('extraction_timestamp', 'Unknown')[:10]}"
+        # Extract and format extraction timestamp
+        extraction_timestamp = self.quality_data.get('extraction_timestamp', '')
+        if extraction_timestamp and extraction_timestamp != 'Unknown':
+            # Parse ISO timestamp and format as readable date
+            try:
+                extraction_date = datetime.fromisoformat(extraction_timestamp.replace('Z', '+00:00'))
+                formatted_date = extraction_date.strftime('%B %d, %Y')
+            except (ValueError, AttributeError):
+                formatted_date = extraction_timestamp[:10] if len(extraction_timestamp) >= 10 else 'Date Unknown'
+        else:
+            formatted_date = 'Date Unknown'
+        
+        ws['A5'] = f"Last Complete BeAScout Data Retrieval: {formatted_date}"
         ws['A5'].font = Font(size=10)
         
         # Quality metrics - remove extra spacing
@@ -398,8 +410,9 @@ class BeAScoutQualityReportGenerator:
         ws[f'A{row}'].font = Font(bold=True)
         row += 1
         quality_items = [
-            ("PO Box location", "Replace PO Box with physical meeting location so parents and youth can find meetings"),
-            ("Personal email", "Use unit-specific email instead of personal email for better continuity and professionalism"),
+            ("Meeting location", "Provide physical meeting location in Unit Meeting Address field instead of Description field"),
+            ("PO Box location", "Complement PO Box with physical meeting location so parents and youth can find meetings"),
+            ("Personal email", "Use unit-specific email monitored by multiple leaders instead of personal email for continuity"),
         ]
         for issue, explanation in quality_items:
             ws[f'A{row}'] = f"  • {issue}"
