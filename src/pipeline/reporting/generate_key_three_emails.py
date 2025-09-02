@@ -527,8 +527,8 @@ Yours in Scouting,
         try:
             import sys
             import os
-            sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'prototype'))
-            from src.config.hne_towns import get_hne_towns_and_zipcodes
+            sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+            from config.hne_towns import get_hne_towns_and_zipcodes
             hne_towns, _ = get_hne_towns_and_zipcodes()
             hne_towns_set = set([town.lower() for town in hne_towns])
             
@@ -608,8 +608,8 @@ Yours in Scouting,
                 # Generate email content
                 email_content = self.generate_email(unit)
                 
-                # Create filename
-                primary_id = unit.get('primary_identifier', 'Unknown_Unit')
+                # Create filename using unit_key or primary_identifier
+                primary_id = unit.get('primary_identifier', unit.get('unit_key', 'Unknown_Unit'))
                 safe_filename = re.sub(r'[^\w\-_\.]', '_', primary_id)
                 filename = f"{safe_filename}_email.md"
                 file_path = Path(output_dir) / filename
