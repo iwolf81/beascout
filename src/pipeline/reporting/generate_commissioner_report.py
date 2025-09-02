@@ -687,6 +687,39 @@ class BeAScoutQualityReportGenerator:
                     cell.font = Font(color="0000FF", underline="single")  # Blue underlined text
                 else:
                     cell.value = email
+            elif col_num == ReportColumns.ZIP_CODE and value:  # Zip Code column - make clickable link to BeAScout/JoinExploring for this unit type
+                zip_code = str(value).strip()
+                if zip_code and len(zip_code) == 5:  # Valid 5-digit zip code
+                    # Get unit type from row data for targeted search
+                    unit_identifier = row_data[0] if row_data else ""  # First column is unit identifier
+                    unit_type = ""
+                    if unit_identifier:
+                        if unit_identifier.startswith("Pack "):
+                            unit_type = "pack"
+                        elif unit_identifier.startswith("Troop "):
+                            unit_type = "scoutsBSA" 
+                        elif unit_identifier.startswith("Crew "):
+                            unit_type = "crew"
+                        elif unit_identifier.startswith("Ship "):
+                            unit_type = "ship"
+                        elif unit_identifier.startswith("Post "):
+                            unit_type = "post"
+                        elif unit_identifier.startswith("Club "):
+                            unit_type = "club"
+                    
+                    if unit_type in ["post", "club"]:
+                        # Create JoinExploring search URL for specific unit type
+                        exploring_url = f"https://joinexploring.org/list/?zip={zip_code}&program[0]={unit_type}&miles=20"
+                        cell.hyperlink = exploring_url
+                    elif unit_type:
+                        # Create BeAScout search URL for specific unit type
+                        beascout_url = f"https://beascout.scouting.org/list/?zip={zip_code}&program[0]={unit_type}&miles=10"
+                        cell.hyperlink = beascout_url
+                    
+                    cell.value = zip_code
+                    cell.font = Font(color="0000FF", underline="single")  # Blue underlined text
+                else:
+                    cell.value = zip_code
             elif col_num == ReportColumns.UNIT_WEBSITE and value:  # Unit Website column - make clickable
                 website = str(value).strip()
                 if website:
