@@ -28,3 +28,33 @@
 2. Town names in discard log are now mostly legit, except for "Daniel Webster Council" and "American Legion Post 355".
 3. There are 42 units in discard log without town names.
 iwolf@Iras-MacBook-Pro debug % grep "unit_town: \'\'." discarded_unit_identifier_debug_scraped_20250901_121905_u.log | wc -l > discarded_unit_identifier_debug_scraped_20250901_121905_null_towns.log
+
+## Pass 3 - Report Generation Feedback
+
+1. These are likely personal emails (do NOT work too much on solving this; it's not worth effort)
+Pack 158 Shrewsbury | CubMasterMaggie@gmail.com
+Troop 1 Acton | smbrunker.troop1acton@gmail.com
+
+2. This is a personal email
+Troop 180 Holden | straightshooters@mail.com
+
+3. Bad parsing of meeting times:
+Troop 7338 Charlton | 73:38 AM (invalid)
+Pack 37 Worcester | 10:52 PM (unlikely)
+Troop 1 Princeton | 00:01 PM (unlikely)
+Pack 16 Athol | 16:00 AM (Should this be 4PM?)
+Troop 243 Sutton | 7:00 AM - 8:30 AM (This should be PM, not AM)
+Troop 6 Gardner | 7:00 AM - 8:30 AM (This should be PM, not AM)
+Pack 1455 Pepperell | 5:00 AM (This should be PM, not AM))
+Troop 1 Acton | 1:00 AM (unlikely )
+Troop 1 Boxborough | 7:00 AM - 8:30 AM (This should be PM, not AM))
+
+4. Bad parsing of meeting location
+Ship 1935 Webster | 4 Bates Point Road in Webster. Our off season meetings are at the 200 Sportsmans Club also in Webster. We meet weekly on Tuesday nights starting at 6:30 PM. We also get together on weekends for all kinds of fun activities Apply Now More Information
+
+5. Column Enumerations
+Are columns enumerated such that they can be moved around by simply changing their position value in one location in code? This is, column values in code are not hard coded but reference an enumerated value
+
+6. Links to beascout.scouting.org and joinexploring.org
+Can the value under Zip Code column be links to the correct beascout.scouting.org or joinexploring.org search page for the unit type and zip code?
+Think about how to do this, but don't implement changes in code.
