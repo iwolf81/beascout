@@ -17,6 +17,72 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
 from typing import Dict, List, Any
 
+class ReportColumns:
+    """Centralized column definitions for BeAScout Quality Reports"""
+    
+    # Column numbers (1-indexed for Excel)
+    UNIT_IDENTIFIER = 1
+    CHARTERED_ORG = 2
+    TOWN = 3
+    ZIP_CODE = 4
+    QUALITY_SCORE = 5
+    QUALITY_GRADE = 6
+    MISSING_INFO = 7
+    QUALITY_ISSUES = 8
+    RECOMMENDED_IMPROVEMENTS = 9
+    MEETING_LOCATION = 10
+    MEETING_DAY = 11
+    MEETING_TIME = 12
+    SPECIALTY = 13
+    CONTACT_EMAIL = 14
+    CONTACT_PERSON = 15
+    CONTACT_PHONE = 16
+    UNIT_WEBSITE = 17
+    KEY_THREE_1 = 18
+    KEY_THREE_2 = 19
+    KEY_THREE_3 = 20
+    
+    # Total number of columns
+    TOTAL_COLUMNS = 20
+    
+    # Column headers in order
+    HEADERS = [
+        "Unit Identifier", "Chartered Organization", "Town", "Zip Code", "Quality Score", "Quality Grade",
+        "Missing Information", "Quality Issues", "Recommended Improvements", "Meeting Location",
+        "Meeting Day", "Meeting Time", "Specialty (Crews only)", "Contact Email", "Contact Person", "Contact Phone Number",
+        "Unit Website", "Key Three (1)", "Key Three (2)", "Key Three (3)"
+    ]
+    
+    # Column widths (in Excel units)
+    WIDTHS = [20, 30, 15, 10, 12, 12, 25, 25, 25, 25, 12, 12, 15, 20, 18, 18, 20, 35, 35, 35]
+    
+    # Column categories for styling
+    IDENTITY_COLUMNS = [UNIT_IDENTIFIER, CHARTERED_ORG, TOWN, ZIP_CODE]
+    QUALITY_COLUMNS = [QUALITY_SCORE, QUALITY_GRADE, MISSING_INFO, QUALITY_ISSUES, RECOMMENDED_IMPROVEMENTS]
+    MEETING_COLUMNS = [MEETING_LOCATION, MEETING_DAY, MEETING_TIME, SPECIALTY, CONTACT_EMAIL, CONTACT_PERSON, CONTACT_PHONE, UNIT_WEBSITE]
+    KEY_THREE_COLUMNS = [KEY_THREE_1, KEY_THREE_2, KEY_THREE_3]
+    
+    # Special formatting columns
+    CLICKABLE_EMAIL_COLUMNS = [CONTACT_EMAIL] + KEY_THREE_COLUMNS
+    CLICKABLE_WEBSITE_COLUMNS = [UNIT_WEBSITE]
+    NUMERIC_COLUMNS = [QUALITY_SCORE]
+    
+    @classmethod
+    def get_column_number(cls, column_name: str) -> int:
+        """Get column number by name (for dynamic lookups)"""
+        return getattr(cls, column_name.upper())
+    
+    @classmethod
+    def is_in_category(cls, col_num: int, category: str) -> bool:
+        """Check if column is in a specific category"""
+        category_map = {
+            'identity': cls.IDENTITY_COLUMNS,
+            'quality': cls.QUALITY_COLUMNS,
+            'meeting': cls.MEETING_COLUMNS,
+            'key_three': cls.KEY_THREE_COLUMNS
+        }
+        return col_num in category_map.get(category, [])
+
 # Add project root to path for imports
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
@@ -33,6 +99,51 @@ except ImportError:
     spec.loader.exec_module(quality_scorer_module)
     UnitQualityScorer = quality_scorer_module.UnitQualityScorer
 
+def load_town_zip_mapping():
+    """Load town to zip code mapping for HNE Council"""
+    # Try relative to current working directory first
+    zip_file_path = Path("data/zipcodes/hne_council_zipcodes.json")
+    if not zip_file_path.exists():
+        # Try relative to script location
+        zip_file_path = Path(__file__).parent.parent.parent / "data" / "zipcodes" / "hne_council_zipcodes.json"
+    
+    try:
+        with open(zip_file_path, 'r') as f:
+            zip_data = json.load(f)
+            return zip_data.get('town_zipcodes', {})
+    except FileNotFoundError:
+        print(f"⚠️  Zip code mapping file not found: {zip_file_path}")
+        return {}
+
+def get_zip_code_for_town(town_name: str, town_zip_mapping: dict) -> str:
+    """Get primary zip code for a town name"""
+    if not town_name or not town_zip_mapping:
+        return ""
+    
+    # Clean up town name variations
+    clean_town = town_name.strip()
+    
+    # Direct lookup
+    if clean_town in town_zip_mapping:
+        zip_codes = town_zip_mapping[clean_town]
+        return zip_codes[0] if zip_codes else ""  # Return first zip code
+    
+    # Try variations for compound town names
+    if clean_town.startswith("E. "):
+        base_town = clean_town[3:]  # Remove "E. " prefix
+        if base_town in town_zip_mapping:
+            zip_codes = town_zip_mapping[base_town]
+            return zip_codes[0] if zip_codes else ""
+    
+    # Try "North " prefix variations
+    if clean_town.startswith("North "):
+        base_town = clean_town[6:]  # Remove "North " prefix  
+        if base_town in town_zip_mapping:
+            zip_codes = town_zip_mapping[base_town]
+            return zip_codes[0] if zip_codes else ""
+    
+    return ""  # No mapping found
+
 class BeAScoutQualityReportGenerator:
     """
     Generates comprehensive BeAScout Quality Reports organized by district
@@ -43,15 +154,40 @@ class BeAScoutQualityReportGenerator:
         self.quality_data = None
         self.key_three_data = None
         self.scorer = UnitQualityScorer()
+        self.town_zip_mapping = load_town_zip_mapping()
         
     def load_quality_data(self, quality_file: str = 'data/raw/all_units_comprehensive_scored.json',
                           validation_file: str = 'data/output/enhanced_three_way_validation_results.json') -> bool:
-        """Load quality-scored unit data, Key Three information, and missing units"""
+        """Load unit data with quality tags already calculated during HTML parsing"""
         try:
-            # Load quality-scored units
+            # Load unit data with integrated quality scoring
             with open(quality_file, 'r', encoding='utf-8') as f:
-                self.quality_data = json.load(f)
-                print(f"📊 Loaded quality data: {len(self.quality_data['units_with_scores'])} units")
+                raw_data = json.load(f)
+                
+                # Handle both data formats: scraped_units or units_with_scores
+                units = raw_data.get('scraped_units', raw_data.get('units_with_scores', []))
+                print(f"📊 Loaded {len(units)} units with quality data")
+            
+            # Quality data is now integrated - no need for separate scoring
+            self.quality_data = {
+                'total_units': len(units),
+                'units_with_scores': units,
+                'average_score': 0.0,
+                'scoring_summary': {'A': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0}
+            }
+            
+            # Calculate summary statistics from integrated quality data
+            total_score = 0.0
+            for unit in self.quality_data['units_with_scores']:
+                grade = unit.get('completeness_grade', 'F')
+                score = unit.get('completeness_score', 0.0)
+                self.quality_data['scoring_summary'][grade] += 1
+                total_score += score
+            
+            if len(self.quality_data['units_with_scores']) > 0:
+                self.quality_data['average_score'] = round(total_score / len(self.quality_data['units_with_scores']), 1)
+            
+            print(f"📊 Quality data integrated: avg score {self.quality_data['average_score']}%")
             
             # Load validation data to get Key Three info and missing units
             with open(validation_file, 'r', encoding='utf-8') as f:
@@ -247,17 +383,16 @@ class BeAScoutQualityReportGenerator:
         ws[f'A{row}'].font = Font(bold=True)
         row += 1
         required_items = [
-            ("Missing meeting location", "Unit needs a physical meeting location with street address for parents and youth to find meetings"),
-            ("Missing meeting day", "Unit needs to specify which day(s) of the week meetings are held"),
-            ("Missing meeting time", "Unit needs to specify what time meetings start and end"),
-            ("Missing contact email", "Unit needs a contact email address for inquiries and communication"),
+            ("Meeting location", "Unit needs a physical meeting location with street address for parents and youth to find meetings"),
+            ("Meeting day", "Unit needs to specify which day(s) of the week meetings are held"),
+            ("Meeting time", "Unit needs to specify what time meetings start and end"),
+            ("Contact email", "Unit needs a contact email address for inquiries and communication"),
         ]
         for issue, explanation in required_items:
             ws[f'A{row}'] = f"  • {issue}"
             ws[f'B{row}'] = explanation
             row += 1
         
-        row += 1
         # Needs Improvement subsection  
         ws[f'A{row}'] = "Needs Improvement:"
         ws[f'A{row}'].font = Font(bold=True)
@@ -271,16 +406,15 @@ class BeAScoutQualityReportGenerator:
             ws[f'B{row}'] = explanation
             row += 1
             
-        row += 1
         # Recommended Information subsection
         ws[f'A{row}'] = "Recommended Information:"
         ws[f'A{row}'].font = Font(bold=True)
         row += 1
         recommended_items = [
-            ("Missing contact person", "Adding a contact person name helps parents and youth know who to reach out to"),
-            ("Missing phone number", "Phone contact provides immediate communication option for urgent questions"),
-            ("Missing website", "Unit-specific website increases visibility and provides additional information for families"),
-            ("Missing description", "Informative description helps attract new members by explaining unit activities and culture"),
+            ("Contact person", "Adding a contact person name helps parents and youth know who to reach out to"),
+            ("Phone number", "Phone contact provides immediate communication option for urgent questions"),
+            ("Website", "Unit-specific website increases visibility and provides additional information for families"),
+            ("Description", "Informative description helps attract new members by explaining unit activities and culture"),
         ]
         for issue, explanation in recommended_items:
             ws[f'A{row}'] = f"  • {issue}"
@@ -335,15 +469,8 @@ class BeAScoutQualityReportGenerator:
         ws['A7'] = f"{len(units)} Units across {len(towns)} towns"
         ws['A7'].font = Font(size=12, bold=True)
         
-        # Create column headers (row 9) with reordered contact columns
-        headers = [
-            "Unit Identifier", "Chartered Organization", "Town", "Quality Score", "Quality Grade",
-            "Missing Information", "Quality Issues", "Recommended Improvements", "Meeting Location",
-            "Meeting Day", "Meeting Time", "Contact Person", "Contact Email", "Contact Phone Number",
-            "Unit Website", "Key Three - First Person", "Key Three - Second Person", "Key Three - Third Person"
-        ]
-        
-        for col_num, header in enumerate(headers, 1):
+        # Create column headers (row 9) using ReportColumns definition
+        for col_num, header in enumerate(ReportColumns.HEADERS, 1):
             cell = ws.cell(row=9, column=col_num)
             cell.value = header
             cell.font = Font(bold=True, size=10)
@@ -369,16 +496,15 @@ class BeAScoutQualityReportGenerator:
         for row_num, unit in enumerate(sorted_units, 10):
             self._populate_unit_row(ws, row_num, unit)
         
-        # Auto-adjust column widths
-        column_widths = [20, 30, 15, 12, 12, 25, 25, 25, 25, 12, 12, 20, 18, 18, 20, 35, 35, 35]
-        for col_num, width in enumerate(column_widths, 1):
+        # Auto-adjust column widths using ReportColumns definition
+        for col_num, width in enumerate(ReportColumns.WIDTHS, 1):
             ws.column_dimensions[get_column_letter(col_num)].width = width
         
-        # Freeze columns A and B (and header rows)
-        ws.freeze_panes = 'C10'
+        # Freeze columns A through D (Unit Identifier through Zip Code) and header rows
+        ws.freeze_panes = 'E10'
         
         # Apply professional formatting to all data cells
-        self._apply_district_sheet_formatting(ws, len(sorted_units), len(headers))
+        self._apply_district_sheet_formatting(ws, len(sorted_units), ReportColumns.TOTAL_COLUMNS)
     
     def _populate_unit_row(self, ws, row_num: int, unit: Dict):
         """Populate a single unit row with all required information"""
@@ -387,8 +513,9 @@ class BeAScoutQualityReportGenerator:
         key_three_info = self.key_three_data.get(unit_key, {})
         key_three_members = key_three_info.get('key_three_members', [])
         
-        # Categorize recommendations
-        recommendations = unit.get('recommendations', [])
+        # Categorize recommendations from quality tags stored in unit data during parsing
+        # Use integrated quality_tags or fall back to recommendations field
+        recommendations = unit.get('quality_tags', unit.get('recommendations', []))
         missing_info = [rec for rec in recommendations if rec.startswith('REQUIRED_')]
         quality_issues = [rec for rec in recommendations if rec.startswith('QUALITY_')]
         recommended_improvements = [rec for rec in recommendations if rec.startswith('RECOMMENDED_') or rec.startswith('CONTENT_')]
@@ -461,11 +588,16 @@ class BeAScoutQualityReportGenerator:
         else:
             formatted_location = ''
         
-        # Populate row data with reordered contact columns and multi-line formatting
+        # Get zip code for this unit's town
+        unit_town = unit.get('unit_town', '')
+        zip_code = get_zip_code_for_town(unit_town, self.town_zip_mapping)
+        
+        # Populate row data with Zip Code and reordered contact columns
         row_data = [
             unit_key,
             unit.get('chartered_organization', ''),
-            unit.get('unit_town', ''),
+            unit_town,
+            zip_code,                        # Populated Zip Code column
             unit.get('completeness_score', 0),
             unit.get('completeness_grade', 'F'),
             '\n'.join(missing_descriptions),  # Each issue on separate line
@@ -474,8 +606,9 @@ class BeAScoutQualityReportGenerator:
             formatted_location,  # Multi-line meeting location
             unit.get('meeting_day', ''),
             unit.get('meeting_time', ''),
-            unit.get('contact_person', ''),  # Reordered: Contact Person first
-            unit.get('contact_email', ''),   # Then Contact Email
+            unit.get('specialty', ''),       # Specialty field for Crews
+            unit.get('contact_email', ''),   # Reordered: Contact Email first  
+            unit.get('contact_person', ''),  # Then Contact Person
             unit.get('phone_number', ''),    # Then Contact Phone
             unit.get('website', ''),
             key_three_1,
@@ -488,19 +621,43 @@ class BeAScoutQualityReportGenerator:
             # Handle 0 values explicitly (don't convert to empty string)
             if value is None or value == '':
                 cell.value = ""
-            elif col_num == 4:  # Quality Score column - use numeric format, left-aligned
+            elif col_num == ReportColumns.QUALITY_SCORE:  # Quality Score column - use numeric format, left-aligned
                 cell.value = float(value) if isinstance(value, (int, float)) else value
+            elif col_num == ReportColumns.CONTACT_EMAIL and value:  # Contact Email column - make clickable
+                email = str(value).strip()
+                if email and '@' in email:
+                    cell.hyperlink = f"mailto:{email}"
+                    cell.value = email
+                    cell.font = Font(color="0000FF", underline="single")  # Blue underlined text
+                else:
+                    cell.value = email
+            elif col_num == ReportColumns.UNIT_WEBSITE and value:  # Unit Website column - make clickable
+                website = str(value).strip()
+                if website:
+                    # Add https:// if no protocol specified
+                    if not website.startswith(('http://', 'https://')):
+                        website_url = f"https://{website}"
+                    else:
+                        website_url = website
+                    cell.hyperlink = website_url
+                    cell.value = website
+                    cell.font = Font(color="0000FF", underline="single")  # Blue underlined text
+                else:
+                    cell.value = website
+            elif col_num in ReportColumns.KEY_THREE_COLUMNS and value:  # Key Three columns - no hyperlink (Excel limitation)
+                text = str(value).strip()
+                cell.value = text if text != 'None' else text
             else:
                 cell.value = str(value)
             
             # Set alignment - left-aligned for Quality Score, default for others
-            if col_num == 4:
+            if col_num == ReportColumns.QUALITY_SCORE:
                 cell.alignment = Alignment(horizontal='left', wrap_text=True, vertical='top')
             else:
                 cell.alignment = Alignment(wrap_text=True, vertical='top')
             
             # Color code quality grades including N/A for missing units
-            if col_num == 5:  # Quality Grade column
+            if col_num == ReportColumns.QUALITY_GRADE:  # Quality Grade column
                 grade = str(value)
                 if grade == 'A':
                     cell.fill = PatternFill(start_color="90EE90", end_color="90EE90", fill_type="solid")
@@ -532,11 +689,24 @@ class BeAScoutQualityReportGenerator:
             cell = ws.cell(row=9, column=col_num)
             cell.border = thin_border
             
+        # Define column category fill colors (very light colors)
+        quality_fill = PatternFill(start_color="FFFACD", end_color="FFFACD", fill_type="solid")      # Very light yellow (F-H)
+        beascout_fill = PatternFill(start_color="F0F8FF", end_color="F0F8FF", fill_type="solid")     # Very light blue (I-O)  
+        key_three_fill = PatternFill(start_color="F0FFF0", end_color="F0FFF0", fill_type="solid")    # Very light green (P-R)
+        
         # Apply formatting to data rows (starting from row 10)
         for row_num in range(10, 10 + num_data_rows):
             for col_num in range(1, num_columns + 1):
                 cell = ws.cell(row=row_num, column=col_num)
                 cell.border = thin_border
+                
+                # Apply category fill colors using ReportColumns categories
+                if col_num in ReportColumns.QUALITY_COLUMNS[2:]:  # Quality Issues, Missing Info, Recommended Improvements
+                    cell.fill = quality_fill
+                elif col_num in ReportColumns.MEETING_COLUMNS:   # Meeting and Contact Information
+                    cell.fill = beascout_fill
+                elif col_num in ReportColumns.KEY_THREE_COLUMNS:  # Key Three Contacts
+                    cell.fill = key_three_fill
 
 def main():
     """Generate BeAScout Quality Report organized by districts"""
@@ -554,7 +724,7 @@ def main():
     
     # Get statistics for display
     total_units = generator.quality_data['total_units']
-    avg_score = generator.quality_data.get('average_completeness_score', 0)
+    avg_score = generator.quality_data.get('average_score', 0)
     
     # Count districts
     districts = set()

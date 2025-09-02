@@ -14,7 +14,6 @@ from datetime import datetime
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
 from src.pipeline.parsing.scraped_data_parser import ScrapedDataParser
-from src.pipeline.analysis.quality_scorer import UnitQualityScorer
 
 def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_code: str) -> str:
     """
@@ -25,8 +24,15 @@ def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_c
     print(f"  Processing JoinExploring: {joinexploring_file}")
 
     try:
+        # Initialize debug session in subprocess by setting environment variable
+        import os
+        import datetime
+        if 'UNIT_DEBUG_TIMESTAMP' not in os.environ:
+            shared_timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            os.environ['UNIT_DEBUG_TIMESTAMP'] = shared_timestamp
+        
         # Use HTML parser to extract units to JSON
-        cmd = f'python3 src/parsing/html_extractor.py "{beascout_file}" "{joinexploring_file}"'
+        cmd = f'python3 src/pipeline/parsing/html_extractor.py "{beascout_file}" "{joinexploring_file}"'
         result = os.system(cmd)
 
         if result == 0:
@@ -56,43 +62,50 @@ def process_with_current_pipeline(json_file: str, zip_code: str) -> str:
         units = parser.parse_json_file(json_file)
 
         print(f"    Processed {len(units)} units through current pipeline")
+        
+        # Check if units have integrated quality data
+        if units and len(units) > 0:
+            first_unit = units[0]
+            has_score = 'completeness_score' in first_unit
+            has_grade = 'completeness_grade' in first_unit
+            has_tags = 'quality_tags' in first_unit
+            print(f"    Quality integration check: score={has_score}, grade={has_grade}, tags={has_tags}")
 
-        # Save processed units
-        processed_json = f"data/raw/all_units_{zip_code}.json"
+        # Ensure directory exists
+        import os
+        os.makedirs("data/raw", exist_ok=True)
+
+        # Save processed units with wrapper structure for consistency with combine_datasets
+        processed_json = f"data/raw/all_units_{zip_code}_processed.json"
+        data_wrapper = {
+            'units_with_scores': units,
+            'total_units': len(units),
+            'average_score': sum(u.get('completeness_score', 0) for u in units) / len(units) if units else 0.0,
+            'extraction_timestamp': datetime.now().isoformat()
+        }
         with open(processed_json, 'w') as f:
-            json.dump(units, f, indent=2)
+            json.dump(data_wrapper, f, indent=2)
+            
+        # Verify file was created
+        if os.path.exists(processed_json):
+            print(f"    ✅ File saved successfully: {processed_json}")
+        else:
+            print(f"    ❌ File was not created: {processed_json}")
+            return None
 
         return processed_json
 
     except Exception as e:
         print(f"    ❌ Current pipeline processing failed: {e}")
+        import traceback
+        traceback.print_exc()
         return None
 
-def score_units(json_file: str, zip_code: str) -> str:
-    """Score units using UnitQualityScorer"""
-    try:
-        # Load units data
-        with open(json_file, 'r') as f:
-            units_data = json.load(f)
-
-        scorer = UnitQualityScorer()
-        scored_data = scorer.score_all_units({'all_units': units_data})
-
-        scored_file = f"data/raw/all_units_{zip_code}_scored.json"
-        with open(scored_file, 'w') as f:
-            json.dump(scored_data, f, indent=2)
-
-        print(f"    Quality scored {len(scored_data.get('units_with_scores', []))} units")
-        return scored_file
-
-    except Exception as e:
-        print(f"    ❌ Quality scoring failed: {e}")
-        return None
 
 def process_scraped_session(session_dir: str):
     """Process a complete scraping session directory using current pipeline"""
     # Reset debug session to ensure single debug file per execution
-    from src.core.unit_identifier import UnitIdentifierNormalizer
+    from src.pipeline.core.unit_identifier import UnitIdentifierNormalizer
     UnitIdentifierNormalizer.reset_debug_session('scraped')
 
     session_path = Path(session_dir)
@@ -131,19 +144,14 @@ def process_scraped_session(session_dir: str):
                 print(f"❌ {zip_code} HTML extraction failed")
                 continue
 
-            # Step 2: Process through current pipeline (generates debug logs!)
+            # Step 2: Process through current pipeline (includes integrated quality scoring!)
             processed_json = process_with_current_pipeline(temp_json, zip_code)
             if not processed_json:
                 print(f"❌ {zip_code} pipeline processing failed")
                 continue
 
-            # Step 3: Quality scoring
-            scored_json = score_units(processed_json, zip_code)
-            if not scored_json:
-                print(f"❌ {zip_code} quality scoring failed")
-                continue
-
-            successful_files.append(scored_json)
+            # Quality scoring is now integrated into HTML parsing - no separate step needed
+            successful_files.append(processed_json)
             print(f"✅ {zip_code} completed successfully")
 
             # Clean up temp file

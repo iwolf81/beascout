@@ -198,6 +198,26 @@ class ScrapedDataParser:
             original_scraped_data=unit
         )
         
+        # Integrate quality scoring - calculate score, grade, and quality tags during parsing
+        try:
+            from src.pipeline.analysis.quality_scorer import UnitQualityScorer
+            scorer = UnitQualityScorer()
+            
+            # Score this individual unit
+            score, recommendations = scorer.score_unit(record)
+            
+            # Add scoring results to unit data for single source of truth
+            record['completeness_score'] = round(score, 1)
+            record['completeness_grade'] = scorer.get_letter_grade(score)
+            record['quality_tags'] = recommendations
+            
+        except Exception as e:
+            # Fallback if quality scoring fails - don't break unit parsing
+            print(f"Warning: Quality scoring failed for unit {record.get('unit_key', 'unknown')}: {e}")
+            record['completeness_score'] = 0.0
+            record['completeness_grade'] = 'F'
+            record['quality_tags'] = []
+        
         return record
     
     def _extract_unit_type(self, unit: Dict[str, Any]) -> Optional[str]:
