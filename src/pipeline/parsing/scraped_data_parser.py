@@ -178,6 +178,7 @@ class ScrapedDataParser:
         website = str(unit.get('website', '')).strip()
         description = str(unit.get('description', '')).strip()
         specialty = str(unit.get('specialty', '')).strip()
+        unit_address = str(unit.get('unit_address', '')).strip()
         
         # Create standardized unit record using UnitIdentifierNormalizer
         record = UnitIdentifierNormalizer.create_unit_record(
@@ -195,6 +196,7 @@ class ScrapedDataParser:
             website=website,
             description=description,
             specialty=specialty,
+            unit_address=unit_address,
             original_scraped_data=unit
         )
         
@@ -614,7 +616,8 @@ def main():
     print("🔧 Testing Meeting Location Formatting")
     
     for i, location in enumerate(test_locations, 1):
-        formatted = parser._format_meeting_location(location)
+        from src.pipeline.parsing.html_extractor import format_meeting_location
+        formatted = format_meeting_location(location)
         print(f"\n{i}. Original: {location}")
         print(f"   Formatted: {formatted}")
         
