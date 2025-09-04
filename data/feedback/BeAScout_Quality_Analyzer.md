@@ -202,7 +202,7 @@ This new order follows the order of the error/quality/recommended messages, whic
 
 ### Add Zip Code
 1. Insert new "Zip Code" column for unit after column C (Town).
-1. This modification will permit report reader to readily look up unit in beascout.org, which accepts only zip code for search criteria.
+1. This modification will permit report reader to readily look up unit in beascout.org, which accepts only zip code for search criteria.1
 
 ### Quality Scoring Issues
 #### Quinapoxet District
@@ -259,3 +259,12 @@ Troop 165 Charlton - troop165.charlton@gmail.com is a unit-specific address - QU
 1. Ship 1935 Webster - The meeting_location value is the entire unit-description string - meeting_locate has parsing issue
 Troop 165 Charlton - troop165.charlton@gmail.com is a unit-specific address - QUALITY_PERSONAL_EMAIL tag is incorrect - Did the substring 'charlton', which is the unit_town, be improperly identified as a person? Should the unit_town be ruled out as an indicator for a personal email?  
 1. Troop 6 Gardner - GardnerScouting6@gmail.com is a unit-specific address - QUALITY_PERSONAL_EMAIL tag is incorrect - Should the unit_number be ruled out as an indicator for a personal email?
+
+## Feedback 10
+
+- The Key Three (1), Key Three (2), and Key Three (3) strings are now not links, which is better than having all string as a link.
+- See excerpt below 
+Chartered Organization Rep.
+Sean F. Thompson
+seanfmt429@gmail.com.  @claude only the email address should be a link. Is the multi-line format causing troubles?
+(774) 312 - 0995"

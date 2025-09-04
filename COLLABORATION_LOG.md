@@ -1237,4 +1237,24 @@ Both user and Claude recognized that the next phase requires moving quality scor
 
 ---
 
+**IMPORTANT LESSONS** 
+***Claude cannot fully verify its own code changes.***
+- Although Claude generates tests for its own code changes, its analysis of its test results are overly confident
+  - That is, its analyses are sometimes/often incorrect.
+- Effective debug logging is necessary for user to analyze results of code changes.
+- Claude can easily and quickly create tools to assist with efficient manual results analyses.
+- Those Claude-generated tools themselves must be manually verified before employing them.
+- Every piece of output data must be manually verified during development.
+***Claude is not an experienced software engineer that implements maintainable code by default.***
+- Claude will sometimes duplicate definitions and processing throughout the code base instead of centralizing them.
+  - A set of fixed town names was initially duplicated.
+  - Normalization of town names was initially duplicated.
+  - Claude had to be directed to centralize definitions and processing
+- Claude will not write easily maintainable code unless directed to do so. For example:
+  - Column identifiers were hard-coded as numbers rather then enumerated as labels.
+- Claude will chase ever increasingly complicated solutions.
+  - When you see this happening, have it stop and analyze the issue your self
+  - Propose solutions based upon your analysis and ask Claude to evaluate them.
+
+
 *This session demonstrates mastery of complex pattern matching, systematic debugging methodology, and the power of precise problem isolation combined with comprehensive solution design. The collaboration achieved production-level parsing robustness through methodical technical excellence.*

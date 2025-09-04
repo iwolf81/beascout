@@ -180,6 +180,14 @@ class ScrapedDataParser:
         specialty = str(unit.get('specialty', '')).strip()
         unit_address = str(unit.get('unit_address', '')).strip()
         
+        # Create minimal debug info (avoid field duplication)
+        debug_info = {
+            'raw_content': unit.get('raw_content', ''),
+            'primary_identifier': unit.get('primary_identifier', ''),
+            'distance': unit.get('distance', ''),
+            'index': unit.get('index', 0)
+        }
+        
         # Create standardized unit record using UnitIdentifierNormalizer
         record = UnitIdentifierNormalizer.create_unit_record(
             unit_type=unit_type,
@@ -197,11 +205,12 @@ class ScrapedDataParser:
             description=description,
             specialty=specialty,
             unit_address=unit_address,
-            original_scraped_data=unit
+            debug_info=debug_info
         )
         
-        # Propagate structural description flag from scraped data to top level
+        # Add processing metadata to top level (single source of truth)
         record['_has_description_div'] = unit.get('_has_description_div', False)
+        record['meeting_location_source'] = unit.get('meeting_location_source', 'none')
         
         # Integrate quality scoring - calculate score, grade, and quality tags during parsing
         try:

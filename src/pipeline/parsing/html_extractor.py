@@ -78,6 +78,99 @@ def format_meeting_time(time_str):
     
     return time_str.upper()
 
+def extract_location_components(text, source_type='address'):
+    """Universal location component extraction
+    
+    Extracts structured location information from any text source.
+    Handles different source types with context-aware parsing.
+    
+    Args:
+        text: Input text (unit-address, description, org name, etc.)
+        source_type: 'address', 'description', 'org_name' for context-aware parsing
+    
+    Returns:
+        dict with keys: 'full_location', 'address', 'town', 'state', 'zip'
+        Returns empty values for components not found
+    """
+    if not text or not text.strip():
+        return {
+            'full_location': '',
+            'address': '',
+            'town': '',
+            'state': '',
+            'zip': ''
+        }
+    
+    result = {
+        'full_location': '',
+        'address': '',
+        'town': '',
+        'state': '',
+        'zip': ''
+    }
+    
+    # For address and description sources, extract full location first
+    if source_type in ['address', 'description']:
+        # Use the same patterns from extract_address_from_text()
+        location_patterns = [
+            # Complete street addresses: number + street name + street type
+            r'\b(\d+\s+[A-Za-z][A-Za-z\s]{2,}(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd|Way|Court|Ct|Place|Pl)\.?(?:\s*,?\s*[A-Za-z][A-Za-z\s]*\s*[A-Z]{0,2}\s*\d{0,5})*)',
+            # Named venues with street addresses  
+            r'\b([A-Z][A-Za-z][A-Za-z\s]{5,}(?:School|Church|Hall|Center|Centre|Building|Library|Post|Legion|VFW|Club|Association|Parish|Camp),?\s+\d+\s+[A-Za-z][A-Za-z\s]{2,}(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr))',
+            # Institutional locations with context
+            r'\b(?:at\s+the\s+|meets?\s+at\s+the\s+|located\s+at\s+the\s+)([A-Z][A-Za-z][A-Za-z\s]{5,}(?:School|Church|Hall|Center|Centre|Building|Library|Station|Department))',
+        ]
+        
+        for pattern in location_patterns:
+            match = re.search(pattern, text, re.IGNORECASE)
+            if match:
+                potential_location = match.group(1).strip()
+                # Apply strict filtering to avoid sentence fragments
+                if (len(potential_location) > 10 and
+                    re.search(r'\b(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd|Way|Court|Ct|Place|Pl|School|Church|Hall|Center|Centre|Building|Library|Station|Department)\b', potential_location, re.IGNORECASE) and
+                    not re.search(r'\b(?:is|are|was|were|have|has|had|will|would|should|could|can|may|might|do|does|did|welcome|upcoming|chartered|located|serves|meet|when|where|what|who|why|how)\b', potential_location, re.IGNORECASE) and
+                    not re.search(r'^\d+\s+(?:is|are|was|were|have|has|had|will|would|welcome|upcoming|for|with|of|in)', potential_location, re.IGNORECASE) and
+                    not '@' in potential_location and
+                    not re.match(r'^\d+$', potential_location) and
+                    not potential_location.lower().startswith(('when ', 'where ', 'what ', 'who ', 'why ', 'how ', 'for ', 'with ', 'of '))):
+                    result['full_location'] = potential_location
+                    break
+    
+    # Extract town from full location or directly from text
+    text_to_parse = result['full_location'] if result['full_location'] else text
+    
+    if source_type == 'org_name':
+        # Organization name patterns (from extract_town_from_org)
+        town_patterns = [
+            r'^([A-Za-z\s]+)-',  # "Town-Organization"
+            r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s+(?:Rod and Gun|Fire|Police|American Legion|VFW|Lions|Rotary|Knights)',  # "Town Organization"
+        ]
+    else:
+        # Address patterns (from extract_town_from_address)
+        town_patterns = [
+            r',\s*([A-Za-z\s]+)\s+MA\s+(\d{5})',  # ", Town MA 12345" - capture zip too
+            r',\s*([A-Za-z\s]+)\s+([A-Z]{2})\s+(\d{5})',  # ", Town ST 12345" - capture state and zip
+            r',\s*([A-Za-z\s]+)\s+MA',  # ", Town MA"
+            r',\s*([A-Za-z\s]+)\s*$',  # ", Town" at end
+        ]
+    
+    for pattern in town_patterns:
+        match = re.search(pattern, text_to_parse)
+        if match:
+            result['town'] = match.group(1).strip()
+            # Extract state and zip if captured
+            if len(match.groups()) >= 2:
+                if match.group(2).isalpha():  # State
+                    result['state'] = match.group(2)
+                    if len(match.groups()) >= 3:
+                        result['zip'] = match.group(3)
+                else:  # Zip (when state is MA)
+                    result['state'] = 'MA'
+                    result['zip'] = match.group(2)
+            break
+    
+    return result
+
 def extract_town_from_address(meeting_location):
     """Extract town name from meeting location address
     
@@ -256,16 +349,8 @@ def filter_hne_units(units):
                         unit['unit_town'] = town
                         break
             
-            # If no HNE town found in org, determine what non-HNE town might be there
-            if not is_hne:
-                # Look for any recognizable town patterns in the org name
-                town_words = re.findall(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b', unit.get('chartered_organization', ''))
-                # Filter out common organization words
-                org_words = {'Department', 'Police', 'Fire', 'School', 'Church', 'Catholic', 'Baptist', 
-                           'Methodist', 'United', 'First', 'Second', 'Third', 'Memorial', 'Association',
-                           'Club', 'Post', 'American', 'Legion', 'Veterans', 'Youth', 'Families'}
-                potential_towns = [w for w in town_words if w not in org_words and len(w) > 2]
-                determined_town = potential_towns[0] if potential_towns else 'chartered org analysis'
+            # Use the already-extracted town from unified extraction
+            determined_town = unit.get('unit_town', 'Unknown')
         
         if is_hne:
             hne_units.append(unit)
@@ -440,6 +525,11 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
         address_containers = unit_body.find_all('div', class_='unit-address')
         unit_address_div_empty = not address_containers or not address_containers[0].get_text(strip=True)
         
+        # Capture unit-address content for quality analysis
+        unit_address = ""
+        if address_containers:
+            unit_address = address_containers[0].get_text(separator=' ', strip=True)
+        
         
         # Meeting location extraction - try address field first, then description
         raw_location_from_address = ""
@@ -463,82 +553,67 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
             if location:
                 raw_location_from_description = location
         
-        # Step 1: If unit-address div is empty, set QUALITY_UNIT_ADDRESS flag
-        if unit_address_div_empty:
-            unit_data['_quality_unit_address'] = True
+        # Unified location extraction - extract both meeting location and town from same sources
+        meeting_location = ""
+        meeting_location_source = "none"
+        unit_town = ""
         
-        # Prioritize address field, fall back to description
-        final_raw_location = ""
-        location_from_description = False
+        # Priority 1: Extract from unit-address content (most reliable)
+        if unit_address:
+            address_components = extract_location_components(unit_address, 'address')
+            if address_components['full_location']:
+                meeting_location = address_components['full_location']
+                meeting_location_source = "address"
+            if address_components['town']:
+                unit_town = address_components['town']
         
-        if raw_location_from_address:
-            # Check if location starts with unit number (invalid pattern)
-            unit_num = unit_data.get('unit_number', '')
-            if not (unit_num and raw_location_from_address.startswith(unit_num)):
-                final_raw_location = raw_location_from_address
+        # Priority 2: Extract from description if no unit-address location (still reliable)
+        if not meeting_location and raw_location_from_description:
+            meeting_location = raw_location_from_description
+            meeting_location_source = "description"
+            # Also try to extract town from description location
+            if not unit_town:
+                desc_components = extract_location_components(raw_location_from_description, 'description')
+                if desc_components['town']:
+                    unit_town = desc_components['town']
         
-        if not final_raw_location and raw_location_from_description:
-            final_raw_location = raw_location_from_description
-            location_from_description = True
-        
-        # Only try address pattern extraction if we have no location AND unit-address div was NOT empty
-        # This preserves QUALITY_UNIT_ADDRESS flag for units with empty unit-address divs
-        if not final_raw_location and not unit_address_div_empty:
-            # Look for address patterns in text
-            # Replace <br> tags with spaces before extracting full text
-            body_copy = unit_body.__copy__()
-            for br in body_copy.find_all("br"):
-                br.replace_with(" ")
-            full_text = body_copy.get_text(separator=' ')
-            address_patterns = [
-                r'\d+\s+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd)[^,]*',
-                r'[A-Za-z\s]+\d+\s+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd)[^,]*'
-            ]
-            for pattern in address_patterns:
-                match = re.search(pattern, full_text)
-                if match:
-                    final_raw_location = match.group().strip()
-                    break
-        
-        # Step 2: Set meeting location with proper formatting
-        if final_raw_location:
-            formatted_location = format_meeting_location(final_raw_location)
+        # Set meeting location with proper formatting and source tracking
+        if meeting_location:
+            formatted_location = format_meeting_location(meeting_location)
             unit_data['meeting_location'] = formatted_location
+            unit_data['meeting_location_source'] = meeting_location_source
         else:
-            # Step 3: If final meeting_location is empty, clear QUALITY_UNIT_ADDRESS 
-            # because REQUIRED_MISSING_LOCATION takes precedence
-            if unit_address_div_empty:
-                unit_data['_quality_unit_address'] = False
+            unit_data['meeting_location'] = ""
+            unit_data['meeting_location_source'] = "none"
         
-        # Extract town name with proper precedence order - STOP once a town is found
+        # Set town if extracted from reliable sources
+        if unit_town:
+            unit_data['unit_town'] = unit_town
+        
+        # Conservative town extraction fallback - only if not already extracted above
+        # Uses unified location extraction with correct precedence
         if not unit_data.get('unit_town'):
-            # Method 1: Extract from unit-address field (meeting_location) - highest priority
-            if unit_data.get('meeting_location'):
-                town_from_address = extract_town_from_address(unit_data['meeting_location'])
-                if town_from_address:
-                    unit_data['unit_town'] = town_from_address
-            
-            # Method 2: Extract from unit-name field (primary_identifier) - stop processing if found
-            if not unit_data.get('unit_town') and unit_data.get('primary_identifier'):
-                town_from_name = extract_town_from_org(unit_data['primary_identifier'])
-                if town_from_name:
-                    unit_data['unit_town'] = town_from_name
-            
-            # Method 3: Extract from unit-description field - stop processing if found  
-            if not unit_data.get('unit_town') and unit_data.get('description'):
+            # Method 3: Extract from description field (still reliable)
+            if unit_data.get('description'):
                 # Filter out contact information patterns to avoid extracting person names as towns
                 description_text = unit_data['description']
                 # Skip description if it primarily contains contact information  
                 if not re.search(r'Contact:\s*[A-Za-z\s]+\s*Email:', description_text, re.IGNORECASE):
-                    town_from_description = extract_town_from_org(description_text)
-                    if town_from_description:
-                        unit_data['unit_town'] = town_from_description
+                    desc_components = extract_location_components(description_text, 'description')
+                    if desc_components['town']:
+                        unit_data['unit_town'] = desc_components['town']
             
-            # Method 4: Fallback to chartered organization extraction (lowest priority)
+            # Method 4: Extract from unit-name field (fallback only)  
+            if not unit_data.get('unit_town') and unit_data.get('primary_identifier'):
+                name_components = extract_location_components(unit_data['primary_identifier'], 'org_name')
+                if name_components['town']:
+                    unit_data['unit_town'] = name_components['town']
+            
+            # Method 5: Fallback to chartered organization extraction (last resort)
             if not unit_data.get('unit_town') and unit_data.get('chartered_organization'):
-                town_from_org = extract_town_from_org(unit_data['chartered_organization'])
-                if town_from_org:
-                    unit_data['unit_town'] = town_from_org
+                org_components = extract_location_components(unit_data['chartered_organization'], 'org_name')
+                if org_components['town']:
+                    unit_data['unit_town'] = org_components['town']
         
         # Raw content for debugging
         unit_data['raw_content'] = wrapper.get_text()[:200] + "..."
@@ -571,7 +646,15 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
         unit_data['completeness_grade'] = 'F'
         unit_data['quality_tags'] = []
     
+    # Add unit-address content to support simplified QUALITY_UNIT_ADDRESS logic
+    unit_data['unit_address'] = unit_address
+    
     return unit_data
+
+def extract_address_from_text(text):
+    """Universal address extraction function - uses unified location parser"""
+    components = extract_location_components(text, 'description')
+    return components['full_location']
 
 def extract_meeting_info(description):
     """Extract meeting day, time, and location from description text"""
@@ -685,36 +768,8 @@ def extract_meeting_info(description):
                 time = format_meeting_time(groups[0])
             break
     
-    # Extract location - look for address patterns in description
-    # Only extract locations that are clearly addresses/venues, not sentence fragments
-    location_patterns = [
-        # Complete street addresses: number + street name + street type
-        r'\b(\d+\s+[A-Za-z][A-Za-z\s]{2,}(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd|Way|Court|Ct|Place|Pl)\.?)',
-        # Named venues with street addresses: "Name, Address"
-        r'\b([A-Z][A-Za-z][A-Za-z\s]{5,}(?:School|Church|Hall|Center|Centre|Building|Library|Post|Legion|VFW|Club|Association|Parish|Camp),?\s+\d+\s+[A-Za-z][A-Za-z\s]{2,}(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr))',
-        # Addresses with explicit context: "at the [venue]"
-        r'\b(?:at\s+the\s+|meets?\s+at\s+the\s+|located\s+at\s+the\s+)([A-Z][A-Za-z][A-Za-z\s]{5,}(?:School|Church|Hall|Center|Centre|Building|Library|Station|Department))',
-    ]
-    
-    for pattern in location_patterns:
-        match = re.search(pattern, description, re.IGNORECASE)
-        if match:
-            potential_location = match.group(1).strip()
-            # Very strict filtering to avoid sentence fragments
-            if (len(potential_location) > 10 and  # Minimum 10 characters for real locations
-                # Must contain either a street type OR an institutional keyword
-                (re.search(r'\b(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd|Way|Court|Ct|Place|Pl|School|Church|Hall|Center|Centre|Building|Library|Station|Department)\b', potential_location, re.IGNORECASE)) and
-                # Must NOT contain common sentence verbs/phrases
-                not re.search(r'\b(?:is|are|was|were|have|has|had|will|would|should|could|can|may|might|do|does|did|welcome|upcoming|chartered|located|serves|meet|when|where|what|who|why|how)\b', potential_location, re.IGNORECASE) and
-                # Must NOT start with problematic patterns
-                not re.search(r'^\d+\s+(?:is|are|was|were|have|has|had|will|would|welcome|upcoming|for|with|of|in)', potential_location, re.IGNORECASE) and
-                # Skip obvious non-addresses
-                not '@' in potential_location and
-                not re.match(r'^\d+$', potential_location) and
-                # Must not be obvious sentence fragments
-                not potential_location.lower().startswith(('when ', 'where ', 'what ', 'who ', 'why ', 'how ', 'for ', 'with ', 'of '))):
-                location = potential_location
-                break
+    # Extract location using common address extraction function
+    location = extract_address_from_text(description)
     
     return day, time, location
 

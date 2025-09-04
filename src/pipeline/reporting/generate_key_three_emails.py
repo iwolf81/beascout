@@ -16,15 +16,16 @@ import sys
 import glob
 import re
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Tuple
+from typing import List, Dict, Any
 import pandas as pd
 from datetime import datetime
 
 
 class KeyThreeEmailGenerator:
-    def __init__(self, key_three_file: str = "data/input/HNE_key_three.xlsx"):
+    def __init__(self, key_three_file: str = "data/input/Key 3 08-22-2025.xlsx"):
         """Initialize with Key Three member data"""
         self.key_three_data = self._load_key_three_data(key_three_file)
+        self.hne_towns_set = self._load_hne_towns()
         
     def _load_key_three_data(self, file_path: str) -> pd.DataFrame:
         """Load Key Three member data from Excel file"""
@@ -36,6 +37,37 @@ class KeyThreeEmailGenerator:
         except Exception as e:
             print(f"Error loading Key Three data: {e}", file=sys.stderr)
             return pd.DataFrame()
+    
+    def _load_hne_towns(self) -> set:
+        """Load HNE towns data once at initialization"""
+        try:
+            import sys
+            import os
+            # Try multiple path approaches for robustness
+            possible_paths = [
+                os.path.join(os.path.dirname(__file__), '..', '..'),  # From src/pipeline/reporting
+                'src',  # From repo root
+                '.'  # Current directory (repo root)
+            ]
+            
+            for path_to_add in possible_paths:
+                if path_to_add not in sys.path:
+                    sys.path.insert(0, path_to_add)
+                
+                try:
+                    from config.hne_towns import get_hne_towns_and_zipcodes
+                    hne_towns, _ = get_hne_towns_and_zipcodes()
+                    return set([town.lower() for town in hne_towns])
+                except ImportError:
+                    continue
+            
+            # If all import attempts fail, log once and return empty set
+            print("Warning: Could not load HNE towns data - all units will be included", file=sys.stderr)
+            return set()
+            
+        except Exception as e:
+            print(f"Warning: Error loading HNE towns: {e}", file=sys.stderr)
+            return set()
     
     def _normalize_unit_identifier(self, identifier: str) -> str:
         """Normalize unit identifier for matching
@@ -184,7 +216,7 @@ class KeyThreeEmailGenerator:
         required_matches = max(1, len(org_keywords) // 2)
         return matches >= required_matches
     
-    def _format_recommendations_section(self, recommendations: List[str], unit_data: Dict[str, Any]) -> str:
+    def _format_recommendations_section(self, recommendations: List[str]) -> str:
         """Format the recommendations section based on missing information"""
         missing_required = [r for r in recommendations if r.startswith('REQUIRED_MISSING_')]
         missing_recommended = [r for r in recommendations if r.startswith('RECOMMENDED_MISSING_')]
@@ -194,7 +226,7 @@ class KeyThreeEmailGenerator:
         
         # Missing Critical Information section
         if missing_required:
-            sections.append("### 🔴 **Missing - Critical Information for Families:**")
+            sections.append("### 🔴 **Missing Critical Information for Families:**")
             
             if 'REQUIRED_MISSING_LOCATION' in recommendations:
                 sections.append("- **Meeting Location**: *Not specified - families need to know where you meet*")
@@ -207,25 +239,27 @@ class KeyThreeEmailGenerator:
         
         # Missing Recommended Information section  
         if missing_recommended:
-            sections.append("\n### 🟡 **Missing - Additional Information:**")
-            
+            sections.append("\n### 🟡 **Recommended Additional Information:**")
+
             if 'RECOMMENDED_MISSING_CONTACT' in recommendations:
-                sections.append("- **Contact Person**: *No designated contact provided*")
+                sections.append("- **Contact Person**: *Helps families know who to reach out to*")
             if 'RECOMMENDED_MISSING_PHONE' in recommendations:
-                sections.append("- **Phone Contact**: *No phone number provided for direct contact*")
+                sections.append("- **Phone Number**: *Provides immediate communication option for urgent questions*")
             if 'RECOMMENDED_MISSING_WEBSITE' in recommendations:
-                sections.append("- **Website**: *No website available for additional information*")
+                sections.append("- **Website**: *A unit website increases visibility and provides additional information for families*")
             if 'RECOMMENDED_MISSING_DESCRIPTION' in recommendations:
-                sections.append("- **Program Description**: *No description provided to help families understand your program*")
+                sections.append("- **Program Description**: *Informative description helps attract new Scouts by explaining unit activities and culture*")
         
         # Quality Issues section
         if quality_issues:
             sections.append("\n### 🟡 **Quality Improvements:**")
             
             if 'QUALITY_PERSONAL_EMAIL' in recommendations:
-                sections.append("- **Contact Email**: *Personal email address - consider using unit-specific email for continuity*")
-            if 'QUALITY_PO_BOX_LOCATION' in recommendations:
-                sections.append("- **Meeting Location**: *PO Box address - families need the actual meeting location*")
+                sections.append("- **Contact Email**: *Consider using unit-specific email monitored by multiple leaders instead of a personal one*")
+            if 'QUALITY_POBOX_LOCATION' in recommendations:
+                sections.append("- **Meeting Location**: *Complement PO Box with physical meeting location so families can find meetings*")
+            if 'QUALITY_UNIT_ADDRESS' in recommendations:
+                sections.append("- **Meeting Location**: *Provide physical meeting location in Unit Meeting Address field instead of Description field*")
         
         return "\n".join(sections)
     
@@ -236,7 +270,7 @@ class KeyThreeEmailGenerator:
         # Check what information is available (not in missing recommendations)
         if unit_data.get('meeting_location') and 'REQUIRED_MISSING_LOCATION' not in recommendations:
             location = unit_data['meeting_location']
-            if 'QUALITY_PO_BOX_LOCATION' in recommendations:
+            if 'QUALITY_POBOX_LOCATION' in recommendations:
                 excellent_items.append(f"- **Meeting Address**: {location} *(Address provided, though actual meeting location would be more helpful)*")
             else:
                 excellent_items.append(f"- **Meeting Location**: {location} *(Clear address provided)*")
@@ -257,8 +291,38 @@ class KeyThreeEmailGenerator:
             excellent_items.append(f"- **Website**: {website} *({unit_type.title()}-specific website available)*")
         
         if unit_data.get('description') and 'RECOMMENDED_MISSING_DESCRIPTION' not in recommendations:
-            description = unit_data['description'][:100] + "..." if len(unit_data['description']) > 100 else unit_data['description']
-            excellent_items.append(f"- **Program Description**: \"{description}\" *(Welcoming and informative)*")
+            description = unit_data['description'].strip()
+            # Format description with proper word wrapping and indentation  
+            if len(description) > 80:
+                # Break at word boundaries and indent continuation lines
+                words = description.split()
+                lines = []
+                current_line = []
+                current_length = 0
+                
+                for word in words:
+                    if current_length + len(word) + 1 > 80 and current_line:
+                        lines.append(' '.join(current_line))
+                        current_line = [word]
+                        current_length = len(word)
+                    else:
+                        current_line.append(word)
+                        current_length += len(word) + (1 if current_line else 0)
+                
+                if current_line:
+                    lines.append(' '.join(current_line))
+                
+                # Format with proper indentation for continuation lines
+                if len(lines) > 1:
+                    formatted_desc = f"\"{lines[0]}\n"
+                    for line in lines[1:]:
+                        formatted_desc += f"  {line}\n"
+                    formatted_desc = formatted_desc.rstrip() + "\""
+                    excellent_items.append(f"- **Program Description**: {formatted_desc} *(Welcoming and informative)*")
+                else:
+                    excellent_items.append(f"- **Program Description**: \"{description}\" *(Welcoming and informative)*")
+            else:
+                excellent_items.append(f"- **Program Description**: \"{description}\" *(Welcoming and informative)*")
         
         if unit_data.get('chartered_organization'):
             excellent_items.append(f"- **Chartered Organization**: {unit_data['chartered_organization']} *(Clear sponsoring organization)*")
@@ -391,7 +455,7 @@ class KeyThreeEmailGenerator:
                 town = parts[2].split('-')[0].strip()  # Get part before first dash
             else:
                 town = 'Town'
-        recommendations = unit_data.get('recommendations', [])
+        recommendations = unit_data.get('recommendations', unit_data.get('quality_tags', []))
         score = unit_data.get('completeness_score', 0)
         
         # Find Key Three members
@@ -408,7 +472,7 @@ class KeyThreeEmailGenerator:
             dear_line = f"Dear {unit_type} {unit_number} {town} Key Three,"
         
         # Format sections
-        current_info_section = self._format_recommendations_section(recommendations, unit_data)
+        current_info_section = self._format_recommendations_section(recommendations)
         excellent_section = self._format_excellent_section(unit_data, recommendations)
         action_items = self._format_action_items(recommendations, unit_data)
         
@@ -451,6 +515,7 @@ The Heart of New England Council periodically reviews unit information on BeASco
    - Log in using your my.scouting.org credentials (same as ScoutBook)
    - Search for your unit and click "Manage Unit Information"
    - Update the missing fields and click "Save"
+   - **Detailed Instructions**: https://www.scouting.org/wp-content/uploads/2020/05/Be-A-Scout-Pin-Set-up.pdf
 3. **Review During Rechartering**: Recommend reviewing information during the annual rechartering process
 
 ## Questions or Need Help?
@@ -504,18 +569,11 @@ Yours in Scouting,
         # Use the unit_town field if available (preferred method)
         unit_town = unit_data.get('unit_town', '')
         if unit_town:
-            try:
-                import sys
-                import os
-                sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'prototype'))
-                from src.config.hne_towns import get_hne_towns_and_zipcodes
-                hne_towns, _ = get_hne_towns_and_zipcodes()
-                hne_towns_set = set([town.lower() for town in hne_towns])
-                
-                return unit_town.lower() in hne_towns_set
-                
-            except ImportError:
-                print("Warning: Could not load HNE towns data, including all units", file=sys.stderr)
+            # Use preloaded HNE towns set
+            if self.hne_towns_set:
+                return unit_town.lower() in self.hne_towns_set
+            else:
+                # If no HNE towns loaded, include all units
                 return True
         
         # Fallback to primary_identifier parsing (for backward compatibility)
@@ -524,38 +582,28 @@ Yours in Scouting,
         if not primary_identifier:
             return False
             
-        try:
-            import sys
-            import os
-            sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
-            from config.hne_towns import get_hne_towns_and_zipcodes
-            hne_towns, _ = get_hne_towns_and_zipcodes()
-            hne_towns_set = set([town.lower() for town in hne_towns])
+        # Use preloaded HNE towns set for fallback parsing too
+        if not self.hne_towns_set:
+            return True  # If no HNE towns loaded, include all units
             
-            # Extract town from primary identifier
-            parts = primary_identifier.split(' ', 2)
-            if len(parts) >= 3:
-                org_part = parts[2]
-                if '-' in org_part:
-                    # Format: 'Acton-Organization Name' 
-                    town = org_part.split('-')[0].strip()
-                else:
-                    # Try to extract town from organization name
-                    org_part_lower = org_part.lower()
-                    for hne_town in hne_towns:
-                        if hne_town.lower() in org_part_lower:
-                            town = hne_town
-                            break
-                    else:
-                        return False  # Cannot determine town
-                
-                return town.lower() in hne_towns_set
-            
-            return False  # Cannot parse identifier
-            
-        except ImportError:
-            print("Warning: Could not load HNE towns data, including all units", file=sys.stderr)
-            return True  # Default to include if cannot determine
+        # Extract town from primary identifier
+        parts = primary_identifier.split(' ', 2)
+        if len(parts) >= 3:
+            org_part = parts[2]
+            if '-' in org_part:
+                # Format: 'Acton-Organization Name' 
+                town = org_part.split('-')[0].strip()
+                return town.lower() in self.hne_towns_set
+            else:
+                # Try to extract town from organization name
+                org_part_lower = org_part.lower()
+                # Check each preloaded HNE town
+                for hne_town_lower in self.hne_towns_set:
+                    if hne_town_lower in org_part_lower:
+                        return True
+                return False  # Cannot determine town
+        
+        return False  # Cannot parse identifier
 
     def generate_emails_from_file(self, json_file: str, output_dir: str = "data/output/emails/", hne_only: bool = True) -> List[str]:
         """Generate emails for all units in a scored JSON file
@@ -630,23 +678,36 @@ Yours in Scouting,
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python scripts/generate_key_three_emails.py <json_file_pattern> [--output-dir output/] [--include-all]", file=sys.stderr)
+        print("Usage: python src/pipeline/reporting/generate_key_three_emails.py "
+              "<json_file> [--key-three file] [--output-dir output/] [--include-all]", file=sys.stderr)
         print("Examples:")
-        print("  python scripts/generate_key_three_emails.py data/raw/all_units_01720_scored.json")
-        print("  python scripts/generate_key_three_emails.py data/raw/all_units_*_scored.json --output-dir data/output/emails/")
-        print("  python scripts/generate_key_three_emails.py data/raw/all_units_01720_scored.json --include-all  # Include non-HNE units")
+        print("  python src/pipeline/reporting/generate_key_three_emails.py "
+              "data/raw/all_units_comprehensive_scored.json")
+        print("  python src/pipeline/reporting/generate_key_three_emails.py "
+              "data/raw/all_units_comprehensive_scored.json --key-three 'data/input/Key 3 08-22-2025.xlsx'")
+        print("  python src/pipeline/reporting/generate_key_three_emails.py "
+              "data/raw/all_units_comprehensive_scored.json --output-dir data/output/emails/")
+        print("  python src/pipeline/reporting/generate_key_three_emails.py "
+              "data/raw/all_units_comprehensive_scored.json --include-all  # Include non-HNE units")
         sys.exit(1)
     
     # Parse arguments
     args = sys.argv[1:]
     output_dir = "data/output/emails/"
     hne_only = True  # Default to HNE units only
+    key_three_file = "data/input/Key 3 08-22-2025.xlsx"  # Default Key Three file
     
     if "--output-dir" in args:
         output_idx = args.index("--output-dir")
         if output_idx + 1 < len(args):
             output_dir = args[output_idx + 1]
             args = args[:output_idx] + args[output_idx + 2:]  # Remove --output-dir and its value
+    
+    if "--key-three" in args:
+        key_three_idx = args.index("--key-three")
+        if key_three_idx + 1 < len(args):
+            key_three_file = args[key_three_idx + 1]
+            args = args[:key_three_idx] + args[key_three_idx + 2:]  # Remove --key-three and its value
     
     if "--include-all" in args:
         hne_only = False
@@ -668,7 +729,7 @@ def main():
     all_files.sort()
     
     # Initialize generator
-    generator = KeyThreeEmailGenerator()
+    generator = KeyThreeEmailGenerator(key_three_file)
     
     all_generated_files = []
     for file_path in all_files:

@@ -1,0 +1,284 @@
+🔍 Searching 142 HTML files for units without descriptions
+================================================================================
+
+📋 UNIQUE UNITS WITHOUT DESCRIPTIONS (68 unique units):
+================================================================================
+• Club 0415 North Smithfield Police Department
+  Reason: No unit-description div found
+  Found in 7 files: joinexploring_01516.html, joinexploring_01519.html, joinexploring_01527.html and 4 more
+
+• Club 1129 Worcester-Heart of New England Council ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 50 files: joinexploring_01005.html, joinexploring_01037.html, joinexploring_01068.html and 47 more
+
+• Crew 0130 Maynard Rod and Gun Club Inc. Specialty: HIGH ADVENTURE
+  Reason: No unit-description div found
+  Found in 5 files: beascout_01451.html, beascout_01460.html, beascout_01719.html and 2 more
+
+• Crew 0250 Harvard-Sportsmens Club Specialty: GUN/MARKSMANSHIP TARGET ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 9 files: beascout_01432.html, beascout_01450.html, beascout_01451.html and 6 more
+
+• Pack 0007 Clinton Heart of New England Council
+  Reason: No unit-description div found
+  Found in 12 files: beascout_01005.html, beascout_01068.html, beascout_01515.html and 9 more
+
+• Pack 0009 Worcester - Greendale Peoples Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 21 files: beascout_01501.html, beascout_01503.html, beascout_01505.html and 18 more
+
+• Pack 0012 Hollis Congregational Church
+  Reason: No unit-description div found
+  Found in 3 files: beascout_01450.html, beascout_01463.html, beascout_01469.html
+
+• Pack 0025 Princeton-Norco Sportsmans Club ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 12 files: beascout_01420.html, beascout_01452.html, beascout_01453.html and 9 more
+
+• Pack 0026 Barre-American Legion Post #2 ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 9 files: beascout_01005.html, beascout_01037.html, beascout_01068.html and 6 more
+
+• Pack 0027 Templeton-Holy Cross Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 9 files: beascout_01005.html, beascout_01331.html, beascout_01368.html and 6 more
+
+• Pack 0028 Dunstable Congregational Church
+  Reason: No unit-description div found
+  Found in 4 files: beascout_01432.html, beascout_01450.html, beascout_01460.html and 1 more
+
+• Pack 0037 Worcester - Christ The King Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 20 files: beascout_01501.html, beascout_01505.html, beascout_01520.html and 17 more
+
+• Pack 0039 Troop One Stow Alumni Inc
+  Reason: No unit-description div found
+  Found in 9 files: beascout_01432.html, beascout_01451.html, beascout_01460.html and 6 more
+
+• Pack 0040 Orange-St Marys Roman Catholic Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 4 files: beascout_01331.html, beascout_01364.html, beascout_01366.html and 1 more
+
+• Pack 0097 St John The Evangelist RC
+  Reason: No unit-description div found
+  Found in 3 files: beascout_01519.html, beascout_01534.html, beascout_01568.html
+
+• Pack 0114 Shrewsbury - First Congregational Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 18 files: beascout_01503.html, beascout_01505.html, beascout_01510.html and 15 more
+
+• Pack 0134 Douglas - Fire Fighters Association ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 7 files: beascout_01516.html, beascout_01527.html, beascout_01534.html and 4 more
+
+• Pack 0135 Friends of Carlisle Scouting
+  Reason: No unit-description div found
+  Found in 3 files: beascout_01460.html, beascout_01719.html, beascout_01720.html
+
+• Pack 0148 E Brookfield - Baptist Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 13 files: beascout_01068.html, beascout_01082.html, beascout_01083.html and 10 more
+
+• Pack 0260 Kilduff-Wirtanen American Legion #74
+  Reason: No unit-description div found
+  Found in 4 files: beascout_01431.html, beascout_01450.html, beascout_01463.html and 1 more
+
+• Post 0551 Hudson Fire Department
+  Reason: No unit-description div found
+  Found in 11 files: joinexploring_01432.html, joinexploring_01450.html, joinexploring_01451.html and 8 more
+
+• Post 0911 Methuen Police Department
+  Reason: No unit-description div found
+  File: joinexploring_01475.html
+
+• Post 0975 Wilmington Police Department
+  Reason: No unit-description div found
+  Found in 5 files: joinexploring_01432.html, joinexploring_01460.html, joinexploring_01475.html and 2 more
+
+• Post 1475 North Andover Police Department
+  Reason: No unit-description div found
+  File: joinexploring_01475.html
+
+• Post 1872 Franklin Fire Department
+  Reason: No unit-description div found
+  Found in 5 files: joinexploring_01516.html, joinexploring_01519.html, joinexploring_01534.html and 2 more
+
+• Post 2012 Holden - Fire Department ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 53 files: joinexploring_01005.html, joinexploring_01037.html, joinexploring_01068.html and 50 more
+
+• Post 2268 Sandown Police Department
+  Reason: No unit-description div found
+  File: joinexploring_01475.html
+
+• Post 4879 Groton-Fire Service Local 4879 ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 24 files: joinexploring_01420.html, joinexploring_01430.html, joinexploring_01431.html and 21 more
+
+• Post 6280 Northeast Paving
+  Reason: No unit-description div found
+  Found in 4 files: joinexploring_01331.html, joinexploring_01364.html, joinexploring_01368.html and 1 more
+
+• Ship 0375 Groton Nashua River Watershed Association ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 9 files: beascout_01432.html, beascout_01450.html, beascout_01451.html and 6 more
+
+• Troop 0001 American Legion Post 355 - Roger L Wood
+  Reason: No unit-description div found
+  Found in 4 files: beascout_01519.html, beascout_01534.html, beascout_01568.html and 1 more
+
+• Troop 0001 Berlin-Board Of Trade ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 10 files: beascout_01451.html, beascout_01503.html, beascout_01505.html and 7 more
+
+• Troop 0001 Bolton-The First Parish of Bolton ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 14 files: beascout_01432.html, beascout_01451.html, beascout_01453.html and 11 more
+
+• Troop 0001 Princeton-First Congregational Church Of Princeton ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 11 files: beascout_01420.html, beascout_01452.html, beascout_01453.html and 8 more
+
+• Troop 0001 Sterling-First Church In Sterling ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 11 files: beascout_01453.html, beascout_01503.html, beascout_01505.html and 8 more
+
+• Troop 0002 American Legion Post 132
+  Reason: No unit-description div found
+  Found in 4 files: beascout_01503.html, beascout_01505.html, beascout_01510.html and 1 more
+
+• Troop 0010 Clinton-Presbyterian Church
+  Reason: No unit-description div found
+  Found in 13 files: beascout_01451.html, beascout_01453.html, beascout_01503.html and 10 more
+
+• Troop 0022 Hubbardston-Ron Burton Training Village ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 8 files: beascout_01005.html, beascout_01068.html, beascout_01440.html and 5 more
+
+• Troop 0053 Auburn - Faith Baptist Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 22 files: beascout_01501.html, beascout_01507.html, beascout_01515.html and 19 more
+
+• Troop 0099 Fitchburg - Knights of Columbus Home Association ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 13 files: beascout_01420.html, beascout_01430.html, beascout_01431.html and 10 more
+
+• Troop 0105 Paxton - First Congregational Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 20 files: beascout_01068.html, beascout_01501.html, beascout_01515.html and 17 more
+
+• Troop 0109 Millbury - Federated Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 20 files: beascout_01501.html, beascout_01516.html, beascout_01519.html and 17 more
+
+• Troop 0123 Leicester - Saint Pius X Catholic Parish ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 23 files: beascout_01068.html, beascout_01501.html, beascout_01507.html and 20 more
+
+• Troop 0132 Concord Scout House, Inc.
+  Reason: No unit-description div found
+  Found in 3 files: beascout_01460.html, beascout_01719.html, beascout_01720.html
+
+• Troop 0134 Douglas - Fire Fighters Association ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 7 files: beascout_01516.html, beascout_01527.html, beascout_01534.html and 4 more
+
+• Troop 0135 Friends of Carlisle Scouting
+  Reason: No unit-description div found
+  Found in 3 files: beascout_01460.html, beascout_01719.html, beascout_01720.html
+
+• Troop 0141 Rutland - Fire Brigade ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 14 files: beascout_01005.html, beascout_01068.html, beascout_01452.html and 11 more
+
+• Troop 0142 Warren - Firemans Association ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 6 files: beascout_01082.html, beascout_01083.html, beascout_01506.html and 3 more
+
+• Troop 0151 Leominster-Amercan Legion Post # 151 ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 11 files: beascout_01420.html, beascout_01450.html, beascout_01451.html and 8 more
+
+• Troop 0155 Whitinsville - Village Congregational Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 6 files: beascout_01516.html, beascout_01519.html, beascout_01527.html and 3 more
+
+• Troop 0173 Webster - St Joseph Basilica ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 9 files: beascout_01501.html, beascout_01507.html, beascout_01516.html and 6 more
+
+• Troop 0182 Holden - First Baptist Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 20 files: beascout_01068.html, beascout_01505.html, beascout_01520.html and 17 more
+
+• Troop 0252 StKathryns Roman Catholic Church
+  Reason: No unit-description div found
+  File: beascout_01463.html
+
+• Troop 0338 Charlton - St Josephs Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 13 files: beascout_01501.html, beascout_01506.html, beascout_01507.html and 10 more
+
+• Troop 1026 Barre - Friends of Troop 1026 ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 10 files: beascout_01005.html, beascout_01037.html, beascout_01068.html and 7 more
+
+• Troop 1122 Veterans Of Foreign Wars Post 1385
+  Reason: No unit-description div found
+  Found in 5 files: beascout_01516.html, beascout_01519.html, beascout_01534.html and 2 more
+
+• Troop 1728 Lunenburg-United Parish of Lunenburg ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 12 files: beascout_01420.html, beascout_01431.html, beascout_01432.html and 9 more
+
+• Troop 1847 Troop 1847 Parents' Committee
+  Reason: No unit-description div found
+  Found in 4 files: beascout_01460.html, beascout_01719.html, beascout_01720.html and 1 more
+
+• Troop 7001 Harvard-Boy Scouts Inc
+  Reason: No unit-description div found
+  Found in 12 files: beascout_01432.html, beascout_01450.html, beascout_01451.html and 9 more
+
+• Troop 7027 Templeton-Holy Cross Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 9 files: beascout_01005.html, beascout_01331.html, beascout_01368.html and 6 more
+
+• Troop 7039 Phillipston-Congregational Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 8 files: beascout_01005.html, beascout_01331.html, beascout_01364.html and 5 more
+
+• Troop 7040 Orange-St Marys Roman Catholic Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 4 files: beascout_01331.html, beascout_01364.html, beascout_01366.html and 1 more
+
+• Troop 7049 Gardner-Annunciation Parish ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 7 files: beascout_01420.html, beascout_01430.html, beascout_01440.html and 4 more
+
+• Troop 7099 Fitchburg - Knights of Columbus Home Association ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 13 files: beascout_01420.html, beascout_01430.html, beascout_01431.html and 10 more
+
+• Troop 7128 Lunenburg-United Parish of Lunenburg ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 12 files: beascout_01420.html, beascout_01431.html, beascout_01432.html and 9 more
+
+• Troop 7165 Charlton - American Legion Post 391 ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 13 files: beascout_01501.html, beascout_01506.html, beascout_01507.html and 10 more
+
+• Troop 7530 Auburn - Faith Baptist Church ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 22 files: beascout_01501.html, beascout_01507.html, beascout_01515.html and 19 more
+
+• Troop 7740 Leominster-Sportsmens Association ## @claude HNE-unit
+  Reason: No unit-description div found
+  Found in 9 files: beascout_01420.html, beascout_01453.html, beascout_01462.html and 6 more
+
+📊 SUMMARY:
+  Files processed: 142
+  Total units processed: 2712
+  Units without descriptions: 742
+  Unique units without descriptions: 68
+  Files with issues: 140
+  Percentage missing descriptions: 27.4%

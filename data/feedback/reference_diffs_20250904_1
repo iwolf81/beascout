@@ -1,0 +1,239 @@
+iwolf@Iras-MacBook-Pro debug % udiff2  unit_identifier_debug_scraped_20250904_064118.log                
+iwolf@Iras-MacBook-Pro debug % dudiff2 discarded_unit_identifier_debug_scraped_20250904_064118.log                
+4,6c4,6
+<   unit_type: 'Club',   unit_number: '0415',   unit_town: '',   chartered_org: 'North Smithfield Police Department',   reason: 'Non-HNE unit filtered out (town: North Smithfield)'
+<   unit_type: 'Crew',   unit_number: '0007',   unit_town: 'Chelmsford',   chartered_org: 'Trinity Lutheran Church',   reason: 'Non-HNE unit filtered out (town: Chelmsford)'
+<   unit_type: 'Crew',   unit_number: '0100',   unit_town: 'Westborough',   chartered_org: 'Congregational Church of Westborough',   reason: 'Non-HNE unit filtered out (town: Westborough)'
+---
+>   unit_type: 'Club',   unit_number: '0415',   unit_town: 'North Smithfield',   chartered_org: 'North Smithfield Police Department',   reason: 'Non-HNE unit filtered out (town: North Smithfield)'
+>   unit_type: 'Crew',   unit_number: '0007',   unit_town: '',   chartered_org: 'Trinity Lutheran Church',   reason: 'Non-HNE unit filtered out (town: Trinity Lutheran)'
+>   unit_type: 'Crew',   unit_number: '0100',   unit_town: '',   chartered_org: 'Congregational Church of Westborough',   reason: 'Non-HNE unit filtered out (town: Congregational Church)'
+8,10c8,10
+<   unit_type: 'Crew',   unit_number: '0164',   unit_town: 'Thorndike',   chartered_org: 'Palmer Firefighters Association',   reason: 'Non-HNE unit filtered out (town: Thorndike)'
+<   unit_type: 'Crew',   unit_number: '0168',   unit_town: 'Brimfield',   chartered_org: 'First Church of Monson',   reason: 'Non-HNE unit filtered out (town: Brimfield)'
+<   unit_type: 'Crew',   unit_number: '0437',   unit_town: 'Westford',   chartered_org: 'Trailblazing Together Foundation',   reason: 'Non-HNE unit filtered out (town: Westford)'
+---
+>   unit_type: 'Crew',   unit_number: '0164',   unit_town: 'Palmer',   chartered_org: 'Palmer Firefighters Association',   reason: 'Non-HNE unit filtered out (town: Palmer)'
+>   unit_type: 'Crew',   unit_number: '0168',   unit_town: '',   chartered_org: 'First Church of Monson',   reason: 'Non-HNE unit filtered out (town: First Church)'
+>   unit_type: 'Crew',   unit_number: '0437',   unit_town: '',   chartered_org: 'Trailblazing Together Foundation',   reason: 'Non-HNE unit filtered out (town: Trailblazing Together)'
+12c12
+<   unit_type: 'Crew',   unit_number: '4048',   unit_town: 'Chelmsford',   chartered_org: 'All Saints Episcopal Church',   reason: 'Non-HNE unit filtered out (town: Chelmsford)'
+---
+>   unit_type: 'Crew',   unit_number: '4048',   unit_town: '',   chartered_org: 'All Saints Episcopal Church',   reason: 'Non-HNE unit filtered out (town: All Saints)'
+14c14,15
+<   unit_type: 'Pack',   unit_number: '0002',   unit_town: 'Uxbridge',   chartered_org: 'Veterans Of Foreign Wars Uxbridge Post #1385',   reason: 'Non-HNE unit filtered out (town: Uxbridge)'
+---
+>   unit_type: 'Pack',   unit_number: '0002',   unit_town: '',   chartered_org: 'Veterans Of Foreign Wars Uxbridge Post #1385',   reason: 'Non-HNE unit filtered out (town: Veterans Of)'
+>   unit_type: 'Pack',   unit_number: '0007',   unit_town: '',   chartered_org: 'First Congregational Church of Brimfield',   reason: 'Non-HNE unit filtered out (town: First Congregational)'
+16d16
+<   unit_type: 'Pack',   unit_number: '0007',   unit_town: 'Brimfield',   chartered_org: 'First Congregational Church of Brimfield',   reason: 'Non-HNE unit filtered out (town: Brimfield)'
+19,21c19,21
+<   unit_type: 'Pack',   unit_number: '0021',   unit_town: '',   chartered_org: 'Albert J. Breault VFW Post 1523',   reason: 'Non-HNE unit filtered out (town: Albert)'
+<   unit_type: 'Pack',   unit_number: '0021',   unit_town: 'Hudson',   chartered_org: 'American Legion Post #48',   reason: 'Non-HNE unit filtered out (town: Hudson)'
+<   unit_type: 'Pack',   unit_number: '0025',   unit_town: 'Uxbridge',   chartered_org: 'St Marys Roman Catholic Church',   reason: 'Non-HNE unit filtered out (town: Uxbridge)'
+---
+>   unit_type: 'Pack',   unit_number: '0021',   unit_town: '',   chartered_org: 'American Legion Post #48',   reason: 'Non-HNE unit filtered out (town: American Legion)'
+>   unit_type: 'Pack',   unit_number: '0021',   unit_town: 'Breault',   chartered_org: 'Albert J. Breault VFW Post 1523',   reason: 'Non-HNE unit filtered out (town: Breault)'
+>   unit_type: 'Pack',   unit_number: '0025',   unit_town: '',   chartered_org: 'St Marys Roman Catholic Church',   reason: 'Non-HNE unit filtered out (town: St Marys)'
+23c23
+<   unit_type: 'Pack',   unit_number: '0028',   unit_town: 'Dunstable',   chartered_org: 'Dunstable Congregational Church',   reason: 'Non-HNE unit filtered out (town: Dunstable)'
+---
+>   unit_type: 'Pack',   unit_number: '0028',   unit_town: '',   chartered_org: 'Dunstable Congregational Church',   reason: 'Non-HNE unit filtered out (town: Dunstable Congregational)'
+27,28c27,28
+<   unit_type: 'Pack',   unit_number: '0041',   unit_town: 'Marlborough',   chartered_org: 'Richer Elementary School PTO',   reason: 'Non-HNE unit filtered out (town: Marlborough)'
+<   unit_type: 'Pack',   unit_number: '0047',   unit_town: '',   chartered_org: 'Holliston Lions Club',   reason: 'Non-HNE unit filtered out (town: Holliston Lions)'
+---
+>   unit_type: 'Pack',   unit_number: '0041',   unit_town: '',   chartered_org: 'Richer Elementary School PTO',   reason: 'Non-HNE unit filtered out (town: Richer Elementary)'
+>   unit_type: 'Pack',   unit_number: '0047',   unit_town: 'Holliston',   chartered_org: 'Holliston Lions Club',   reason: 'Non-HNE unit filtered out (town: Holliston)'
+30,32c30,32
+<   unit_type: 'Pack',   unit_number: '0062',   unit_town: 'Sudbury',   chartered_org: 'St Elizabeth's Episcopal Church',   reason: 'Non-HNE unit filtered out (town: Sudbury)'
+<   unit_type: 'Pack',   unit_number: '0070',   unit_town: 'Chelmsford',   chartered_org: 'All Saints Episcopal Church',   reason: 'Non-HNE unit filtered out (town: Chelmsford)'
+<   unit_type: 'Pack',   unit_number: '0071',   unit_town: 'Milford',   chartered_org: 'Saint Mary Of The Assumption',   reason: 'Non-HNE unit filtered out (town: Milford)'
+---
+>   unit_type: 'Pack',   unit_number: '0062',   unit_town: '',   chartered_org: 'St Elizabeth's Episcopal Church',   reason: 'Non-HNE unit filtered out (town: St Elizabeth)'
+>   unit_type: 'Pack',   unit_number: '0070',   unit_town: '',   chartered_org: 'All Saints Episcopal Church',   reason: 'Non-HNE unit filtered out (town: All Saints)'
+>   unit_type: 'Pack',   unit_number: '0071',   unit_town: '',   chartered_org: 'Saint Mary Of The Assumption',   reason: 'Non-HNE unit filtered out (town: Saint Mary)'
+34c34
+<   unit_type: 'Pack',   unit_number: '0088',   unit_town: '',   chartered_org: 'Berard Desjarlais American Legion Post 88',   reason: 'Non-HNE unit filtered out (town: Berard Desjarlais)'
+---
+>   unit_type: 'Pack',   unit_number: '0088',   unit_town: 'Berard Desjarlais',   chartered_org: 'Berard Desjarlais American Legion Post 88',   reason: 'Non-HNE unit filtered out (town: Berard Desjarlais)'
+36,37c36,37
+<   unit_type: 'Pack',   unit_number: '0092',   unit_town: 'Franklin',   chartered_org: 'VFW Post 3402',   reason: 'Non-HNE unit filtered out (town: Franklin)'
+<   unit_type: 'Pack',   unit_number: '0095',   unit_town: 'Westford',   chartered_org: 'Westford Sportsmens Club',   reason: 'Non-HNE unit filtered out (town: Westford)'
+---
+>   unit_type: 'Pack',   unit_number: '0092',   unit_town: '',   chartered_org: 'VFW Post 3402',   reason: 'Non-HNE unit filtered out (town: chartered org analysis)'
+>   unit_type: 'Pack',   unit_number: '0095',   unit_town: 'MA',   chartered_org: 'Westford Sportsmens Club',   reason: 'Non-HNE unit filtered out (town: Ma)'
+39,40c39,40
+<   unit_type: 'Pack',   unit_number: '0097',   unit_town: 'Hopkinton',   chartered_org: 'St John The Evangelist RC',   reason: 'Non-HNE unit filtered out (town: Hopkinton)'
+<   unit_type: 'Pack',   unit_number: '0100',   unit_town: 'Westborough',   chartered_org: 'Congregational Church of Westborough',   reason: 'Non-HNE unit filtered out (town: Westborough)'
+---
+>   unit_type: 'Pack',   unit_number: '0097',   unit_town: '',   chartered_org: 'St John The Evangelist RC',   reason: 'Non-HNE unit filtered out (town: St John)'
+>   unit_type: 'Pack',   unit_number: '0100',   unit_town: '',   chartered_org: 'Congregational Church of Westborough',   reason: 'Non-HNE unit filtered out (town: Congregational Church)'
+42c42
+<   unit_type: 'Pack',   unit_number: '0107',   unit_town: 'Chelmsford',   chartered_org: 'Central Baptist Church',   reason: 'Non-HNE unit filtered out (town: Chelmsford)'
+---
+>   unit_type: 'Pack',   unit_number: '0107',   unit_town: '',   chartered_org: 'Central Baptist Church',   reason: 'Non-HNE unit filtered out (town: Central Baptist)'
+47,49c47,49
+<   unit_type: 'Pack',   unit_number: '0163',   unit_town: 'Rivers',   chartered_org: 'Divine Mercy Parish',   reason: 'Non-HNE unit filtered out (town: Rivers)'
+<   unit_type: 'Pack',   unit_number: '0164',   unit_town: 'Palmer',   chartered_org: 'Second Congregational Church of Palmer',   reason: 'Non-HNE unit filtered out (town: Palmer)'
+<   unit_type: 'Pack',   unit_number: '0168',   unit_town: 'Monson',   chartered_org: 'First Church of Monson',   reason: 'Non-HNE unit filtered out (town: Monson)'
+---
+>   unit_type: 'Pack',   unit_number: '0163',   unit_town: '',   chartered_org: 'Divine Mercy Parish',   reason: 'Non-HNE unit filtered out (town: Divine Mercy)'
+>   unit_type: 'Pack',   unit_number: '0164',   unit_town: '',   chartered_org: 'Second Congregational Church of Palmer',   reason: 'Non-HNE unit filtered out (town: Second Congregational)'
+>   unit_type: 'Pack',   unit_number: '0168',   unit_town: '',   chartered_org: 'First Church of Monson',   reason: 'Non-HNE unit filtered out (town: First Church)'
+51c51
+<   unit_type: 'Pack',   unit_number: '0194',   unit_town: 'Bedford',   chartered_org: 'Anthony Hunt Hamilton A .L. Post 221',   reason: 'Non-HNE unit filtered out (town: Bedford)'
+---
+>   unit_type: 'Pack',   unit_number: '0194',   unit_town: '',   chartered_org: 'Anthony Hunt Hamilton A .L. Post 221',   reason: 'Non-HNE unit filtered out (town: Anthony Hunt)'
+55,57c55,57
+<   unit_type: 'Pack',   unit_number: '0926',   unit_town: 'Southborough',   chartered_org: 'St Mark's Church',   reason: 'Non-HNE unit filtered out (town: Southborough)'
+<   unit_type: 'Pack',   unit_number: '3001',   unit_town: 'Ashland',   chartered_org: 'Ashland Sporting Association Inc.',   reason: 'Non-HNE unit filtered out (town: Ashland)'
+<   unit_type: 'Pack',   unit_number: '3033',   unit_town: 'Westborough',   chartered_org: 'Rotary Club of Westborough',   reason: 'Non-HNE unit filtered out (town: Westborough)'
+---
+>   unit_type: 'Pack',   unit_number: '0926',   unit_town: '',   chartered_org: 'St Mark's Church',   reason: 'Non-HNE unit filtered out (town: St Mark)'
+>   unit_type: 'Pack',   unit_number: '3001',   unit_town: '',   chartered_org: 'Ashland Sporting Association Inc.',   reason: 'Non-HNE unit filtered out (town: Ashland Sporting)'
+>   unit_type: 'Pack',   unit_number: '3033',   unit_town: '',   chartered_org: 'Rotary Club of Westborough',   reason: 'Non-HNE unit filtered out (town: Rotary Club)'
+59c59
+<   unit_type: 'Pack',   unit_number: '3401',   unit_town: 'Hopedale',   chartered_org: 'Sacred Heart Church',   reason: 'Non-HNE unit filtered out (town: Hopedale)'
+---
+>   unit_type: 'Pack',   unit_number: '3401',   unit_town: '',   chartered_org: 'Sacred Heart Church',   reason: 'Non-HNE unit filtered out (town: Sacred Heart)'
+61,63c61,63
+<   unit_type: 'Pack',   unit_number: '3601',   unit_town: 'Southborough',   chartered_org: 'Pilgrim Church',   reason: 'Non-HNE unit filtered out (town: Southborough)'
+<   unit_type: 'Pack',   unit_number: '4507',   unit_town: 'Belchertown',   chartered_org: 'St Francis of Assisi',   reason: 'Non-HNE unit filtered out (town: Belchertown)'
+<   unit_type: 'Post',   unit_number: '0412',   unit_town: '',   chartered_org: 'Woonsocket Police Department',   reason: 'Non-HNE unit filtered out (town: Woonsocket Police)'
+---
+>   unit_type: 'Pack',   unit_number: '3601',   unit_town: '',   chartered_org: 'Pilgrim Church',   reason: 'Non-HNE unit filtered out (town: Pilgrim Church)'
+>   unit_type: 'Pack',   unit_number: '4507',   unit_town: '',   chartered_org: 'St Francis of Assisi',   reason: 'Non-HNE unit filtered out (town: St Francis)'
+>   unit_type: 'Post',   unit_number: '0412',   unit_town: 'Woonsocket',   chartered_org: 'Woonsocket Police Department',   reason: 'Non-HNE unit filtered out (town: Woonsocket)'
+65c65
+<   unit_type: 'Post',   unit_number: '0603',   unit_town: '',   chartered_org: 'New Hampshire State Firemen's Association',   reason: 'Non-HNE unit filtered out (town: New Hampshire)'
+---
+>   unit_type: 'Post',   unit_number: '0603',   unit_town: 'Hampshire State',   chartered_org: 'New Hampshire State Firemen's Association',   reason: 'Non-HNE unit filtered out (town: Hampshire State)'
+67,70c67,70
+<   unit_type: 'Post',   unit_number: '0975',   unit_town: '',   chartered_org: 'Wilmington Police Department',   reason: 'Non-HNE unit filtered out (town: Wilmington Police)'
+<   unit_type: 'Post',   unit_number: '1475',   unit_town: '',   chartered_org: 'North Andover Police Department',   reason: 'Non-HNE unit filtered out (town: North Andover)'
+<   unit_type: 'Post',   unit_number: '1872',   unit_town: '',   chartered_org: 'Franklin Fire Department',   reason: 'Non-HNE unit filtered out (town: Franklin Fire)'
+<   unit_type: 'Post',   unit_number: '2268',   unit_town: '',   chartered_org: 'Sandown Police Department',   reason: 'Non-HNE unit filtered out (town: Sandown Police)'
+---
+>   unit_type: 'Post',   unit_number: '0975',   unit_town: 'Wilmington',   chartered_org: 'Wilmington Police Department',   reason: 'Non-HNE unit filtered out (town: Wilmington)'
+>   unit_type: 'Post',   unit_number: '1475',   unit_town: 'North Andover',   chartered_org: 'North Andover Police Department',   reason: 'Non-HNE unit filtered out (town: North Andover)'
+>   unit_type: 'Post',   unit_number: '1872',   unit_town: 'Franklin',   chartered_org: 'Franklin Fire Department',   reason: 'Non-HNE unit filtered out (town: Franklin)'
+>   unit_type: 'Post',   unit_number: '2268',   unit_town: 'Sandown',   chartered_org: 'Sandown Police Department',   reason: 'Non-HNE unit filtered out (town: Sandown)'
+72a73
+>   unit_type: 'Troop',   unit_number: '0001',   unit_town: '',   chartered_org: 'Church Of The Nativity',   reason: 'Non-HNE unit filtered out (town: Church Of)'
+73a75,76
+>   unit_type: 'Troop',   unit_number: '0001',   unit_town: '',   chartered_org: 'Pilgrim Church',   reason: 'Non-HNE unit filtered out (town: Pilgrim Church)'
+>   unit_type: 'Troop',   unit_number: '0001',   unit_town: '',   chartered_org: 'Union Evangelical',   reason: 'Non-HNE unit filtered out (town: Union Evangelical)'
+75,77d77
+<   unit_type: 'Troop',   unit_number: '0001',   unit_town: 'Hopedale',   chartered_org: 'Union Evangelical',   reason: 'Non-HNE unit filtered out (town: Hopedale)'
+<   unit_type: 'Troop',   unit_number: '0001',   unit_town: 'Northborough',   chartered_org: 'Church Of The Nativity',   reason: 'Non-HNE unit filtered out (town: Northborough)'
+<   unit_type: 'Troop',   unit_number: '0001',   unit_town: 'Southborough',   chartered_org: 'Pilgrim Church',   reason: 'Non-HNE unit filtered out (town: Southborough)'
+79,83c79,83
+<   unit_type: 'Troop',   unit_number: '0002',   unit_town: 'Marlborough',   chartered_org: 'American Legion Post 132',   reason: 'Non-HNE unit filtered out (town: Marlborough)'
+<   unit_type: 'Troop',   unit_number: '0004',   unit_town: 'Hopkinton',   chartered_org: 'St John The Evangelist RC',   reason: 'Non-HNE unit filtered out (town: Hopkinton)'
+<   unit_type: 'Troop',   unit_number: '0004',   unit_town: 'Milford',   chartered_org: 'Saint Mary Of The Assumption',   reason: 'Non-HNE unit filtered out (town: Milford)'
+<   unit_type: 'Troop',   unit_number: '0007',   unit_town: 'Brimfield',   chartered_org: 'First Congregational Church of Brimfield',   reason: 'Non-HNE unit filtered out (town: Brimfield)'
+<   unit_type: 'Troop',   unit_number: '0011',   unit_town: '',   chartered_org: 'Good Shepherd Lutheran Church',   reason: 'Non-HNE unit filtered out (town: Good Shepherd)'
+---
+>   unit_type: 'Troop',   unit_number: '0002',   unit_town: '',   chartered_org: 'American Legion Post 132',   reason: 'Non-HNE unit filtered out (town: American Legion)'
+>   unit_type: 'Troop',   unit_number: '0004',   unit_town: '',   chartered_org: 'Saint Mary Of The Assumption',   reason: 'Non-HNE unit filtered out (town: Saint Mary)'
+>   unit_type: 'Troop',   unit_number: '0004',   unit_town: '',   chartered_org: 'St John The Evangelist RC',   reason: 'Non-HNE unit filtered out (town: St John)'
+>   unit_type: 'Troop',   unit_number: '0007',   unit_town: '',   chartered_org: 'First Congregational Church of Brimfield',   reason: 'Non-HNE unit filtered out (town: First Congregational)'
+>   unit_type: 'Troop',   unit_number: '0011',   unit_town: 'Westboro',   chartered_org: 'Good Shepherd Lutheran Church',   reason: 'Non-HNE unit filtered out (town: Westboro)'
+85,86c85,86
+<   unit_type: 'Troop',   unit_number: '0014',   unit_town: 'Bellingham',   chartered_org: 'Stallbrook PTO',   reason: 'Non-HNE unit filtered out (town: Bellingham)'
+<   unit_type: 'Troop',   unit_number: '0014',   unit_town: 'Holliston',   chartered_org: 'St Marys Catholic Church',   reason: 'Non-HNE unit filtered out (town: Holliston)'
+---
+>   unit_type: 'Troop',   unit_number: '0014',   unit_town: '',   chartered_org: 'St Marys Catholic Church',   reason: 'Non-HNE unit filtered out (town: St Marys)'
+>   unit_type: 'Troop',   unit_number: '0014',   unit_town: '',   chartered_org: 'Stallbrook PTO',   reason: 'Non-HNE unit filtered out (town: Stallbrook)'
+88c88
+<   unit_type: 'Troop',   unit_number: '0019',   unit_town: 'Daniel Webster Council',   chartered_org: 'Daniel Webster Council',   reason: 'Non-HNE unit (outside council territory)'
+---
+>   unit_type: 'Troop',   unit_number: '0019',   unit_town: 'NH
+91,92c91,92
+<   unit_type: 'Troop',   unit_number: '0025',   unit_town: '',   chartered_org: 'Albert J. Breault VFW Post 1523',   reason: 'Non-HNE unit filtered out (town: Albert)'
+<   unit_type: 'Troop',   unit_number: '0025',   unit_town: 'Uxbridge',   chartered_org: 'St Marys Roman Catholic Church',   reason: 'Non-HNE unit filtered out (town: Uxbridge)'
+---
+>   unit_type: 'Troop',   unit_number: '0025',   unit_town: '',   chartered_org: 'St Marys Roman Catholic Church',   reason: 'Non-HNE unit filtered out (town: St Marys)'
+>   unit_type: 'Troop',   unit_number: '0025',   unit_town: 'Breault',   chartered_org: 'Albert J. Breault VFW Post 1523',   reason: 'Non-HNE unit filtered out (town: Breault)'
+95c95
+<   unit_type: 'Troop',   unit_number: '0028',   unit_town: 'Dunstable',   chartered_org: 'Dunstable Congregational Church',   reason: 'Non-HNE unit filtered out (town: Dunstable)'
+---
+>   unit_type: 'Troop',   unit_number: '0028',   unit_town: '',   chartered_org: 'Dunstable Congregational Church',   reason: 'Non-HNE unit filtered out (town: Dunstable Congregational)'
+98,102c98,102
+<   unit_type: 'Troop',   unit_number: '0044',   unit_town: '',   chartered_org: 'Mendon Firefighters Association',   reason: 'Non-HNE unit filtered out (town: Mendon Firefighters)'
+<   unit_type: 'Troop',   unit_number: '0046',   unit_town: 'Tyngsborough',   chartered_org: 'Tyngsboro Firefighters Association',   reason: 'Non-HNE unit filtered out (town: Tyngsborough)'
+<   unit_type: 'Troop',   unit_number: '0061',   unit_town: 'Sudbury',   chartered_org: 'Memorial Congregational Church',   reason: 'Non-HNE unit filtered out (town: Sudbury)'
+<   unit_type: 'Troop',   unit_number: '0063',   unit_town: 'Sudbury',   chartered_org: 'Saint Elizabeth's Episcopal Church',   reason: 'Non-HNE unit filtered out (town: Sudbury)'
+<   unit_type: 'Troop',   unit_number: '0064',   unit_town: 'Palmer',   chartered_org: 'Second Congregational Church of Palmer',   reason: 'Non-HNE unit filtered out (town: Palmer)'
+---
+>   unit_type: 'Troop',   unit_number: '0044',   unit_town: 'Mendon',   chartered_org: 'Mendon Firefighters Association',   reason: 'Non-HNE unit filtered out (town: Mendon)'
+>   unit_type: 'Troop',   unit_number: '0046',   unit_town: 'Tyngsboro',   chartered_org: 'Tyngsboro Firefighters Association',   reason: 'Non-HNE unit filtered out (town: Tyngsboro)'
+>   unit_type: 'Troop',   unit_number: '0061',   unit_town: '',   chartered_org: 'Memorial Congregational Church',   reason: 'Non-HNE unit filtered out (town: Memorial Congregational)'
+>   unit_type: 'Troop',   unit_number: '0063',   unit_town: '',   chartered_org: 'Saint Elizabeth's Episcopal Church',   reason: 'Non-HNE unit filtered out (town: Saint Elizabeth)'
+>   unit_type: 'Troop',   unit_number: '0064',   unit_town: '',   chartered_org: 'Second Congregational Church of Palmer',   reason: 'Non-HNE unit filtered out (town: Second Congregational)'
+105,108c105,108
+<   unit_type: 'Troop',   unit_number: '0073',   unit_town: 'Holliston',   chartered_org: 'First Congregational Church',   reason: 'Non-HNE unit filtered out (town: Holliston)'
+<   unit_type: 'Troop',   unit_number: '0075',   unit_town: 'Chelmsford',   chartered_org: 'Trinity Lutheran and Central Congregational Church UCC',   reason: 'Non-HNE unit filtered out (town: Chelmsford)'
+<   unit_type: 'Troop',   unit_number: '0076',   unit_town: 'Holliston',   chartered_org: 'Mount Hollis Lodge of Free Masons',   reason: 'Non-HNE unit filtered out (town: Holliston)'
+<   unit_type: 'Troop',   unit_number: '0077',   unit_town: 'Chelmsford',   chartered_org: 'Friends of New England Base Camp',   reason: 'Non-HNE unit filtered out (town: Chelmsford)'
+---
+>   unit_type: 'Troop',   unit_number: '0073',   unit_town: '',   chartered_org: 'First Congregational Church',   reason: 'Non-HNE unit filtered out (town: First Congregational)'
+>   unit_type: 'Troop',   unit_number: '0075',   unit_town: '',   chartered_org: 'Trinity Lutheran and Central Congregational Church UCC',   reason: 'Non-HNE unit filtered out (town: Trinity Lutheran)'
+>   unit_type: 'Troop',   unit_number: '0076',   unit_town: '',   chartered_org: 'Mount Hollis Lodge of Free Masons',   reason: 'Non-HNE unit filtered out (town: Mount Hollis)'
+>   unit_type: 'Troop',   unit_number: '0077',   unit_town: '',   chartered_org: 'Friends of New England Base Camp',   reason: 'Non-HNE unit filtered out (town: Friends)'
+111,116c111,116
+<   unit_type: 'Troop',   unit_number: '0088',   unit_town: '',   chartered_org: 'Berard Desjarlais American Legion Post 88',   reason: 'Non-HNE unit filtered out (town: Berard Desjarlais)'
+<   unit_type: 'Troop',   unit_number: '0100',   unit_town: 'Westborough',   chartered_org: 'Congregational Church of Westborough',   reason: 'Non-HNE unit filtered out (town: Westborough)'
+<   unit_type: 'Troop',   unit_number: '0101',   unit_town: 'Northborough',   chartered_org: 'St Rose of Lima',   reason: 'Non-HNE unit filtered out (town: Northborough)'
+<   unit_type: 'Troop',   unit_number: '0114',   unit_town: 'Bedford',   chartered_org: 'F. W. Thompson Masonic Lodge',   reason: 'Non-HNE unit filtered out (town: Bedford)'
+<   unit_type: 'Troop',   unit_number: '0126',   unit_town: 'Franklin',   chartered_org: 'VFW Post 3402',   reason: 'Non-HNE unit filtered out (town: Franklin)'
+<   unit_type: 'Troop',   unit_number: '0127',   unit_town: 'Lincoln',   chartered_org: 'Joseph Warren Soley Lodge',   reason: 'Non-HNE unit filtered out (town: Lincoln)'
+---
+>   unit_type: 'Troop',   unit_number: '0088',   unit_town: 'Berard Desjarlais',   chartered_org: 'Berard Desjarlais American Legion Post 88',   reason: 'Non-HNE unit filtered out (town: Berard Desjarlais)'
+>   unit_type: 'Troop',   unit_number: '0100',   unit_town: '',   chartered_org: 'Congregational Church of Westborough',   reason: 'Non-HNE unit filtered out (town: Congregational Church)'
+>   unit_type: 'Troop',   unit_number: '0101',   unit_town: '',   chartered_org: 'St Rose of Lima',   reason: 'Non-HNE unit filtered out (town: St Rose)'
+>   unit_type: 'Troop',   unit_number: '0114',   unit_town: '',   chartered_org: 'F. W. Thompson Masonic Lodge',   reason: 'Non-HNE unit filtered out (town: Thompson Masonic)'
+>   unit_type: 'Troop',   unit_number: '0126',   unit_town: '',   chartered_org: 'VFW Post 3402',   reason: 'Non-HNE unit filtered out (town: chartered org analysis)'
+>   unit_type: 'Troop',   unit_number: '0127',   unit_town: 'MA',   chartered_org: 'Joseph Warren Soley Lodge',   reason: 'Non-HNE unit filtered out (town: Ma)'
+120,122c120,122
+<   unit_type: 'Troop',   unit_number: '0159',   unit_town: 'Westford',   chartered_org: 'First Parish Church United',   reason: 'Non-HNE unit filtered out (town: Westford)'
+<   unit_type: 'Troop',   unit_number: '0164',   unit_town: 'Rivers',   chartered_org: 'Divine Mercy Parish',   reason: 'Non-HNE unit filtered out (town: Rivers)'
+<   unit_type: 'Troop',   unit_number: '0194',   unit_town: 'Bedford',   chartered_org: 'Anthony Hunt Hamilton A .L. Post 221',   reason: 'Non-HNE unit filtered out (town: Bedford)'
+---
+>   unit_type: 'Troop',   unit_number: '0159',   unit_town: '',   chartered_org: 'First Parish Church United',   reason: 'Non-HNE unit filtered out (town: First Parish)'
+>   unit_type: 'Troop',   unit_number: '0164',   unit_town: '',   chartered_org: 'Divine Mercy Parish',   reason: 'Non-HNE unit filtered out (town: Divine Mercy)'
+>   unit_type: 'Troop',   unit_number: '0194',   unit_town: '',   chartered_org: 'Anthony Hunt Hamilton A .L. Post 221',   reason: 'Non-HNE unit filtered out (town: Anthony Hunt)'
+124,125c124,125
+<   unit_type: 'Troop',   unit_number: '0219',   unit_town: 'Milford',   chartered_org: 'Sacred Heart of Jesus Parish',   reason: 'Non-HNE unit filtered out (town: Milford)'
+<   unit_type: 'Troop',   unit_number: '0232',   unit_town: 'Ashland',   chartered_org: 'Ashland Sporting Association Inc.',   reason: 'Non-HNE unit filtered out (town: Ashland)'
+---
+>   unit_type: 'Troop',   unit_number: '0219',   unit_town: '',   chartered_org: 'Sacred Heart of Jesus Parish',   reason: 'Non-HNE unit filtered out (town: Sacred Heart)'
+>   unit_type: 'Troop',   unit_number: '0232',   unit_town: '',   chartered_org: 'Ashland Sporting Association Inc.',   reason: 'Non-HNE unit filtered out (town: Ashland Sporting)'
+129c129
+<   unit_type: 'Troop',   unit_number: '0303',   unit_town: 'Marlborough',   chartered_org: 'Marlboro Fish and Game Association Inc',   reason: 'Non-HNE unit filtered out (town: Marlborough)'
+---
+>   unit_type: 'Troop',   unit_number: '0303',   unit_town: '',   chartered_org: 'Marlboro Fish and Game Association Inc',   reason: 'Non-HNE unit filtered out (town: Marlboro Fish)'
+131,134c131,134
+<   unit_type: 'Troop',   unit_number: '0314',   unit_town: 'Milford',   chartered_org: 'Montgomery Lodge AF & AM',   reason: 'Non-HNE unit filtered out (town: Milford)'
+<   unit_type: 'Troop',   unit_number: '0382',   unit_town: 'Westborough',   chartered_org: 'Rotary Club of Westborough',   reason: 'Non-HNE unit filtered out (town: Westborough)'
+<   unit_type: 'Troop',   unit_number: '0410',   unit_town: '',   chartered_org: 'Immaculate Conception Church',   reason: 'Non-HNE unit filtered out (town: Immaculate Conception)'
+<   unit_type: 'Troop',   unit_number: '0437',   unit_town: 'Westford',   chartered_org: 'Trailblazing Together Foundation',   reason: 'Non-HNE unit filtered out (town: Westford)'
+---
+>   unit_type: 'Troop',   unit_number: '0314',   unit_town: '',   chartered_org: 'Montgomery Lodge AF & AM',   reason: 'Non-HNE unit filtered out (town: Montgomery Lodge)'
+>   unit_type: 'Troop',   unit_number: '0382',   unit_town: '',   chartered_org: 'Rotary Club of Westborough',   reason: 'Non-HNE unit filtered out (town: Rotary Club)'
+>   unit_type: 'Troop',   unit_number: '0410',   unit_town: 'Nashua',   chartered_org: 'Immaculate Conception Church',   reason: 'Non-HNE unit filtered out (town: Nashua)'
+>   unit_type: 'Troop',   unit_number: '0437',   unit_town: '',   chartered_org: 'Trailblazing Together Foundation',   reason: 'Non-HNE unit filtered out (town: Trailblazing Together)'
+138,139c138,139
+<   unit_type: 'Troop',   unit_number: '0823',   unit_town: 'Northborough',   chartered_org: 'Church Of The Nativity',   reason: 'Non-HNE unit filtered out (town: Northborough)'
+<   unit_type: 'Troop',   unit_number: '1122',   unit_town: 'Uxbridge',   chartered_org: 'Veterans Of Foreign Wars Post 1385',   reason: 'Non-HNE unit filtered out (town: Uxbridge)'
+---
+>   unit_type: 'Troop',   unit_number: '0823',   unit_town: '',   chartered_org: 'Church Of The Nativity',   reason: 'Non-HNE unit filtered out (town: Church Of)'
+>   unit_type: 'Troop',   unit_number: '1122',   unit_town: '',   chartered_org: 'Veterans Of Foreign Wars Post 1385',   reason: 'Non-HNE unit filtered out (town: Veterans Of)'
+143c143,145
+<   unit_type: 'Troop',   unit_number: '5007',   unit_town: 'Brimfield',   chartered_org: 'First Congregational Church of Brimfield',   reason: 'Non-HNE unit filtered out (town: Brimfield)'
+---
+>   unit_type: 'Troop',   unit_number: '5007',   unit_town: '',   chartered_org: 'First Congregational Church of Brimfield',   reason: 'Non-HNE unit filtered out (town: First Congregational)'
+> Experience Year)'
+> Experience year',   chartered_org: 'Daniel Webster Council',   reason: 'Non-HNE unit filtered out (town: Nh
+iwolf@Iras-MacBook-Pro debug % 

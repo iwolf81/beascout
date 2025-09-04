@@ -290,8 +290,11 @@ class UnitQualityScorer:
                     if self.is_pobox_location(location):
                         quality_deduction = weight * 0.5  # Deduct 50% for PO Box
                         recommendations.append('QUALITY_POBOX_LOCATION')
-                    elif unit.get('_quality_unit_address', False):
-                        quality_deduction = weight * 0.5  # Deduct 50% for location in description
+                    elif (not unit.get('unit_address', '').strip() and 
+                          location and location.strip()):
+                        # Unit has meeting location but empty/missing unit-address field
+                        # This means location exists but needs to be in the proper address field
+                        quality_deduction = weight * 0.5  # Deduct 50% for location in wrong place
                         recommendations.append('QUALITY_UNIT_ADDRESS')
                         
                 elif field == 'contact_email':

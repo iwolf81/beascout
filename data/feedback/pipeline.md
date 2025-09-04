@@ -76,3 +76,70 @@
   The key architectural improvement is integrating quality scoring directly into HTML parsing rather than as a separate
   pipeline step, ensuring data consistency and accuracy.
 
+
+
+Manual Pipeline Execution Commands
+
+  Based on the current integrated pipeline, here are the step-by-step commands:
+
+  Step 1: Data Sources (Input)
+
+  Input: Scraped HTML files (assumed already collected)
+  - data/scraped/[timestamp]/beascout_[zipcode].html
+  - data/scraped/[timestamp]/joinexploring_[zipcode].html
+
+  Step 2: HTML Extraction & Quality Integration
+
+  Command:
+  python src/pipeline/parsing/html_extractor.py data/scraped/20250824_220843/beascout_01430.html
+  data/scraped/20250824_220843/joinexploring_01430.html
+
+  Input: Raw HTML files from both sources
+  Output: data/raw/all_units_01430.json (individual zip code file with integrated quality scoring)
+
+  Process: Extracts units, applies quality scoring, deduplicates, filters for HNE territory
+
+  Step 3: Data Aggregation
+
+  Command:
+  python src/tools/utilities/process_full_dataset_v2.py data/scraped/20250824_220843/
+
+  Input: Directory containing all scraped HTML files (processes all zip codes)
+  Output: data/raw/all_units_comprehensive_scored.json (combined dataset)
+
+  Process: Combines all zip code JSON files, deduplicates across zip codes, calculates summary statistics
+
+  Step 4: Report Generation
+
+  Command:
+  python src/pipeline/reporting/generate_commissioner_report.py
+  Or programmatically:
+  from src.pipeline.reporting.generate_commissioner_report import BeAScoutQualityReportGenerator
+  generator = BeAScoutQualityReportGenerator()
+  generator.load_quality_data('data/raw/all_units_comprehensive_scored.json')
+  output_file = generator.create_quality_report()
+
+  Input: data/raw/all_units_comprehensive_scored.json
+  Output: data/output/reports/BeAScout_Quality_Report_[timestamp].xlsx
+
+  Process: Loads scored units, combines with Key Three data, organizes by districts, creates formatted Excel report
+
+  Current Working Example:
+
+  # Step 2 (single zip code test)
+  python src/pipeline/parsing/html_extractor.py data/scraped/20250824_220843/beascout_01430.html
+  data/scraped/20250824_220843/joinexploring_01430.html
+
+  # Step 3 (full dataset - currently has issues, but individual files work)  
+  python src/tools/utilities/process_full_dataset_v2.py data/scraped/20250824_220843/
+
+  # Step 4 (using existing comprehensive dataset)
+  python -c "
+  from src.pipeline.reporting.generate_commissioner_report import BeAScoutQualityReportGenerator
+  generator = BeAScoutQualityReportGenerator()
+  generator.load_quality_data('data/raw/all_units_comprehensive_scored.json')
+  print('Report:', generator.create_quality_report())
+  "
+
+  Note: Step 3 has aggregation issues in process_full_dataset_v2.py, but individual HTML extractions (Step 2) work perfectly
+  with integrated quality scoring.

@@ -58,3 +58,23 @@ Are columns enumerated such that they can be moved around by simply changing the
 6. Links to beascout.scouting.org and joinexploring.org
 Can the value under Zip Code column be links to the correct beascout.scouting.org or joinexploring.org search page for the unit type and zip code?
 Think about how to do this, but don't implement changes in code.
+
+### Review of Time Fixes
+
+     📝 MEETING TIME CHANGES:
+     ================================================================================
+     UNIT IDENTIFIER                          OLD TIME             NEW TIME Status/Description
+     ================================================================================
+     Pack 123 Leicester                       6:00 PM              (6pm- 7pmx) <p>Meeting Wednesday nights from 6pm - 7pm during the school year.</p>
+     Pack 1455 Pepperell                      5:00 AM              (none) ok
+     Pack 16 Athol                            16:00 AM             (none) ok
+     Pack 37 Worcester                        10:52 PM             (none) ok
+     Pack 62 Shrewsbury                       8:00 PM              (7-8pm) <p>Pack meetings - 7-8pm at Ray Stone Post
+Full agenda: <a href="https://docs.google.com/document/d/1FJG-Fclr3L2olU9wD5c7zRPzzpxYVCDa/edit">https://docs.google.com/document/d/1FJG-Fclr3L2olU9wD5c7zRPzzpxYVCDa/edit</a></p>
+     Troop 1 Acton                            1:00 AM              (none) ok
+     Troop 1 Princeton                        00:01 PM             (none) ok
+     Troop 281 Ware                           6:00 PM              (6PM) <p>We are a youth-led program with a very active outdoor program. Meet on Tuesdays 6PM at the American Legion Hall in Ware. </p>
+     Troop 7054 Worcester                     8:00 PM              (6:30-8 pm) <p>The Troop meets on Tuesdays from 6:30-8 pm.</p>
+     Troop 7163 Fiskdale                      6:00 PM              (4-6 pm) <p>Scouts BSA Troop 163 is a premier Scout Troop for girls.  We meet on Sundays from 4-6 pm, and have monthly camping trips or day activities.  We're a fun and inclusive group, come check us out, we'd love to have you!</p>
+     Troop 7338 Charlton                      73:38 AM             (none) ok
+     ================================================================================
