@@ -463,8 +463,27 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
             if location:
                 raw_location_from_description = location
         
-        # 3. If no location in address div, try address patterns in full text
-        if not raw_location_from_address:
+        # Step 1: If unit-address div is empty, set QUALITY_UNIT_ADDRESS flag
+        if unit_address_div_empty:
+            unit_data['_quality_unit_address'] = True
+        
+        # Prioritize address field, fall back to description
+        final_raw_location = ""
+        location_from_description = False
+        
+        if raw_location_from_address:
+            # Check if location starts with unit number (invalid pattern)
+            unit_num = unit_data.get('unit_number', '')
+            if not (unit_num and raw_location_from_address.startswith(unit_num)):
+                final_raw_location = raw_location_from_address
+        
+        if not final_raw_location and raw_location_from_description:
+            final_raw_location = raw_location_from_description
+            location_from_description = True
+        
+        # Only try address pattern extraction if we have no location AND unit-address div was NOT empty
+        # This preserves QUALITY_UNIT_ADDRESS flag for units with empty unit-address divs
+        if not final_raw_location and not unit_address_div_empty:
             # Look for address patterns in text
             # Replace <br> tags with spaces before extracting full text
             body_copy = unit_body.__copy__()
@@ -478,33 +497,18 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
             for pattern in address_patterns:
                 match = re.search(pattern, full_text)
                 if match:
-                    raw_location_from_address = match.group().strip()
+                    final_raw_location = match.group().strip()
                     break
         
-        # Prioritize address field, fall back to description
-        final_raw_location = ""
-        location_from_description = False
-        
-        if raw_location_from_address and not re.match(r'(?i)p\.?o\.?\s*box', raw_location_from_address):
-            # Check if location starts with unit number (invalid pattern)
-            unit_num = unit_data.get('unit_number', '')
-            if not (unit_num and raw_location_from_address.startswith(unit_num)):
-                final_raw_location = raw_location_from_address
-        
-        if not final_raw_location and raw_location_from_description:
-            final_raw_location = raw_location_from_description
-            location_from_description = True
-        
-        # Set meeting location with proper formatting
+        # Step 2: Set meeting location with proper formatting
         if final_raw_location:
             formatted_location = format_meeting_location(final_raw_location)
             unit_data['meeting_location'] = formatted_location
-            
-            # Apply QUALITY_UNIT_ADDRESS logic:
-            # If unit-address div was empty but we found location in description, this is a quality issue
-            if unit_address_div_empty and location_from_description:
-                # We'll handle the tag logic in the calling function after all extraction is complete
-                unit_data['_quality_unit_address'] = True
+        else:
+            # Step 3: If final meeting_location is empty, clear QUALITY_UNIT_ADDRESS 
+            # because REQUIRED_MISSING_LOCATION takes precedence
+            if unit_address_div_empty:
+                unit_data['_quality_unit_address'] = False
         
         # Extract town name with proper precedence order - STOP once a town is found
         if not unit_data.get('unit_town'):
@@ -680,6 +684,37 @@ def extract_meeting_info(description):
             else:
                 time = format_meeting_time(groups[0])
             break
+    
+    # Extract location - look for address patterns in description
+    # Only extract locations that are clearly addresses/venues, not sentence fragments
+    location_patterns = [
+        # Complete street addresses: number + street name + street type
+        r'\b(\d+\s+[A-Za-z][A-Za-z\s]{2,}(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd|Way|Court|Ct|Place|Pl)\.?)',
+        # Named venues with street addresses: "Name, Address"
+        r'\b([A-Z][A-Za-z][A-Za-z\s]{5,}(?:School|Church|Hall|Center|Centre|Building|Library|Post|Legion|VFW|Club|Association|Parish|Camp),?\s+\d+\s+[A-Za-z][A-Za-z\s]{2,}(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr))',
+        # Addresses with explicit context: "at the [venue]"
+        r'\b(?:at\s+the\s+|meets?\s+at\s+the\s+|located\s+at\s+the\s+)([A-Z][A-Za-z][A-Za-z\s]{5,}(?:School|Church|Hall|Center|Centre|Building|Library|Station|Department))',
+    ]
+    
+    for pattern in location_patterns:
+        match = re.search(pattern, description, re.IGNORECASE)
+        if match:
+            potential_location = match.group(1).strip()
+            # Very strict filtering to avoid sentence fragments
+            if (len(potential_location) > 10 and  # Minimum 10 characters for real locations
+                # Must contain either a street type OR an institutional keyword
+                (re.search(r'\b(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd|Way|Court|Ct|Place|Pl|School|Church|Hall|Center|Centre|Building|Library|Station|Department)\b', potential_location, re.IGNORECASE)) and
+                # Must NOT contain common sentence verbs/phrases
+                not re.search(r'\b(?:is|are|was|were|have|has|had|will|would|should|could|can|may|might|do|does|did|welcome|upcoming|chartered|located|serves|meet|when|where|what|who|why|how)\b', potential_location, re.IGNORECASE) and
+                # Must NOT start with problematic patterns
+                not re.search(r'^\d+\s+(?:is|are|was|were|have|has|had|will|would|welcome|upcoming|for|with|of|in)', potential_location, re.IGNORECASE) and
+                # Skip obvious non-addresses
+                not '@' in potential_location and
+                not re.match(r'^\d+$', potential_location) and
+                # Must not be obvious sentence fragments
+                not potential_location.lower().startswith(('when ', 'where ', 'what ', 'who ', 'why ', 'how ', 'for ', 'with ', 'of '))):
+                location = potential_location
+                break
     
     return day, time, location
 
