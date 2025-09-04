@@ -839,3 +839,103 @@ def generate_search_url(zip_code, unit_type, source='beascout'):
 **Current System Status**: Production-ready with quality scoring integration complete. Report generation working correctly with 55.9% average completeness score. Ready for parsing improvement implementations when time permits.
 
 *Final Update 2025-09-01: Pass 3 feedback analysis complete. Comprehensive parsing improvement plan documented. Quality scoring architecture successfully integrated. System operational and ready for enhancement implementations.*
+
+---
+
+### September 4, 2025 Session - Data Architecture Restructuring Plan
+
+**🎯 CRITICAL ARCHITECTURAL DECISION: Eliminate Field Duplication**
+
+**Problem Identified**: Current JSON structure duplicates ~15 fields between top-level and `original_scraped_data`, causing bugs, confusion, and memory waste. The Post 2012 Holden quality tag bug was directly caused by this duplication architecture.
+
+**Root Issues**:
+1. **Source of Truth Confusion**: Quality scorer looks for `unit_address` at top-level, but it only existed in nested `original_scraped_data`
+2. **Bug Generation Pattern**: Every field duplication creates potential for inconsistency bugs
+3. **Memory Waste**: ~30% data duplication across entire JSON structure
+4. **Code Maintenance**: Developers must choose between top-level vs nested field access
+5. **Band-Aid Fix Cycle**: Each bug fix adds MORE duplication rather than fixing architecture
+
+**Current Problematic Structure**:
+```json
+{
+  "meeting_location": "1370 Main Street, Holden MA 01520",    // Top level
+  "contact_email": "secretarypack37@gmail.com",              // Top level
+  "completeness_score": 37.5,                                 // Top level
+  
+  "original_scraped_data": {
+    "meeting_location": "1370 Main Street, Holden MA 01520", // DUPLICATE
+    "contact_email": "secretarypack37@gmail.com",             // DUPLICATE  
+    "completeness_score": 37.5,                              // DUPLICATE
+    "unit_address": "1370 Main Street Holden MA 01520"       // ONLY EXISTS HERE - BUG SOURCE
+  }
+}
+```
+
+**Proposed Clean Architecture**:
+```json
+{
+  // Core Identity (normalized)
+  "unit_key": "Post 2012 Holden",
+  "unit_type": "Post", 
+  "unit_number": "2012",
+  "unit_town": "Holden",
+  "district": "Quinapoxet",
+  
+  // Source Data (single copy)
+  "meeting_location": "1370 Main Street, Holden MA 01520",
+  "contact_email": "",
+  "unit_address": "1370 Main Street Holden MA 01520",
+  
+  // Computed Analysis
+  "completeness_score": 12.5,
+  "quality_tags": [...],
+  
+  // Processing Metadata  
+  "data_source": "JoinExploring",
+  "meeting_location_source": "address",
+  
+  // Minimal Debug Info (optional)
+  "debug_info": {
+    "raw_content": "...",
+    "primary_identifier": "Post 2012 Holden - Fire Department"
+  }
+}
+```
+
+**Implementation Plan**:
+
+**Phase 1: Commit Current State & Document Plan**
+1. ✅ Commit and push current bug fixes (unit_address field propagation)
+2. ✅ Update SESSION_HANDOFF.md with detailed restructure plan and reasoning  
+3. ✅ Commit and push documentation updates
+
+**Phase 2: Implement Data Structure Restructure**
+1. Modify `scraped_data_parser.py` to eliminate field duplication:
+   - Keep all business fields at top-level only
+   - Reduce `original_scraped_data` to minimal debug info (`raw_content`, `primary_identifier`, `distance`)
+   - Organize top-level by purpose: identity, source data, computed analysis, metadata
+2. Update any components that might reference nested fields (unlikely based on analysis)
+3. Test with sample data to ensure structure is correct
+
+**Phase 3: Validation & Regression Testing**  
+1. Reprocess scraped data with new clean structure
+2. Verify debug logs show no regressions in HNE unit identification
+3. Validate that all 165 HNE units are still correctly processed
+4. Only after validation passes, move to report verification
+
+**Benefits of This Approach**:
+- Eliminates source-of-truth confusion permanently
+- Prevents entire class of duplication-related bugs
+- Reduces memory usage by ~30%
+- Cleaner, more maintainable architecture
+- Matches current code access patterns (most components already use top-level fields)
+
+**Critical Insight Applied**: **Restructure First, Fix Bugs Second** - Instead of patching symptoms with more duplication, fix the root architectural flaw that creates the bugs in the first place.
+
+**Risk Assessment**: Minimal - existing code already accesses top-level fields, so no breaking changes expected. This change eliminates the possibility of future duplication bugs.
+
+**Success Criteria**: 
+- All 165 HNE units processed correctly with clean data structure  
+- No field duplication in JSON output
+- Quality scoring works correctly with single source of truth
+- Memory usage reduced by eliminating redundant data storage
