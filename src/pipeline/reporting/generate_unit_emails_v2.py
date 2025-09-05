@@ -19,6 +19,8 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
+from src.pipeline.parsing.key_three_parser import KeyThreeParser
+
 class UnitEmailGenerator:
     """Generate personalized improvement emails for Scouting units"""
     
@@ -27,6 +29,9 @@ class UnitEmailGenerator:
         self.council_email = "[council contact email]"
         self.council_phone = "[council phone number]"
         self.analysis_date = datetime.now().strftime("%B %d, %Y")
+        
+        # Initialize parser for unit info extraction
+        self.parser = None
         
         # Quality score grade mappings
         self.grade_thresholds = {
@@ -51,6 +56,9 @@ class UnitEmailGenerator:
         file_path = Path(key_three_file_path)
         
         if file_path.suffix.lower() == '.xlsx':
+            # Initialize parser for unit info extraction
+            self.parser = KeyThreeParser(key_three_file_path)
+            
             # Load directly from Excel file
             df = pd.read_excel(key_three_file_path, header=8)
             print(f"Loaded {len(df)} Key Three member records from Excel")
@@ -80,36 +88,35 @@ class UnitEmailGenerator:
                 key_three_members.append(member_data)
         
         else:
-            # Load from JSON file (backward compatibility)
-            with open(key_three_file_path, 'r') as f:
-                data = json.load(f)
-            key_three_members = data.get('key_three_members', [])
+            raise ValueError(f"Unsupported file format. Only Excel .xlsx files are supported. Got: {file_path.suffix}")
         
-        # Index by unit display for easy lookup
+        # Index by unit_key (unit_type_unit_number_town) for precise matching
+        # This uses the same unit_key format as scraped data
         key_three_index = {}
         for member in key_three_members:
-            unit_display = member.get('unit_display', '')
-            if unit_display not in key_three_index:
-                key_three_index[unit_display] = []
-            key_three_index[unit_display].append(member)
+            unit_org_name = member.get('unit_org_name', '')
+            
+            # Extract unit info from unitcommorgname using existing parser
+            unit_info = self.parser.extract_unit_info_from_unitcommorgname(unit_org_name)
+            
+            if unit_info and unit_info.get('unit_town'):
+                # Create unit_key in same format as scraped data: "Troop 7012 Leominster" (no leading zeros)
+                unit_number = unit_info['unit_number'].lstrip('0') or '0'  # Remove leading zeros, but keep '0' if all zeros
+                unit_key = f"{unit_info['unit_type']} {unit_number} {unit_info['unit_town']}"
+                
+                if unit_key not in key_three_index:
+                    key_three_index[unit_key] = []
+                key_three_index[unit_key].append(member)
         
         return key_three_index
     
     def find_key_three_for_unit(self, unit: Dict, key_three_index: Dict) -> List[Dict]:
-        """Find Key Three members for a specific unit"""
-        unit_type = unit.get('unit_type', '').capitalize()
-        unit_number = unit.get('unit_number', '').lstrip('0')  # Remove leading zeros
+        """Find Key Three members for a specific unit using unit_key"""
+        unit_key = unit.get('unit_key', '')
         
-        # Try different unit display formats
-        possible_keys = [
-            f"{unit_type} {unit.get('unit_number', '')}",  # e.g., "Pack 0032"
-            f"{unit_type} {unit_number}",  # e.g., "Pack 32"
-            f"{unit_type} 0{unit_number}" if len(unit_number) < 4 else f"{unit_type} {unit_number}",
-        ]
-        
-        for key in possible_keys:
-            if key in key_three_index:
-                return key_three_index[key]
+        # Direct lookup using unit_key (e.g., "Troop_7012_Leominster")
+        if unit_key in key_three_index:
+            return key_three_index[unit_key]
         
         return []
     
@@ -220,8 +227,8 @@ class UnitEmailGenerator:
         
         for field in required_missing:
             if field == 'meeting_location':
-                recommendations.append("""**1. Meeting Location** *(Missing - Required)*
-- Families need to know where your troop meets to attend meetings and events
+                recommendations.append(f"""**1. Meeting Location** *(Missing - Required)*
+- Families need to know where your {unit_type.capitalize()} meets to attend meetings and events
 - **Action**: Update the Unit Meeting Address field with the full street address (e.g., "Boardwalk Campus School, 71-75 Spruce St, Acton MA 01720")""")
             
             elif field == 'meeting_day' or field == 'meeting_time':
@@ -229,15 +236,15 @@ class UnitEmailGenerator:
                 if 'meeting_day' in required_missing and 'meeting_time' in required_missing:
                     if field == 'meeting_day':  # Only add once
                         recommendations.append(f"""**2. Meeting Day & Time** *(Missing - Required)*
-- Families searching for Scouting need to know when your {unit_type} meets to plan their schedule
+- Families searching for Scouting need to know when your {unit_type.capitalize()} meets to plan their schedule
 - **Action**: Please update the Description field with your regular meeting day and time (e.g., "Every Thursday, 7:00 PM - 8:30 PM")""")
                 elif field == 'meeting_day' and 'meeting_time' not in required_missing:
                     recommendations.append(f"""**2. Meeting Day** *(Missing - Required)*
-- Families searching for Scouting need to know when your {unit_type} meets to plan their schedule
+- Families searching for Scouting need to know when your {unit_type.capitalize()} meets to plan their schedule
 - **Action**: Please update the Description field with your regular meeting day (e.g., "Every Thursday")""")
                 elif field == 'meeting_time' and 'meeting_day' not in required_missing:
                     recommendations.append(f"""**2. Meeting Time** *(Missing - Required)*
-- Families searching for Scouting need to know when your {unit_type} meets to plan their schedule
+- Families searching for Scouting need to know when your {unit_type.capitalize()} meets to plan their schedule
 - **Action**: Please update the Description field with your regular meeting time (e.g., "7:00 PM - 8:30 PM")""")
             
             elif field == 'contact_email':
@@ -245,7 +252,7 @@ class UnitEmailGenerator:
                 recommendations.append(f"""**3. Contact Email** *(Missing - Required)*
 - Families need a way to ask questions and get information about joining
 - **Action**: Please update the Contact Information field with a {unit_type.capitalize()} email address (preferably unit-specific like {unit_name}@gmail.com)
-- **Best Practice**: Use a unit-specific email that can be monitored by multiple unit leaders""")
+- **Best Practice**: Use an email account that can be monitored by multiple unit leaders""")
         
         if recommendations:
             return "### 🔴 **High Priority - Missing Critical Information:**\n\n" + "\n\n".join(recommendations)
@@ -283,7 +290,7 @@ class UnitEmailGenerator:
             
             elif field == 'description':
                 recommendations.append(f"""**{counter}. Program Description** *(Missing - Recommended)*
-- Helps families understand what makes your {unit_type} special
+- Helps families understand what makes your {unit_type.capitalize()} special
 - **Action**: Add a welcoming description of your unit's activities and culture to the Description field
 - **Best Practice**: Include highlights and special characteristics of your unit""")
                 counter += 1
@@ -292,7 +299,7 @@ class UnitEmailGenerator:
                 unit_name = f"{unit_type.lower()}{unit.get('unit_number', '').lstrip('0')}{unit.get('unit_town', '').lower()}"
                 recommendations.append(f"""**{counter}. Professional Email Address** *(Recommended Improvement)*
 - Current email appears to be personal rather than unit-specific
-- **Action**: Consider creating a {unit_type.lower()}-specific email address (e.g., {unit_name}@gmail.com)
+- **Action**: Consider creating a {unit_type.capitalize()}-specific email address (e.g., {unit_name}@gmail.com)
 - **Best Practice**: Unit-specific emails provide better continuity and can be monitored by multiple leaders""")
                 counter += 1
         
@@ -314,17 +321,19 @@ class UnitEmailGenerator:
                 unit_type = "Unit"
                 unit_number = "Unknown"
             
-            # Extract town name from unitcommorgname field in Key Three data
+            # Extract unit info using existing KeyThreeParser
             unit_town = ''
             if key_three_members:
                 unit_org_name = key_three_members[0].get('unit_org_name', '')
                 if unit_org_name:
-                    # Parse town from format like "Pack 0161 (F) - Fiskdale-American Legion Post 109"
-                    # or "Pack 0003 - Leominster-Our Lady Of The Lake Church" (without gender indicator)
-                    if ' - ' in unit_org_name:
-                        org_part = unit_org_name.split(' - ', 1)[1]  # Get "Fiskdale-American Legion Post 109"
-                        if '-' in org_part:
-                            unit_town = org_part.split('-')[0]  # Get "Fiskdale"
+                    # Use the existing sophisticated parser
+                    parser = KeyThreeParser("")  # We don't need to load data, just use parsing logic
+                    unit_info = parser.extract_unit_info_from_unitcommorgname(unit_org_name)
+                    if unit_info:
+                        # Override the parsed values with the more accurate results
+                        unit_type = unit_info.get('unit_type', unit_type)
+                        unit_number = unit_info.get('unit_number', '').lstrip('0') or '0'
+                        unit_town = unit_info.get('unit_town', '')
             
             unit = {
                 'unit_type': unit_type.lower(),
@@ -388,15 +397,15 @@ class UnitEmailGenerator:
         email_parts.append(f"Dear {unit_identifier} Key Three ({key_three_names}),\n")
         
         if is_missing_unit:
-            email_parts.append(f"The {self.council_name} maintains records of all active units and their Key Three leadership. However, during our periodic review of unit information on BeAScout.org, we discovered that **{unit_identifier} does not appear to have any online presence**.\n")
+            email_parts.append(f"The {self.council_name} maintains records of all active units and their Key Three leadership. However, during our periodic review of unit information on BeAScout.org, we discovered that **{unit_identifier} does not appear to have a presence in BeAScout**.\n")
         else:
-            email_parts.append(f"The {self.council_name} periodically reviews unit information on BeAScout.org to help prospective Scout families easily find complete, accurate information about local units. We've completed a review of {unit_identifier}'s online presence and wanted to share our findings and recommendations.\n")
+            email_parts.append(f"The {self.council_name} periodically reviews unit information on BeAScout.org to help prospective Scout families easily find complete, accurate information about local units. We've completed a review of {unit_identifier}'s presence in BeAScout and wanted to share our findings and recommendations.\n")
         
         # Current Quality Section - different title for missing units
         if is_missing_unit:
-            email_parts.append(f"## Your {unit_type}'s Current Online Status\n")
+            email_parts.append(f"## Your {unit_type.capitalize()}'s Current Online Status\n")
         else:
-            email_parts.append(f"## Your {unit_type}'s Current Information Quality\n")
+            email_parts.append(f"## Your {unit_type.capitalize()}'s Current Information Quality\n")
         email_parts.append(f"**Overall Completeness Score: {completeness_score}%**\n")
         
         # Existing Information - conditional header based on score
@@ -419,7 +428,8 @@ class UnitEmailGenerator:
             for info in existing_info:
                 email_parts.append(f"{info}")
         else:
-            email_parts.append(f"**{unit_identifier}** does not appear to have any information on BeAScout.org. Families searching for Scouting in your area cannot find your unit online. Guidance and instructions for configuring BeAScout.org for your Pack follow below.")
+            email_parts.append("## Recommendations for Configuring BeAScout:\n")
+            email_parts.append(f"Families searching for Scouting in your area cannot find your unit online. Guidance and instructions for configuring BeAScout.org for your {unit_type.capitalize()} follow below.")
         email_parts.append("")
         
         # Recommendations, Congratulations, or Critical Setup (for missing units)
@@ -427,17 +437,17 @@ class UnitEmailGenerator:
             # Required Setup Information for missing units
             email_parts.append("### 🔴 **Required Setup Information:**\n")
             email_parts.append("**1. Meeting Location** *(Missing - Critical)*")
-            email_parts.append(f"- Families need to know where your {unit_type.lower()} meets")
+            email_parts.append(f"- Families need to know where your {unit_type.capitalize()} meets")
             email_parts.append("- **Action**: Add the complete meeting address (e.g., \"Community Center, 123 Main St, YourTown MA 01234\")\n")
             
             email_parts.append("**2. Meeting Schedule** *(Missing - Critical)*")
-            email_parts.append(f"- Families need to know when your {unit_type.lower()} meets to plan their schedule")
+            email_parts.append(f"- Families need to know when your {unit_type.capitalize()} meets to plan their schedule")
             email_parts.append("- **Action**: Add meeting day and time (e.g., \"Every Tuesday, 7:00 PM - 8:30 PM\")\n")
             
             email_parts.append("**3. Contact Information** *(Missing - Critical)*")
             email_parts.append("- Families need a way to ask questions and get information about joining")
-            email_parts.append(f"- **Action**: Add a {unit_type.lower()}-specific email address and/or phone number\n")
-            
+            email_parts.append(f"- **Action**: Add a {unit_type.capitalize()}-specific email address such as {unit_type.lower()}{unit_number}{unit_town.lower()}@gmail.com and an optional a phone number\n")
+
             # Add recommended section for missing units to achieve 100% score
             email_parts.append("### 🟡 **Recommended - Additional Information:**\n")
             email_parts.append("**4. Contact Person** *(Missing - Recommended)*")
@@ -455,7 +465,7 @@ class UnitEmailGenerator:
             email_parts.append("- **Best Practice**: Update the Contact Information field with the unit's website\n")
             
             email_parts.append("**7. Program Description** *(Missing - Recommended)*")
-            email_parts.append(f"- Helps families understand what makes your {unit_type.lower()} special")
+            email_parts.append(f"- Helps families understand what makes your {unit_type.capitalize()} special")
             email_parts.append("- **Action**: Add a welcoming description of your unit's activities and culture to the Description field")
             email_parts.append("- **Best Practice**: Include highlights and special characteristics of your unit\n")
             
@@ -471,8 +481,9 @@ class UnitEmailGenerator:
             # Unit has complete information - congratulate them!
             unit_type_lower = self.format_unit_type_for_email(unit.get('unit_type', ''))
             email_parts.append("## Congratulations!\n")
-            email_parts.append(f"🎉 **Excellent work!** Your {unit_type_lower} has complete, family-friendly information on BeAScout.org. Families searching for Scouting in your area will easily find all the details they need to connect with {unit_identifier}.\n")
-        
+            email_parts.append(f"## Your {unit_type.capitalize()}'s Current Online Status\n")
+            email_parts.append(f"🎉 **Excellent work!** Your {unit_type.capitalize()} has complete, family-friendly information on BeAScout.org. Families searching for Scouting in your area will easily find all the details they need to connect with {unit_identifier}.\n")
+
         # Guidelines section
         email_parts.append("## Guidelines for Effective BeAScout Information\n")
         email_parts.append("### **Prove a welcoming and informative description**")
@@ -491,7 +502,7 @@ class UnitEmailGenerator:
         email_parts.append("- Provide both start and end times when possible\n")
         
         email_parts.append("### **Contact Information Continuity:**")
-        email_parts.append(f"- Use {unit_type}-specific email addresses when possible")
+        email_parts.append(f"- Use a unit-specific email address when possible")
         email_parts.append("- Ensure three unit leaders have access to the email account to ensure inquiries are promptly responded to\n")
         
         # Next Steps
@@ -523,16 +534,16 @@ class UnitEmailGenerator:
         email_parts.append("*Unit Support Team*\n")
         email_parts.append("---\n")
         
-        # Footer
-        email_parts.append(f"**Note**: This review was generated using the Council's automated BeAScout information analysis system. Information was analyzed from BeAScout.org on [Date]. If you've recently updated your information, please allow time for changes to be reflected in our next review.\n")
-        
         # Unit details
         meeting_location = unit.get('meeting_location', '').strip() or "Not specified"
         review_date = datetime.now().strftime("%B %d, %Y")
         review_id = f"{unit_type.upper()}_{unit_number}_{unit_town.upper()}_{datetime.now().strftime('%m%d%y')}"
         
+        # Footer
+        email_parts.append(f"**Note**: This review was generated using the Council's automated BeAScout information analysis system. Information was analyzed from BeAScout.org on {review_date}. If you've recently updated your information, please allow time for changes to be reflected in our next review.\n")
+        
         email_parts.append(f"**{unit_identifier} Details Reviewed:**")
-        email_parts.append(f"- Unit Type: {unit_type}")
+        email_parts.append(f"- Unit Type: {unit_type.capitalize()}")
         email_parts.append(f"- Charter Organization: {chartered_org}")
         email_parts.append(f"- Meeting Location: {meeting_location}")
         email_parts.append(f"- Analysis Date: {review_date}")
@@ -559,7 +570,7 @@ Examples:
     
     parser.add_argument(
         'key_three_file', 
-        help='Path to Key Three contacts file (Excel .xlsx or JSON .json)'
+        help='Path to Key Three contacts file (Excel .xlsx format only)'
     )
     
     parser.add_argument(
