@@ -181,21 +181,22 @@ class BeAScoutQualityReportGenerator:
                 units = raw_data.get('scraped_units', raw_data.get('units_with_scores', []))
                 print(f"📊 Loaded {len(units)} units with quality data")
             
-            # Load original scraping timestamp from session_summary.json
+            # Load scraping timestamp from the comprehensive data source tracking
             scraping_timestamp = ''
+            scraped_data_source = ''
             try:
-                # Look for session_summary.json in data/scraped/*/session_summary.json
-                scraped_dir = Path('data/scraped')
-                for session_dir in scraped_dir.glob('*/'):
-                    session_summary_file = session_dir / 'session_summary.json'
-                    if session_summary_file.exists():
-                        with open(session_summary_file, 'r', encoding='utf-8') as f:
-                            session_data = json.load(f)
-                            scraping_timestamp = session_data.get('start_time', '')
-                            print(f"📅 Found scraping timestamp: {scraping_timestamp}")
-                            break  # Use the first (most recent) session found
+                # Check if comprehensive data has source tracking
+                if raw_data.get('session_summary', {}).get('start_time'):
+                    scraping_timestamp = raw_data['session_summary']['start_time']
+                    scraped_data_source = raw_data.get('scraped_data_source', '')
+                    print(f"📅 Found scraping timestamp from source tracking: {scraping_timestamp}")
+                    if scraped_data_source:
+                        print(f"📁 Source directory: {scraped_data_source}")
+                else:
+                    print(f"⚠️ No source tracking found in comprehensive data")
+                    scraping_timestamp = ''
             except Exception as e:
-                print(f"⚠️ Could not load scraping timestamp: {e}")
+                print(f"⚠️ Could not load scraping timestamp from source tracking: {e}")
                 scraping_timestamp = ''
             
             # Quality data is now integrated - no need for separate scoring

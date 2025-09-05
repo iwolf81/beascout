@@ -167,11 +167,11 @@ def process_scraped_session(session_dir: str):
 
     # Combine all scored files
     if successful_files:
-        combine_datasets(successful_files)
+        combine_datasets(successful_files, session_dir)
     else:
         print("❌ No data to combine")
 
-def combine_datasets(json_files: list):
+def combine_datasets(json_files: list, session_dir: str = None):
     """Combine all scored datasets with deduplication"""
     print("Combining all scored datasets with deduplication...")
 
@@ -202,6 +202,31 @@ def combine_datasets(json_files: list):
         total_score = sum(unit.get('completeness_score', 0) for unit in combined_units)
         avg_score = total_score / len(combined_units)
 
+        # Load session metadata if session_dir is provided
+        session_metadata = {}
+        if session_dir:
+            try:
+                session_summary_path = Path(session_dir) / 'session_summary.json'
+                if session_summary_path.exists():
+                    with open(session_summary_path, 'r', encoding='utf-8') as f:
+                        session_data = json.load(f)
+                        session_metadata = {
+                            'scraped_data_source': session_dir,
+                            'session_summary': {
+                                'session_timestamp': session_data.get('session_timestamp', ''),
+                                'start_time': session_data.get('start_time', ''),
+                                'end_time': session_data.get('end_time', ''),
+                                'total_zip_codes': session_data.get('total_zip_codes', 0),
+                                'successful_zips': session_data.get('successful_zips', 0),
+                                'success_rate': session_data.get('success_rate', 0.0)
+                            }
+                        }
+                        print(f"📅 Added source tracking for session: {session_data.get('session_timestamp', 'Unknown')}")
+                else:
+                    print(f"⚠️ No session_summary.json found in {session_dir}")
+            except Exception as e:
+                print(f"⚠️ Could not load session metadata: {e}")
+
         combined_data = {
             'extraction_timestamp': datetime.now().isoformat(),
             'total_units': len(combined_units),
@@ -211,6 +236,7 @@ def combine_datasets(json_files: list):
                 'units_after_dedup': len(combined_units),
                 'duplicates_removed': total_before - len(combined_units)
             },
+            **session_metadata,  # Include source tracking if available
             'units_with_scores': combined_units
         }
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Conservative Multi-Zip Scraper
+Multi-Zip Scraper
+Scrapes BeAScout and JoinExploring for multiple ZIP codes with timestamped output
 Implements respectful rate limiting to avoid detection/blocking
 """
 
@@ -12,12 +13,16 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import sys
 
-# Add project root to path
-sys.path.append(str(Path(__file__).parent.parent))
-from src.scraping.browser_scraper import BrowserScraper
+# Add current directory to path for imports (assumes running from beascout/ directory)
+# When running "python src/scripts/multi_zip_scraper.py" from beascout/, 
+# we need the beascout directory in the path
+current_dir = Path.cwd()
+sys.path.insert(0, str(current_dir))
+
+from src.pipeline.scraping.browser_scraper import BrowserScraper
 
 
-class ConservativeMultiZipScraper:
+class MultiZipScraper:
     """
     Multi-zip scraper with aggressive rate limiting to prevent blocking
     
@@ -193,14 +198,14 @@ class ConservativeMultiZipScraper:
             await scraper.close()
     
     async def process_all_hne_zip_codes(self):
-        """Process all HNE Council zip codes with conservative approach"""
+        """Process all zip codes from the default zip code file"""
         # Load zip codes
         zip_file = "data/zipcodes/hne_council_zipcodes.json"
         with open(zip_file, 'r') as f:
             zip_data = json.load(f)
         
         all_zips = zip_data['all_zipcodes']
-        print(f"📋 Loaded {len(all_zips)} HNE Council zip codes")
+        print(f"📋 Loaded {len(all_zips)} zip codes")
         
         # Create timestamped directory for this scraping session
         start_time = datetime.now()
@@ -286,7 +291,23 @@ async def test_conservative_approach():
     # Test with just 3 zip codes
     test_zips = ['01720', '01420', '01453']
     
-    scraper = ConservativeMultiZipScraper()
+    scraper = MultiZipScraper()
+    
+    # Initialize session directory and stats for test
+    start_time = datetime.now()
+    scraper.session_stats = {
+        'requests_in_session': 0,
+        'successful_zips': 0,
+        'failed_zips': 0,
+        'consecutive_failures': 0,
+        'start_time': start_time
+    }
+    scraper.session_timestamp = start_time.strftime("%Y%m%d_%H%M%S")
+    scraper.session_dir = f"data/scraped/{scraper.session_timestamp}"
+    
+    # Create session directory
+    Path(scraper.session_dir).mkdir(parents=True, exist_ok=True)
+    print(f"📁 Session directory: {scraper.session_dir}")
     
     # Temporarily reduce delays for testing
     scraper.config.update({
@@ -307,11 +328,11 @@ if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'test':
         asyncio.run(test_conservative_approach())
     elif len(sys.argv) > 1 and sys.argv[1] == 'full':
-        scraper = ConservativeMultiZipScraper()
+        scraper = MultiZipScraper()
         asyncio.run(scraper.process_all_hne_zip_codes())
     else:
-        print("Conservative Multi-Zip Scraper")
+        print("Multi-Zip Scraper")
         print("Usage:")
-        print("  python conservative_multi_zip_scraper.py test    # Test with 3 zip codes") 
-        print("  python conservative_multi_zip_scraper.py full    # Process all 72 zip codes")
-        print("  python conservative_multi_zip_scraper.py         # Interactive mode")
+        print("  python src/scripts/multi_zip_scraper.py test    # Test with 3 zip codes") 
+        print("  python src/scripts/multi_zip_scraper.py full    # Process all zip codes from file")
+        print("  python src/scripts/multi_zip_scraper.py         # Show usage")
