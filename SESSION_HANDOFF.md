@@ -9,11 +9,33 @@
 
 ## Current State Summary
 
-### ✅ Completed This Session (Data Layer Consolidation & Regression Fixes)
+### ✅ **MAJOR ARCHITECTURAL ACHIEVEMENT: Clean Directory Restructuring (September 2025)**
+
+**TRANSFORMATION COMPLETED**: Achieved production-ready file organization with clear operational vs development separation.
+
+**Directory Structure**: See **[ARCHITECTURE.md](ARCHITECTURE.md)** for complete details.
+
+**Key Benefits Achieved**:
+- **11 operational files** organized in logical pipeline flow (acquisition → processing → analysis → core)
+- **Clear separation**: `src/pipeline/` (operational) vs `src/dev/` (development tools)
+- **Directory organization**: Significant root directory clutter reduction achieved
+- **Cloud deployment ready**: Single `src/pipeline/` tree contains all operational code
+- **Import path stability**: All production imports use `src.pipeline.*` namespace
+
+**Pipeline Commands Updated**:
+```bash
+# Complete operational workflow  
+python src/pipeline/acquisition/multi_zip_scraper.py full
+python src/pipeline/processing/process_full_dataset.py data/scraped/YYYYMMDD_HHMMSS/
+python src/pipeline/analysis/generate_commissioner_report.py
+python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json "data/input/Key 3 08-22-2025.xlsx"
+```
+
+### ✅ Completed Previously (Data Layer Consolidation & Regression Fixes)
 1. **Critical Regression Analysis & Resolution**
    - **Identified Regressions**: Troop 7012 Acton missing, Troop 284 showing "Boxborough" instead of "Acton"
    - **Root Cause**: Redundant town definitions across multiple files causing data inconsistencies
-   - **Resolution**: Consolidated all mappings to single source of truth in `src/mapping/district_mapping.py`
+   - **Resolution**: Consolidated all mappings to single source of truth in `src/pipeline/core/district_mapping.py`
 
 2. **Data Layer Consolidation (Single Source of Truth)**
    - **TOWN_TO_DISTRICT Dictionary**: 65 HNE towns with district assignments in centralized location
@@ -76,10 +98,10 @@ if unit_type == 'Crew':
 
 ## Files & Current Implementation
 
-### Core Scripts
-- **`src/legacy/extract_all_units.py`** - Main extraction script with refined patterns
-- **`src/mapping/district_mapping.py`** - Council territory definitions (65 towns, 2 districts)
-- **`src/scripts/`** - Production pipeline scripts organized for clear execution phases
+### Core Scripts (Current Clean Architecture - see ARCHITECTURE.md for detailed structure)
+- **`src/pipeline/processing/html_extractor.py`** - Main extraction script with refined patterns
+- **`src/pipeline/core/district_mapping.py`** - Council territory definitions (65 towns, 2 districts) 
+- **`src/pipeline/`** - 11 operational files organized by function (acquisition → processing → analysis → core)
 
 ### Data Assets
 - **`data/raw/debug_page_01720.html`** - Source HTML (66 units from beascout.scouting.org)

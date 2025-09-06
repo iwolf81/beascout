@@ -89,7 +89,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 **Initial Approach:** Multiple files contained redundant town definitions that could get out of sync, causing inconsistent data layer behavior.
 
 **Data Layer Issues Discovered:**
-- Duplicate town mappings in `src/core/unit_identifier.py`, `src/parsing/html_extractor.py`, and `src/mapping/district_mapping.py`
+- Duplicate town mappings resolved through consolidation to `src/pipeline/core/district_mapping.py`
 - Redundant HNE town lists that could diverge over time
 - Import path issues when accessing mappings from different execution contexts
 
@@ -99,7 +99,7 @@ org_keywords = ['acton', 'group', 'citizens']  # from "Acton-Group Of Citizens, 
 - **Troop 0132**: Discarded as "Mendon" instead of correctly processed as "Upton"
 
 **Consolidated Solution - Single Source of Truth:**
-1. **Centralized Mapping**: All town/district data consolidated to `src/mapping/district_mapping.py`
+1. **Centralized Mapping**: All town/district data consolidated to `src/pipeline/core/district_mapping.py`
 2. **TOWN_TO_DISTRICT Dictionary**: 65 HNE towns with district assignments
 3. **TOWN_ALIASES Dictionary**: Handles common variations and abbreviations
 4. **Validation Functions**: `get_district_for_town()`, `get_all_hne_towns()`, etc.
@@ -227,7 +227,7 @@ if matches:
 - **"Worcester County Council"**: Extracts "Worcester" as the first valid HNE town match
 
 ### 3.3 HNE Territory Validation
-All extracted towns validated against centralized mapping in `src/mapping/district_mapping.py`:
+All extracted towns validated against centralized mapping in `src/pipeline/core/district_mapping.py`:
 
 ```python
 # Single source of truth for HNE territory

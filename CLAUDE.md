@@ -48,7 +48,7 @@ Improve Scouting America unit information quality for the Heart of New England C
 - ✅ **Quality scoring system**: Specialized unit scoring with A-F grading and recommendation categorization
 - ✅ **BeAScout Quality Reports**: District-organized Excel reports with professional formatting, quality grades, and Key Three contacts
 - ✅ **Key Three email generation**: Personalized emails with actual contact information and improvement recommendations
-- ✅ **Production pipeline**: Main scripts consolidated to `src/scripts/` with single source of truth mapping in `src/mapping/`
+- ✅ **Production pipeline**: Main operational files organized in `src/pipeline/` with single source of truth mapping in `src/pipeline/core/`
 - ✅ **Exponential backoff retry**: Common retry logic for both websites with jitter and fresh page contexts
 - 🎯 **Ready for multi-zip deployment**: System validated end-to-end with fresh data
 - ⏳ **Feedback integration phase**: Review emails/reports with unit leaders and council commissioner
@@ -56,10 +56,10 @@ Improve Scouting America unit information quality for the Heart of New England C
 - ⏳ **Infrastructure scaling**: All 72 HNE zip codes with deduplication across multiple zip queries
 
 **Key Technical Patterns:**
-- **Dual-source scraping**: `src/scraping/browser_scraper.py` with common retry logic for both BeAScout and JoinExploring
-- **URL generation**: `src/scraping/url_generator.py` handles proper parameter encoding for both platforms
-- **HNE filtering**: Enhanced `src/legacy/extract_all_units.py` with unit_town prioritization over org name matching
-- **Quality scoring**: `src/analysis/quality_scorer.py` with specialized unit support (Crews, Posts, Clubs at 14% vs 17.5%)
+- **Dual-source scraping**: `src/pipeline/acquisition/browser_scraper.py` with common retry logic for both BeAScout and JoinExploring  
+- **URL generation**: `src/dev/scraping/url_generator.py` handles proper parameter encoding for both platforms
+- **HNE filtering**: Enhanced `src/pipeline/processing/html_extractor.py` with unit_town prioritization over org name matching
+- **Quality scoring**: `src/pipeline/core/quality_scorer.py` with specialized unit support (Crews, Posts, Clubs at 14% vs 17.5%)
 - **Data flow**: Browser automation → HTML → JSON → Quality scoring → BeAScout Quality Reports → Personalized emails
 
 **Quality Scoring Implementation:**

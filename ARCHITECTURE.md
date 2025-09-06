@@ -21,84 +21,105 @@ Raw Data → HTML/Excel → JSON → Normalized → Scored → Reports
 Scraping   Parsing   Extraction  Quality   Final   Output
 ```
 
-## Project Structure
+## 🏗️ Project Structure & Directory Organization
 
 ```
-src/                                 # All production code (organized by function)
-├── core/                           # ✅ Core system components
-│   └── unit_identifier.py         # Unit normalization with debug logging
-│                                   # - Creates standardized unit_key format
-│                                   # - Uses centralized HNE town mapping (TOWN_TO_DISTRICT)
-│                                   # - Source-specific debug file generation
-│                                   # - Discarded unit logging with audit trails
-├── mapping/                        # ✅ Geographic data management (SINGLE SOURCE OF TRUTH)
-│   └── district_mapping.py        # HNE territory definitions & town mappings
-│                                   # - 65 towns across Quinapoxet/Soaring Eagle districts
-│                                   # - Centralized TOWN_TO_DISTRICT dictionary
-│                                   # - Village definitions as separate towns
-│                                   # - Town alias handling and validation functions
-├── parsing/                        # ✅ Data parsing engines
-│   ├── fixed_scraped_data_parser.py # Scraped HTML processor
-│   │                               # - Position-first town extraction (fixes hyphenated towns)
-│   │                               # - 4-precedence rule: unit_address → unit_name → unit_description → chartered_org
-│   │                               # - Uses centralized mapping for HNE territory filtering
-│   │                               # - Comprehensive error handling with debug logging
-│   └── key_three_parser.py        # Excel spreadsheet processor  
-│                                   # - Active unit processing with edge case handling
-│                                   # - Sophisticated town extraction (9 patterns)
-│                                   # - Debug logging integration
-├── scraping/                       # ✅ Data collection (when needed)
-│   ├── browser_scraper.py         # Playwright automation
-│   └── url_generator.py           # Search URL creation
-├── analysis/                       # ✅ Data quality assessment
-│   └── quality_scorer.py          # Unit completeness scoring
-│                                   # - Required vs recommended field weighting
-│                                   # - A-F grading system
-│                                   # - Specialized scoring for unit types
-├── scripts/                        # ✅ Production pipeline scripts
-│   ├── process_full_dataset_v2.py      # Main pipeline orchestration
-│   ├── generate_district_reports.py    # District-specific Excel reports (legacy)
-│   ├── generate_key_three_emails.py    # Personalized email creation
-│   ├── create_authoritative_dataset.py # Dataset consolidation
-│   └── generate_commissioner_report.py # BeAScout Quality Reports (primary)
-└── legacy/                         # ✅ Legacy tools (still used)
-    └── extract_all_units.py       # HTML → JSON conversion
+src/
+├── pipeline/              # 🚀 OPERATIONAL PIPELINE (11 core files)
+│   ├── acquisition/       # Data collection (2 files)
+│   │   ├── multi_zip_scraper.py    # Main scraper - dual-source automation
+│   │   │                          # - BeAScout.org + JoinExploring.org processing
+│   │   │                          # - Rate limiting & retry logic
+│   │   │                          # - Timestamped session directories
+│   │   └── browser_scraper.py      # Browser automation engine
+│   │                              # - Playwright-based web scraping
+│   │                              # - Exponential backoff retry logic
+│   │                              # - Fresh page contexts for reliability
+│   ├── processing/        # Data processing (3 files)
+│   │   ├── process_full_dataset.py # HTML → JSON orchestrator
+│   │   │                          # - Main pipeline coordination
+│   │   │                          # - Source tracking & data lineage
+│   │   │                          # - Quality scoring integration
+│   │   ├── html_extractor.py       # HTML parsing engine
+│   │   │                          # - BeautifulSoup unit extraction
+│   │   │                          # - 6-pattern address parsing
+│   │   │                          # - Territory validation
+│   │   └── scraped_data_parser.py  # JSON processing & quality scoring
+│   │                              # - Position-first town extraction
+│   │                              # - 4-source precedence logic
+│   │                              # - HNE territory filtering
+│   ├── analysis/          # Reports & outputs (2 files)
+│   │   ├── generate_commissioner_report.py  # Excel report generation
+│   │   │                                   # - Professional formatting
+│   │   │                                   # - District-specific analysis
+│   │   │                                   # - Quality metrics & grading
+│   │   └── generate_unit_emails.py         # Unit improvement emails
+│   │                                       # - Personalized recommendations
+│   │                                       # - Key Three contact matching
+│   │                                       # - Unit-specific action items
+│   └── core/              # Shared infrastructure (4 files)
+│       ├── district_mapping.py    # Town/district mapping (SINGLE SOURCE OF TRUTH)
+│       │                         # - 65 HNE towns across 2 districts
+│       │                         # - TOWN_TO_DISTRICT authority
+│       │                         # - Village definitions & aliases
+│       ├── unit_identifier.py     # Unit normalization & debug logging
+│       │                         # - Standardized unit_key format
+│       │                         # - Source-specific debug files
+│       │                         # - Discarded unit audit trails
+│       ├── quality_scorer.py      # Quality assessment system
+│       │                         # - A-F grading (70% required, 30% recommended)
+│       │                         # - Specialized unit type scoring
+│       │                         # - Recommendation identifiers
+│       └── hne_towns.py          # HNE Council town utilities
+│                                 # - Town validation functions
+│                                 # - Geographic boundary support
+└── dev/                   # 🛠️ DEVELOPMENT TOOLS
+    ├── archive/           # All deprecated/legacy code (flattened)
+    ├── tools/             # Analysis utilities & scripts  
+    ├── parsing/           # Alternative parsers
+    ├── reporting/         # Alternative report generators
+    ├── validation/        # Development validation tools
+    └── scraping/          # Alternative scraping utilities
 
-archive/                            # ✅ Deprecated code (historical reference)
-├── html_extractor.py              # Archived: had redundant town mappings
-├── process_full_dataset.py        # Archived: superseded by process_full_dataset_v2.py
-└── [other archived files]         # Legacy processing scripts
+data/                      # Data organization by processing stage
+├── input/                 # Source data files
+├── output/               # Generated reports & emails
+│   ├── reports/          # Excel commissioner reports
+│   └── emails/           # Unit improvement emails
+├── raw/                  # Processed JSON data
+├── scraped/              # HTML scraping results
+├── logs/                 # Application logs (organized)
+├── feedback/             # User feedback & planning
+└── debug/                # Debug & regression data
 
-scripts/                            # Utility & testing scripts
-├── search_strings.py              # Multi-file search tool
-└── test_key_three_debug.py        # Key Three parser validation
-
-tests/                            # ✅ Testing & validation
-├── reference/                    # Reference files for regression testing
-│   ├── units/                    # Unit extraction reference logs
-│   │   ├── unit_identifier_debug_scraped_reference_u.log    # Expected scraped results
-│   │   └── discarded_unit_identifier_debug_scraped_reference_u.log # Expected discards
-│   ├── key_three/               # Key Three processing reference files
-│   └── towns/                   # Town extraction test cases
-├── verify_all.py                # Comprehensive validation runner
-└── README.md                    # Testing documentation
-
-data/                              # All data files (organized by stage)
-├── input/                         # Source data files
-│   └── Key 3 08-22-2025.xlsx     # Monthly Key Three export
-├── scraped/                       # Raw HTML from websites  
-│   └── YYYYMMDD_HHMMSS/          # Timestamped scraping sessions
-├── raw/                          # Processed JSON data
-│   └── all_units_comprehensive_scored.json # Final consolidated dataset
-├── debug/                        # Debug & audit logs
-│   ├── unit_identifier_debug_scraped_*.log      # Scraped data processing
-│   ├── unit_identifier_debug_keythree_*.log     # Key Three processing  
-│   └── discarded_unit_identifier_debug_*.log    # Excluded units
-├── output/                       # Final reports
-│   ├── reports/                  # Excel district reports
-│   └── emails/                   # Generated Key Three emails
-└── feedback/                     # Analysis & documentation
+tests/                    # Test framework & regression validation
+├── reference/            # Reference files for regression testing
+└── verify_all.py         # Comprehensive validation runner
 ```
+
+### **🏗️ Directory Organization Principles**
+
+#### **Separation of Concerns**
+- **`src/pipeline/`**: Production-critical operational code only
+- **`src/dev/`**: Development tools, alternatives, and archived code
+- **Clear data flow**: acquisition → processing → analysis → core
+
+#### **Pipeline Flow Architecture**
+```
+Scraping → Processing → Analysis
+   ↓           ↓          ↓
+HTML files → JSON data → Reports/Emails
+```
+
+#### **Development vs Operations**
+- **Never modify `src/pipeline/`** without full testing
+- **Use `src/dev/tools/`** for analysis and debugging
+- **Archive old code** in `src/dev/archive/` with clear rationale
+
+#### **Cloud Deployment Ready**
+- All operational files in single `src/pipeline/` tree
+- Clear separation enables containerization
+- Environment-agnostic configuration in `src/pipeline/core/`
 
 ## Key Technical Features
 
@@ -208,43 +229,42 @@ Comprehensive audit trails distinguish between data sources:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Pipeline Execution Commands
+## 🚀 Pipeline Execution Commands
 
-### Complete Pipeline (Fresh Scraping)
+### **Complete Production Pipeline**
 ```bash
-# Step 1: Fresh data collection (30-45 minutes)
-python src/scraping/browser_scraper.py --all-zipcodes --output data/scraped/$(date +%Y%m%d_%H%M%S)/
+# Step 1: Fresh data collection (30-45 minutes for all 72 zip codes)
+python src/pipeline/acquisition/multi_zip_scraper.py full
 
 # Step 2: Complete processing pipeline
-python src/tools/utilities/process_full_dataset_v2.py data/scraped/YYYYMMDD_HHMMSS/
+python src/pipeline/processing/process_full_dataset.py data/scraped/YYYYMMDD_HHMMSS/
 
 # Step 3: Generate BeAScout Quality Report (primary)
-python src/pipeline/reporting/generate_commissioner_report.py
+python src/pipeline/analysis/generate_commissioner_report.py
 
-# Step 4: Generate district reports (legacy format - optional)  
-python src/pipeline/reporting/generate_district_reports.py data/raw/all_units_comprehensive_scored.json --output-dir data/output/reports/
-
-# Step 5: Generate personalized emails (optional)
-python src/pipeline/reporting/generate_key_three_emails.py data/raw/all_units_comprehensive_scored.json
+# Step 4: Generate Unit Improvement Emails
+python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json "data/input/Key 3 08-22-2025.xlsx"
 ```
 
-### Process Existing Data
+### **Process Existing Data**
 ```bash
 # Use existing scraped data
-python src/tools/utilities/process_full_dataset_v2.py data/scraped/20250824_220843/
-python src/pipeline/reporting/generate_commissioner_report.py
+python src/pipeline/processing/process_full_dataset.py data/scraped/20250905_000339/
+python src/pipeline/analysis/generate_commissioner_report.py
 ```
 
-### Debug & Validation  
+### **Development & Validation**
 ```bash
-# Test Key Three parsing
-python scripts/test_key_three_debug.py
+# Test single zip code for development
+python src/pipeline/acquisition/multi_zip_scraper.py test
 
-# Search across multiple files
-python scripts/search_strings.py search_terms.txt data/debug/*.log
+# Run regression testing after processing
+python src/pipeline/processing/process_full_dataset.py data/scraped/YYYYMMDD_HHMMSS/
+# Compare with reference logs using verification aliases
 
-# View latest debug logs
+# View latest debug logs with organized structure
 ls -la data/debug/unit_identifier_debug_*$(date +%Y%m%d)*.log
+ls -la data/logs/scraper_full_run_$(date +%Y%m%d)*.log
 ```
 
 ## Production Metrics

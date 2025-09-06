@@ -83,64 +83,26 @@ python src/core/unit_identifier.py  # Test unit identifier normalization
 python scripts/test_key_three_debug.py  # Test Key Three parsing
 ```
 
-## Project File Structure
+## 📁 Project Structure
 
-```
-beascout/
-├── src/                          # All production code (organized by function)
-│   ├── core/                     # Core system components
-│   │   └── unit_identifier.py           # Unit normalization & debug logging
-│   ├── mapping/                  # Configuration and territory mappings
-│   │   └── district_mapping.py          # HNE territory definitions & town mappings (SINGLE SOURCE OF TRUTH)
-│   ├── scraping/                 # Data collection
-│   │   ├── browser_scraper.py           # Playwright automation
-│   │   └── url_generator.py             # Search URL creation
-│   ├── parsing/                  # Data parsing engines
-│   │   ├── fixed_scraped_data_parser.py # Scraped HTML with position-first parsing
-│   │   └── key_three_parser.py          # Excel spreadsheet processor
-│   ├── analysis/                 # Data quality assessment
-│   │   └── quality_scorer.py            # Unit completeness scoring
-│   ├── pipeline/                 # Production pipeline components
-│   │   ├── reporting/               # Report generation
-│   │   │   ├── generate_commissioner_report.py # BeAScout Quality Reports (primary)
-│   │   │   ├── generate_district_reports.py    # District-specific reports (legacy)
-│   │   │   └── generate_key_three_emails.py    # Personalized email generation
-│   │   └── validation/              # Data validation
-│   │       └── three_way_validator.py       # Cross-source validation
-│   ├── tools/                    # Development and testing tools
-│   │   ├── utilities/               # Utility scripts
-│   │   │   └── process_full_dataset_v2.py   # Main pipeline orchestration
-│   │   └── testing/                 # Testing utilities
-│   │       └── test_key_three_debug.py      # Key Three parser testing
-│   └── legacy/                   # Legacy tools (still used)
-│       └── extract_all_units.py         # HTML → JSON conversion
-├── scripts/                      # Project-level utility scripts
-│   └── search_strings.py         # Multi-file search tool
-├── data/                         # All data files
-│   ├── input/                    # Source data
-│   │   └── Key 3 08-22-2025.xlsx  # Monthly Key Three export
-│   ├── scraped/                  # Raw HTML from websites
-│   │   └── 20250827_HHMMSS/      # Timestamped scraping sessions
-│   ├── raw/                      # Processed JSON data
-│   │   └── all_units_comprehensive_scored.json  # Final dataset
-│   ├── debug/                    # Debug & audit logs
-│   │   ├── unit_identifier_debug_scraped_*.log
-│   │   ├── unit_identifier_debug_keythree_*.log
-│   │   └── discarded_unit_identifier_debug_*.log
-│   ├── output/                   # Final reports
-│   │   ├── reports/              # Excel district reports
-│   │   └── emails/               # Generated Key Three emails
-│   └── feedback/                 # Analysis & documentation
-├── tests/                        # Testing & validation
-│   ├── reference/                # Reference files for regression testing
-│   │   ├── units/                # Unit extraction reference logs  
-│   │   ├── key_three/            # Key Three processing reference files
-│   │   └── towns/                # Town extraction test cases
-│   └── verify_all.py             # Comprehensive validation runner
-└── archive/                      # Deprecated code (archived for reference)
-    ├── html_extractor.py         # Archived: had redundant town mappings
-    └── process_full_dataset.py   # Archived: superseded by v2
-```
+**For detailed directory structure and organization principles, see [ARCHITECTURE.md](ARCHITECTURE.md).**
+
+**Quick Summary:**
+- `src/pipeline/`: 11 core operational files (acquisition → processing → analysis → core)
+- `src/dev/`: Development tools, alternatives, and archived code  
+- `data/`: Organized by processing stage with dedicated logs
+- Significant reduction in root directory clutter (clean, production-ready structure)
+
+### **🗂️ Quick File Reference**
+
+**Need to modify the scraper?** → `src/pipeline/acquisition/multi_zip_scraper.py`
+**Data processing issues?** → `src/pipeline/processing/process_full_dataset.py`  
+**Report generation?** → `src/pipeline/analysis/generate_commissioner_report.py`
+**Email generation?** → `src/pipeline/analysis/generate_unit_emails.py`
+**District mappings?** → `src/pipeline/core/district_mapping.py`
+
+**Development utilities** → `src/dev/tools/`
+**Old/experimental code** → `src/dev/archive/`
 
 ## Debug and Monitoring
 
@@ -172,8 +134,8 @@ alias verify_units='f() { code --diff ~/Repos/beascout/tests/reference/units/uni
 alias verify_units_discards='f() { code --diff ~/Repos/beascout/tests/reference/units/discarded_unit_identifier_debug_scraped_reference_u.log "$1"; }; f'
 
 # Run regression testing after processing
-python src/scripts/process_full_dataset_v2.py data/scraped/20250830_123456/
-verify_units data/debug/unit_identifier_debug_scraped_20250830_164237_u.log
+python src/pipeline/processing/process_full_dataset.py data/scraped/20250905_123456/
+verify_units data/debug/unit_identifier_debug_scraped_20250905_164237_u.log
 
 # Should show no differences if processing is consistent
 # Any differences indicate potential regressions or improvements
@@ -182,34 +144,37 @@ verify_units data/debug/unit_identifier_debug_scraped_20250830_164237_u.log
 ### Required Input Files
 Place these files in `data/input/` before running the pipeline:
 - **Key Three Spreadsheet**: `Key 3 08-22-2025.xlsx` (or current month)
-- **Council Territory Map**: HNE town boundaries (built-in to `src/mapping/district_mapping.py`)
+- **Council Territory Map**: HNE town boundaries (built-in to `src/pipeline/core/district_mapping.py`)
 - **Optional**: Existing scraped HTML files in `data/scraped/YYYYMMDD_HHMMSS/`
 
-### Complete Pipeline Execution
+### 🚀 **Operational Pipeline Execution**
+
+#### **Complete Production Workflow:**
+1. **acquisition/**: Scrape BeAScout.org and JoinExploring.org
+2. **processing/**: Convert HTML → JSON with quality scoring  
+3. **analysis/**: Generate Excel reports and unit emails
+4. **core/**: Shared utilities for all pipeline components
 
 #### Option 1: Full Pipeline from Fresh Scraping
 ```bash
-# Step 1: Fresh Data Scraping (30-45 minutes for all 71 zip codes)
-python src/scraping/browser_scraper.py --all-zipcodes --output data/scraped/$(date +%Y%m%d_%H%M%S)/
+# Step 1: Fresh Data Scraping (30-45 minutes for all 72 zip codes)
+python src/pipeline/acquisition/multi_zip_scraper.py full
 
 # Step 2: Process Scraped Data Through Complete Pipeline
-python src/tools/utilities/process_full_dataset_v2.py data/scraped/YYYYMMDD_HHMMSS/
+python src/pipeline/processing/process_full_dataset.py data/scraped/YYYYMMDD_HHMMSS/
 
 # Step 3: Generate BeAScout Quality Report (Commissioner Report)
-python src/pipeline/reporting/generate_commissioner_report.py
+python src/pipeline/analysis/generate_commissioner_report.py
 
-# Step 4: Generate District Reports (legacy format - optional)  
-python src/pipeline/reporting/generate_district_reports.py data/raw/all_units_comprehensive_scored.json --output-dir data/output/reports/
-
-# Step 5: Generate Key Three Emails (optional)
-python src/pipeline/reporting/generate_key_three_emails.py data/raw/all_units_comprehensive_scored.json
+# Step 4: Generate Unit Improvement Emails
+python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json "data/input/Key 3 08-22-2025.xlsx"
 ```
 
 #### Option 2: Process Existing Scraped Data
 ```bash
 # Use existing scraped HTML files
-python src/tools/utilities/process_full_dataset_v2.py data/scraped/20250824_220843/
-python src/pipeline/reporting/generate_commissioner_report.py
+python src/pipeline/processing/process_full_dataset.py data/scraped/20250905_000339/
+python src/pipeline/analysis/generate_commissioner_report.py
 ```
 
 #### Option 3: Test Key Three Parsing Only
