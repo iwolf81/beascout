@@ -19,7 +19,7 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
-from src.pipeline.parsing.key_three_parser import KeyThreeParser
+from src.dev.parsing.key_three_parser import KeyThreeParser
 
 class UnitEmailGenerator:
     """Generate personalized improvement emails for Scouting units"""

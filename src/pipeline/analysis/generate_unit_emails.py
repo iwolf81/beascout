@@ -12,10 +12,21 @@ from pathlib import Path
 import argparse
 import json
 
-# Add the parent directories to the path
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+# Add project root to path for imports
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
 
-from src.pipeline.reporting.generate_unit_emails_v2 import UnitEmailGenerator
+# Import using absolute path fallback
+try:
+    from src.dev.reporting.generate_unit_emails_v2 import UnitEmailGenerator
+except ImportError:
+    # Fallback - direct file import
+    import importlib.util
+    email_gen_path = project_root / "src" / "dev" / "reporting" / "generate_unit_emails_v2.py"
+    spec = importlib.util.spec_from_file_location("generate_unit_emails_v2", email_gen_path)
+    email_gen_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(email_gen_module)
+    UnitEmailGenerator = email_gen_module.UnitEmailGenerator
 
 def main():
     parser = argparse.ArgumentParser(
@@ -73,11 +84,10 @@ Examples:
     
     scraped_units = set()
     for unit in units:
-        unit_type = unit.get('unit_type', '').capitalize()
-        unit_number = unit.get('unit_number', '').lstrip('0')
-        # Try to match the key three format
-        scraped_units.add(f"{unit_type} {unit_number}")
-        scraped_units.add(f"{unit_type} {unit.get('unit_number', '')}")  # With leading zeros
+        # Use the same format as Key Three index: "Unit Type Number Town"
+        unit_key = unit.get('unit_key', '')
+        if unit_key:
+            scraped_units.add(unit_key)
     
     missing_online_units = all_key_three_units - scraped_units
     if missing_online_units:
@@ -140,12 +150,36 @@ Examples:
                 
                 print(f"Processing MISSING unit: {unit_display}...")
                 
+                # Parse unit info to get proper identifiers including town name
+                from src.dev.parsing.key_three_parser import KeyThreeParser
+                
+                # Use existing parser to get unit info from the first Key Three member
+                if key_three_members:
+                    unit_org_name = key_three_members[0].get('unit_org_name', '')
+                    if unit_org_name:
+                        parser = KeyThreeParser("")  # Don't need to load data, just use parsing logic
+                        unit_info = parser.extract_unit_info_from_unitcommorgname(unit_org_name)
+                        
+                        if unit_info and unit_info.get('unit_town'):
+                            # Create proper filename with town name
+                            unit_type = unit_info['unit_type']
+                            unit_number = unit_info['unit_number'].lstrip('0') or '0'
+                            unit_town = unit_info['unit_town']
+                            safe_filename = f"{unit_type}_{unit_number}_{unit_town}".replace(' ', '_').replace('/', '_')
+                        else:
+                            # Fallback to original unit_display if parsing fails
+                            safe_filename = unit_display.replace(' ', '_').replace('/', '_')
+                    else:
+                        # No unit org name available
+                        safe_filename = unit_display.replace(' ', '_').replace('/', '_')
+                else:
+                    # No key three members available
+                    safe_filename = unit_display.replace(' ', '_').replace('/', '_')
+                
                 # Generate urgent setup email - pass unit_display as string to trigger missing unit logic
                 email_content = generator.generate_email_content(unit_display, key_three_members)
                 
-                # Save email to file
-                safe_filename = unit_display.replace(' ', '_').replace('/', '_')
-                email_file = output_dir / f"{safe_filename}_URGENT_setup_email.md"
+                email_file = output_dir / f"{safe_filename}_setup_email.md"
                 
                 with open(email_file, 'w') as f:
                     f.write(email_content)

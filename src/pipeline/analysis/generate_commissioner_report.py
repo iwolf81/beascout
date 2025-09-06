@@ -87,12 +87,12 @@ class ReportColumns:
 sys.path.append(str(Path(__file__).parent.parent.parent))
 
 try:
-    from src.pipeline.analysis.quality_scorer import UnitQualityScorer
+    from src.pipeline.core.quality_scorer import UnitQualityScorer
 except ImportError:
     # Fallback for when running from different directory
     import os
     current_dir = Path(__file__).parent
-    quality_scorer_path = current_dir.parent / "analysis" / "quality_scorer.py"
+    quality_scorer_path = current_dir.parent / "core" / "quality_scorer.py"
     import importlib.util
     spec = importlib.util.spec_from_file_location("quality_scorer", quality_scorer_path)
     quality_scorer_module = importlib.util.module_from_spec(spec)

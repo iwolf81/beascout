@@ -19,7 +19,7 @@ import sys
 current_dir = Path.cwd()
 sys.path.insert(0, str(current_dir))
 
-from src.pipeline.scraping.browser_scraper import BrowserScraper
+from src.pipeline.acquisition.browser_scraper import BrowserScraper
 
 
 class MultiZipScraper:

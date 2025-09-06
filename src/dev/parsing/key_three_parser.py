@@ -15,7 +15,7 @@ from datetime import datetime
 # Add project root to path for imports
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
-from src.config.district_mapping import get_district_for_town
+from src.pipeline.core.district_mapping import get_district_for_town
 from src.pipeline.core.unit_identifier import UnitIdentifierNormalizer
 
 class KeyThreeParser:
@@ -161,7 +161,7 @@ class KeyThreeParser:
     
     def _is_valid_town(self, town_candidate: str) -> bool:
         """Check if candidate is a valid HNE Council town"""
-        from src.config.district_mapping import get_district_for_town
+        from src.pipeline.core.district_mapping import get_district_for_town
         return get_district_for_town(town_candidate) != "Unknown"
     
     

@@ -14,7 +14,7 @@ from typing import Dict, Any, List, Optional, Set
 # Add project root to path for imports
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
-from src.config.district_mapping import get_district_for_town
+from src.pipeline.core.district_mapping import get_district_for_town
 from src.pipeline.core.unit_identifier import UnitIdentifierNormalizer
 
 class ScrapedDataParser:
@@ -55,7 +55,7 @@ class ScrapedDataParser:
     
     def _load_hne_towns(self) -> Set[str]:
         """Load HNE town names from centralized source"""
-        from src.config.district_mapping import get_all_hne_towns
+        from src.pipeline.core.district_mapping import get_all_hne_towns
         return get_all_hne_towns()
     
     def parse_json_file(self, file_path: str) -> List[Dict[str, Any]]:
@@ -214,7 +214,7 @@ class ScrapedDataParser:
         
         # Integrate quality scoring - calculate score, grade, and quality tags during parsing
         try:
-            from src.pipeline.analysis.quality_scorer import UnitQualityScorer
+            from src.pipeline.core.quality_scorer import UnitQualityScorer
             scorer = UnitQualityScorer()
             
             # Score this individual unit
@@ -505,7 +505,7 @@ class ScrapedDataParser:
         text = text.strip().lower()
         
         # First check for town aliases using centralized TOWN_ALIASES
-        from src.config.district_mapping import TOWN_ALIASES
+        from src.pipeline.core.district_mapping import TOWN_ALIASES
         import re
         
         # Check all alias patterns from centralized configuration
@@ -625,7 +625,7 @@ def main():
     print("🔧 Testing Meeting Location Formatting")
     
     for i, location in enumerate(test_locations, 1):
-        from src.pipeline.parsing.html_extractor import format_meeting_location
+        from src.pipeline.processing.html_extractor import format_meeting_location
         formatted = format_meeting_location(location)
         print(f"\n{i}. Original: {location}")
         print(f"   Formatted: {formatted}")

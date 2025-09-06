@@ -13,7 +13,7 @@ from typing import Dict, Any, Optional
 # Add project root to path for imports
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
-from src.config.district_mapping import get_district_for_town
+from src.pipeline.core.district_mapping import get_district_for_town
 
 class UnitIdentifierNormalizer:
     """
@@ -130,7 +130,7 @@ class UnitIdentifierNormalizer:
             return ""
 
         # Import centralized town aliases
-        from src.config.district_mapping import TOWN_ALIASES
+        from src.pipeline.core.district_mapping import TOWN_ALIASES
         
         town = town.strip()
 
@@ -163,7 +163,7 @@ class UnitIdentifierNormalizer:
         
         # Use centralized HNE towns mapping
         try:
-            from src.config.district_mapping import TOWN_TO_DISTRICT
+            from src.pipeline.core.district_mapping import TOWN_TO_DISTRICT
             
             # Get HNE towns from centralized mapping
             hne_towns = list(TOWN_TO_DISTRICT.keys())

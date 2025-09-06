@@ -9,13 +9,13 @@ import json
 def get_district_for_town(town):
     """Assign district based on town name using centralized mapping"""
     try:
-        from src.config.district_mapping import TOWN_TO_DISTRICT
+        from src.pipeline.core.district_mapping import TOWN_TO_DISTRICT
     except ImportError:
         # Fallback for when called from different contexts
         import sys
         from pathlib import Path
         sys.path.append(str(Path(__file__).parent.parent.parent.parent))
-        from src.config.district_mapping import TOWN_TO_DISTRICT
+        from src.pipeline.core.district_mapping import TOWN_TO_DISTRICT
     
     return TOWN_TO_DISTRICT.get(town, "Unknown")
 
@@ -225,7 +225,7 @@ def extract_town_from_org(chartered_org):
                 town = chartered_org.split('-')[0].strip()
                 # Check if the extracted town is an alias and resolve it
                 try:
-                    from src.config.district_mapping import TOWN_ALIASES, TOWN_TO_DISTRICT
+                    from src.pipeline.core.district_mapping import TOWN_ALIASES, TOWN_TO_DISTRICT
                     if town in TOWN_ALIASES:
                         canonical_town = TOWN_ALIASES[town]
                         if canonical_town in TOWN_TO_DISTRICT:
@@ -237,7 +237,7 @@ def extract_town_from_org(chartered_org):
     # Method 2: Search for HNE town names in organization
     # Use centralized district mapping for HNE towns and aliases
     try:
-        from src.config.district_mapping import TOWN_TO_DISTRICT, TOWN_ALIASES
+        from src.pipeline.core.district_mapping import TOWN_TO_DISTRICT, TOWN_ALIASES
         hne_towns = list(TOWN_TO_DISTRICT.keys())
         
         org_lower = chartered_org.lower()
@@ -300,7 +300,7 @@ def filter_hne_units(units):
     """
     # Load HNE towns list
     try:
-        from src.config.hne_towns import get_hne_towns_and_zipcodes
+        from src.pipeline.core.hne_towns import get_hne_towns_and_zipcodes
         hne_towns, _ = get_hne_towns_and_zipcodes()
         hne_towns_lower = [town.lower() for town in hne_towns]
     except ImportError:
@@ -628,7 +628,7 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
     
     # Integrate quality scoring - calculate score, grade, and quality tags during HTML parsing
     try:
-        from src.pipeline.analysis.quality_scorer import UnitQualityScorer
+        from src.pipeline.core.quality_scorer import UnitQualityScorer
         scorer = UnitQualityScorer()
         
         # Score this individual unit

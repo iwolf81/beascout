@@ -13,7 +13,7 @@ from datetime import datetime
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
-from src.pipeline.parsing.scraped_data_parser import ScrapedDataParser
+from src.pipeline.processing.scraped_data_parser import ScrapedDataParser
 
 def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_code: str) -> str:
     """
@@ -32,7 +32,7 @@ def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_c
             os.environ['UNIT_DEBUG_TIMESTAMP'] = shared_timestamp
         
         # Use HTML parser to extract units to JSON
-        cmd = f'python3 src/pipeline/parsing/html_extractor.py "{beascout_file}" "{joinexploring_file}"'
+        cmd = f'python3 src/pipeline/processing/html_extractor.py "{beascout_file}" "{joinexploring_file}"'
         result = os.system(cmd)
 
         if result == 0:
