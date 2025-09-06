@@ -1,12 +1,19 @@
-# Personal Information - Key Three Database Files
+# Generated Output Files (should not be version controlled)
+data/output/
+data/debug/
+data/logs/
+*.xlsx
+*.log
+
+# Personal Information - Key Three Database Files  
 data/input/HNE_key_three.json
 data/input/HNE_key_three.xlsx
 data/input/key_three_units.txt
+data/input/Key*.xlsx
+data/input/Key*.json
 
-# Generated Reports with Personal Information
-data/output/reports/*.xlsx
-data/output/emails/
-data/output/three_way_validation_results.json
+# Keep reference files for testing
+!tests/reference/**
 
 # Python Virtual Environment
 venv/
@@ -46,3 +53,10 @@ Thumbs.db
 # Temporary Files
 *.tmp
 ~$*
+
+# JSON output files (keep package.json and reference files)
+*.json
+!package.json
+!package-lock.json  
+!data/zipcodes/*.json
+!tests/reference/**/*.json
