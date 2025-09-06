@@ -96,12 +96,17 @@ python scripts/test_key_three_debug.py  # Test Key Three parsing
 ### **🗂️ Quick File Reference**
 
 **Need to modify the scraper?** → `src/pipeline/acquisition/multi_zip_scraper.py`
-**Data processing issues?** → `src/pipeline/processing/process_full_dataset.py`  
+
+**Data processing issues?** → `src/pipeline/processing/process_full_dataset.py`
+
 **Report generation?** → `src/pipeline/analysis/generate_commissioner_report.py`
+
 **Email generation?** → `src/pipeline/analysis/generate_unit_emails.py`
+
 **District mappings?** → `src/pipeline/core/district_mapping.py`
 
 **Development utilities** → `src/dev/tools/`
+
 **Old/experimental code** → `src/dev/archive/`
 
 ## Debug and Monitoring

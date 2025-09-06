@@ -12,8 +12,9 @@ data/input/key_three_units.txt
 data/input/Key*.xlsx
 data/input/Key*.json
 
-# Keep reference files for testing
+# Keep reference files for testing (including anonymized data)
 !tests/reference/**
+!tests/reference/key_three/anonymized_*
 
 # Python Virtual Environment
 venv/
