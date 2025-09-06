@@ -1,0 +1,15 @@
+{
+  "generation_date": "September 04, 2025",
+  "total_units": 165,
+  "emails_generated": 165,
+  "units_skipped": 0,
+  "urgent_emails_missing_units": 4,
+  "grade_distribution": {
+    "A": 14,
+    "B": 36,
+    "C": 15,
+    "D": 9,
+    "F": 91
+  },
+  "output_directory": "data/output/test_missing_units"
+}

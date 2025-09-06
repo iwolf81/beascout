@@ -1,0 +1,41 @@
+BeAScout Quality Report,
+Heart of New England Council,
+"Generation Date/Time: September 05, 2025 at 06:09 PM",
+Data Sources: BeAScout.org (10-mile search radius per zip code) + JoinExploring.org (20-mile search radius per zip code) + Key 3 08-22-2025.xlsx,
+"Last Complete BeAScout Data Retrieval: September 05, 2025 at 12:03 AM",
+
+This information within this document is to be used only for authorized purposes on behalf of the Scouting America.,
+"Disclosing, copying, or making any inappropriate use of this information is strictly prohibited.",
+
+QUALITY OVERVIEW,
+Total Units Analyzed,169
+Units missing from BeAScout,4
+Units across Towns,169 units across 54 towns
+Average Quality Score,53.6%
+Quality Grade Distribution:,
+  • Grade A (90%+),14 units (8.3%)
+  • Grade B (80-89%),36 units (21.3%)
+  • Grade C (70-79%),15 units (8.9%)
+  • Grade D (60-69%),9 units (5.3%)
+  • Grade F (<60%),91 units (53.8%)
+  • Grade N/A (Missing),4 units (2.4%)
+
+UNITS BY DISTRICT,
+Quinapoxet,103 units
+Soaring Eagle,66 units
+
+QUALITY ISSUE LEGEND,
+Required Information:,
+  • Meeting location,Unit needs a physical meeting location with street address for parents and youth to find meetings
+  • Meeting day,Unit needs to specify which day(s) of the week meetings are held
+  • Meeting time,Unit needs to specify what time meetings start and end
+  • Contact email,Unit needs a contact email address for inquiries and communication
+Needs Improvement:,
+  • Meeting location,Provide physical meeting location in Unit Meeting Address field instead of Description field
+  • PO Box location,Complement PO Box with physical meeting location so parents and youth can find meetings
+  • Personal email,Use unit-specific email monitored by multiple leaders instead of personal email for continuity
+Recommended Information:,
+  • Contact person,Adding a contact person name helps parents and youth know who to reach out to
+  • Phone number,Phone contact provides immediate communication option for urgent questions
+  • Website,Unit-specific website increases visibility and provides additional information for families
+  • Description,Informative description helps attract new members by explaining unit activities and culture

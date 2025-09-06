@@ -489,31 +489,29 @@
       "chartered_organization": "Leominster-Sportsmens Association",
       "district": "Quinapoxet",
       "data_source": "scraped",
-      "meeting_location": "",
+      "meeting_location": "1455 Elm St, Leominster MA 01453",
       "meeting_day": "",
       "meeting_time": "",
-      "contact_email": "",
+      "contact_email": "troop7740leominster@gmail.com",
       "contact_person": "",
       "phone_number": "",
       "website": "",
       "description": "",
       "specialty": "",
-      "unit_address": "",
+      "unit_address": "1455 Elm St Leominster MA 01453",
       "debug_info": {
-        "raw_content": "\n\n\nTroop 7740 Leominster-Sportsmens Association\n\n\n\n\n Girl Troop\n Online Registration available for this unit.\n\n\nApply NowMore Information \n\n...",
+        "raw_content": "\n\n\nTroop 7740 Leominster-Sportsmens Association\n\n\n          1455 Elm St Leominster MA 01453        \n\n\nEmail: troop7740leominster@gmail.com\ntroop7740leominster@gmail.com\n\n\n\n Girl Troop\n Online Registra...",
         "primary_identifier": "Troop 7740 Leominster-Sportsmens Association",
         "distance": "1.3 miles",
         "index": 14
       },
       "_has_description_div": false,
-      "meeting_location_source": "none",
-      "completeness_score": 0.0,
+      "meeting_location_source": "address",
+      "completeness_score": 50.0,
       "completeness_grade": "F",
       "quality_tags": [
-        "REQUIRED_MISSING_LOCATION",
         "REQUIRED_MISSING_DAY",
         "REQUIRED_MISSING_TIME",
-        "REQUIRED_MISSING_EMAIL",
         "RECOMMENDED_MISSING_CONTACT",
         "RECOMMENDED_MISSING_PHONE",
         "RECOMMENDED_MISSING_WEBSITE",
@@ -1164,6 +1162,6 @@
     }
   ],
   "total_units": 33,
-  "average_score": 46.36363636363637,
-  "extraction_timestamp": "2025-09-04T08:44:20.048422"
+  "average_score": 47.878787878787875,
+  "extraction_timestamp": "2025-09-06T00:04:52.203352"
 }

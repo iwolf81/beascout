@@ -149,31 +149,29 @@
       "chartered_organization": "Leominster-Sportsmens Association",
       "district": "Quinapoxet",
       "data_source": "scraped",
-      "meeting_location": "",
+      "meeting_location": "1455 Elm St, Leominster MA 01453",
       "meeting_day": "",
       "meeting_time": "",
-      "contact_email": "",
+      "contact_email": "troop7740leominster@gmail.com",
       "contact_person": "",
       "phone_number": "",
       "website": "",
       "description": "",
       "specialty": "",
-      "unit_address": "",
+      "unit_address": "1455 Elm St Leominster MA 01453",
       "debug_info": {
-        "raw_content": "\n\n\nTroop 7740 Leominster-Sportsmens Association\n\n\n\n\n Girl Troop\n Online Registration available for this unit.\n\n\nApply NowMore Information \n\n...",
+        "raw_content": "\n\n\nTroop 7740 Leominster-Sportsmens Association\n\n\n          1455 Elm St Leominster MA 01453        \n\n\nEmail: troop7740leominster@gmail.com\ntroop7740leominster@gmail.com\n\n\n\n Girl Troop\n Online Registra...",
         "primary_identifier": "Troop 7740 Leominster-Sportsmens Association",
         "distance": "0.8 miles",
         "index": 4
       },
       "_has_description_div": false,
-      "meeting_location_source": "none",
-      "completeness_score": 0.0,
+      "meeting_location_source": "address",
+      "completeness_score": 50.0,
       "completeness_grade": "F",
       "quality_tags": [
-        "REQUIRED_MISSING_LOCATION",
         "REQUIRED_MISSING_DAY",
         "REQUIRED_MISSING_TIME",
-        "REQUIRED_MISSING_EMAIL",
         "RECOMMENDED_MISSING_CONTACT",
         "RECOMMENDED_MISSING_PHONE",
         "RECOMMENDED_MISSING_WEBSITE",
@@ -1193,12 +1191,12 @@
       "contact_email": "",
       "contact_person": "Steve Tarver",
       "phone_number": "",
-      "website": "http://pack9lancaster.org/index.shtml",
+      "website": "http://pack9lancaster.org",
       "description": "Come see us to talk first hand about all of the cool stuff we do each scouting season. For current members, welcome to another great year!",
       "specialty": "",
       "unit_address": "",
       "debug_info": {
-        "raw_content": "\n\n\nPack 0009 Lancaster-First Church of Christ Unitarian\n\n\n\n\nContact: Steve Tarver\n\n\nWebsite: http://pack9lancaster.org/index.shtml\n Go to Website\n\n\n\n Boy Pack\n Online Registration available for this u...",
+        "raw_content": "\n\n\nPack 0009 Lancaster-First Church of Christ Unitarian\n\n\n\n\nContact: Steve Tarver\n\n\nWebsite: http://pack9lancaster.org\n Go to Website\n\n\n\n Dens for Boys or Girls\n Online Registration available for this...",
         "primary_identifier": "Pack 0009 Lancaster-First Church of Christ Unitarian",
         "distance": "0.8 miles",
         "index": 34
@@ -1331,6 +1329,6 @@
     }
   ],
   "total_units": 38,
-  "average_score": 46.05263157894737,
-  "extraction_timestamp": "2025-09-04T08:44:23.078219"
+  "average_score": 47.36842105263158,
+  "extraction_timestamp": "2025-09-06T00:04:55.273629"
 }

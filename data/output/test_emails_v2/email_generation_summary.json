@@ -1,0 +1,14 @@
+{
+  "generation_date": "September 04, 2025",
+  "total_units": 41,
+  "emails_generated": 41,
+  "units_skipped": 0,
+  "grade_distribution": {
+    "A": 2,
+    "B": 9,
+    "C": 5,
+    "D": 1,
+    "F": 24
+  },
+  "output_directory": "data/output/test_emails_v2"
+}

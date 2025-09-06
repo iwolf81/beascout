@@ -530,7 +530,7 @@
         "raw_content": "\n\n\nPack 0062 Shrewsbury - American Legion Ray Stone Post #238\n\n\n          2 School Street Ray Stone Post Shrewsbury MA 01545        \n\n\n\nContact: Robert Parry-Cruwys\n\n\nEmail: vendant875@gmail.com\nvenda...",
         "primary_identifier": "Pack 0062 Shrewsbury - American Legion Ray Stone Post #238",
         "distance": "1.1 miles",
-        "index": 45
+        "index": 46
       },
       "_has_description_div": true,
       "meeting_location_source": "address",
@@ -582,5 +582,5 @@
   ],
   "total_units": 17,
   "average_score": 55.88235294117647,
-  "extraction_timestamp": "2025-09-04T08:44:24.148771"
+  "extraction_timestamp": "2025-09-06T00:04:56.363162"
 }

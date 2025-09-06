@@ -323,7 +323,7 @@
       "contact_person": "",
       "phone_number": "",
       "website": "https://actonscouts.org/",
-      "description": "Meets most Wednesdays 7:00 - 8:30 p.m. when school is in session.\n\n For more information, email troop32-information@actonscouts.org",
+      "description": "Meets most Wednesdays 7:00 - 8:30 p.m. when school is in session at Boardwalk Campus (Douglas / Gates Schools).\n\n For more information, email troop32-information@actonscouts.org",
       "specialty": "",
       "unit_address": "",
       "debug_info": {
@@ -1044,5 +1044,5 @@
   ],
   "total_units": 30,
   "average_score": 50.083333333333336,
-  "extraction_timestamp": "2025-09-04T08:44:19.025148"
+  "extraction_timestamp": "2025-09-06T00:04:51.245123"
 }

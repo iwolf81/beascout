@@ -874,12 +874,12 @@
       "contact_email": "",
       "contact_person": "Steve Tarver",
       "phone_number": "",
-      "website": "http://pack9lancaster.org/index.shtml",
+      "website": "http://pack9lancaster.org",
       "description": "Come see us to talk first hand about all of the cool stuff we do each scouting season. For current members, welcome to another great year!",
       "specialty": "",
       "unit_address": "",
       "debug_info": {
-        "raw_content": "\n\n\nPack 0009 Lancaster-First Church of Christ Unitarian\n\n\n\n\nContact: Steve Tarver\n\n\nWebsite: http://pack9lancaster.org/index.shtml\n Go to Website\n\n\n\n Boy Pack\n Online Registration available for this u...",
+        "raw_content": "\n\n\nPack 0009 Lancaster-First Church of Christ Unitarian\n\n\n\n\nContact: Steve Tarver\n\n\nWebsite: http://pack9lancaster.org\n Go to Website\n\n\n\n Dens for Boys or Girls\n Online Registration available for this...",
         "primary_identifier": "Pack 0009 Lancaster-First Church of Christ Unitarian",
         "distance": "2.5 miles",
         "index": 30
@@ -1325,5 +1325,5 @@
   ],
   "total_units": 38,
   "average_score": 52.96052631578947,
-  "extraction_timestamp": "2025-09-04T08:44:20.726080"
+  "extraction_timestamp": "2025-09-06T00:04:52.906808"
 }
