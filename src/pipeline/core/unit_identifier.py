@@ -71,19 +71,17 @@ class UnitIdentifierNormalizer:
 
         Args:
             unit_type: Unit type (Pack, Troop, Crew, Ship, Post, Club)
-            unit_number: Unit number (removes leading zeros)
+            unit_number: Unit number (normalized to 4-digit format)
             town: Town name (normalized to canonical form)
 
         Returns:
-            Normalized identifier string (e.g., "Pack 3 Leominster")
+            Normalized identifier string with 4-digit unit numbers (e.g., "Pack 0003 Leominster")
         """
         # Normalize unit type (capitalize first letter)
         clean_type = str(unit_type).strip().capitalize()
 
-        # For unit_key, use display format (no leading zeros)
-        clean_number = UnitIdentifierNormalizer.get_display_unit_number(
-            UnitIdentifierNormalizer._normalize_unit_number(unit_number)
-        )
+        # For unit_key, use 4-digit format for internal consistency
+        clean_number = UnitIdentifierNormalizer._normalize_unit_number(unit_number)
 
         # Normalize town name (handle variations and aliases)
         clean_town = UnitIdentifierNormalizer._normalize_town_name(str(town).strip())

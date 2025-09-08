@@ -20,6 +20,7 @@ sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 from src.pipeline.core.unit_identifier import UnitIdentifierNormalizer
 from src.pipeline.processing.scraped_data_parser import ScrapedDataParser
 from src.dev.parsing.key_three_parser import KeyThreeParser
+from src.pipeline.core.district_mapping import get_district_for_town
 
 class ValidationStatus(Enum):
     """Unit validation status categories"""
@@ -88,24 +89,55 @@ class ThreeWayValidator:
         print(f"   Key Three units: {len(self.key_three_units)}")
         print(f"   Scraped units: {len(self.scraped_units)}")
         
-        # Use same approach as current pipeline - Key Three unit_display vs scraped unit_key
-        # But normalize both to same format for proper matching
-        key_three_keys = set()
-        key_three_dict = {}
-        for unit in self.key_three_units:
-            unit_display = unit.get('unit_display', '')  # e.g., "Pack 0007"
-            unit_org_name = unit.get('unit_org_name', '')  # e.g., "Pack 0007 (B) - Clinton - Heart of New England Council"
+        # Consolidate Key Three members by unit to match working format
+        key_three_units_by_key = {}
+        for member in self.key_three_units:
+            unit_display = member.get('unit_display', '') or member.get('displayname', '')
+            unit_org_name = member.get('unit_org_name', '') or member.get('unitcommorgname', '')
+            district = member.get('district', '') or member.get('districtname', '')
             
             if unit_display and unit_org_name:
-                # Use existing KeyThreeParser to extract unit info properly
-                parser = KeyThreeParser("")  # Don't need to load data, just use parsing logic
+                parser = KeyThreeParser("")
                 unit_info = parser.extract_unit_info_from_unitcommorgname(unit_org_name)
                 
                 if unit_info and unit_info.get('unit_town'):
                     town = unit_info['unit_town']
                     unit_key = f"{unit_display} {town}"
-                    key_three_keys.add(unit_key)
-                    key_three_dict[unit_key] = unit
+                    
+                    # Use proper district mapping based on town, not Key Three district data
+                    proper_district = get_district_for_town(town)
+                    # If town not found in mapping, fall back to cleaned Key Three district
+                    if not proper_district:
+                        proper_district = district.replace(' 01', '').replace(' 02', '').replace(' 03', '').replace(' 04', '').strip()
+                        # Never allow "Special" district - these should be mapped properly
+                        if proper_district == "Special":
+                            proper_district = "Unknown"
+                    
+                    # Initialize unit record if first time seeing this unit
+                    if unit_key not in key_three_units_by_key:
+                        key_three_units_by_key[unit_key] = {
+                            'unit_key': unit_key,
+                            'unit_type': unit_info.get('unit_type', ''),
+                            'unit_number': unit_info.get('unit_number', ''),
+                            'unit_town': town,
+                            'chartered_organization': unit_info.get('chartered_organization', ''),
+                            'district': proper_district,
+                            'original_unitcommorgname': unit_org_name,
+                            'key_three_members': []
+                        }
+                    
+                    # Add this member to the unit
+                    member_record = {
+                        'fullname': member.get('member_name', '') or member.get('fullname', ''),
+                        'email': member.get('email', ''),
+                        'phone': member.get('phone', ''),
+                        'position': member.get('position', ''),
+                        'status': member.get('ypt_status', '') or member.get('yptstatus', '') or 'ACTIVE'
+                    }
+                    key_three_units_by_key[unit_key]['key_three_members'].append(member_record)
+        
+        key_three_keys = set(key_three_units_by_key.keys())
+        key_three_dict = key_three_units_by_key
         
         # Normalize scraped units to ensure 4-digit unit numbers
         scraped_keys = set()
@@ -195,15 +227,13 @@ class ThreeWayValidator:
                 # This shouldn't happen but included for completeness
                 continue
             
-            # Create validation result with enhanced Key Three data
+            # Create validation result with consolidated Key Three data
             key_three_data = key_three_dict.get(unit_key)
-            if key_three_data:
-                key_three_data = self._enhance_key_three_data_with_members(key_three_data)
             
             result = ValidationResult(
                 unit_key=unit_key,
                 status=status,
-                key_three_data=key_three_data,
+                key_three_data=key_three_data,  # Already in correct format
                 scraped_data=scraped_dict.get(unit_key),
                 issues=[]
             )
@@ -216,45 +246,6 @@ class ThreeWayValidator:
         self.validation_results = validation_results
         return validation_results
     
-    def _enhance_key_three_data_with_members(self, key_three_data: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Enhance Key Three data with formatted member information for reporting
-        """
-        enhanced_data = key_three_data.copy()
-        members = key_three_data.get('key_three_members', [])
-        
-        # Extract specific roles from members for commissioner report
-        for member in members:
-            position = member.get('position', '').lower()
-            
-            if 'committee chair' in position:
-                enhanced_data['committee_chair_name'] = member.get('fullname', 'N/A')
-                enhanced_data['committee_chair_email'] = member.get('email', 'N/A')
-                enhanced_data['committee_chair_phone'] = member.get('phone', 'N/A')
-            elif 'cubmaster' in position or 'scoutmaster' in position:
-                enhanced_data['unit_leader_name'] = member.get('fullname', 'N/A')
-                enhanced_data['unit_leader_email'] = member.get('email', 'N/A')
-                enhanced_data['unit_leader_phone'] = member.get('phone', 'N/A')
-            elif 'chartered org' in position:
-                enhanced_data['chartered_org_rep_name'] = member.get('fullname', 'N/A')
-                enhanced_data['chartered_org_rep_email'] = member.get('email', 'N/A')
-                enhanced_data['chartered_org_rep_phone'] = member.get('phone', 'N/A')
-        
-        # Map chartered_organization to expected field name for commissioner report  
-        enhanced_data['chartered_org_name'] = enhanced_data.get('chartered_organization', 'Unknown')
-        
-        # Ensure all expected fields exist for the commissioner report
-        if 'committee_chair_name' not in enhanced_data:
-            enhanced_data['committee_chair_name'] = 'N/A'
-            enhanced_data['committee_chair_email'] = 'N/A'
-            enhanced_data['committee_chair_phone'] = 'N/A'
-            
-        if 'unit_leader_name' not in enhanced_data:
-            enhanced_data['unit_leader_name'] = 'N/A'
-            enhanced_data['unit_leader_email'] = 'N/A'
-            enhanced_data['unit_leader_phone'] = 'N/A'
-        
-        return enhanced_data
     
     def _analyze_unit_issues(self, result: ValidationResult):
         """Analyze specific issues for a unit validation result"""
@@ -326,7 +317,7 @@ class ThreeWayValidator:
         """Get all units with specific validation status"""
         return [r for r in self.validation_results if r.status == status]
     
-    def save_validation_results(self, output_path: str = 'data/output/three_way_validation_results.json'):
+    def save_validation_results(self, output_path: str = 'data/output/enhanced_three_way_validation_results.json'):
         """Save comprehensive validation results"""
         
         # Convert results to serializable format
@@ -385,7 +376,7 @@ Examples:
                        default='data/raw/all_units_comprehensive_scored.json', 
                        help='Path to scraped units data (JSON) [default: %(default)s]')
     parser.add_argument('--output',
-                       default='data/output/three_way_validation_results.json',
+                       default='data/output/enhanced_three_way_validation_results.json',
                        help='Output validation results file [default: %(default)s]')
     
     args = parser.parse_args()
