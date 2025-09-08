@@ -1365,6 +1365,30 @@ Both user and Claude recognized that the next phase requires moving quality scor
 
 **Key Learning**: When user says "think hard" about architectural decisions, it signals high-impact choices requiring careful analysis.
 
+# Lessons - 06Sep2025
+
+**Pay attention to interim/intermediate files that Claude creates**
+- These files are often used to help solve issues but unexpectedly become part of the workflow.
+- They also may contain stale data that unknowingly affects final results.
+
+**Claude has a narrow focus to solve the current issue, but does not consider the bigger picture**
+- This narrow vision will *regularly* result with Claude duplicating existing logic and processing in code.
+  - Claude does not normally consider the impact on maintaining the code base when making changes, whether for a new feature or to fix a bug.
+  - Claude does not seem to maintain instant awareness of existing logic and processing, but will find it if directed to do so.
+- The user *must* be well aware of the entire system/pipeline *and* of what Claude code is creating at all times.
+  - Be ready to interrupt Claude if you see it making questionable changes and inquire if they follow good coding/design/architecture practices.
+
+**Save early, save often!!**
+- Claude will chase a bug down a rabbit hole if you let it.
+- It tends to add much more code when it has trouble finding a solution to an issue.
+- This excess code often introduces regressions.
+- Having a safe place to revert is essential.
+
+**Claude can think hard**
+- You can tell Claude to "think hard" about something such as planning a design or evaluating options.
+- It with print "* Thinking..." when it is doing so.
+- The phase 
+
 ### **Architectural Principles Established**
 
 1. **Operational vs Development Separation**: Clear filesystem boundaries enable different deployment and testing strategies

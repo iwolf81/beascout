@@ -3,7 +3,8 @@
 Convert HNE Key Three Excel spreadsheet to JSON format for faster processing
 
 Usage:
-    python scripts/convert_key_three_to_json.py data/input/HNE_key_three.xlsx
+    python scripts/convert_key_three_to_json.py "data/input/Key 3 08-22-2025.xlsx"  # Use real data for production
+    python scripts/convert_key_three_to_json.py tests/reference/key_three/anonymized_key_three.xlsx  # Use anonymized data for development
 """
 
 import pandas as pd
@@ -74,7 +75,8 @@ def convert_key_three_to_json(excel_file: str, output_file: str = None) -> str:
 def main():
     if len(sys.argv) < 2:
         print("Usage: python scripts/convert_key_three_to_json.py <excel_file> [output_file]")
-        print("Example: python scripts/convert_key_three_to_json.py data/input/HNE_key_three.xlsx")
+        print("Example (production): python scripts/convert_key_three_to_json.py data/input/HNE_key_three.xlsx")
+        print("Example (development): python scripts/convert_key_three_to_json.py tests/reference/key_three/anonymized_key_three.xlsx")
         sys.exit(1)
     
     excel_file = sys.argv[1]

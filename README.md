@@ -15,37 +15,37 @@ The system features consolidated data layer with single source of truth for town
 
 ```
 ┌───────────────────────────────────────────────────────────────────┐
-│                        DATA SOURCES (3)                             │
+│                        DATA SOURCES (3)                           │
 ├───────────────────────────────────────────────────────────────────┤
-│ BeAScout.org      │ JoinExploring.org  │ Key Three Spreadsheet   │
-│ (10mi radius)     │ (20mi radius)      │ (169 units)             │
-│                   │                    │                         │
-│ Browser Automation│ Browser Automation │ Excel Parser            │
-│ ↓                 │ ↓                  │ ↓                       │
-│ HTML Files        │ HTML Files         │ Structured Data         │
+│ BeAScout.org      │ JoinExploring.org  │ Key Three Spreadsheet    │
+│ (10mi radius)     │ (20mi radius)      │ (169 units)              │
+│                   │                    │                          │
+│ Browser Automation│ Browser Automation │ Excel Parser             │
+│ ↓                 │ ↓                  │ ↓                        │
+│ HTML Files        │ HTML Files         │ Structured Data          │
 └───────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ↓
+                                  │
+                                  ↓
 ┌───────────────────────────────────────────────────────────────────┐
 │                   DATA PROCESSING PIPELINE                        │
 ├───────────────────────────────────────────────────────────────────┤
-│ 1. HTML → JSON Extraction (Legacy Parser)                       │
+│ 1. HTML → JSON Extraction (Legacy Parser)                         │
 │ 2. Unit Town Extraction (4-source precedence with position-first) │
 │ 3. Territory Filtering (65 HNE Towns using consolidated mapping)  │
 │ 4. Quality Scoring (Required vs Recommended Fields)               │
 │ 5. Deduplication (unit_key matching)                              │
 │ 6. District Assignment (Quinapoxet vs Soaring Eagle)              │
 └───────────────────────────────────────────────────────────────────┘
-                                    │
-                                    ↓
+                                  │
+                                  ↓
 ┌───────────────────────────────────────────────────────────────────┐
-│                    OUTPUTS (2 types)                            │
+│                    OUTPUTS (2 types)                              │
 ├───────────────────────────────────────────────────────────────────┤
-│ Excel District Reports          │ Personalized Key Three Emails │
+│ Excel District Reports          │ Personalized Key Three Emails   │
 │ • Quinapoxet District Sheet     │ • Individual improvement plans  │
 │ • Soaring Eagle District Sheet  │ • Contact information           │
-│ • Quality scores & grades       │ • Specific recommendations     │
-│ • Key Three member contacts     │ • Ready-to-send email format   │
+│ • Quality scores & grades       │ • Specific recommendations      │
+│ • Key Three member contacts     │ • Ready-to-send email format    │
 └───────────────────────────────────────────────────────────────────┘
 ```
 
@@ -105,9 +105,36 @@ python scripts/test_key_three_debug.py  # Test Key Three parsing
 
 **District mappings?** → `src/pipeline/core/district_mapping.py`
 
+**Data source configuration?** → `src/pipeline/config/data_sources.py`
+
 **Development utilities** → `src/dev/tools/`
 
 **Old/experimental code** → `src/dev/archive/`
+
+## 🛡️ Data Safety & Privacy
+
+**Development Mode (Default)**: System uses anonymized test data by default
+- ✅ **Safe for commits** - no real personal information
+- ✅ **Safe for sharing** - repository can be shared publicly  
+- ✅ **Realistic testing** - maintains all data relationships
+- 📁 **Test data location**: `tests/reference/key_three/anonymized_key_three.*`
+
+**Production Mode**: Use only for generating actual reports
+- ⚠️ **Contains real personal data** - DO NOT commit generated files
+- 🔒 **Local use only** - never push outputs to repository
+- 📁 **Real data location**: `data/input/HNE_key_three.*` (local only)
+
+**Switch modes**:
+```bash
+# Development mode (default - anonymized data)
+export BEASCOUT_DEV_MODE=true
+
+# Production mode (real data - use with caution)
+export BEASCOUT_DEV_MODE=false
+
+# Check current configuration
+python src/pipeline/config/data_sources.py
+```
 
 ## Debug and Monitoring
 

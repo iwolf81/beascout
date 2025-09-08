@@ -557,8 +557,8 @@ def main():
         description='Generate personalized improvement emails for Scouting units',
         epilog="""
 Examples:
-  python generate_unit_emails_v2.py data/raw/all_units_comprehensive_scored.json data/input/HNE_key_three.xlsx
-  python generate_unit_emails_v2.py data/raw/all_units_comprehensive_scored.json "data/input/Key 3 08-22-2025.xlsx" --output-dir emails/
+  python generate_unit_emails_v2.py data/raw/all_units_comprehensive_scored.json tests/reference/key_three/anonymized_key_three.json
+  python generate_unit_emails_v2.py data/raw/all_units_comprehensive_scored.json tests/reference/key_three/anonymized_key_three.xlsx --output-dir emails/
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
