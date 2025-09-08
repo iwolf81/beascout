@@ -28,7 +28,7 @@ python src/pipeline/acquisition/multi_zip_scraper.py test
 # @claude - Create enhancement request to specify alternate zip code file (for a different council)
 python src/pipeline/acquisition/multi_zip_scraper.py full
 
-# Optionally capture output with logging (note the -u flag; needed for tee)
+# Optionally capture output with logging (note the -u flag; needed for tee with 1+ hour scape)
 python -u src/pipeline/acquisition/multi_zip_scraper.py full 2>&1 | tee data/logs/multi_zip_scraper_$(date +%Y%m%d_%H%M%S).log
 
 # Parse scraped HTML unit data to identify quality issues
@@ -132,16 +132,16 @@ python src/pipeline/analysis/generate_commissioner_report.py --key-three tests/r
 ### **Generate Unit Emails**
 #### Input:
 - Prepared unit data:   data/raw/all_units_comprehensive_scored.json
-- Real Key Three data:  "data/input/Key 3 08-22-2025.json" **OR**
+- Real Key Three data:  "data/input/Key 3 08-22-2025.xlsxjson" **OR**
 - Test Key Three data:  tests/reference/key_three/anonymized_key_three.json
 #### Output:
 - data/output/reports/BeAScout_Quality_Report_YYYYMMDD_HHMMSS.xslx
 ```bash
 # Generate unit improvement emails with **real** Key Three data
-python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json "data/input/Key 3 08-22-2025.json"
+python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json "data/input/Key 3 08-22-2025.xlsx"
 
 # Generate unit improvement emails with **test** Key Three data
-python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json tests/reference/key_three/anonymized_key_three.json
+python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json tests/reference/key_three/anonymized_key_three.xlsx 2>&1 | tee data/logs/generate_unit_emails_$(date +%Y%m%d_%H%M%S).log
 ```
 
 ### **🗂️ Quick File Reference**

@@ -46,7 +46,25 @@ class UnitEmailGenerator:
         """Load processed unit data with quality scores"""
         with open(units_file_path, 'r') as f:
             data = json.load(f)
-        return data.get('units_with_scores', [])
+        
+        units = data.get('units_with_scores', [])
+        
+        # Convert 4-digit unit keys to display format for compatibility with Key Three matching
+        for unit in units:
+            unit_key = unit.get('unit_key', '')
+            if unit_key:
+                # Convert "Pack 0007 Clinton" -> "Pack 7 Clinton" for Key Three matching
+                parts = unit_key.split()
+                if len(parts) >= 3:
+                    unit_type = parts[0]
+                    unit_number_4digit = parts[1]
+                    town = ' '.join(parts[2:])
+                    # Remove leading zeros for display format
+                    display_number = unit_number_4digit.lstrip('0') or '0'
+                    display_key = f"{unit_type} {display_number} {town}"
+                    unit['unit_key'] = display_key
+        
+        return units
     
     def load_key_three_data(self, key_three_file_path: str) -> Dict:
         """Load Key Three contact information from Excel or JSON"""
@@ -449,7 +467,7 @@ class UnitEmailGenerator:
             email_parts.append(f"- **Action**: Add a {unit_type.capitalize()}-specific email address such as {unit_type.lower()}{unit_number}{unit_town.lower()}@gmail.com and an optional a phone number\n")
 
             # Add recommended section for missing units to achieve 100% score
-            email_parts.append("### 🟡 **Recommended - Additional Information:**\n")
+            email_parts.append("### 🟡 **Recommended Additional Information:**\n")
             email_parts.append("**4. Contact Person** *(Missing - Recommended)*")
             email_parts.append("- Provides families with a specific person to contact for questions")
             email_parts.append("- **Action**: Add the unit leader's name or designated person to the Contact Information field\n")
@@ -486,7 +504,7 @@ class UnitEmailGenerator:
 
         # Guidelines section
         email_parts.append("## Guidelines for Effective BeAScout Information\n")
-        email_parts.append("### **Prove a welcoming and informative description**")
+        email_parts.append("### **Provide a welcoming and informative description**")
         email_parts.append("- Describe the type of activities your unit does in the Description field.")
         email_parts.append("- Identify highlights and special characteristics of your unit\n")
         
@@ -507,13 +525,13 @@ class UnitEmailGenerator:
         
         # Next Steps
         email_parts.append("## Next Steps\n")
-        email_parts.append("1. **Update Missing Information**: Please provide the critical missing information identified above")
+        email_parts.append("1. **Update Missing Information**: Please provide the important missing information identified above")
         email_parts.append("2. **How to Update BeAScout**: ")
         email_parts.append("   - Log into my.scouting.org with your ScoutBook credentials")
         email_parts.append("   - From the Menu, select your unit and then Organization Manager")
         email_parts.append("   - Follow the detailed instructions at")
         email_parts.append("     https://www.scouting.org/wp-content/uploads/2020/05/Be-A-Scout-Pin-Set-up.pdf")
-        email_parts.append("3. **Review During Rechartering**: Recommend reviewing information during the annual rechartering process\n")
+        email_parts.append("3. **Review During Rechartering**: Recommend reviewing information during the annual rechartering process and over the summer, ahead of Fall recruiting efforts.\n")
         
         # Contact information
         email_parts.append("## Questions or Need Help?\n")
@@ -557,8 +575,8 @@ def main():
         description='Generate personalized improvement emails for Scouting units',
         epilog="""
 Examples:
-  python generate_unit_emails_v2.py data/raw/all_units_comprehensive_scored.json tests/reference/key_three/anonymized_key_three.json
-  python generate_unit_emails_v2.py data/raw/all_units_comprehensive_scored.json tests/reference/key_three/anonymized_key_three.xlsx --output-dir emails/
+  python generate_unit_emails_v2.py data/raw/all_units_comprehensive_scored.json data/input/HNE_key_three.xlsx
+  python generate_unit_emails_v2.py data/raw/all_units_comprehensive_scored.json "data/input/Key 3 08-22-2025.xlsx" --output-dir emails/
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
