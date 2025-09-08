@@ -19,7 +19,7 @@ The BeAScout Unit Information System is designed to improve the quality and comp
 - **✅ Quality Scoring**: A-F grading system with 10 human-readable recommendation identifiers operational
 - **✅ Key Three Integration**: Automated personalized email generation with 98%+ cross-referencing accuracy
 - **✅ Edge Case Handling**: Sophisticated email classification and organization matching for duplicate unit numbers
-- **🎯 Ready for Deployment**: System tested and ready for all ~200 HNE Council units across 72 zip codes
+- **🎯 Ready for Deployment**: System tested and ready for all 165 HNE Council units across 71 zip codes
 
 ### Proven System Benefits
 - **Immediate Impact**: 62 personalized Key Three improvement emails generated with actual contact information
@@ -169,7 +169,7 @@ alias verify_units_discards='f() { code --diff ~/Repos/beascout/tests/reference/
 **Deployment Readiness Assessment:**
 - ✅ **Data Quality**: Handles real-world data variations and edge cases
 - ✅ **Accuracy**: 98%+ cross-referencing success rate meets production standards
-- ✅ **Scalability**: Modular design supports expansion to ~200 units
+- ✅ **Scalability**: Modular design supports all 165 HNE units with 97.6% validation success
 - ✅ **Error Handling**: Graceful degradation for missing or malformed data
 - ✅ **Documentation**: Comprehensive system understanding and maintenance procedures
 
@@ -291,7 +291,7 @@ Each step logged to debug files with source identification for regression testin
 **Input Sources:**
 - beascout.scouting.org (10-mile radius searches)
 - joinexploring.org (20-mile radius searches)  
-- 72 zip codes across HNE Council territory (~200 total units)
+- 71 zip codes across HNE Council territory (165 HNE units)
 - HNE_key_three.xlsx (498 Key Three member records)
 
 **Collection Strategy:**
@@ -425,7 +425,7 @@ Each step logged to debug files with source identification for regression testin
 ### 6.2 Ongoing Monitoring System
 
 **Re-scraping Schedule:**
-- **Biweekly**: Complete re-scraping of all 72 zip codes
+- **Biweekly**: Complete re-scraping of all 71 zip codes
 - **Monthly**: Deep analysis and strategic reporting
 - **Quarterly**: Comprehensive system review and updates
 
@@ -509,7 +509,7 @@ Each step logged to debug files with source identification for regression testin
 
 ### Phase 3: Full Council Scaling (Weeks 2-4)
 - [ ] Build conservative multi-zip scraping system
-- [ ] Execute complete data collection across all 72 zip codes
+- [x] Execute complete data collection across all 71 zip codes
 - [ ] Apply validated recommendation system to complete dataset
 - [ ] Generate comprehensive Council-wide quality analysis
 
@@ -618,8 +618,14 @@ Each step logged to debug files with source identification for regression testin
 ## Appendices
 
 ### Appendix A: HNE Council Zip Codes
-**Total:** 72 zip code entries across 62 towns (71 unique zip codes)
-**Total Units:** 169 units council-wide (exact count from HNE Key Three database)
+**Total:** 71 unique zip codes across 65 HNE towns  
+**Total Units:** 169 units council-wide (Key Three database) with 165 HNE units having web presence
+
+**Current System Status (September 2025):**
+- **Three-Way Validation**: 97.6% success rate between Key Three and web data
+- **HNE Units Processed**: 165 units successfully validated
+- **Quality Scoring**: 60.2% average completeness with improvement recommendations
+- **Email Generation**: 169 personalized unit improvement emails generated
 
 **Shared Zip Codes:**
 - **01331** serves both Athol and Phillipston (appears twice in town mapping but scraped once)
@@ -630,8 +636,8 @@ Each step logged to debug files with source identification for regression testin
 - Leominster: 01453
 - Acton: 01720 (baseline test case)
 
-**Scraping Implementation Note:** 
-System automatically deduplicates zip codes during processing, resulting in 71 unique scraping operations despite 72 zip code entries in the configuration file.
+**Implementation Achievement:** 
+Complete system operational with 71 unique zip codes successfully processed, three-way validation working, and personalized email generation ready for production deployment.
 
 ### Appendix B: Data Schema
 

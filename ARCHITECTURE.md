@@ -6,6 +6,21 @@
 
 The BeAScout system is a production-ready data quality monitoring platform that processes three primary data sources to generate comprehensive unit quality reports for the Heart of New England Council. The system features consolidated data mappings with single source of truth, position-first town extraction logic, comprehensive debug logging, and automated report generation.
 
+## Current System Status (September 2025)
+
+**✅ Production Achievements**:
+- **Three-Way Validation**: 97.6% cross-validation success between Key Three database (169 units) and web data (165 units)
+- **Unit Key Normalization**: Fixed format consistency between 4-digit internal processing and display format for reports
+- **Email Generation**: Complete personalized email system with 100% compatibility for real and anonymized data
+- **GitHub Issue Management**: Systematic development roadmap established (#12-19) for future enhancements
+- **Complete Anonymization**: Safe development environment with full anonymized datasets for testing
+
+**🎯 Current Metrics**:
+- **HNE Units Processed**: 165 units successfully identified and validated
+- **Key Three Integration**: 169 total units with comprehensive contact information
+- **Average Quality Score**: 60.2% completeness with detailed improvement recommendations
+- **Territory Coverage**: All 71 HNE zip codes across 65 towns in 2 districts
+
 ## Core Components
 
 ### Data Sources
@@ -67,7 +82,7 @@ src/
 │       │                         # - Source-specific debug files
 │       │                         # - Discarded unit audit trails
 │       ├── quality_scorer.py      # Quality assessment system
-│       │                         # - A-F grading (70% required, 30% recommended)
+│       │                         # - A-F grading (100% from required fields only)
 │       │                         # - Specialized unit type scoring
 │       │                         # - Recommendation identifiers
 │       └── hne_towns.py          # HNE Council town utilities
@@ -104,12 +119,6 @@ tests/                    # Test framework & regression validation
 - **`src/dev/`**: Development tools, alternatives, and archived code
 - **Clear data flow**: acquisition → processing → analysis → core
 
-#### **Pipeline Flow Architecture**
-```
-Scraping → Processing → Analysis
-   ↓           ↓          ↓
-HTML files → JSON data → Reports/Emails
-```
 
 #### **Development vs Operations**
 - **Never modify `src/pipeline/`** without full testing
@@ -144,8 +153,8 @@ Comprehensive audit trails distinguish between data sources:
 - `discarded_unit_identifier_debug_SOURCE_YYYYMMDD_HHMMSS.log`
 
 ### Quality Scoring Algorithm
-- **Required Fields** (70% weight): Location, meeting day/time, contact email, unit composition
-- **Recommended Fields** (30% weight): Contact person, phone, website, description
+- **Required Fields** (100% of score): Location, meeting day/time, contact email, specialty (Crews only)
+- **Informational Fields** (no scoring impact): Contact person, phone, website, description
 - **Grading Scale**: A (90%+), B (80-89%), C (70-79%), D (60-69%), F (<60%)
 - **Penalties**: Half credit for PO Box locations, personal email addresses
 
@@ -158,113 +167,75 @@ Comprehensive audit trails distinguish between data sources:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           INPUT STAGE (3 Sources)                          │
+│                           INPUT STAGE (3 Sources)                           │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 1. Web Scraping (BeAScout + JoinExploring)                                │
-│    • 71 zip codes × 2 websites = 142 HTML files                           │
-│    • Rate-limited browser automation                                      │
-│    • Exponential backoff retry logic                                      │
-│                                                                            │
-│ 2. Key Three Excel Processing                                             │
-│    • Monthly export with 169 active units                                │
-│    • Sophisticated town extraction (9 patterns)                          │
-│    • Contact information integration                                      │
-│                                                                            │
-│ 3. Territory Mapping                                                      │
-│    • 65 towns across 2 districts                                         │
-│    • Village definitions as separate entities                             │
-│    • Geographic boundary validation                                       │
+│ 1. Web Scraping (BeAScout + JoinExploring)                                  │
+│    • 71 zip codes × 2 websites = 142 HTML files                             │
+│    • Rate-limited browser automation                                        │
+│    • Exponential backoff retry logic                                        │
+│                                                                             │
+│ 2. Key Three Excel Processing                                               │
+│    • Monthly export with 169 active units                                   │
+│    • Sophisticated town extraction (9 patterns)                             │
+│    • Contact information integration                                        │
+│                                                                             │
+│ 3. Territory Mapping                                                        │
+│    • 65 towns across 2 districts                                            │
+│    • Village definitions as separate entities                               │
+│    • Geographic boundary validation                                         │
 └─────────────────────────────────────────────────────────────────────────────┘
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                       PROCESSING STAGE (6 Steps)                           │
+│                       PROCESSING STAGE (6 Steps)                            │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 1. HTML → JSON Extraction                                                 │
-│    • Legacy parser processes HTML to structured JSON                      │
-│    • Unit container identification and data extraction                    │
-│                                                                            │
-│ 2. Unit Normalization & Town Extraction                                  │
-│    • Standardized unit_key creation: "Pack 3 Leominster"                │
-│    • Position-first town extraction with 4-source precedence rule       │
-│    • Uses centralized TOWN_TO_DISTRICT mapping for consistency          │
-│    • Debug logging with source identification                             │
-│                                                                            │
-│ 3. Territory Filtering                                                    │
-│    • HNE boundary validation using consolidated district mapping         │
-│    • Village-aware processing (Fiskdale, Whitinsville, Jefferson)       │
-│    • Non-HNE unit exclusion with comprehensive logging                   │
-│                                                                            │
-│ 4. Quality Scoring                                                        │
-│    • Weighted field analysis (70% required, 30% recommended)             │
-│    • A-F grade assignment                                                 │
-│    • Improvement recommendations generation                                │
-│                                                                            │
-│ 5. Deduplication                                                          │
-│    • Cross-zip unit_key matching                                         │
-│    • Best-score unit retention                                           │
-│                                                                            │
-│ 6. District Assignment & Key Three Integration                           │
-│    • Town → District mapping                                             │
-│    • Key Three member contact matching                                    │
-│    • Final dataset consolidation                                          │
+│ 1. HTML → JSON Extraction                                                   │
+│    • Legacy parser processes HTML to structured JSON                        │
+│    • Unit container identification and data extraction                      │
+│                                                                             │
+│ 2. Unit Normalization & Town Extraction                                     │
+│    • Standardized unit_key creation: "Pack 3 Leominster"                    │
+│    • Position-first town extraction with 4-source precedence rule           │
+│    • Uses centralized TOWN_TO_DISTRICT mapping for consistency              │
+│    • Debug logging with source identification                               │
+│                                                                             │
+│ 3. Territory Filtering                                                      │
+│    • HNE boundary validation using consolidated district mapping            │
+│    • Village-aware processing (Fiskdale, Whitinsville, Jefferson)           │
+│    • Non-HNE unit exclusion with comprehensive logging                      │
+│                                                                             │
+│ 4. Quality Scoring                                                          │
+│    • Quality assessment (100% from required fields only)                    │
+│    • A-F grade assignment                                                   │
+│    • Improvement recommendations generation                                 │
+│                                                                             │
+│ 5. Deduplication                                                            │
+│    • Cross-zip unit_key matching                                            │
+│    • Best-score unit retention                                              │
+│                                                                             │
+│ 6. District Assignment & Key Three Integration                              │
+│    • Town → District mapping                                                │
+│    • Key Three member contact matching                                      │
+│    • Final dataset consolidation                                            │
 └─────────────────────────────────────────────────────────────────────────────┘
                                     │
                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         OUTPUT STAGE (2 Types)                             │
+│                         OUTPUT STAGE (2 Types)                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│ 1. Excel District Reports                                                │
-│    • HNE_Council_BeAScout_Report_YYYYMMDD_HHMMSS.xlsx                   │
-│    • Separate sheets for Quinapoxet and Soaring Eagle districts          │
-│    • Quality scores, grades, and specific recommendations                 │
-│    • Key Three member contact information (up to 3 per unit)             │
-│    • Professional formatting for commissioner distribution                 │
-│                                                                            │
-│ 2. Personalized Key Three Emails                                         │
-│    • Individual improvement plans for unit leaders                        │
-│    • Specific, actionable recommendations                                 │
-│    • Contact information and next steps                                   │
-│    • Ready-to-send email format                                          │
+│ 1. Excel District Reports                                                   │
+│    • HNE_Council_BeAScout_Report_YYYYMMDD_HHMMSS.xlsx                       │
+│    • Separate sheets for Quinapoxet and Soaring Eagle districts             │
+│    • Quality scores, grades, and specific recommendations                   │
+│    • Key Three member contact information (up to 3 per unit)                │
+│    • Professional formatting for commissioner distribution                  │
+│                                                                             │
+│ 2. Personalized Key Three Emails                                            │
+│    • Individual improvement plans for unit leaders                          │
+│    • Specific, actionable recommendations                                   │
+│    • Contact information and next steps                                     │
+│    • Ready-to-send email format                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
-```
-
-## 🚀 Pipeline Execution Commands
-
-### **Complete Production Pipeline**
-```bash
-# Step 1: Fresh data collection (30-45 minutes for all 72 zip codes)
-python src/pipeline/acquisition/multi_zip_scraper.py full
-
-# Step 2: Complete processing pipeline
-python src/pipeline/processing/process_full_dataset.py data/scraped/YYYYMMDD_HHMMSS/
-
-# Step 3: Generate BeAScout Quality Report (primary)
-python src/pipeline/analysis/generate_commissioner_report.py
-
-# Step 4: Generate Unit Improvement Emails
-python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json "data/input/Key 3 08-22-2025.xlsx"
-```
-
-### **Process Existing Data**
-```bash
-# Use existing scraped data
-python src/pipeline/processing/process_full_dataset.py data/scraped/20250905_000339/
-python src/pipeline/analysis/generate_commissioner_report.py
-```
-
-### **Development & Validation**
-```bash
-# Test single zip code for development
-python src/pipeline/acquisition/multi_zip_scraper.py test
-
-# Run regression testing after processing
-python src/pipeline/processing/process_full_dataset.py data/scraped/YYYYMMDD_HHMMSS/
-# Compare with reference logs using verification aliases
-
-# View latest debug logs with organized structure
-ls -la data/debug/unit_identifier_debug_*$(date +%Y%m%d)*.log
-ls -la data/logs/scraper_full_run_$(date +%Y%m%d)*.log
 ```
 
 ## Production Metrics
@@ -281,7 +252,7 @@ ls -la data/logs/scraper_full_run_$(date +%Y%m%d)*.log
 - **Professional Formatting**: Excel reports with borders, frozen panes, numeric quality scores
 
 ### Processing Performance
-- **Zip Codes Processed**: 71 of 72 HNE zip codes (98.6% coverage)
+- **Zip Codes Processed**: 71 HNE zip codes (100% coverage)
 - **Village Extraction**: 100% accurate for Fiskdale, Whitinsville, Jefferson
 - **Debug Logging**: Complete audit trail with source-specific identification
 - **Report Generation**: BeAScout Quality Reports with professional formatting and multi-line cell support

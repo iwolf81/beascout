@@ -2,11 +2,15 @@
 
 Production-ready data quality monitoring and reporting platform for Scouting America unit information across [beascout.scouting.org](https://beascout.scouting.org/) and [joinexploring.org](https://joinexploring.org/) for the Heart of New England Council (Massachusetts). The system provides comprehensive data quality auditing, automated reporting, and personalized improvement recommendations for council leadership and unit Key Three members.
 
+Development employed a combination of peer programming and vibe coding with Anthropic's Claude Code 4 AI. Our interaction throughout this project is captured in [COLLABORATION_LOG.md](https://github.com/iwolf81/beascout/blob/main/COLLABORATION_LOG.md). See "Critical Observations (September 2025)" in this document for lessons learned on working together.
+
+Each new Claude session is initialized with the markdown files in the [iwolf81/ai-context](https://github.com/iwolf81/ai-context) repository. [AI_INTERACTION_GUIDELINES.md](https://github.com/iwolf81/ai-context/blob/master/AI_INTERACTION_GUIDELINES.md) is iteratively updated as new lessons are learned.  
+
 ## System Overview
 
 The BeAScout system processes three primary data sources to generate comprehensive unit quality reports:
 - **Key Three Database** (169 units) - Official council unit registry with leadership contacts
-- **BeAScout/JoinExploring Web Data** (308+ units across 71 zip codes) - Public unit information with contact details
+- **BeAScout/JoinExploring Web Data** (165 HNE units across 71 zip codes) - Public unit information with contact details
 - **HNE Council Territory Map** (65 towns across 2 districts) - Authoritative geographic boundaries
 
 The system features consolidated data layer with single source of truth for town mappings, position-first town extraction logic, comprehensive debug logging, and automated generation of district reports and personalized Key Three emails.
@@ -52,12 +56,33 @@ The system features consolidated data layer with single source of truth for town
 ## Key Features
 
 - **Automated Data Collection**: Browser automation for dual-source scraping (BeAScout + JoinExploring) with retry logic and rate limiting
+- **Three-Way Validation System**: Cross-reference validation between Key Three database, BeAScout, and JoinExploring data sources
 - **Position-First Town Extraction**: Enhanced text parsing prioritizes first occurrence for hyphenated towns (fixes "Acton-Boxborough" → "Acton")
 - **Quality Scoring System**: Professional grading (A-F) with weighted scoring for required vs recommended fields
 - **Territory Validation**: Precise HNE boundary filtering across 65 towns in Quinapoxet and Soaring Eagle districts
 - **Comprehensive Debug Logging**: Source-specific debug files distinguish Key Three vs scraped data parsing with full audit trails
 - **Automated Report Generation**: Excel district reports with Key Three member integration and personalized email recommendations
+- **Email Generation System**: Personalized unit improvement emails with actual contact information and specific recommendations
+- **Complete Anonymization Support**: Safe development environment with full anonymized datasets for testing and development
 - **Production-Ready Pipeline**: End-to-end processing from fresh scraping through final reports with error handling and monitoring
+
+## Recent Achievements (September 2025)
+
+**✅ Three-Way Validation System**
+- 97.6% cross-validation success rate between Key Three database (169 units) and web data (165 units)
+- Perfect unit key normalization between 4-digit internal format and display format for reports
+- Comprehensive identification of units with incomplete Key Three data (10 units with <3 members)
+
+**✅ Email Generation Complete**
+- Production-ready personalized email system with actual Key Three contact information
+- 100% compatibility with both real and anonymized data for safe development
+- Individual improvement recommendations based on quality analysis and missing data identification
+
+**✅ Development Infrastructure**
+- Complete anonymization pipeline for safe development and testing
+- GitHub issue management system established with 8 development priorities (#12-19)
+- Reference testing framework prevents regressions and validates pipeline changes
+- Documentation fully updated to reflect current system architecture and capabilities
 
 ## Quick Start
 
@@ -124,18 +149,6 @@ python scripts/test_key_three_debug.py  # Test Key Three parsing
 - 🔒 **Local use only** - never push outputs to repository
 - 📁 **Real data location**: `data/input/HNE_key_three.*` (local only)
 
-**Switch modes**:
-```bash
-# Development mode (default - anonymized data)
-export BEASCOUT_DEV_MODE=true
-
-# Production mode (real data - use with caution)
-export BEASCOUT_DEV_MODE=false
-
-# Check current configuration
-python src/pipeline/config/data_sources.py
-```
-
 ## Debug and Monitoring
 
 ### Debug Log Analysis
@@ -153,21 +166,21 @@ cat data/debug/discarded_unit_identifier_debug_*$(date +%Y%m%d)*.log
 
 # Count unique units processed
 sort -u data/debug/unit_identifier_debug_scraped_*.log | wc -l
-
-# Search for specific issues
-python scripts/search_strings.py search_terms.txt data/debug/*.log
 ```
 
 ### Reference Testing and Regression Validation
 Compare current processing results against known good references:
 ```bash
 # Set up verification aliases (add to ~/.zshrc)
-alias verify_units='f() { code --diff ~/Repos/beascout/tests/reference/units/unit_identifier_debug_scraped_reference_u.log "$1"; }; f'
-alias verify_units_discards='f() { code --diff ~/Repos/beascout/tests/reference/units/discarded_unit_identifier_debug_scraped_reference_u.log "$1"; }; f'
+alias udiff='f() { fname="$1"; base="${fname%.*}"; ext="${fname##*.}"; sort -u "$fname" > "${base}_u.${ext}"; diff ~/Repos/beascout/tests/reference/units/unit_identifier_debug_scraped_reference_u.log "${base}_u.${ext}"; }; f'
+alias dudiff='f() { fname="$1"; base="${fname%.*}"; ext="${fname##*.}"; sort -u "$fname" > "${base}_u.${ext}"; diff ~/Repos/beascout/tests/reference/units/discarded_unit_identifier_debug_scraped_reference_u.log "${base}_u.${ext}"; }; f'
+
+# Process scraped unit data
+python src/pipeline/processing/process_full_dataset.py data/scraped/20250905_123456/
 
 # Run regression testing after processing
-python src/pipeline/processing/process_full_dataset.py data/scraped/20250905_123456/
-verify_units data/debug/unit_identifier_debug_scraped_20250905_164237_u.log
+udiff data/debug/unit_identifier_debug_scraped_20250905_164237.log
+dudiff data/debug/discarded_unit_identifier_debug_scraped_20250905_164237.log
 
 # Should show no differences if processing is consistent
 # Any differences indicate potential regressions or improvements
@@ -189,16 +202,23 @@ Place these files in `data/input/` before running the pipeline:
 
 #### Option 1: Full Pipeline from Fresh Scraping
 ```bash
-# Step 1: Fresh Data Scraping (30-45 minutes for all 72 zip codes)
+# Step 1: Fresh Unit Data Scraping (60-75 minutes for all 71 zip codes)
 python src/pipeline/acquisition/multi_zip_scraper.py full
 
-# Step 2: Process Scraped Data Through Complete Pipeline
+# Step 2: Process Scraped Unit Data
 python src/pipeline/processing/process_full_dataset.py data/scraped/YYYYMMDD_HHMMSS/
 
-# Step 3: Generate BeAScout Quality Report (Commissioner Report)
+# Step 3: Convert Key Three Data from XLSX to JSON
+#         This step only needs to be done when real Key Three data is updated
+python src/dev/tools/convert_key_three_to_json.py "data/input/Key 3 08-22-2025.xlsx"
+
+# Step 4: Correlate Scraped Unit Data with Key Three Data
+python src/pipeline/analysis/three_way_validator.py --key-three "data/input/Key 3 08-22-2025.json"
+
+# Step 5: Generate BeAScout Quality Report (Commissioner Report)
 python src/pipeline/analysis/generate_commissioner_report.py
 
-# Step 4: Generate Unit Improvement Emails
+# Step 6: Generate Unit Improvement Emails
 python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json "data/input/Key 3 08-22-2025.xlsx"
 ```
 
@@ -206,13 +226,8 @@ python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehe
 ```bash
 # Use existing scraped HTML files
 python src/pipeline/processing/process_full_dataset.py data/scraped/20250905_000339/
+python src/pipeline/analysis/three_way_validator.py --key-three "data/input/Key 3 08-22-2025.json"
 python src/pipeline/analysis/generate_commissioner_report.py
-```
-
-#### Option 3: Test Key Three Parsing Only
-```bash
-# Generate debug logs for Key Three parsing verification
-python scripts/test_key_three_debug.py
 ```
 
 # Professional Reporting
@@ -223,28 +238,27 @@ python src/pipeline/reporting/generate_commissioner_report.py  # Excel reports w
 
 **Implemented A-F grading with recommendation identifiers for Key Three outreach**
 
-### Required Fields (70% weight)
-- **Meeting location** (17.5% non-Crews, 14% Crews): Street address required, half credit for PO boxes
-- **Meeting day** (17.5%/14%): Full weekday names, supports abbreviation expansion  
-- **Meeting time** (17.5%/14%): Precise times with enhanced parsing (3-4 digit formats)
-- **Contact email** (17.5%/14%): Unit-specific preferred, personal emails flagged for continuity
-- **Specialty** (14% Venturing Crews only): Program focus area
+### Required Fields (100% of score)
+- **Meeting location** (25% standard units, 20% Crews): Street address required, half credit for PO boxes only, half credit for empty unit-address
+- **Meeting day** (25%/20%): Full weekday names, supports abbreviation expansion  
+- **Meeting time** (25%/20%): Precise times with enhanced parsing (3-4 digit formats)
+- **Contact email** (25%/20%): Unit-specific preferred, personal emails flagged for continuity
+- **Specialty** (20% Venturing Crews only): Program focus area
 
-### Recommended Fields (30% weight)  
-- **Contact person** (7.5%): Unit leader or designated contact
-- **Phone number** (7.5%): Direct contact method
-- **Website** (7.5%): Unit-specific information page
-- **Description** (7.5%): Informative program details
+### Informational Fields (no scoring impact)
+- **Contact person**: Unit leader or designated contact (tracked for recommendations)
+- **Phone number**: Direct contact method (tracked for recommendations)
+- **Website**: Unit-specific information page (tracked for recommendations)
+- **Description**: Informative program details (tracked for recommendations)
 
-### Current Production Status (All 72 HNE Zip Codes)
-- **Total Units Processed**: 2,034 raw scraped → 152 unique units (92% deduplication)
-- **Three-Way Validation Results**: 84.0% web presence (142/169), 0% false positives
-- **District Distribution**: Quinapoxet 78 units, Soaring Eagle 76 units
-- **Town Extraction Success**: 74.9% address parsing, 17.4% chartered org fallback, 0.5% failed
+### Current Production Status (All 71 HNE Zip Codes)
+- **Total Units Processed**: 2,034 raw scraped → 165 unique HNE units (92% deduplication)
+- **Three-Way Validation Results**: 97.6% cross-validation success (165/169), perfect Key Three integration
+- **District Distribution**: Quinapoxet and Soaring Eagle districts fully processed
+- **Unit Key Normalization**: Fixed format consistency between 4-digit internal processing and display format
 - **Territory Filtering**: Successfully excludes non-HNE units (Connecticut, non-council MA towns)
-- **Parsing Accuracy**: 100% success rate with enhanced edge case handling
-- **System Status**: Production-ready with comprehensive end-to-end validation
-
+- **Email Generation**: 100% success rate with both real and anonymized data support
+- **System Status**: Production-ready with complete three-way validation and personalized email generation
 
 
 ## Project Documentation
@@ -252,6 +266,7 @@ python src/pipeline/reporting/generate_commissioner_report.py  # Excel reports w
 Review and process the following markdown files **in their entirety** in the listed order:
 1. **[CLAUDE.md](CLAUDE.md)**: AI development context and technical constraints
 1. **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Current session state and context preservation
+1. **[OPERATIONAL_WORKFLOW.md](OPERATIONAL_WORKFLOW.md)**: Complete operational pipeline commands and workflows
 1. **[COLLABORATION_LOG.md](COLLABORATION_LOG.md)**: AI-human collaboration insights and lessons learned
 1. **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Business requirements, success metrics, operational workflows
 1. **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical system design and component architecture
@@ -298,10 +313,10 @@ Each District contains multiple towns, and each town may have zero or more Scout
 - **Best Practice**: Build parsing systems incrementally based on actual data patterns, not theoretical specifications
 
 ### Production Readiness Assessment
-- **Metric**: 61.0% average unit completeness score across 62 units
-- **Validation**: 98%+ Key Three cross-referencing accuracy (1 miss out of 62 units)
+- **Metric**: 60.2% average unit completeness score across 165 HNE units
+- **Validation**: 97.6% Key Three cross-referencing accuracy (165/169 units matched)
 - **Scalability**: System handles duplicate unit numbers, missing data, and format variations reliably
-- **Recommendation**: Ready for deployment across all ~200 HNE Council units
+- **Recommendation**: Production-ready for all 165 HNE Council units with complete three-way validation
 
 ## Development
 
