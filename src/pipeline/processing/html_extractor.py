@@ -895,6 +895,10 @@ def main():
         'all_units': hne_filtered_units
     }
     
+    # Create output directory if it doesn't exist
+    import os
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    
     with open(output_file, 'w') as f:
         json.dump(output_data, f, indent=2)
     
