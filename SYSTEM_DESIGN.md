@@ -12,18 +12,18 @@
 
 ## 1. Executive Summary
 
-The BeAScout Unit Information System is designed to improve the quality and completeness of Scouting America unit information published on beascout.scouting.org and joinexploring.org for the Heart of New England Council (Massachusetts). The system will automate data collection, analysis, and monitoring to help prospective Scout families find complete and accurate unit information.
+The BeAScout Unit Information System is designed to ensure comprehensive unit presence correlation for the Heart of New England Council (Massachusetts) by correlating Council Office's authoritative unit registry with beascout.scouting.org and joinexploring.org to identify missing web presence units and potentially defunct listings. The system automates data collection, correlation analysis, and gap reporting to enable effective web presence management for all HNE Council units.
 
 ### System Status (Production-Ready)
 - **✅ Complete**: Production-ready system validated with 62 units from zip code 01720
 - **✅ Quality Scoring**: A-F grading system with 10 human-readable recommendation identifiers operational
-- **✅ Key Three Integration**: Automated personalized email generation with 98%+ cross-referencing accuracy
+- **✅ Key Three Integration**: Automated personalized email generation with 98%+ unit presence correlation accuracy
 - **✅ Edge Case Handling**: Sophisticated email classification and organization matching for duplicate unit numbers
 - **🎯 Ready for Deployment**: System tested and ready for all 165 HNE Council units across 71 zip codes
 
 ### Proven System Benefits
 - **Immediate Impact**: 62 personalized Key Three improvement emails generated with actual contact information
-- **High Accuracy**: 98%+ Key Three cross-referencing success rate (only 1 unit missing data)
+- **High Accuracy**: 98%+ Key Three correlation success rate identifying missing web presence and potentially defunct units
 - **Comprehensive Analysis**: 61.0% average completeness score revealing significant improvement opportunities
 - **Production Stability**: Handles edge cases including duplicate unit numbers across different organizations
 - **Scalable Architecture**: Modular design ready for deployment across all HNE Council territory
@@ -161,14 +161,14 @@ alias verify_units_discards='f() { code --diff ~/Repos/beascout/tests/reference/
 
 ### 2.6 Production Readiness Validation
 **Metrics Achieved:**
-- 98%+ Key Three cross-referencing accuracy (1 miss out of 62 units)
+- 97.6% Key Three correlation accuracy (165 out of 169 units matched between registry and web data)
 - 61.0% average unit completeness score
 - Comprehensive edge case handling (duplicate numbers, missing data, format variations)
-- 62 personalized emails generated with actual Key Three contact information
+- 169 personalized emails generated with actual Key Three contact information
 
 **Deployment Readiness Assessment:**
 - ✅ **Data Quality**: Handles real-world data variations and edge cases
-- ✅ **Accuracy**: 98%+ cross-referencing success rate meets production standards
+- ✅ **Accuracy**: 97.6% correlation success rate meets production standards
 - ✅ **Scalability**: Modular design supports all 165 HNE units with 97.6% validation success
 - ✅ **Error Handling**: Graceful degradation for missing or malformed data
 - ✅ **Documentation**: Comprehensive system understanding and maintenance procedures
@@ -622,8 +622,8 @@ Each step logged to debug files with source identification for regression testin
 **Total Units:** 169 units council-wide (Key Three database) with 165 HNE units having web presence
 
 **Current System Status (September 2025):**
-- **Three-Way Validation**: 97.6% success rate between Key Three and web data
-- **HNE Units Processed**: 165 units successfully validated
+- **Unit Presence Correlation**: 97.6% correlation success between Key Three authoritative registry and web data, identifying missing web presence and potentially defunct units
+- **HNE Units Processed**: 165 units successfully correlated with web data
 - **Quality Scoring**: 60.2% average completeness with improvement recommendations
 - **Email Generation**: 169 personalized unit improvement emails generated
 
@@ -637,7 +637,7 @@ Each step logged to debug files with source identification for regression testin
 - Acton: 01720 (baseline test case)
 
 **Implementation Achievement:** 
-Complete system operational with 71 unique zip codes successfully processed, three-way validation working, and personalized email generation ready for production deployment.
+Complete system operational with 71 unique zip codes successfully processed, unit presence correlation working, and personalized email generation ready for production deployment.
 
 ### Appendix B: Data Schema
 

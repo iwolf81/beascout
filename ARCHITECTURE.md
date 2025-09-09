@@ -9,7 +9,7 @@ The BeAScout system is a production-ready data quality monitoring platform that 
 ## Current System Status (September 2025)
 
 **✅ Production Achievements**:
-- **Three-Way Validation**: 97.6% cross-validation success between Key Three database (169 units) and web data (165 units)
+- **Unit Presence Correlation**: 97.6% correlation success between Key Three authoritative registry (169 units) and web data (165 units), identifying missing web presence and potentially defunct units
 - **Unit Key Normalization**: Fixed format consistency between 4-digit internal processing and display format for reports
 - **Email Generation**: Complete personalized email system with 100% compatibility for real and anonymized data
 - **GitHub Issue Management**: Systematic development roadmap established (#12-19) for future enhancements
@@ -24,10 +24,10 @@ The BeAScout system is a production-ready data quality monitoring platform that 
 ## Core Components
 
 ### Data Sources
-- **Key Three Database** (169 units): Official council unit registry from Excel exports
-- **BeAScout.org** (10-mile radius search): Primary unit information platform  
-- **JoinExploring.org** (20-mile radius search): Exploring/Venturing unit information
-- **HNE Territory Map** (65 towns, 2 districts): Authoritative geographic boundaries
+- **Key Three Database** (169 units): Authoritative Council Office unit registry from Excel exports, serving as definitive source for active units
+- **BeAScout.org** (10-mile radius search): Primary unit web presence platform for correlation analysis
+- **JoinExploring.org** (20-mile radius search): Exploring/Venturing unit web presence platform
+- **HNE Territory Map** (65 towns, 2 districts): Geographic boundaries for territory validation
 
 ### Processing Pipeline
 ```

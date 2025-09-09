@@ -1,10 +1,10 @@
-# BeAScout Unit Data Quality Monitoring System
+# BeAScout Unit Data Quality Analysis System
 
-Production-ready data quality monitoring and reporting platform for Scouting America unit information across [beascout.scouting.org](https://beascout.scouting.org/) and [joinexploring.org](https://joinexploring.org/) for the Heart of New England Council (Massachusetts). The system provides comprehensive data quality auditing, automated reporting, and personalized improvement recommendations for council leadership and unit Key Three members.
+Data quality analysis and reporting platform for Scouting America unit information from [beascout.org](https://beascout.scouting.org/) and [joinexploring.org](https://joinexploring.org/) for the Heart of New England Council (central Massachusetts). Generates data quality reports and personalized improvement recommendations for Council leadership and unit Key Three members (i.e., those authorized to update their unit's information).
 
-Development employed a combination of peer programming and vibe coding with Anthropic's Claude Code 4 AI. Our interaction throughout this project is captured in [COLLABORATION_LOG.md](https://github.com/iwolf81/beascout/blob/main/COLLABORATION_LOG.md). See "Critical Observations (September 2025)" in this document for lessons learned on working together.
+Project development employed rapid-prototyping, specification programming, and vibe coding techniques with Anthropic's Claude Code 4 AI. [COLLABORATION_LOG.md](https://github.com/iwolf81/beascout/blob/main/COLLABORATION_LOG.md) documents AI-human collaboration evolution for best practices insight. [COLLABORATION_LESSONS.md](https://github.com/iwolf81/beascout/blob/main/COLLABORATION_LESSONS.md) summarizes technical insights and meta-insights about AI-human collaboration effectiveness from this log.
 
-Each new Claude session is initialized with the markdown files in the [iwolf81/ai-context](https://github.com/iwolf81/ai-context) repository. [AI_INTERACTION_GUIDELINES.md](https://github.com/iwolf81/ai-context/blob/master/AI_INTERACTION_GUIDELINES.md) is iteratively updated as new lessons are learned.  
+Each new Claude session initializes with markdown files from the [iwolf81/ai-context](https://github.com/iwolf81/ai-context) repository. [AI_INTERACTION_GUIDELINES.md](https://github.com/iwolf81/ai-context/blob/master/AI_INTERACTION_GUIDELINES.md) updates iteratively as new lessons emerge.  
 
 ## System Overview
 
@@ -56,7 +56,7 @@ The system features consolidated data layer with single source of truth for town
 ## Key Features
 
 - **Automated Data Collection**: Browser automation for dual-source scraping (BeAScout + JoinExploring) with retry logic and rate limiting
-- **Three-Way Validation System**: Cross-reference validation between Key Three database, BeAScout, and JoinExploring data sources
+- **Unit Presence Correlation System**: Comprehensive correlation between Key Three authoritative registry, BeAScout, and JoinExploring to identify missing web presence and potentially defunct units
 - **Position-First Town Extraction**: Enhanced text parsing prioritizes first occurrence for hyphenated towns (fixes "Acton-Boxborough" → "Acton")
 - **Quality Scoring System**: Professional grading (A-F) with weighted scoring for required vs recommended fields
 - **Territory Validation**: Precise HNE boundary filtering across 65 towns in Quinapoxet and Soaring Eagle districts
@@ -68,9 +68,9 @@ The system features consolidated data layer with single source of truth for town
 
 ## Recent Achievements (September 2025)
 
-**✅ Three-Way Validation System**
-- 97.6% cross-validation success rate between Key Three database (169 units) and web data (165 units)
-- Perfect unit key normalization between 4-digit internal format and display format for reports
+**✅ Unit Presence Correlation System**
+- 97.6% correlation success rate between Key Three authoritative registry (169 units) and web data (165 units), identifying missing web presence and potentially defunct units
+- Perfect unit key normalization between 4-digit internal format and display format for reports  
 - Comprehensive identification of units with incomplete Key Three data (10 units with <3 members)
 
 **✅ Email Generation Complete**
@@ -212,7 +212,7 @@ python src/pipeline/processing/process_full_dataset.py data/scraped/YYYYMMDD_HHM
 #         This step only needs to be done when real Key Three data is updated
 python src/dev/tools/convert_key_three_to_json.py "data/input/Key 3 08-22-2025.xlsx"
 
-# Step 4: Correlate Scraped Unit Data with Key Three Data
+# Step 4: Correlate Scraped Unit Data with Key Three Authoritative Registry
 python src/pipeline/analysis/three_way_validator.py --key-three "data/input/Key 3 08-22-2025.json"
 
 # Step 5: Generate BeAScout Quality Report (Commissioner Report)
@@ -231,6 +231,7 @@ python src/pipeline/analysis/generate_commissioner_report.py
 ```
 
 # Professional Reporting
+```bash
 python src/pipeline/reporting/generate_commissioner_report.py  # Excel reports with BeAScout Quality analysis
 ```
 
@@ -253,24 +254,17 @@ python src/pipeline/reporting/generate_commissioner_report.py  # Excel reports w
 
 ### Current Production Status (All 71 HNE Zip Codes)
 - **Total Units Processed**: 2,034 raw scraped → 165 unique HNE units (92% deduplication)
-- **Three-Way Validation Results**: 97.6% cross-validation success (165/169), perfect Key Three integration
+- **Unit Presence Correlation Results**: 97.6% correlation success (165/169), identifying missing web presence and potentially defunct units
 - **District Distribution**: Quinapoxet and Soaring Eagle districts fully processed
 - **Unit Key Normalization**: Fixed format consistency between 4-digit internal processing and display format
 - **Territory Filtering**: Successfully excludes non-HNE units (Connecticut, non-council MA towns)
 - **Email Generation**: 100% success rate with both real and anonymized data support
-- **System Status**: Production-ready with complete three-way validation and personalized email generation
+- **System Status**: Production-ready with complete unit presence correlation and personalized email generation
 
 
 ## Project Documentation
 
-Review and process the following markdown files **in their entirety** in the listed order:
-1. **[CLAUDE.md](CLAUDE.md)**: AI development context and technical constraints
-1. **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Current session state and context preservation
-1. **[OPERATIONAL_WORKFLOW.md](OPERATIONAL_WORKFLOW.md)**: Complete operational pipeline commands and workflows
-1. **[COLLABORATION_LOG.md](COLLABORATION_LOG.md)**: AI-human collaboration insights and lessons learned
-1. **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Business requirements, success metrics, operational workflows
-1. **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical system design and component architecture
-1. **[PRODUCTION_STATUS.md](PRODUCTION_STATUS.md)**: Current deployment status and achievements
+For the complete project documentation structure and reading order, see [Project Documentation Structure](CLAUDE.md#project-documentation-structure) in CLAUDE.md.
 
 ## Data Sources
 
@@ -314,9 +308,9 @@ Each District contains multiple towns, and each town may have zero or more Scout
 
 ### Production Readiness Assessment
 - **Metric**: 60.2% average unit completeness score across 165 HNE units
-- **Validation**: 97.6% Key Three cross-referencing accuracy (165/169 units matched)
+- **Validation**: 97.6% Key Three correlation accuracy (165/169 units matched between registry and web data)
 - **Scalability**: System handles duplicate unit numbers, missing data, and format variations reliably
-- **Recommendation**: Production-ready for all 165 HNE Council units with complete three-way validation
+- **Recommendation**: Production-ready for all 165 HNE Council units with complete unit presence correlation
 
 ## Development
 
