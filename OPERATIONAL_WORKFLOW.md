@@ -6,6 +6,8 @@
 3. **analysis/**: Generate Excel reports and unit emails
 4. **core/**: Shared utilities for all pipeline components
 
+**IMPORTANT:** It is critical to consistently follow the **real** data workflow or the **test** data workflow.
+
 ## **Acquisition:**
 
 ### Scrape and prepare unit data from beascout.org and joinexploring.org for processing.
@@ -20,10 +22,10 @@
 ```bash
 # The scraped HTML files, <source>_<zip-code>.html, are written to - data/scraped/YYYYMMDD_HHMMSS/
 
-# Development: Scrape unit data for 3 zip codes for testing script
+# Development: Scrape **real** unit data for 3 zip codes for testing script
 python src/pipeline/acquisition/multi_zip_scraper.py test
 
-# Production: Scrape unit data for all 71 zip codes from data/zipcodes/hne_council_zipcodes.json
+# Production: Scrape **real** unit data for all 71 zip codes from data/zipcodes/hne_council_zipcodes.json
 # @claude - Identify dev script that creates hne_council_zipcodes.json
 # @claude - Create enhancement request to specify alternate zip code file (for a different council)
 python src/pipeline/acquisition/multi_zip_scraper.py full
@@ -31,10 +33,19 @@ python src/pipeline/acquisition/multi_zip_scraper.py full
 # Optionally capture output with logging (note the -u flag; needed for tee with 1+ hour scape)
 python -u src/pipeline/acquisition/multi_zip_scraper.py full 2>&1 | tee data/logs/multi_zip_scraper_$(date +%Y%m%d_%H%M%S).log
 
-# Parse scraped HTML unit data to identify quality issues
+# Parse **real** scraped HTML unit data to identify quality issues
 # Input: data/scraped/YYYYMMDD_HHMMSS/*.html
 # Output: data/raw/all_units_comprehensive_scored.json
 python -u src/pipeline/processing/process_full_dataset.py data/scraped/20250905_000339/ 2>&1 | tee data/logs/process_full_dataset_$(date +%Y%m%d_%H%M%S).log
+
+# OR
+
+# Parse **test** scraped HTML unit data to identify quality issues
+# - No need to execute multi_zip_scraper.py
+# Input: tests/reference/units/scraped/*.html
+# Output: data/raw/all_units_comprehensive_scored.json
+python -u src/pipeline/processing/process_full_dataset.py tests/reference/units/scraped/ 2>&1 | tee data/logs/process_full_dataset_$(date +%Y%m%d_%H%M%S).log
+
 ```
 
 ### Test for regressions in parsing of scraped HTML unit data by comparing generated debug logs, uniquely sorted, to reference debug logs.
@@ -63,7 +74,7 @@ dudiff2='f() { fname="$1"; base="${fname%.*}"; ext="${fname##*.}"; sort -u "$fna
 
 ## **Processing:**
 
-### Anonymize real Key Three personal data for testing and publishing (e.g., public github).
+### Anonymize **real** Key Three personal data for testing and publishing (e.g., public github).
 - The Key Three leaders for a unit are authorized to update their unit's information in BeAScout.
 - Their information is provided by the Council Office in a generated xlsx spreadsheet.
 - This information must be anonymized for reports uploaded to github.
@@ -78,19 +89,19 @@ dudiff2='f() { fname="$1"; base="${fname%.*}"; ext="${fname##*.}"; sort -u "$fna
 python src/dev/tools/anonymize_key_three_v2.py "data/input/Key 3 08-22-2025.xlsx" --verify
 ```
 
-### Convert real Key Three xlsx file to json.
+### Convert **real** Key Three xlsx file to json.
 - Subsequent processing and analysis required the Key Three data in JSON format.
 #### Input:
 - "data/input/Key 3 08-22-2025.xlsx"
 #### Output:
 - "data/input/Key 3 08-22-2025.json"
 ```bash
-# This step only needs to be done when real Key Three data is updated
+# This step only needs to be done when **real** Key Three data is updated
 # Output: "data/input/Key 3 08-22-2025.json"
 python src/dev/tools/convert_key_three_to_json.py "data/input/Key 3 08-22-2025.xlsx"
 ```
 
-### Correlate processed beascout.org/joinexploring.org unit data with real or anonymized Key Three data.
+### Correlate processed beascout.org/joinexploring.org unit data with **real** or **test** (anonymized) Key Three data.
 #### Input:
 - Processed Unit data: data/raw/all_units_comprehensive_scored.json
 - Real Key Three data: "data/input/Key 3 08-22-2025.json" **OR**
@@ -119,6 +130,10 @@ python src/pipeline/analysis/three_way_validator.py --key-three tests/reference/
 #### Output:
 - data/output/reports/BeAScout_Quality_Report_YYYYMMDD_HHMMSS.xslx
 ```bash
+# Notes:
+# 1. process_full_dataset.py could have previously generated data/raw/all_units_comprehensive_scored.json with either **real** scraped HTML unit data or **test** scraped HTML unit data.
+# 2. three_way_validator.py could have previously generated data/output/three_way_validation_results.json with either **real** Key Three data or **test** Key Three data AND with either **real** scraped HTML unit data or **test** scraped HTML unit data.
+# 3. It is critical to follow the **real** or **test** workflow consistently.
 
 # Generate MS Excel report with **real** Key Three data
 python src/pipeline/analysis/generate_commissioner_report.py 2>&1 | tee data/logs/generate_commissioner_report_$(date +%Y%m%d_%H%M%S).log
@@ -132,8 +147,8 @@ python src/pipeline/analysis/generate_commissioner_report.py --key-three tests/r
 ### **Generate Unit Emails**
 #### Input:
 - Prepared unit data:   data/raw/all_units_comprehensive_scored.json
-- Real Key Three data:  "data/input/Key 3 08-22-2025.xlsxjson" **OR**
-- Test Key Three data:  tests/reference/key_three/anonymized_key_three.json
+- Real Key Three data:  "data/input/Key 3 08-22-2025.xlsx" **OR**
+- Test Key Three data:  tests/reference/key_three/anonymized_key_three.xlsx
 #### Output:
 - data/output/reports/BeAScout_Quality_Report_YYYYMMDD_HHMMSS.xslx
 ```bash
