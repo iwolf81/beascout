@@ -1,7 +1,7 @@
 # CLAUDE.md - AI Development Context
 
 ## Context Initialization
-Process the markdown files in https://github.com/iwolf81/ai-context at the start of each new session.
+Process the markdown files in ../ai-context at the start of each new session.
 
 ## Project Mission
 Ensure comprehensive unit presence correlation for the Heart of New England Council by building an automated system that correlates Council Office's authoritative unit registry with beascout.scouting.org and joinexploring.org to identify missing web presence units and potentially defunct listings, enabling effective web presence management.

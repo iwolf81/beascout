@@ -10,7 +10,7 @@ name = "beascout-analysis"
 version = "1.0.0"
 description = "BeAScout Unit Information Analysis System for Heart of New England Council"
 authors = [
-    {name = "Ira Wolf", email = "ira@example.com"}  # Update email as needed
+    {name = "Ira Wolf", email = "irawolf81@gmail.com"}  # Update email as needed
 ]
 readme = "README.md"
 license = {text = "MIT"}  # Update license as appropriate
