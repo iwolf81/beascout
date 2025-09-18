@@ -1,0 +1,167 @@
+# Universal Python Project Configuration Template
+# Copy to project root as pyproject.toml and customize as needed
+
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "beascout-analysis"
+version = "1.0.0"
+description = "BeAScout Unit Information Analysis System for Heart of New England Council"
+authors = [
+    {name = "Ira Wolf", email = "ira@example.com"}  # Update email as needed
+]
+readme = "README.md"
+license = {text = "MIT"}  # Update license as appropriate
+requires-python = ">=3.9"
+dependencies = [
+    "pandas>=1.5.0",
+    "openpyxl>=3.1.0",
+    "playwright>=1.37.0",
+    "beautifulsoup4>=4.12.0",
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "pylint>=2.17.0",
+    "mypy>=1.5.0",
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pre-commit>=3.3.0",
+]
+
+# Code formatting with Black (opinionated, deterministic)
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+    \.git
+  | \.venv
+  | build
+  | dist
+  | \.mypy_cache
+)/
+'''
+
+# Import organization with isort
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["src"]
+known_third_party = ["pandas", "openpyxl", "playwright", "beautifulsoup4", "requests"]
+
+# Pylint configuration (MISRA-inspired safety checks)
+[tool.pylint.main]
+load-plugins = ["pylint.extensions.docparams"]
+
+[tool.pylint.messages_control]
+disable = [
+    "C0103",  # Allow short variable names for math/algorithms
+    "R0903",  # Too few public methods (acceptable for data classes)
+    "W0212",  # Allow access to protected members in tests
+]
+enable = [
+    "W0613",  # Unused argument
+    "W0622",  # Redefined builtin
+    "C0415",  # Import outside toplevel
+]
+
+[tool.pylint.format]
+max-line-length = 88
+
+[tool.pylint.design]
+max-args = 7           # Maximum function arguments (MISRA complexity limit)
+max-locals = 15        # Maximum local variables per function
+max-branches = 12      # Maximum conditional branches per function
+max-statements = 30    # Guideline for decomposition consideration
+max-returns = 6        # Maximum return statements per function
+max-bool-expr = 5      # Maximum boolean expressions in if statement
+
+[tool.pylint.similarities]
+min-similarity-lines = 6
+
+[tool.pylint.typecheck]
+generated-members = ["numpy.*", "pandas.*"]  # Common scientific libraries
+
+# Static type checking with mypy (defensive programming)
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_unreachable = true
+strict_equality = true
+
+# Per-module configuration
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false  # Relax for test files
+
+[[tool.mypy.overrides]]
+module = [
+    "pandas.*",
+    "numpy.*",
+    "matplotlib.*",
+    "openpyxl.*",
+    "playwright.*",
+]
+ignore_missing_imports = true
+
+# Pytest configuration
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",              # Verbose output
+    "--tb=short",      # Short traceback format
+    "--strict-markers", # Treat unknown markers as errors
+    "--strict-config",  # Treat config errors as errors
+    "--cov=src",       # Coverage for src directory
+    "--cov-report=term-missing",  # Show missing lines
+    "--cov-report=html:htmlcov",  # HTML coverage report
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__init__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+show_missing = true
+precision = 2
+
+[tool.coverage.html]
+directory = "htmlcov"

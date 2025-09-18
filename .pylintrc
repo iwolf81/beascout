@@ -1,0 +1,281 @@
+# Universal Pylint Configuration Template
+# Copy to project root as .pylintrc and customize as needed
+# MISRA-inspired safety checks for Python code quality
+
+[MAIN]
+# Python code to analyze
+init-hook='import sys; sys.path.append("src")'
+
+# List of plugins (as comma separated values of python module names) to load
+load-plugins=pylint.extensions.docparams,
+             pylint.extensions.docstyle,
+             pylint.extensions.mccabe
+
+# Pickle collected data for later comparisons
+persistent=yes
+
+# When enabled, pylint would attempt to guess common misconfiguration and emit
+# user-friendly hints instead of false-positive error messages
+suggestion-mode=yes
+
+# Allow loading of arbitrary C extensions
+unsafe-load-any-extension=no
+
+[MESSAGES CONTROL]
+# Only show warnings with the listed confidence levels
+confidence=
+
+# Disable specific message categories or IDs
+disable=raw-checker-failed,
+        bad-inline-option,
+        locally-disabled,
+        file-ignored,
+        suppressed-message,
+        useless-suppression,
+        deprecated-pragma,
+        use-symbolic-message-instead,
+        # MISRA adaptations for Python scientific computing
+        C0103,  # Invalid name (allow short vars for math)
+        R0903,  # Too few public methods (data classes)
+        W0212,  # Protected access (acceptable in tests)
+
+# Enable specific warnings for safety-critical patterns
+enable=W0613,  # unused-argument (MISRA: unused parameters)
+       W0622,  # redefined-builtin (MISRA: avoid shadowing)
+       C0415,  # import-outside-toplevel (MISRA: predictable imports)
+       R0801,  # duplicate-code (MISRA: avoid copy-paste)
+       W0123,  # eval-used (MISRA: avoid dynamic execution)
+       W0603,  # global-statement (MISRA: minimize globals)
+
+[REPORTS]
+# Template used to display messages
+msg-template={path}:{line}:{column}: {msg_id}: {msg} ({symbol})
+
+# Set the output format
+output-format=colorized
+
+# Tells whether to display a full report or only the messages
+reports=no
+
+# Activate the evaluation score
+score=yes
+
+[REFACTORING]
+# Maximum number of nested blocks for function / method body
+max-nested-blocks=5
+
+# Complete name of functions that never returns
+never-returning-functions=sys.exit,argparse.parse_error
+
+[SIMILARITIES]
+# Comments are removed from the similarity computation
+ignore-comments=yes
+
+# Docstrings are removed from the similarity computation
+ignore-docstrings=yes
+
+# Imports are removed from the similarity computation
+ignore-imports=no
+
+# Signatures are removed from the similarity computation
+ignore-signatures=no
+
+# Minimum lines number of a similarity
+min-similarity-lines=6
+
+[SPELLING]
+# Limits count of emitted suggestions
+max-spelling-suggestions=4
+
+# List of comma separated words that should be considered directives if they
+# appear and the beginning of a comment and should not be checked
+spelling-ignore-comment-directives=fmt: off,fmt: on,noqa:,noqa,nosec,isort:skip,mypy:
+
+[STRING]
+# This flag controls whether inconsistent-quotes generates a warning when the
+# character used as a quote delimiter is used inconsistently within a module
+check-quote-consistency=no
+
+# This flag controls whether the implicit-str-concat should generate a warning
+# on implicit string concatenation in sequences defined over several lines
+check-str-concat-over-line-jumps=no
+
+[TYPECHECK]
+# List of decorators that produce context managers
+contextmanager-decorators=contextlib.contextmanager
+
+# List of members which are set dynamically and missed by pylint inference
+generated-members=numpy.*,pandas.*,torch.*,cv2.*
+
+# Tells whether missing members accessed in mixin class should be ignored
+ignore-mixin-members=yes
+
+# Tells whether to warn about missing members when the owner of the attribute
+# is inferred to be None
+ignore-none=yes
+
+# This flag controls whether pylint should warn about no-member and similar
+# checks whenever an opaque object is returned when inferring
+ignore-on-opaque-inference=yes
+
+# List of class names for which member attributes should not be checked
+ignored-classes=optparse.Values,thread._local,_thread._local
+
+# List of module names for which member attributes should not be checked
+ignored-modules=numpy,pandas,torch,cv2,matplotlib,sklearn
+
+[VARIABLES]
+# List of additional names supposed to be defined in builtins
+additional-builtins=
+
+# Tells whether unused global variables should be treated as a violation
+allow-global-unused-variables=yes
+
+# List of names allowed to shadow builtins
+allowed-redefined-builtins=
+
+# List of strings which can identify a callback function by name
+callbacks=cb_,_cb
+
+# A regular expression matching the name of dummy variables
+dummy-variables-rgx=_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_
+
+# Argument names that match this expression will be ignored
+ignored-argument-names=_.*|^ignored_|^unused_
+
+# Tells whether we should check for unused import in __init__ files
+init-import=no
+
+# List of qualified module names which can have objects that can redefine builtins
+redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
+
+[FORMAT]
+# Expected format of line ending
+expected-line-ending-format=
+
+# Regexp for a line that is allowed to be longer than the limit
+ignore-long-lines=^\s*(# )?<?https?://\S+>?$
+
+# Number of spaces of indent required inside a hanging or continued line
+indent-after-paren=4
+
+# String used as indentation unit
+indent-string='    '
+
+# Maximum number of characters on a single line (MISRA-inspired limit)
+max-line-length=88
+
+# Maximum number of lines in a module (MISRA: maintain manageable modules)
+max-module-lines=1000
+
+# Allow the body of a class to be on the same line as the declaration if body
+# contains a single statement
+single-line-class-stmt=no
+
+# Allow the body of an if to be on the same line as the test if there is no else
+single-line-if-stmt=no
+
+[LOGGING]
+# The type of string formatting that logging methods do
+logging-format-style=old
+
+# Logging modules to check that the string format arguments are in logging
+# function parameter format
+logging-modules=logging
+
+[MISCELLANEOUS]
+# List of note tags to take in consideration, separated by a comma
+notes=FIXME,XXX,TODO,BUG,HACK
+
+# Regular expression of note tags to take in consideration
+notes-rgx=
+
+[DESIGN]
+# List of regular expressions of class ancestor names to ignore when counting
+# public methods (see R0903)
+exclude-too-few-public-methods=
+
+# List of qualified class names to ignore when counting class parents (see R0901)
+ignored-parents=
+
+# Maximum number of arguments for function / method (MISRA complexity limit)
+max-args=7
+
+# Maximum number of attributes for a class (keep classes focused)
+max-attributes=15
+
+# Maximum number of boolean expressions in an if statement (MISRA principle)
+max-bool-expr=5
+
+# Maximum number of branch for function / method body (MISRA complexity)
+max-branches=12
+
+# Maximum number of locals for function / method body (MISRA principle)
+max-locals=15
+
+# Maximum number of parents for a class (avoid deep inheritance)
+max-parents=7
+
+# Maximum number of public methods for a class (interface segregation)
+max-public-methods=20
+
+# Maximum number of return / yield for function / method body (MISRA)
+max-returns=6
+
+# Maximum number of statements in function / method body (guideline for decomposition)
+max-statements=30
+
+# Minimum number of public methods for a class (see R0903)
+min-public-methods=2
+
+[CLASSES]
+# Warn about protected attribute access inside special methods
+check-protected-access-in-special-methods=no
+
+# List of method names used to declare (i.e. assign) instance attributes
+defining-attr-methods=__init__,__new__,setUp,__post_init__
+
+# List of member names, which should be excluded from the protected access warning
+exclude-protected=_asdict,_fields,_replace,_source,_make
+
+# List of valid names for the first argument in a class method
+valid-classmethod-first-arg=cls
+
+# List of valid names for the first argument in a metaclass class method
+valid-metaclass-classmethod-first-arg=cls
+
+[IMPORTS]
+# List of modules that can be imported at any level, not just the top level
+allow-any-import-level=
+
+# Allow wildcard imports from modules that define __all__
+allow-wildcard-with-all=no
+
+# Analyse import fallback blocks
+analyse-fallback-blocks=no
+
+# Deprecated modules which should not be used
+deprecated-modules=optparse,tkinter.tix
+
+# Output a graph (.gv or any supported image format) of external dependencies
+ext-import-graph=
+
+# Output a graph (.gv or any supported image format) of all (i.e. internal
+# and external) dependencies
+import-graph=
+
+# Output a graph (.gv or any supported image format) of internal dependencies
+int-import-graph=
+
+# Force import order to follow PEP8 conventions
+known-standard-library=
+
+# Force import order to follow PEP8 conventions
+known-third-party=enchant
+
+# Couples of modules and preferred modules
+preferred-modules=
+
+[EXCEPTIONS]
+# Exceptions that will emit a warning when being caught
+overgeneral-exceptions=BaseException,Exception
