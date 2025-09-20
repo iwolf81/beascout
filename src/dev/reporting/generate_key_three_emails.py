@@ -11,11 +11,16 @@ Usage:
     python scripts/generate_key_three_emails.py data/raw/all_units_*_scored.json --output-dir data/output/emails/
 """
 
-import json
 import sys
+from pathlib import Path
+
+# Ensure project root is in Python path for imports
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+import json
 import glob
 import re
-from pathlib import Path
 from typing import List, Dict, Any
 import pandas as pd
 from datetime import datetime
@@ -61,9 +66,13 @@ class KeyThreeEmailGenerator:
                 except ImportError:
                     continue
             
-            # If all import attempts fail, log once and return empty set
-            print("Warning: Could not load HNE towns data - all units will be included", file=sys.stderr)
-            return set()
+            # If all import attempts fail, this is a critical error
+            raise RuntimeError(
+                f"CRITICAL ERROR [{Path(__file__).name}]: Cannot load HNE towns data (TOWN_TO_DISTRICT mapping). "
+                "This is required to filter units to HNE territory only. "
+                "Without this data, non-HNE units could be included in reports. "
+                "Pipeline must stop to prevent data integrity issues."
+            )
             
         except Exception as e:
             print(f"Warning: Error loading HNE towns: {e}", file=sys.stderr)

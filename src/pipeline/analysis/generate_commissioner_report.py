@@ -173,11 +173,12 @@ class BeAScoutQualityReportGenerator:
     Includes quality scores, grades, recommendations, and Key Three contact information
     """
     
-    def __init__(self):
+    def __init__(self, key_three_filename: str = None):
         self.quality_data = None
         self.key_three_data = None
         self.scorer = UnitQualityScorer()
         self.town_zip_mapping = load_town_zip_mapping()
+        self.key_three_filename = key_three_filename or "[Key Three filename not specified]"
         
     def load_quality_data(self, quality_file: str = 'data/raw/all_units_comprehensive_scored.json',
                           validation_file: str = 'data/output/enhanced_three_way_validation_results.json') -> bool:
@@ -292,20 +293,29 @@ class BeAScoutQualityReportGenerator:
             'missing_from_beascout': True
         }
     
-    def create_quality_report(self, output_path: str = None) -> str:
+    def create_quality_report(self, output_path: str = None, session_id: str = None) -> str:
         """
         Create comprehensive BeAScout Quality Report organized by district
-        
+
+        Args:
+            output_path: Explicit output path (overrides session_id logic)
+            session_id: Session ID for pipeline mode (generates weekly report path)
+
         Returns:
             Path to generated Excel file
         """
         if not self.quality_data:
             raise ValueError("No quality data loaded")
-        
+
         # Generate timestamped filename if not provided
         if not output_path:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            output_path = f"data/output/reports/BeAScout_Quality_Report_{timestamp}.xlsx"
+            if session_id:
+                # Pipeline mode: weekly reports directory with session timestamp
+                output_path = f"data/output/reports/weekly/BeAScout_Weekly_Quality_Report_{session_id}.xlsx"
+            else:
+                # Independent mode: general reports directory with current timestamp
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                output_path = f"data/output/reports/BeAScout_Quality_Report_{timestamp}.xlsx"
         
         # Ensure output directory exists
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
@@ -343,8 +353,7 @@ class BeAScoutQualityReportGenerator:
         ws['A3'].font = Font(size=12)
         
         # Data sources - include Key Three spreadsheet name
-        key_three_filename = "Key 3 08-22-2025.xlsx"  # TODO: Extract from actual filename
-        ws['A4'] = f"Data Sources: BeAScout.org (10-mile search radius per zip code) + JoinExploring.org (20-mile search radius per zip code) + {key_three_filename}"
+        ws['A4'] = f"Data Sources: BeAScout.org (10-mile search radius per zip code) + JoinExploring.org (20-mile search radius per zip code) + {self.key_three_filename}"
         ws['A4'].font = Font(size=12)
         
         # Extract and format original scraping timestamp with date and time
@@ -518,8 +527,7 @@ class BeAScoutQualityReportGenerator:
         ws['A4'] = f"Generation Date/Time: {datetime.now().strftime('%B %d, %Y at %I:%M %p')}"
         ws['A4'].font = Font(size=10)
         
-        key_three_filename = "Key 3 08-22-2025.xlsx"  # TODO: Extract from actual filename
-        ws['A5'] = f"Data Sources: BeAScout.org (10-mile search radius per zip code) + JoinExploring.org (20-mile search radius per zip code) + {key_three_filename}"
+        ws['A5'] = f"Data Sources: BeAScout.org (10-mile search radius per zip code) + JoinExploring.org (20-mile search radius per zip code) + {self.key_three_filename}"
         ws['A5'].font = Font(size=10)
         
         # Extract and format original scraping timestamp with date and time (same logic as Executive Summary)
@@ -832,21 +840,28 @@ def main():
         description='Generate comprehensive BeAScout Quality Report with Key Three integration',
         epilog='''
 Examples:
-  # Use real Key Three data (default)
+  # Independent mode - general reports directory
   python generate_commissioner_report.py
-  
+  → data/output/reports/BeAScout_Quality_Report_20250920_143025.xlsx
+
+  # Pipeline mode - weekly reports directory
+  python generate_commissioner_report.py --session-id 20250920_143025
+  → data/output/reports/weekly/BeAScout_Weekly_Quality_Report_20250920_143025.xlsx
+
   # Use anonymized test data
   python generate_commissioner_report.py --key-three tests/reference/key_three/anonymized_key_three.json
-  
-  # Use custom data sources
-  python generate_commissioner_report.py --quality-data data/raw/custom_units.json --key-three tests/data/test_key_three.json
 
-This script generates:
-  • BeAScout_Quality_Report_[TIMESTAMP].xlsx (comprehensive Excel report with Key Three contacts)
-  
+  # Use custom data sources with explicit output
+  python generate_commissioner_report.py --quality-data data/raw/custom_units.json --output-dir data/reports/
+
+Output Path Logic:
+  • Independent mode (no --session-id): data/output/reports/BeAScout_Quality_Report_[TIMESTAMP].xlsx
+  • Pipeline mode (with --session-id): data/output/reports/weekly/BeAScout_Weekly_Quality_Report_[SESSION_ID].xlsx
+  • Explicit --output-dir: Uses specified directory with appropriate filename format
+
 Pipeline Dependencies:
   1. process_full_dataset.py → --quality-data
-  2. enhanced_validator.py   → --validation-file  
+  2. enhanced_validator.py   → --validation-file
   3. anonymize_key_three.py  → --key-three (test mode)
         ''',
         formatter_class=argparse.RawDescriptionHelpFormatter
@@ -861,8 +876,9 @@ Pipeline Dependencies:
     parser.add_argument('--key-three',
                        help='Path to Key Three data (JSON/Excel) [default: uses Key Three data from validation file] [anonymized version: anonymize_key_three.py]')
     parser.add_argument('--output-dir',
-                       default='data/output/reports/',
-                       help='Output directory for reports [default: data/output/reports/]')
+                       help='Output directory for reports [default: auto-determined by mode]')
+    parser.add_argument('--session-id',
+                       help='Session ID for pipeline mode (generates weekly report path)')
     
     args = parser.parse_args()
     
@@ -877,21 +893,28 @@ Pipeline Dependencies:
     else:
         print(f"   Key Three data: from validation file (default)")
     
-    generator = BeAScoutQualityReportGenerator()
+    # Extract just the filename (not full path) for display in reports
+    import os
+    key_three_display_name = os.path.basename(args.key_three) if args.key_three else None
+
+    generator = BeAScoutQualityReportGenerator(key_three_display_name)
     
     # Load quality and Key Three data with custom paths
     if not generator.load_quality_data(args.quality_data, args.validation_file):
         return
     
-    # Generate report with custom output directory
+    # Generate report with conditional output path logic
     if args.output_dir:
-        # Generate timestamped filename in specified directory
+        # Explicit output directory specified
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = f"{args.output_dir.rstrip('/')}/BeAScout_Quality_Report_{timestamp}.xlsx"
+        if args.session_id:
+            output_path = f"{args.output_dir.rstrip('/')}/BeAScout_Weekly_Quality_Report_{args.session_id}.xlsx"
+        else:
+            output_path = f"{args.output_dir.rstrip('/')}/BeAScout_Quality_Report_{timestamp}.xlsx"
     else:
-        output_path = None  # Use default
-    
-    report_path = generator.create_quality_report(output_path)
+        output_path = None  # Use method's conditional logic
+
+    report_path = generator.create_quality_report(output_path, args.session_id)
     
     # Get statistics for display
     total_units = generator.quality_data['total_units']

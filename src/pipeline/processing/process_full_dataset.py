@@ -31,9 +31,18 @@ def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_c
             shared_timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             os.environ['UNIT_DEBUG_TIMESTAMP'] = shared_timestamp
         
-        # Use HTML parser to extract units to JSON
-        cmd = f'python3 src/pipeline/processing/html_extractor.py "{beascout_file}" "{joinexploring_file}"'
-        result = os.system(cmd)
+        # Use HTML parser to extract units to JSON with proper working directory
+        # Ensure we're in the project root for proper imports
+        import subprocess
+        project_root = Path(__file__).parent.parent.parent.parent
+        cmd = [
+            'python3',
+            'src/pipeline/processing/html_extractor.py',
+            str(beascout_file),
+            str(joinexploring_file)
+        ]
+        result = subprocess.run(cmd, cwd=project_root, capture_output=False)
+        result = result.returncode
 
         if result == 0:
             json_file = f"data/raw/all_units_{zip_code}.json"

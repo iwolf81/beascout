@@ -16,7 +16,7 @@ from playwright.async_api import async_playwright, TimeoutError as PlaywrightTim
 # Import our URL generator
 sys.path.append(str(Path(__file__).parent))
 sys.path.append(str(Path(__file__).parent.parent.parent))
-from url_generator import DualSourceURLGenerator
+from src.dev.scraping.url_generator import DualSourceURLGenerator
 
 
 class BrowserScraper:

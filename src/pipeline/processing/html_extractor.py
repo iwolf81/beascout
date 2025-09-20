@@ -2,6 +2,13 @@
 """
 Extract ALL units from HTML for manual verification of meeting info patterns
 """
+import sys
+from pathlib import Path
+
+# Ensure project root is in Python path for imports
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.insert(0, str(project_root))
+
 import re
 from bs4 import BeautifulSoup
 import json
@@ -298,14 +305,19 @@ def filter_hne_units(units):
     Returns:
         Filtered list containing only HNE Council units
     """
-    # Load HNE towns list
+    # Load HNE towns list - CRITICAL DATA FOR TERRITORY FILTERING
     try:
         from src.pipeline.core.hne_towns import get_hne_towns_and_zipcodes
         hne_towns, _ = get_hne_towns_and_zipcodes()
         hne_towns_lower = [town.lower() for town in hne_towns]
-    except ImportError:
-        print("Warning: Could not load HNE towns data - all units will be included")
-        return units
+    except ImportError as e:
+        # CRITICAL FAILURE - Cannot proceed without HNE territory data
+        raise RuntimeError(
+            f"CRITICAL ERROR [{Path(__file__).name}]: Cannot load HNE towns data (TOWN_TO_DISTRICT mapping): {e}. "
+            "This is required to filter units to HNE territory only. "
+            "Without this data, non-HNE units could be included in reports. "
+            "Pipeline must stop to prevent data integrity issues."
+        )
     
     hne_units = []
     non_hne_units = []

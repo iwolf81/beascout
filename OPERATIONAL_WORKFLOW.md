@@ -61,14 +61,14 @@ Note: Regression test for discarded units awaits fix for unit town names - beasc
 ```bash
 (venv) iwolf@Iras-MacBook-Pro debug % pwd
 /Users/iwolf/Repos/beascout/data/debug
-(venv) iwolf@Iras-MacBook-Pro debug % alias udiff2
-udiff2='f() { fname="$1"; base="${fname%.*}"; ext="${fname##*.}"; sort -u "$fname" > "${base}_u.${ext}"; diff ~/Repos/beascout/tests/reference/units/unit_identifier_debug_scraped_reference_u.log "${base}_u.${ext}"; }; f'
-(venv) iwolf@Iras-MacBook-Pro debug % alias dudiff2
-dudiff2='f() { fname="$1"; base="${fname%.*}"; ext="${fname##*.}"; sort -u "$fname" > "${base}_u.${ext}"; diff ~/Repos/beascout/tests/reference/units/discarded_unit_identifier_debug_scraped_reference_u.log "${base}_u.${ext}"; }; f'
+(venv) iwolf@Iras-MacBook-Pro logs % alias udiff
+udiff='f() { fname="$1"; base="${fname%.*}"; ext="${fname##*.}"; sort -u "$fname" > "${base}_u.${ext}"; diff ~/Repos/beascout/tests/reference/units/unit_identifier_debug_scraped_reference_u.log "${base}_u.${ext}"; }; f'
+(venv) iwolf@Iras-MacBook-Pro debug % alias dudiff
+dudiff='f() { fname="$1"; base="${fname%.*}"; ext="${fname##*.}"; sort -u "$fname" > "${base}_u.${ext}"; diff ~/Repos/beascout/tests/reference/units/discarded_unit_identifier_debug_scraped_reference_u.log "${base}_u.${ext}"; }; f'
 
 # No diff output means no regressions with HNE-units
 # Regression test for discarded units awaits fix for unit town names - issue [#5](https://github.com/iwolf81/beascout/issues/5)
-(venv) iwolf@Iras-MacBook-Pro debug % udiff2 unit_identifier_debug_scraped_20250905_085924.log
+(venv) iwolf@Iras-MacBook-Pro debug % udiff unit_identifier_debug_scraped_20250905_085924.log
 (venv) iwolf@Iras-MacBook-Pro debug % 
 ```
 
