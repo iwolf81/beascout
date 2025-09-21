@@ -1,8 +1,17 @@
 ## 🚀 **Operational Pipeline Workflow**
 
-### **Complete Production Pipeline:**
+### **Weekly Reports Pipeline (Recommended):**
+For comprehensive weekly quality reports with automated email drafts:
+```bash
+# Complete weekly pipeline (scraping → processing → reporting → analytics → email)
+python src/pipeline/operation/generate_weekly_report.py
+
+# See WEEKLY_REPORT_WORKFLOW.md for complete documentation
+```
+
+### **Complete Production Pipeline (Manual):**
 1. **acquisition/**: Scrape BeAScout.org and JoinExploring.org
-2. **processing/**: Convert HTML → JSON with quality scoring  
+2. **processing/**: Convert HTML → JSON with quality scoring
 3. **analysis/**: Generate Excel reports and unit emails
 4. **core/**: Shared utilities for all pipeline components
 

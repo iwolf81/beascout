@@ -67,15 +67,17 @@ class WeeklyReportPipeline:
     Handles orchestration, error recovery, and status tracking
     """
 
-    def __init__(self, skip_failed_zips: bool = False, fallback_to_cache: bool = False, key_three_file: str = None, scraped_dir: str = None):
+    def __init__(self, skip_failed_zips: bool = False, fallback_to_cache: bool = False, key_three_file: str = None, scraped_dir: str = None, baseline_file: str = None):
         self.skip_failed_zips = skip_failed_zips
         self.fallback_to_cache = fallback_to_cache
         self.key_three_file = key_three_file
+        self.baseline_file = baseline_file
         self.start_time = datetime.now()
         self.session_id = self.start_time.strftime("%Y%m%d_%H%M%S")
 
         # Session-specific data tracking
         self.scraped_session_dir = scraped_dir
+        self.scraped_session_id = self._extract_scraped_session_id()
 
         # Setup logging
         self.setup_logging()
@@ -194,8 +196,8 @@ class WeeklyReportPipeline:
             ),
             "email_draft": PipelineStage(
                 name="email_draft",
-                description="Generate email draft with statistics for manual distribution",
-                script_path="src/pipeline/analysis/generate_email_draft.py",
+                description="Generate weekly email draft with statistics for manual distribution",
+                script_path="src/pipeline/analysis/generate_weekly_email_draft.py",
                 required_files=[
                     "data/output/reports/weekly/BeAScout_Weekly_Quality_Report_*.json",
                     "data/config/email_distribution.json"
@@ -620,8 +622,35 @@ class WeeklyReportPipeline:
         elif stage.name == "reporting":
             # Pass session ID for pipeline mode to generate weekly report path
             cmd_args.extend(["--session-id", self.session_id])
+            # Pass Key Three file for accurate filename display
+            if self.key_three_file:
+                cmd_args.extend(["--key-three", self.key_three_file])
+            # Pass scraped session ID if available for accurate timestamps
+            if self.scraped_session_id:
+                cmd_args.extend(["--scraped-session", self.scraped_session_id])
+
+        elif stage.name == "analytics":
+            # Add baseline parameter if specified
+            if hasattr(self, 'baseline_file') and self.baseline_file:
+                cmd_args.extend(["--baseline", self.baseline_file])
+
+        elif stage.name == "email_draft":
+            # Pass scraped session ID if available for accurate timestamps
+            if self.scraped_session_id:
+                cmd_args.extend(["--scraped-session", self.scraped_session_id])
 
         return cmd_args
+
+    def _extract_scraped_session_id(self) -> Optional[str]:
+        """Extract session ID from scraped directory path"""
+        if not self.scraped_session_dir:
+            return None
+
+        # Extract timestamp from path like "data/scraped/20250920_124820"
+        session_path = Path(self.scraped_session_dir)
+        if session_path.exists():
+            return session_path.name
+        return None
 
     def _find_latest_scraped_session(self) -> Optional[Path]:
         """Find the most recent scraped session directory"""
@@ -916,6 +945,7 @@ This pipeline orchestrates the complete data flow:
     parser.add_argument('--session-id', help='Resume specific session ID')
     parser.add_argument('--key-three-file', help='Path to Key Three file (e.g., "data/input/Key 3 08-22-2025.xlsx")')
     parser.add_argument('--scraped-dir', help='Path to scraped session directory (e.g., "data/scraped/20250919_191632")')
+    parser.add_argument('--baseline', help='Baseline analytics file for week-over-week comparison (e.g., "BeAScout_Weekly_Quality_Report_20250904_154530.json")')
 
     args = parser.parse_args()
 
@@ -924,7 +954,8 @@ This pipeline orchestrates the complete data flow:
         skip_failed_zips=args.skip_failed_zips,
         fallback_to_cache=args.fallback_to_cache,
         key_three_file=args.key_three_file,
-        scraped_dir=args.scraped_dir
+        scraped_dir=args.scraped_dir,
+        baseline_file=args.baseline
     )
 
     # Determine stages to run

@@ -173,12 +173,34 @@ class BeAScoutQualityReportGenerator:
     Includes quality scores, grades, recommendations, and Key Three contact information
     """
     
-    def __init__(self, key_three_filename: str = None):
+    def __init__(self, key_three_filename: str = None, scraped_session_id: str = None):
         self.quality_data = None
         self.key_three_data = None
         self.scorer = UnitQualityScorer()
         self.town_zip_mapping = load_town_zip_mapping()
         self.key_three_filename = key_three_filename or "[Key Three filename not specified]"
+        self.scraped_session_id = scraped_session_id
+
+    def _format_scraped_timestamp(self) -> str:
+        """Format scraped session timestamp for display"""
+        if not self.scraped_session_id:
+            return ""
+
+        try:
+            from datetime import datetime
+            # Parse timestamp: YYYYMMDD_HHMMSS
+            date_part = self.scraped_session_id[:8]
+            time_part = self.scraped_session_id[9:]
+
+            date_obj = datetime.strptime(date_part, "%Y%m%d")
+            time_obj = datetime.strptime(time_part, "%H%M%S")
+
+            formatted_date = date_obj.strftime("%B %d, %Y")
+            formatted_time = time_obj.strftime("%I:%M %p")
+
+            return f" - Data scraped: {formatted_date} at {formatted_time}"
+        except Exception:
+            return f" - Scraped session: {self.scraped_session_id}"
         
     def load_quality_data(self, quality_file: str = 'data/raw/all_units_comprehensive_scored.json',
                           validation_file: str = 'data/output/enhanced_three_way_validation_results.json') -> bool:
@@ -879,7 +901,9 @@ Pipeline Dependencies:
                        help='Output directory for reports [default: auto-determined by mode]')
     parser.add_argument('--session-id',
                        help='Session ID for pipeline mode (generates weekly report path)')
-    
+    parser.add_argument('--scraped-session',
+                       help='Scraped session ID for accurate data timestamp display')
+
     args = parser.parse_args()
     
     print("📋 Generating BeAScout Quality Report")
@@ -897,7 +921,7 @@ Pipeline Dependencies:
     import os
     key_three_display_name = os.path.basename(args.key_three) if args.key_three else None
 
-    generator = BeAScoutQualityReportGenerator(key_three_display_name)
+    generator = BeAScoutQualityReportGenerator(key_three_display_name, args.scraped_session)
     
     # Load quality and Key Three data with custom paths
     if not generator.load_quality_data(args.quality_data, args.validation_file):

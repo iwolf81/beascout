@@ -8,11 +8,166 @@ Automated system for generating weekly quality reports for manual email distribu
 # Run complete pipeline (recommended for Sunday evenings)
 python src/pipeline/operation/generate_weekly_report.py
 
+# Run with specific Key Three file
+python src/pipeline/operation/generate_weekly_report.py --key-three-file "data/input/key_3_08-22-2025.xlsx"
+
+# Run with explicit baseline for analytics comparison
+python src/pipeline/operation/generate_weekly_report.py --baseline BeAScout_Weekly_Quality_Report_20250904_154530.json
+
 # Or if you encounter issues, run stage by stage:
 python src/pipeline/operation/generate_weekly_report.py --stage scraping
 python src/pipeline/operation/generate_weekly_report.py --stage processing
 python src/pipeline/operation/generate_weekly_report.py --stage validation
 python src/pipeline/operation/generate_weekly_report.py --stage reporting
+python src/pipeline/operation/generate_weekly_report.py --stage analytics
+python src/pipeline/operation/generate_weekly_report.py --stage email_draft
+```
+
+## Pipeline Arguments Reference
+
+### Main Pipeline Script: `generate_weekly_report.py`
+
+**All Available Arguments**:
+```bash
+python src/pipeline/operation/generate_weekly_report.py [OPTIONS]
+
+--stage {scraping,processing,validation,reporting,analytics,email_draft,all}
+    Pipeline stage to run [default: all]
+
+--resume
+    Resume from last successful stage in previous session
+
+--skip-failed-zips
+    Skip zip codes that fail during scraping and continue
+
+--fallback-to-cache
+    Use cached data if fresh scraping fails
+
+--session-id SESSION_ID
+    Resume specific session ID
+
+--key-three-file KEY_THREE_FILE
+    Path to Key Three file (e.g., "data/input/Key_3_08-22-2025.xlsx")
+
+--scraped-dir SCRAPED_DIR
+    Path to scraped session directory (e.g., "data/scraped/20250920_191632")
+
+--baseline BASELINE
+    Baseline analytics file for week-over-week comparison
+    (e.g., "BeAScout_Weekly_Quality_Report_20250904_154530.json")
+```
+
+**Common Usage Patterns**:
+```bash
+# Complete pipeline with custom Key Three file
+python src/pipeline/operation/generate_weekly_report.py \
+  --key-three-file "data/input/key_3_08-22-2025.xlsx"
+
+# Resume from failure point
+python src/pipeline/operation/generate_weekly_report.py --resume
+
+# Use existing scraped data (skip scraping stage)
+python src/pipeline/operation/generate_weekly_report.py \
+  --scraped-dir "data/scraped/20250920_124820" \
+  --key-three-file "data/input/key_3_08-22-2025.xlsx"
+
+# Generate analytics with specific baseline
+python src/pipeline/operation/generate_weekly_report.py \
+  --stage analytics \
+  --baseline BeAScout_Weekly_Quality_Report_20250904_154530.json
+
+# Skip problematic zip codes during scraping
+python src/pipeline/operation/generate_weekly_report.py \
+  --skip-failed-zips --fallback-to-cache
+```
+
+## Individual Scripts Called by Pipeline
+
+### 1. Scraping: `multi_zip_scraper.py`
+```bash
+# Called by pipeline as:
+python src/pipeline/acquisition/multi_zip_scraper.py full [--skip-failed] [--fallback-cache]
+
+# Manual usage:
+python src/pipeline/acquisition/multi_zip_scraper.py {test|full}
+  test: Scrape 3 zip codes for testing
+  full: Scrape all 71 HNE zip codes
+  --skip-failed: Continue if some zip codes fail
+  --fallback-cache: Use cached data if scraping fails
+```
+
+### 2. Processing: `process_full_dataset.py`
+```bash
+# Called by pipeline as:
+python src/pipeline/processing/process_full_dataset.py SCRAPED_DIR
+
+# Manual usage:
+python src/pipeline/processing/process_full_dataset.py SCRAPED_DIRECTORY
+  SCRAPED_DIRECTORY: Path to directory containing HTML files (e.g., data/scraped/20250920_124820)
+```
+
+### 3. Key Three Conversion: `convert_key_three_to_json.py`
+```bash
+# Called by pipeline as:
+python src/dev/tools/convert_key_three_to_json.py KEY_THREE_FILE
+
+# Manual usage:
+python src/dev/tools/convert_key_three_to_json.py KEY_THREE_FILE
+  KEY_THREE_FILE: Path to Key Three Excel/CSV file (e.g., data/input/key_3_08-22-2025.xlsx)
+```
+
+### 4. Validation: `enhanced_validator.py`
+```bash
+# Called by pipeline as:
+python src/pipeline/analysis/enhanced_validator.py --key-three KEY_THREE_JSON
+
+# Manual usage:
+python src/pipeline/analysis/enhanced_validator.py [OPTIONS]
+  --quality-data PATH: Quality data JSON file [default: data/raw/all_units_comprehensive_scored.json]
+  --key-three PATH: Key Three JSON file (required for pipeline)
+  --output PATH: Output validation results file [default: data/output/enhanced_three_way_validation_results.json]
+```
+
+### 5. Reporting: `generate_commissioner_report.py`
+```bash
+# Called by pipeline as:
+python src/pipeline/analysis/generate_commissioner_report.py \
+  --session-id SESSION_ID \
+  --key-three KEY_THREE_FILE \
+  --scraped-session SCRAPED_SESSION_ID
+
+# Manual usage:
+python src/pipeline/analysis/generate_commissioner_report.py [OPTIONS]
+  --quality-data PATH: Quality data JSON [default: data/raw/all_units_comprehensive_scored.json]
+  --validation-file PATH: Validation results JSON [default: data/output/enhanced_three_way_validation_results.json]
+  --key-three PATH: Key Three data file (JSON/Excel) for accurate filename display
+  --output-dir PATH: Output directory [default: auto-determined]
+  --session-id ID: Session ID for pipeline mode (generates weekly report path)
+  --scraped-session ID: Scraped session ID for accurate data timestamp display
+```
+
+### 6. Analytics: `generate_weekly_analytics.py`
+```bash
+# Called by pipeline as:
+python src/pipeline/analysis/generate_weekly_analytics.py [--baseline BASELINE_FILE]
+
+# Manual usage:
+python src/pipeline/analysis/generate_weekly_analytics.py [OPTIONS]
+  --excel-file PATH: Excel report file [default: find latest in weekly reports directory]
+  --output PATH: Output analytics JSON [default: same directory as Excel file]
+  --baseline PATH: Baseline analytics file for comparison [default: auto-detect most recent]
+```
+
+### 7. Email Draft: `generate_weekly_email_draft.py`
+```bash
+# Called by pipeline as:
+python src/pipeline/analysis/generate_weekly_email_draft.py [--scraped-session SCRAPED_SESSION_ID]
+
+# Manual usage:
+python src/pipeline/analysis/generate_weekly_email_draft.py [OPTIONS]
+  --analytics-file PATH: Analytics JSON file [default: find latest in weekly reports directory]
+  --output PATH: Output email draft [default: same directory as analytics file]
+  --scraped-session ID: Scraped session ID for accurate data timestamp display
 ```
 
 ## Pipeline Stages
@@ -59,6 +214,9 @@ python src/pipeline/operation/generate_weekly_report.py --stage reporting
 ```bash
 # Resume from last successful stage
 python src/pipeline/operation/generate_weekly_report.py --resume
+
+# Resume specific session by ID
+python src/pipeline/operation/generate_weekly_report.py --resume --session-id 20250920_124820
 ```
 
 ### Skip Problem Areas
@@ -68,6 +226,28 @@ python src/pipeline/operation/generate_weekly_report.py --skip-failed-zips
 
 # Use cached data if fresh scraping fails
 python src/pipeline/operation/generate_weekly_report.py --fallback-to-cache
+
+# Combine both for maximum resilience
+python src/pipeline/operation/generate_weekly_report.py --skip-failed-zips --fallback-to-cache
+```
+
+### Use Existing Data
+```bash
+# Use existing scraped data (skip scraping completely)
+python src/pipeline/operation/generate_weekly_report.py \
+  --scraped-dir "data/scraped/20250920_124820" \
+  --key-three-file "data/input/key_3_08-22-2025.xlsx"
+
+# Process existing scraped data only
+python src/pipeline/operation/generate_weekly_report.py \
+  --stage processing \
+  --scraped-dir "data/scraped/20250920_124820"
+
+# Generate report with specific Key Three file
+python src/pipeline/operation/generate_weekly_report.py \
+  --stage reporting \
+  --key-three-file "data/input/key_3_08-22-2025.xlsx" \
+  --scraped-dir "data/scraped/20250920_124820"
 ```
 
 ### Run Individual Stages
@@ -75,12 +255,20 @@ python src/pipeline/operation/generate_weekly_report.py --fallback-to-cache
 # If scraping fails, try processing existing data
 python src/pipeline/operation/generate_weekly_report.py --stage processing
 
-# Generate report from existing data
-python src/pipeline/operation/generate_weekly_report.py --stage reporting
+# Generate report from existing data with specific Key Three file
+python src/pipeline/operation/generate_weekly_report.py \
+  --stage reporting \
+  --key-three-file "data/input/key_3_08-22-2025.xlsx"
 
-# Generate analytics and email draft only (if report already exists)
-python src/pipeline/operation/generate_weekly_report.py --stage analytics
-python src/pipeline/operation/generate_weekly_report.py --stage email_draft
+# Generate analytics with explicit baseline comparison
+python src/pipeline/operation/generate_weekly_report.py \
+  --stage analytics \
+  --baseline BeAScout_Weekly_Quality_Report_20250904_154530.json
+
+# Generate weekly email draft with correct scraped timestamp
+python src/pipeline/operation/generate_weekly_report.py \
+  --stage email_draft \
+  --scraped-dir "data/scraped/20250920_124820"
 ```
 
 ## Manual Distribution Workflow
@@ -171,6 +359,21 @@ python src/pipeline/operation/generate_weekly_report.py --stage email_draft
 - Verify Excel dependencies are installed (`openpyxl`)
 - Check disk space in output directory
 
+**🔥 "Key Three filename not specified"**
+- Use `--key-three-file` parameter to specify exact file
+- Ensure Key Three file exists in `data/input/` directory
+- File must be .xlsx or .csv format
+
+**🔥 "Analytics baseline not found"**
+- Use `--baseline` parameter to specify exact baseline file
+- Check that baseline analytics JSON file exists
+- Baseline file should be in `data/output/reports/weekly/` directory
+
+**🔥 "Email shows wrong data timestamp"**
+- Use `--scraped-dir` parameter to specify correct scraped session
+- Verify scraped session contains `session_summary.json`
+- Pipeline automatically passes scraped timestamps when run completely
+
 ### Recovery Strategies
 
 **Partial Pipeline Failure**:
@@ -229,6 +432,9 @@ python src/pipeline/operation/generate_weekly_report.py --stage email_draft
 ✅ **Email draft generation**: Complete copy/paste email with recipients, subject, and statistics
 ✅ **Simplified workflow**: Single command generates report, analytics, and email draft
 ✅ **Configuration management**: Email addresses and templates stored in configuration files
+✅ **Accurate timestamps**: Reports and emails show actual scraped data timestamp, not generation time
+✅ **Baseline analytics**: Explicit baseline comparison for week-over-week analysis
+✅ **Key Three integration**: Automatic Key Three filename display in reports
 
 ## Future Enhancements
 

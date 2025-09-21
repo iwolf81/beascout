@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"name": "beascout",
+			"path": "."
+		},
+		{
+			"name": "scoutbook",
+			"path": "../scoutbook"
+		},
+		{
+			"name": "ai-context",
+			"path": "../ai-context"
+		}
+	],
+	"settings": {
+		"files.defaultLanguage": "\"python\""
+	}
+}

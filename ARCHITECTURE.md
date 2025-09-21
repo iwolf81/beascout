@@ -40,7 +40,12 @@ Scraping   Parsing   Extraction  Quality   Final   Output
 
 ```
 src/
-├── pipeline/              # 🚀 OPERATIONAL PIPELINE (11 core files)
+├── pipeline/              # 🚀 OPERATIONAL PIPELINE (14 core files)
+│   ├── operation/         # Pipeline orchestration (1 file)
+│   │   └── generate_weekly_report.py  # Complete weekly pipeline
+│   │                                  # - End-to-end automation
+│   │                                  # - Stage-based execution
+│   │                                  # - Error recovery & resume
 │   ├── acquisition/       # Data collection (2 files)
 │   │   ├── multi_zip_scraper.py    # Main scraper - dual-source automation
 │   │   │                          # - BeAScout.org + JoinExploring.org processing
@@ -63,15 +68,21 @@ src/
 │   │                              # - Position-first town extraction
 │   │                              # - 4-source precedence logic
 │   │                              # - HNE territory filtering
-│   ├── analysis/          # Reports & outputs (2 files)
+│   ├── analysis/          # Reports & outputs (4 files)
 │   │   ├── generate_commissioner_report.py  # Excel report generation
 │   │   │                                   # - Professional formatting
 │   │   │                                   # - District-specific analysis
 │   │   │                                   # - Quality metrics & grading
-│   │   └── generate_unit_emails.py         # Unit improvement emails
-│   │                                       # - Personalized recommendations
-│   │                                       # - Key Three contact matching
-│   │                                       # - Unit-specific action items
+│   │   ├── generate_unit_emails.py         # Unit improvement emails
+│   │   │                                   # - Personalized recommendations
+│   │   │                                   # - Key Three contact matching
+│   │   │                                   # - Unit-specific action items
+│   │   ├── generate_weekly_analytics.py    # Week-over-week analytics
+│   │   │                                   # - Baseline comparison analysis
+│   │   │                                   # - Quality improvement tracking
+│   │   └── generate_weekly_email_draft.py  # Leadership email drafts
+│   │                                       # - Copy/paste distribution format
+│   │                                       # - Weekly statistics summary
 │   └── core/              # Shared infrastructure (4 files)
 │       ├── district_mapping.py    # Town/district mapping (SINGLE SOURCE OF TRUTH)
 │       │                         # - 65 HNE towns across 2 districts

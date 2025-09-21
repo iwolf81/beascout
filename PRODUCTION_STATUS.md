@@ -114,7 +114,10 @@ The BeAScout Unit Information Analysis System has successfully evolved from prot
 
 ### Professional Reporting Implementation
 - **Commissioner-Ready Output**: 5-sheet Excel format with executive summary and action flags
+- **Weekly Reporting Pipeline**: Automated end-to-end report generation (`generate_weekly_report.py`)
 - **Data Quality Metrics**: Complete validation statistics for council leadership briefings
+- **Week-over-Week Analytics**: Baseline comparison with quality improvement tracking
+- **Email Distribution**: Automated draft generation for leadership distribution
 - **Action Classification**: Clear follow-up requirements for missing web presence and data gaps
 - **Visual Presentation**: Professional charts and summaries for stakeholder communication
 

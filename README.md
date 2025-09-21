@@ -126,7 +126,11 @@ python scripts/test_key_three_debug.py  # Test Key Three parsing
 
 **Report generation?** → `src/pipeline/analysis/generate_commissioner_report.py`
 
+**Weekly reports pipeline?** → `src/pipeline/operation/generate_weekly_report.py`
+
 **Email generation?** → `src/pipeline/analysis/generate_unit_emails.py`
+
+**Weekly email drafts?** → `src/pipeline/analysis/generate_weekly_email_draft.py`
 
 **District mappings?** → `src/pipeline/core/district_mapping.py`
 

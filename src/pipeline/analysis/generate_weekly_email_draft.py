@@ -19,9 +19,10 @@ sys.path.insert(0, str(project_root))
 class EmailDraftGenerator:
     """Generates complete email drafts for weekly quality report distribution"""
 
-    def __init__(self):
+    def __init__(self, scraped_session_id: str = None):
         self.analytics_data = None
         self.email_config = None
+        self.scraped_session_id = scraped_session_id
 
     def load_email_configuration(self, config_path: Path = None) -> bool:
         """Load email distribution configuration"""
@@ -93,8 +94,23 @@ class EmailDraftGenerator:
             return timestamp
 
     def format_data_timestamp(self) -> str:
-        """Format data timestamp from analytics"""
+        """Format data timestamp - use scraped session timestamp if available, otherwise report timestamp"""
         try:
+            # Prefer scraped session timestamp if available
+            if self.scraped_session_id:
+                # Parse scraped session timestamp: YYYYMMDD_HHMMSS
+                date_part = self.scraped_session_id[:8]
+                time_part = self.scraped_session_id[9:]
+
+                date_obj = datetime.strptime(date_part, "%Y%m%d")
+                time_obj = datetime.strptime(time_part, "%H%M%S")
+
+                formatted_date = date_obj.strftime("%B %d, %Y")
+                formatted_time = time_obj.strftime("%I:%M %p")
+
+                return f"{formatted_date} at {formatted_time}"
+
+            # Fall back to report timestamp from analytics
             metadata = self.analytics_data.get("report_metadata", {})
             timestamp = metadata.get("timestamp", "")
 
@@ -117,7 +133,7 @@ class EmailDraftGenerator:
             return "Date Unknown"
 
     def generate_statistics_section(self) -> str:
-        """Generate the statistics section for email body"""
+        """Generate the comprehensive statistics section for email body"""
         if not self.analytics_data:
             return "Statistics unavailable."
 
@@ -128,7 +144,6 @@ class EmailDraftGenerator:
         if exec_changes.get("first_week", True):
             # First week - show current statistics without comparisons
             exec_summary = self.analytics_data.get("executive_summary", {})
-
             lines = ["This Week's Quality Overview:"]
 
             # Total units
@@ -136,24 +151,42 @@ class EmailDraftGenerator:
             if total_units is not None:
                 lines.append(f"• Total Units: {total_units} units")
 
+            # Units missing from BeAScout
+            missing_units = exec_summary.get("units_missing_from_beascout")
+            if missing_units is not None:
+                lines.append(f"• Units missing from BeAScout: {missing_units}")
+
             # Average quality score
             avg_score = exec_summary.get("average_quality_score")
             if avg_score is not None:
                 lines.append(f"• Average Quality Score: {avg_score}%")
 
-            # Grade distribution
+            # Complete grade distribution
+            lines.append("• Quality Grade Distribution:")
             grade_dist = exec_summary.get("grade_distribution", {})
-            for grade in ["A", "F"]:  # Just show A and F grades for brevity
-                grade_data = grade_dist.get(grade, {})
-                count = grade_data.get("count")
-                if count is not None:
-                    grade_name = "Grade A" if grade == "A" else "Grade F"
-                    lines.append(f"• {grade_name} Units: {count} units")
+            grade_order = ["A", "B", "C", "D", "F", "N/A"]
+            grade_names = {
+                "A": "Grade A (90%+)",
+                "B": "Grade B (80-89%)",
+                "C": "Grade C (70-79%)",
+                "D": "Grade D (60-69%)",
+                "F": "Grade F (<60%)",
+                "N/A": "Grade N/A (Missing)"
+            }
+
+            for grade in grade_order:
+                if grade in grade_dist:
+                    grade_data = grade_dist[grade]
+                    count = grade_data.get("count")
+                    percentage = grade_data.get("percentage")
+                    if count is not None:
+                        pct_str = f" ({percentage}%)" if percentage is not None else ""
+                        lines.append(f"  - {grade_names[grade]}: {count} units{pct_str}")
 
             return "\n".join(lines)
 
         else:
-            # Subsequent weeks - show changes
+            # Subsequent weeks - show comprehensive changes
             changes = exec_changes.get("changes", {})
             lines = ["This Week's Quality Overview Changes:"]
 
@@ -163,7 +196,7 @@ class EmailDraftGenerator:
                 current = total_data["current"]
                 change = total_data["change"]
                 sign = "+" if change >= 0 else ""
-                lines.append(f"• Total Units: {current} units ({sign}{change} from last week)")
+                lines.append(f"• Total Units: {current} units ({sign}{change} from baseline)")
 
             # Average quality score change
             if "average_quality_score" in changes:
@@ -171,18 +204,28 @@ class EmailDraftGenerator:
                 current = avg_data["current"]
                 change = avg_data["change"]
                 sign = "+" if change >= 0 else ""
-                lines.append(f"• Average Quality Score: {current}% ({sign}{change}% from last week)")
+                lines.append(f"• Average Quality Score: {current}% ({sign}{change}% from baseline)")
 
-            # Grade distribution changes (focus on A and F)
+            # Complete grade distribution changes
+            lines.append("• Quality Grade Distribution Changes:")
             grade_changes = changes.get("grade_distribution", {})
-            for grade in ["A", "F"]:
+            grade_order = ["A", "B", "C", "D", "F", "N/A"]
+            grade_names = {
+                "A": "Grade A (90%+)",
+                "B": "Grade B (80-89%)",
+                "C": "Grade C (70-79%)",
+                "D": "Grade D (60-69%)",
+                "F": "Grade F (<60%)",
+                "N/A": "Grade N/A (Missing)"
+            }
+
+            for grade in grade_order:
                 if grade in grade_changes:
                     grade_data = grade_changes[grade]
                     current = grade_data["current"]
                     change = grade_data["change"]
                     sign = "+" if change >= 0 else ""
-                    grade_name = "Grade A" if grade == "A" else "Grade F"
-                    lines.append(f"• {grade_name} Units: {current} units ({sign}{change} from last week)")
+                    lines.append(f"  - {grade_names[grade]}: {current} units ({sign}{change} from baseline)")
 
             # Add unit-level changes
             unit_comparison = comparison.get("unit_score_changes", {})
@@ -195,7 +238,7 @@ class EmailDraftGenerator:
                 # Top improvements (up to 3)
                 improvements = [u for u in unit_changes if u["improvement"]][:3]
                 if improvements:
-                    lines.append("Improved Scores:")
+                    lines.append("Top Improvements:")
                     for unit in improvements:
                         prev_score = unit["previous_score"]
                         curr_score = unit["current_score"]
@@ -205,8 +248,9 @@ class EmailDraftGenerator:
                 # Top declines (up to 3)
                 declines = [u for u in unit_changes if not u["improvement"]][:3]
                 if declines:
-                    lines.append("")
-                    lines.append("Declined Scores:")
+                    if improvements:  # Add spacing only if there were improvements
+                        lines.append("")
+                    lines.append("Top Declines:")
                     for unit in declines:
                         prev_score = unit["previous_score"]
                         curr_score = unit["current_score"]
@@ -304,13 +348,13 @@ def main():
         epilog="""
 Examples:
   # Generate email draft from latest analytics
-  python generate_email_draft.py
+  python generate_weekly_email_draft.py
 
   # Generate email draft from specific analytics file
-  python generate_email_draft.py --analytics-file path/to/analytics.json
+  python generate_weekly_email_draft.py --analytics-file path/to/analytics.json
 
   # Specify output location
-  python generate_email_draft.py --output path/to/email_draft.txt
+  python generate_weekly_email_draft.py --output path/to/email_draft.txt
 
 This script creates a complete email draft with recipients, subject,
 body with statistics, and attachment information for copy/paste distribution.
@@ -320,10 +364,11 @@ body with statistics, and attachment information for copy/paste distribution.
 
     parser.add_argument('--analytics-file', help='Path to analytics JSON file [default: find latest in weekly reports directory]')
     parser.add_argument('--output', help='Output path for email draft [default: same directory as analytics file]')
+    parser.add_argument('--scraped-session', help='Scraped session ID for accurate data timestamp display')
 
     args = parser.parse_args()
 
-    generator = EmailDraftGenerator()
+    generator = EmailDraftGenerator(args.scraped_session)
 
     # Determine input analytics file
     if args.analytics_file:

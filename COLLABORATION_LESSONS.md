@@ -141,6 +141,8 @@
 4. **Real-world edge case discovery beats theoretical pattern analysis**
 5. **Reference testing framework prevents regressions better than automated correctness assumptions**
 6. **Business goal clarification prevents technical drift**: Clear purpose definition (unit presence correlation vs cross-validation accuracy) enables focused development
+7. **Specific problem reporting with actual command usage**: Providing exact commands, filenames, and error examples enables precise diagnosis and resolution
+8. **Systematic issue prioritization**: "let's start with item 2" approach ensures focused resolution of multiple problems
 
 ### **Process Excellence**
 - Meta-conversations about collaboration methods create most efficient working relationships
@@ -148,6 +150,19 @@
 - Documentation-driven development using user feedback files as comprehensive requirements
 - Performance feedback enables real-time collaboration optimization
 - **Comprehensive documentation updates**: Multi-file consistency management enables professional system documentation and stakeholder communication
+
+### **Production Pipeline Development**
+- **Session continuity from context summaries**: Complex technical work can be successfully resumed without momentum loss when proper context is provided
+- **Iterative enhancement beats initial perfection**: Starting with basic functionality and systematically enhancing through user feedback creates better final products than attempting comprehensive design upfront
+- **Operational testing reveals hidden issues**: Real usage patterns expose timestamp accuracy, data consistency, and formatting problems invisible during development
+- **Explicit parameter control over auto-detection**: User-controlled baseline selection provides more reliable results than automated algorithm selection
+- **Complete feature delivery includes supporting materials**: Code completion requires comprehensive documentation, naming clarity, and operational readiness validation
+
+### **Advanced AI Collaboration Capabilities Demonstrated**
+- **Pipeline-wide problem tracing**: AI can systematically track issues through multiple script stages to identify root causes (e.g., timestamp propagation through 6 pipeline stages)
+- **Multi-file documentation coordination**: Simultaneous updates across 11 markdown files while maintaining consistency and avoiding redundancy
+- **Context-driven enhancement**: Successfully building upon existing functionality through detailed context summaries rather than starting from scratch
+- **Format iteration management**: Coordinating multiple rounds of output format refinement while maintaining backward compatibility and user preferences
 
 ---
 
