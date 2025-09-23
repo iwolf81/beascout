@@ -188,7 +188,22 @@ class EmailDraftGenerator:
         else:
             # Subsequent weeks - show comprehensive changes
             changes = exec_changes.get("changes", {})
-            lines = ["This Week's Quality Overview Changes:"]
+
+            # Get baseline information
+            baseline_info = comparison.get("baseline_metadata", {})
+            baseline_date = baseline_info.get("baseline_date", "unknown")
+
+            # Format baseline date for readability
+            baseline_date_formatted = "unknown date"
+            if baseline_date != "unknown" and len(baseline_date) == 8:
+                try:
+                    from datetime import datetime
+                    date_obj = datetime.strptime(baseline_date, "%Y%m%d")
+                    baseline_date_formatted = date_obj.strftime("%B %d, %Y")
+                except:
+                    baseline_date_formatted = baseline_date
+
+            lines = [f"This Week's Quality Overview Changes (compared to {baseline_date_formatted} baseline):"]
 
             # Total units change
             if "total_units" in changes:

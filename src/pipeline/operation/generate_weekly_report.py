@@ -517,8 +517,16 @@ class WeeklyReportPipeline:
                 duration = stage.duration
                 self.logger.info(f"✅ Stage completed: {stage.name} ({duration:.1f}s)")
 
-                # Run udiff regression testing after scraping stage
+                # Update scraped session directory and run regression testing after scraping stage
                 if stage.name == "scraping":
+                    # Update scraped session directory to current session after successful scraping
+                    current_session_dir = f"data/scraped/{self.session_id}"
+                    if Path(current_session_dir).exists():
+                        self.scraped_session_dir = current_session_dir
+                        self.logger.info(f"✅ Updated scraped session directory to current session: {current_session_dir}")
+                    else:
+                        self.logger.warning(f"⚠️  Current session directory not found after scraping: {current_session_dir}")
+
                     self._run_udiff_regression_test()
             else:
                 stage.fail("Output validation failed")

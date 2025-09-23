@@ -68,6 +68,12 @@ class WeeklyAnalyticsGenerator:
                     baseline_data = json.load(f)
 
                 print(f"📈 Using explicit baseline: {baseline_path.name}")
+                # Add baseline metadata for transparency
+                baseline_data['_baseline_metadata'] = {
+                    'baseline_filename': baseline_path.name,
+                    'baseline_timestamp': baseline_data.get('report_metadata', {}).get('timestamp', 'unknown'),
+                    'baseline_date': baseline_data.get('report_metadata', {}).get('report_date', 'unknown')
+                }
                 return baseline_data
 
             except Exception as e:
@@ -95,6 +101,12 @@ class WeeklyAnalyticsGenerator:
                 previous_data = json.load(f)
 
             print(f"📈 Auto-detected previous analytics: {previous_file.name}")
+            # Add baseline metadata for transparency
+            previous_data['_baseline_metadata'] = {
+                'baseline_filename': previous_file.name,
+                'baseline_timestamp': previous_data.get('report_metadata', {}).get('timestamp', 'unknown'),
+                'baseline_date': previous_data.get('report_metadata', {}).get('report_date', 'unknown')
+            }
             return previous_data
 
         except Exception as e:
@@ -408,10 +420,16 @@ class WeeklyAnalyticsGenerator:
         unit_changes = self.calculate_unit_score_changes()
 
         # Add comparison data
-        self.current_analytics["weekly_comparison"] = {
+        comparison_data = {
             "executive_summary_changes": week_changes,
             "unit_score_changes": unit_changes
         }
+
+        # Add baseline metadata if available
+        if self.previous_analytics and '_baseline_metadata' in self.previous_analytics:
+            comparison_data["baseline_metadata"] = self.previous_analytics['_baseline_metadata']
+
+        self.current_analytics["weekly_comparison"] = comparison_data
 
         # Save analytics file
         try:
