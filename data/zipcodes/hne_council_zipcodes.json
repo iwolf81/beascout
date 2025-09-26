@@ -1,72 +1,75 @@
 {
   "council": "Heart of New England",
-  "total_towns": 62,
-  "total_zipcodes": 71,
-  "estimated_units_range": "124-248",
+  "total_towns": 65,
+  "total_zipcodes": 75,
+  "estimated_units_range": "130-260",
   "estimation_method": "2-4 units per town average",
   "towns": [
-    "Ashby",
-    "Townsend",
-    "Pepperell",
-    "Groton",
-    "Ayer",
-    "Littleton",
     "Acton",
-    "Boxborough",
-    "Fitchburg",
-    "Lunenburg",
-    "Shirley",
-    "Harvard",
-    "Bolton",
-    "Berlin",
-    "Lancaster",
-    "Leominster",
-    "Sterling",
-    "Clinton",
-    "West Boylston",
-    "Boylston",
-    "Shrewsbury",
-    "Worcester",
-    "Holden",
-    "Rutland",
-    "Princeton",
-    "Paxton",
-    "Leicester",
+    "Ashby",
     "Auburn",
-    "Millbury",
-    "Royalston",
-    "Winchendon",
+    "Ayer",
+    "Berlin",
+    "Bolton",
+    "Boxborough",
+    "Boylston",
+    "Clinton",
+    "Fitchburg",
+    "Groton",
+    "Harvard",
+    "Holden",
+    "Jefferson",
+    "Lancaster",
+    "Leicester",
+    "Leominster",
+    "Littleton",
+    "Lunenburg",
+    "Paxton",
+    "Pepperell",
+    "Princeton",
+    "Rutland",
+    "Shirley",
+    "Shrewsbury",
+    "Sterling",
+    "Townsend",
+    "West Boylston",
+    "Worcester",
     "Ashburnham",
-    "Gardner",
-    "Templeton",
-    "Phillipston",
     "Athol",
-    "Orange",
-    "Westminster",
-    "Hubbardston",
     "Barre",
-    "Petersham",
-    "Hardwick",
-    "New Braintree",
-    "Oakham",
-    "Ware",
-    "West Brookfield",
-    "East Brookfield",
-    "North Brookfield",
     "Brookfield",
-    "Spencer",
-    "Warren",
-    "Sturbridge",
     "Charlton",
-    "Oxford",
-    "Dudley",
-    "Webster",
     "Douglas",
-    "Sutton",
+    "Dudley",
+    "East Brookfield",
+    "Fiskdale",
+    "Gardner",
     "Grafton",
-    "Upton",
+    "Hardwick",
+    "Hubbardston",
+    "Millbury",
+    "New Braintree",
     "Northbridge",
-    "Southbridge"
+    "North Brookfield",
+    "Oakham",
+    "Orange",
+    "Oxford",
+    "Petersham",
+    "Phillipston",
+    "Royalston",
+    "Southbridge",
+    "Spencer",
+    "Sturbridge",
+    "Sutton",
+    "Templeton",
+    "Upton",
+    "Ware",
+    "Warren",
+    "Webster",
+    "West Brookfield",
+    "Westminster",
+    "Whitinsville",
+    "Winchendon"
   ],
   "town_zipcodes": {
     "Acton": [
@@ -109,6 +112,9 @@
     "Holden": [
       "01520"
     ],
+    "Jefferson": [
+      "01522"
+    ],
     "Lancaster": [
       "01523"
     ],
@@ -123,9 +129,6 @@
     ],
     "Lunenburg": [
       "01462"
-    ],
-    "Millbury": [
-      "01527"
     ],
     "Paxton": [
       "01612"
@@ -190,6 +193,9 @@
     "East Brookfield": [
       "01515"
     ],
+    "Fiskdale": [
+      "01518"
+    ],
     "Gardner": [
       "01440"
     ],
@@ -201,6 +207,9 @@
     ],
     "Hubbardston": [
       "01452"
+    ],
+    "Millbury": [
+      "01527"
     ],
     "New Braintree": [
       "01531"
@@ -262,6 +271,9 @@
     "Westminster": [
       "01473"
     ],
+    "Whitinsville": [
+      "01588"
+    ],
     "Winchendon": [
       "01475"
     ]
@@ -281,12 +293,12 @@
     "01450",
     "01451",
     "01520",
+    "01522",
     "01523",
     "01524",
     "01453",
     "01460",
     "01462",
-    "01527",
     "01612",
     "01463",
     "01541",
@@ -314,10 +326,12 @@
     "01516",
     "01571",
     "01515",
+    "01518",
     "01440",
     "01519",
     "01037",
     "01452",
+    "01527",
     "01531",
     "01535",
     "01534",
@@ -325,6 +339,7 @@
     "01364",
     "01540",
     "01366",
+    "01331",
     "01368",
     "01550",
     "01562",
@@ -337,6 +352,7 @@
     "01570",
     "01585",
     "01473",
+    "01588",
     "01475"
   ]
 }

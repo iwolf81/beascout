@@ -87,16 +87,34 @@ dudiff='f() { fname="$1"; base="${fname%.*}"; ext="${fname##*.}"; sort -u "$fnam
 - The Key Three leaders for a unit are authorized to update their unit's information in BeAScout.
 - Their information is provided by the Council Office in a generated xlsx spreadsheet.
 - This information must be anonymized for reports uploaded to github.
+
+#### Two-Step Anonymization Process:
+
+**Step 1: Anonymize Excel File**
 #### Input:
 - "data/input/Key 3 08-22-2025.xlsx"
 #### Output:
 - tests/reference/key_three/anonymized_key_three.xlsx
+```bash
+# Anonymize personal data while preserving organizational structure
+# NOTE: Each run generates new random fake data (names, emails, phones, addresses)
+python src/dev/tools/anonymize_key_three.py "data/input/Key 3 08-22-2025.xlsx" --verify
+```
+
+**Step 2: Convert to JSON for Pipeline Use**
+#### Input:
+- tests/reference/key_three/anonymized_key_three.xlsx
+#### Output:
 - tests/reference/key_three/anonymized_key_three.json
 ```bash
-# This step saves anonymized data in xlsx and json formats
-# It only needs to be done when real Key Three data is updated
-python src/dev/tools/anonymize_key_three_v2.py "data/input/Key 3 08-22-2025.xlsx" --verify
+# Convert anonymized Excel to clean JSON format expected by pipeline
+python src/dev/tools/convert_key_three_to_json.py tests/reference/key_three/anonymized_key_three.xlsx
 ```
+
+**🔄 Important Notes:**
+- Only regenerate when real Key Three data is updated
+- Each anonymization run produces different (but valid) fake personal data - new random data is generated each time
+- For regression testing, use current `tests/reference/key_three/anonymized_key_three.xlsx` and `anonymized_key_three.json` as baseline (generated with cleaned-up code)
 
 ### Convert **real** Key Three xlsx file to json.
 - Subsequent processing and analysis required the Key Three data in JSON format.
@@ -168,13 +186,64 @@ python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehe
 python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json tests/reference/key_three/anonymized_key_three.xlsx 2>&1 | tee data/logs/generate_unit_emails_$(date +%Y%m%d_%H%M%S).log
 ```
 
+## **Town/District Data Management:**
+
+### **Complete HNE Territory Definition Workflow**
+
+The HNE Council territory data flows through a defined pipeline from visual source to scraper input:
+
+```
+HNE_council_map.png (visual source)
+    ↓ (iterative AI-human analysis)
+src/pipeline/core/district_mapping.py (authoritative towns/districts)
+    ↓ (automated zip code assignment)
+src/pipeline/core/hne_towns.py (adds zip codes)
+    ↓ (generates JSON output)
+data/zipcodes/hne_council_zipcodes.json (scraper input)
+```
+
+#### **Step 1: Authoritative Source**
+- **Input**: `data/input/HNE_council_map.png` (visual district boundaries)
+- **Process**: Iterative AI-human analysis to extract towns and district assignments
+- **Output**: `src/pipeline/core/district_mapping.py` (65 towns/villages with districts)
+- **Status**: **Complete and stable** - contains all HNE towns plus villages (Jefferson, Fiskdale, Whitinsville)
+
+#### **Step 2: Zip Code Assignment**
+- **Input**: `src/pipeline/core/district_mapping.py` (authoritative towns)
+- **Process**: Automated zip code lookup and assignment
+- **Script**: `python src/pipeline/core/hne_towns.py`
+- **Output**: `data/zipcodes/hne_council_zipcodes.json` (65 towns, 75 zip codes)
+
+#### **Step 3: Scraper Integration**
+- **Input**: `data/zipcodes/hne_council_zipcodes.json`
+- **Usage**: `src/pipeline/acquisition/multi_zip_scraper.py` reads all_zipcodes array
+- **Coverage**: Complete HNE territory (both districts, all villages)
+
+#### **Regeneration Commands**
+```bash
+# Regenerate zip codes from authoritative town/district source
+python src/pipeline/core/hne_towns.py
+
+# Update regression test reference data
+cp data/zipcodes/hne_council_zipcodes.json tests/reference/towns/hne_council_zipcodes.json
+```
+
+#### **Key Design Principles**
+- **Single Source of Truth**: `district_mapping.py` is the definitive HNE territory authority
+- **Automated Propagation**: Zip code generation prevents manual synchronization errors
+- **Village Support**: Jefferson, Fiskdale, Whitinsville treated as separate towns for unit identification
+- **Future USPS Integration**: Current manual zip codes can be replaced with USPS lookup API
+
+---
+
 ### **🗂️ Quick File Reference**
 
 **Need to modify the scraper?** → `src/pipeline/acquisition/multi_zip_scraper.py`
-**Data processing issues?** → `src/pipeline/processing/process_full_dataset.py`  
+**Data processing issues?** → `src/pipeline/processing/process_full_dataset.py`
 **Report generation?** → `src/pipeline/analysis/generate_commissioner_report.py`
 **Email generation?** → `src/pipeline/analysis/generate_unit_emails.py`
 **District mappings?** → `src/pipeline/core/district_mapping.py`
+**Territory zip codes?** → `src/pipeline/core/hne_towns.py`
 
 **Development utilities** → `src/dev/tools/`
 **Old/experimental code** → `src/dev/archive/`

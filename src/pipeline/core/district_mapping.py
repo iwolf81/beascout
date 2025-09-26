@@ -88,12 +88,6 @@ TOWN_ALIASES = {
     
     # Handle geographic variations within HNE towns
     "North Grafton": "Grafton",  # North Grafton is part of Grafton
-    
-    # Handle Key Three formatting variations @Claude is this no-op mapping necessary?
-    "West Boylston": "West Boylston",
-    "East Brookfield": "East Brookfield",
-    "West Brookfield": "West Brookfield", 
-    "North Brookfield": "North Brookfield",
 }
 
 def get_district_for_town(town_name: str) -> str:
