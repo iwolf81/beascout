@@ -225,6 +225,7 @@ class RegressionTestRunner:
         cmd = [
             'python3', '-u', 'src/pipeline/analysis/three_way_validator.py',
             '--key-three', 'tests/reference/key_three/anonymized_key_three.json',
+            '--scraped-data', 'data/raw/all_units_comprehensive_scored.json',
             '--session-id', self.session_manager.session_id,
             '--log'
         ]
@@ -278,6 +279,8 @@ class RegressionTestRunner:
         cmd = [
             'python3', '-u', 'src/pipeline/analysis/generate_commissioner_report.py',
             '--key-three', 'tests/reference/key_three/anonymized_key_three.json',
+            '--quality-data', 'data/raw/all_units_comprehensive_scored.json',
+            '--validation-file', 'data/output/enhanced_three_way_validation_results.json',
             '--session-id', self.session_manager.session_id,
             '--output-dir', 'data/output/reports',
             '--log'

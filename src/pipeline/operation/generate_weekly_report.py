@@ -458,7 +458,7 @@ class WeeklyReportPipeline:
                     results = data.get('validation_results', [])
                     summary = data.get('validation_summary', {})
 
-                    correlation_rate = summary.get('correlation_percentage', 0)
+                    correlation_rate = summary.get('validation_percentages', {}).get('both_sources', 0)
                     if correlation_rate < 95:  # Expect high correlation
                         self.logger.warning(f"⚠️  Low correlation rate: {correlation_rate}%")
 

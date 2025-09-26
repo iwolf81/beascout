@@ -183,7 +183,7 @@ def process_scraped_session_with_terse_output(session_dir: str, session_manager:
             avg_score = data.get('average_completeness_score', 0)
             session_timestamp = data.get('session_summary', {}).get('session_timestamp', 'Unknown')
 
-            session_manager.terse_print(f"📅 Added source tracking for session: {session_timestamp}")
+            session_manager.terse_print(f"📅 Added source tracking for scraped unit data from session: {session_timestamp}")
             dedup_info = data.get('deduplication_summary', {})
             if dedup_info:
                 before = dedup_info.get('units_before_dedup', 0)
@@ -318,7 +318,7 @@ def combine_datasets(json_files: list, session_dir: str = None):
                                 'success_rate': session_data.get('success_rate', 0.0)
                             }
                         }
-                        print(f"📅 Added source tracking for session: {session_data.get('session_timestamp', 'Unknown')}")
+                        print(f"📅 Added source tracking for scraped unit data from session: {session_data.get('session_timestamp', 'Unknown')}")
                 else:
                     print(f"⚠️ No session_summary.json found in {session_dir}")
             except Exception as e:

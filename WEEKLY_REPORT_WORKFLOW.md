@@ -116,13 +116,13 @@ python src/dev/tools/convert_key_three_to_json.py KEY_THREE_FILE
   KEY_THREE_FILE: Path to Key Three Excel/CSV file (e.g., data/input/key_3_08-22-2025.xlsx)
 ```
 
-### 4. Validation: `enhanced_validator.py`
+### 4. Validation: `three_way_validator.py`
 ```bash
 # Called by pipeline as:
-python src/pipeline/analysis/enhanced_validator.py --key-three KEY_THREE_JSON
+python src/pipeline/analysis/three_way_validator.py --key-three KEY_THREE_JSON
 
 # Manual usage:
-python src/pipeline/analysis/enhanced_validator.py [OPTIONS]
+python src/pipeline/analysis/three_way_validator.py [OPTIONS]
   --quality-data PATH: Quality data JSON file [default: data/raw/all_units_comprehensive_scored.json]
   --key-three PATH: Key Three JSON file (required for pipeline)
   --output PATH: Output validation results file [default: data/output/enhanced_three_way_validation_results.json]
