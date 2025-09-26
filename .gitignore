@@ -6,12 +6,15 @@ data/scraped/
 *.xlsx
 *.log
 
-# Personal Information - Key Three Database Files  
+# Personal Information - Key Three Database Files
 data/input/HNE_key_three.json
 data/input/HNE_key_three.xlsx
 data/input/key_three_units.txt
 data/input/Key*.xlsx
 data/input/Key*.json
+data/input/Key*.csv
+data/input/Key*units*.txt
+data/input/*key_three*
 
 # Keep reference files for testing (including anonymized data)
 !tests/reference/**
