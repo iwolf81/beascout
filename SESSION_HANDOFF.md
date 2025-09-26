@@ -998,7 +998,7 @@ def generate_search_url(zip_code, unit_type, source='beascout'):
 - `src/pipeline/analysis/three_way_validator.py`: Moved from dev to production with CLI args
 - `src/pipeline/analysis/generate_commissioner_report.py`: Added display format conversion 
 - `src/dev/reporting/generate_unit_emails_v2.py`: Added unit key normalization
-- `src/dev/tools/anonymize_key_three_v2.py`: Fixed Excel format for email generation compatibility
+- `src/dev/tools/anonymize_key_three.py`: Fixed Excel format for email generation compatibility
 - `OPERATIONAL_WORKFLOW.md`: Updated with current pipeline commands
 
 **Current System Status**:
