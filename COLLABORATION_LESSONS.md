@@ -51,10 +51,15 @@
 - Manual verification remains essential for complex data transformations
 
 ### **Reference-Driven Validation**
-- **Reference logs of known working states essential for regression detection** 
+- **Reference logs of known working states essential for regression detection**
 - Create verification tools for rapid regression testing (`alias verify_units=...`)
 - Debug output necessary to verify parsing of each data source
 - Ground truth validation more reliable than theoretical correctness assumptions
+
+### **Regression Testing Framework Design**
+- **User identifies what can be regression tested → AI creates tests → User manually verifies tests**
+- Independent human validation of AI-created tests essential (e.g., BeyondCompare verification of compare_excel_files.py)
+- Automated tests must be validated against known good behavior, not just theoretical correctness
 
 ### **Edge Case Management at Scale**
 - **Expect unhandled edge conditions in full dataset that weren't visible in prototype**
@@ -77,6 +82,11 @@
 - Unit key normalization: Key Three used 4-digit format, scraped used display format
 - Establish single normalization authority for all format conversions across system
 - Test cross-reference validation with realistic data volumes
+
+### **Documentation as Living Architecture**
+- **Conscious effort needed to continuously update documentation alongside feature and code changes**
+- Treat documentation updates as part of feature delivery, not afterthought
+- Documentation drift accumulates over time and requires systematic consolidation efforts
 
 ---
 
@@ -102,6 +112,9 @@
 - **Can falsely believe it has been successful** - over-confident in test result analysis
 - Chases increasingly complicated solutions without user intervention
 - Becomes forgetful with context compaction - forgets architecture connections
+- **Domain expertise essential to catch AI assumption propagation errors**
+- AI can make up non-existent file references or meaningless statistics without domain validation
+- **Auto-editing modes reduce error detection opportunities** - balance automation with human oversight checkpoints
 
 ### **Essential Management Strategies**
 - **Save early, save often** - Claude will chase bugs down rabbit holes
@@ -143,6 +156,15 @@
 6. **Business goal clarification prevents technical drift**: Clear purpose definition (unit presence correlation vs cross-validation accuracy) enables focused development
 7. **Specific problem reporting with actual command usage**: Providing exact commands, filenames, and error examples enables precise diagnosis and resolution
 8. **Systematic issue prioritization**: "let's start with item 2" approach ensures focused resolution of multiple problems
+
+### **Process Architecture Patterns**
+- **Don't consolidate workflows serving different operational needs**
+- Separate pipeline documentation for development/testing vs production serves distinct purposes
+- Multiple workflow documents can coexist when they address different stakeholder needs
+
+### **Strategic Documentation Focus**
+- **Emphasize prevention patterns over problem remediation in lessons learned**
+- Focus on forward-looking process improvements rather than historical issue analysis
 
 ### **Process Excellence**
 - Meta-conversations about collaboration methods create most efficient working relationships

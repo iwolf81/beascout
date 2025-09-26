@@ -1884,3 +1884,57 @@ if Path(current_session_dir).exists():
 ---
 
 *This incident demonstrates that comprehensive component testing cannot substitute for end-to-end operational validation. Real-world usage scenarios reveal integration failures that threaten system reliability and operational credibility. The combination of explicit logging, source data transparency, and systematic debugging enabled rapid problem identification and resolution before operational impact.*
+
+---
+
+## Documentation Consolidation and Process Insights (Sept 26, 2025)
+
+### Documentation Maintenance Discipline
+
+**Insight**: Conscious effort needed to continuously update documentation alongside feature and code changes
+
+**Evidence**: Documentation consolidation session discovered significant documentation drift and duplications that accumulated over time
+
+**Practice**: Treat documentation updates as part of feature delivery, not afterthought
+
+### Domain Knowledge as Error Detection
+
+**Insight**: User's domain knowledge essential to catch AI errors that would otherwise propagate
+
+**Evidence**: User caught AI making up non-existent ai-context file names, identified meaningless statistics
+
+**Critical Role**: User expertise prevents AI assumptions from becoming "documented facts"
+
+### Auto-Editing Mode Risks
+
+**Insight**: Auto-editing modes make catching AI errors more difficult
+
+**Risk**: Rapid changes reduce opportunity for user review and course correction
+
+**Mitigation**: Balance automation with human oversight checkpoints
+
+### Regression Testing Framework Requirements
+
+**Process**: User first identifies what can be regression tested → AI creates the tests → User manually verifies tests
+
+**Evidence**: BeyondCompare verification of compare_excel_files.py functionality
+
+**Key Point**: AI-created tests must be independently validated by human expertise
+
+### Separate Pipeline Documentation Strategy
+
+**Insight**: Having separate pipelines and documentation for development/testing vs production is essential
+
+**Evidence**: OPERATIONAL_WORKFLOW.md (development) vs WEEKLY_REPORT_WORKFLOW.md (production) serve distinct purposes
+
+**Practice**: Don't consolidate workflows that serve different operational needs
+
+### Strategic Focus
+
+**Focus on forward-looking process improvements**
+
+**Emphasize prevention patterns over problem remediation**
+
+---
+
+*This session captures deeper systemic insights about sustainable human-AI collaboration patterns for complex software projects, emphasizing the critical role of domain expertise in guiding AI capabilities while maintaining separation of concerns in documentation and testing frameworks.*
