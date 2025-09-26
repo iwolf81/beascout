@@ -371,7 +371,7 @@ class BeAScoutQualityReportGenerator:
         ws['A2'].font = Font(size=14, bold=True)
         
         # Report generation info
-        ws['A3'] = f"Generation Date/Time: {datetime.now().strftime('%B %d, %Y at %I:%M %p')}"
+        ws['A3'] = f"Generation Date/Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
         ws['A3'].font = Font(size=12)
         
         # Data sources - include Key Three spreadsheet name
@@ -384,7 +384,7 @@ class BeAScoutQualityReportGenerator:
             # Parse ISO timestamp and format as readable date and time
             try:
                 scraping_date = datetime.fromisoformat(scraping_timestamp.replace('Z', '+00:00'))
-                formatted_date = scraping_date.strftime('%B %d, %Y at %I:%M %p')
+                formatted_date = scraping_date.strftime('%Y-%m-%d %H:%M:%S')
             except (ValueError, AttributeError):
                 formatted_date = scraping_timestamp[:10] if len(scraping_timestamp) >= 10 else 'Date Unknown'
         else:
@@ -546,7 +546,7 @@ class BeAScoutQualityReportGenerator:
         ws['A3'] = f"{district_name} District"
         ws['A3'].font = Font(size=14, bold=True)
         
-        ws['A4'] = f"Generation Date/Time: {datetime.now().strftime('%B %d, %Y at %I:%M %p')}"
+        ws['A4'] = f"Generation Date/Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
         ws['A4'].font = Font(size=10)
         
         ws['A5'] = f"Data Sources: BeAScout.org (10-mile search radius per zip code) + JoinExploring.org (20-mile search radius per zip code) + {self.key_three_filename}"
@@ -557,7 +557,7 @@ class BeAScoutQualityReportGenerator:
         if scraping_timestamp and scraping_timestamp != 'Unknown':
             try:
                 scraping_date = datetime.fromisoformat(scraping_timestamp.replace('Z', '+00:00'))
-                formatted_date = scraping_date.strftime('%B %d, %Y at %I:%M %p')
+                formatted_date = scraping_date.strftime('%Y-%m-%d %H:%M:%S')
             except (ValueError, AttributeError):
                 formatted_date = scraping_timestamp[:10] if len(scraping_timestamp) >= 10 else 'Date Unknown'
         else:
