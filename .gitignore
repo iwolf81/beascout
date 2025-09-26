@@ -2,6 +2,7 @@
 data/output/
 data/debug/
 data/logs/
+data/scraped/
 *.xlsx
 *.log
 
