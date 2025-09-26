@@ -8,6 +8,7 @@ Organized by district sheets with detailed unit information for commissioners
 import json
 import re
 import sys
+import argparse
 from pathlib import Path
 from datetime import datetime
 import pandas as pd
@@ -16,6 +17,12 @@ from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.utils import get_column_letter
 from typing import Dict, List, Any
+
+# Add project root to path for imports
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.append(str(project_root))
+
+from src.pipeline.core.session_utils import SessionManager, session_logging
 
 class ReportColumns:
     """Centralized column definitions for BeAScout Quality Reports"""
@@ -331,13 +338,16 @@ class BeAScoutQualityReportGenerator:
 
         # Generate timestamped filename if not provided
         if not output_path:
-            if session_id:
-                # Pipeline mode: weekly reports directory with session timestamp
-                output_path = f"data/output/reports/weekly/BeAScout_Weekly_Quality_Report_{session_id}.xlsx"
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            session_suffix = session_id if session_id else timestamp
+
+            # Use weekly flag to determine report type and location
+            if hasattr(self, '_weekly_mode') and self._weekly_mode:
+                # Weekly pipeline mode: weekly reports directory
+                output_path = f"data/output/reports/weekly/BeAScout_Weekly_Quality_Report_{session_suffix}.xlsx"
             else:
-                # Independent mode: general reports directory with current timestamp
-                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                output_path = f"data/output/reports/BeAScout_Quality_Report_{timestamp}.xlsx"
+                # Standard commissioner report mode: main reports directory
+                output_path = f"data/output/reports/BeAScout_Quality_Report_{session_suffix}.xlsx"
         
         # Ensure output directory exists
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
@@ -354,8 +364,7 @@ class BeAScoutQualityReportGenerator:
         
         # Save workbook
         workbook.save(output_path)
-        print(f"\n📋 BeAScout Quality Report saved: {output_path}")
-        
+
         return output_path
     
     def _create_executive_summary_sheet(self, workbook):
@@ -900,66 +909,74 @@ Pipeline Dependencies:
     parser.add_argument('--output-dir',
                        help='Output directory for reports [default: auto-determined by mode]')
     parser.add_argument('--session-id',
-                       help='Session ID for pipeline mode (generates weekly report path)')
+                       help='Session ID for pipeline mode')
+    parser.add_argument('--weekly', action='store_true',
+                       help='Generate weekly report format (used by weekly pipeline)')
     parser.add_argument('--scraped-session',
                        help='Scraped session ID for accurate data timestamp display')
 
+    # Add additional session management arguments (note: --session-id already exists above)
+    parser.add_argument('--log', action='store_true',
+                       help='Direct stdout/stderr to log file')
+
     args = parser.parse_args()
-    
-    print("📋 Generating BeAScout Quality Report")
-    
-    # Show data sources being used
-    print(f"📁 Data sources:")
-    print(f"   Quality data: {args.quality_data}")
-    print(f"   Validation file: {args.validation_file}")
-    if args.key_three:
-        print(f"   Key Three data: {args.key_three} (explicit override)")
-    else:
-        print(f"   Key Three data: from validation file (default)")
-    
-    # Extract just the filename (not full path) for display in reports
-    import os
-    key_three_display_name = os.path.basename(args.key_three) if args.key_three else None
 
-    generator = BeAScoutQualityReportGenerator(key_three_display_name, args.scraped_session)
-    
-    # Load quality and Key Three data with custom paths
-    if not generator.load_quality_data(args.quality_data, args.validation_file):
-        return
-    
-    # Generate report with conditional output path logic
-    if args.output_dir:
-        # Explicit output directory specified
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        if args.session_id:
-            output_path = f"{args.output_dir.rstrip('/')}/BeAScout_Weekly_Quality_Report_{args.session_id}.xlsx"
+    # Create session manager from arguments (using existing session-id)
+    session_manager = SessionManager(session_id=args.session_id, session_type='pipeline')
+
+    # Use session logging context manager with terminal_terse mode
+    with session_logging(session_manager, "generate_commissioner_report",
+                        log_enabled=args.log, verbose=args.log, terminal_terse=True):
+
+        # All detailed processing goes to log, show terse summary on terminal
+        session_manager.terse_print("📋 Generating BeAScout Quality Report")
+
+        # Extract just the filename (not full path) for display in reports
+        import os
+        key_three_display_name = os.path.basename(args.key_three) if args.key_three else None
+
+        generator = BeAScoutQualityReportGenerator(key_three_display_name, args.scraped_session)
+
+        # Set weekly mode flag based on command line argument
+        generator._weekly_mode = args.weekly
+
+        # Load quality and Key Three data with custom paths (detailed output goes to log)
+        if not generator.load_quality_data(args.quality_data, args.validation_file):
+            session_manager.terse_print("❌ Failed to load quality data")
+            return
+
+        # Generate report with conditional output path logic (detailed output goes to log)
+        if args.output_dir:
+            # Explicit output directory specified
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            session_suffix = args.session_id if args.session_id else timestamp
+
+            if args.weekly:
+                output_path = f"{args.output_dir.rstrip('/')}/BeAScout_Weekly_Quality_Report_{session_suffix}.xlsx"
+            else:
+                output_path = f"{args.output_dir.rstrip('/')}/BeAScout_Quality_Report_{session_suffix}.xlsx"
         else:
-            output_path = f"{args.output_dir.rstrip('/')}/BeAScout_Quality_Report_{timestamp}.xlsx"
-    else:
-        output_path = None  # Use method's conditional logic
+            output_path = None  # Use method's conditional logic
 
-    report_path = generator.create_quality_report(output_path, args.session_id)
-    
-    # Get statistics for display
-    total_units = generator.quality_data['total_units']
-    avg_score = generator.quality_data.get('average_score', 0)
-    
-    # Count districts
-    districts = set()
-    for unit in generator.quality_data['units_with_scores']:
-        district = unit.get('district', 'Unknown')
-        if district != 'Unknown':
-            districts.add(district)
-    
-    print(f"\n✅ BeAScout Quality Report Generated Successfully!")
-    print(f"📁 Report saved to: {report_path}")
-    print(f"\n📊 Report Contents:")
-    print(f"   • Executive Summary with quality metrics and legend")
-    print(f"   • {len(districts)} District sheets with detailed unit information")
-    print(f"   • {total_units} total units with quality scores (avg: {avg_score}%)")
-    print(f"   • 18-column format with quality grades, recommendations, and Key Three contacts")
-    
-    return report_path
+        report_path = generator.create_quality_report(output_path, args.session_id)
+
+        # Get statistics for terse terminal display
+        total_units = generator.quality_data['total_units']
+        avg_score = generator.quality_data.get('average_score', 0)
+
+        # Count districts
+        districts = set()
+        for unit in generator.quality_data['units_with_scores']:
+            district = unit.get('district', 'Unknown')
+            if district != 'Unknown':
+                districts.add(district)
+
+        # Show terse summary on terminal
+        session_manager.terse_print(f"✅ BeAScout Quality Report Generated Successfully!")
+        session_manager.terse_print(f"📁 Report saved to: {report_path}")
+        session_manager.terse_print(f"📊 {total_units} total units, {len(districts)} districts, avg score: {avg_score}%")
+
+        return report_path
 
 if __name__ == "__main__":
     main()

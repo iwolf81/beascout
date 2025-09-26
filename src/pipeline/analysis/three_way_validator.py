@@ -15,9 +15,11 @@ from dataclasses import dataclass
 from enum import Enum
 
 # Add project root to path for imports
-sys.path.append(str(Path(__file__).parent.parent.parent.parent))
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.append(str(project_root))
 
 from src.pipeline.core.unit_identifier import UnitIdentifierNormalizer
+from src.pipeline.core.session_utils import SessionManager, session_logging
 from src.pipeline.processing.scraped_data_parser import ScrapedDataParser
 from src.dev.parsing.key_three_parser import KeyThreeParser
 from src.pipeline.core.district_mapping import get_district_for_town
@@ -378,71 +380,136 @@ Examples:
     parser.add_argument('--output',
                        default='data/output/enhanced_three_way_validation_results.json',
                        help='Output validation results file [default: %(default)s]')
-    
+
+    # Add session management arguments
+    session_manager = SessionManager()
+    session_manager.add_session_args(parser)
+
     args = parser.parse_args()
-    
-    print("🚀 Three-Way Unit Validation Engine")
-    print(f"📁 Key Three data: {args.key_three}")
-    print(f"📁 Scraped data: {args.scraped_data}")
-    
-    validator = ThreeWayValidator()
-    
-    # Load data sources
-    if not validator.load_key_three_data(args.key_three):
-        return
-    
-    if not validator.load_scraped_data(args.scraped_data):
-        return
-    
-    # Perform validation
-    results = validator.validate_all_units()
-    
-    if not results:
-        print("❌ No validation results generated")
-        return
-    
-    # Display summary
-    summary = validator.get_validation_summary()
-    
-    print(f"\n📊 Validation Summary:")
-    print(f"   Total units analyzed: {summary['total_units']}")
-    print(f"   ✅ Both sources: {summary['status_breakdown']['both_sources']} ({summary['validation_percentages']['both_sources']:.1f}%)")
-    print(f"   ⚠️  Key Three only: {summary['status_breakdown']['key_three_only']} ({summary['validation_percentages']['key_three_only']:.1f}%)")
-    print(f"   ❌ Web only: {summary['status_breakdown']['web_only']} ({summary['validation_percentages']['web_only']:.1f}%)")
-    print(f"   🔍 Units with issues: {summary['units_with_issues']}")
-    
-    # Show Key Three only units by district
-    if summary['key_three_only_by_district']:
-        print(f"\n⚠️  Key Three Only Units by District:")
-        for district, count in summary['key_three_only_by_district'].items():
-            print(f"   {district}: {count} units")
-    
-    # Show sample units needing attention
-    key_three_only = validator.get_units_by_status(ValidationStatus.KEY_THREE_ONLY)
-    web_only = validator.get_units_by_status(ValidationStatus.WEB_ONLY)
-    
-    if key_three_only:
-        print(f"\n⚠️  Sample Key Three Only Units (Missing from Web):")
-        for result in key_three_only[:5]:
-            print(f"   • {result.unit_key}")
-            for issue in result.issues[:2]:  # Show first 2 issues
-                print(f"     - {issue}")
-    
-    if web_only:
-        print(f"\n❌ Sample Web Only Units (Not in Key Three):")
-        for result in web_only[:3]:
-            print(f"   • {result.unit_key}")
-            for issue in result.issues[:1]:  # Show first issue
-                print(f"     - {issue}")
-    
-    # Save results
-    output_file = validator.save_validation_results(args.output)
-    
-    print(f"\n🎯 Validation Complete - Commissioner Action Required:")
-    print(f"   • Review {summary['status_breakdown']['key_three_only']} units missing from web")
-    print(f"   • Investigate {summary['status_breakdown']['web_only']} web-only units")
-    print(f"   • Address {summary['units_with_issues']} units with data quality issues")
-    
+
+    # Create session manager from arguments
+    if args.session_id:
+        session_manager = SessionManager.from_args(args)
+
+    # Use session logging with terminal_terse mode
+    with session_logging(session_manager, "three_way_validator",
+                        log_enabled=args.log, verbose=args.verbose, terminal_terse=True):
+
+        def run_validation():
+            """Run the validation process"""
+            print("🚀 Three-Way Unit Validation Engine")
+            print(f"📁 Key Three data: {args.key_three}")
+            print(f"📁 Scraped data: {args.scraped_data}")
+
+            validator = ThreeWayValidator()
+
+            # Load data sources
+            if not validator.load_key_three_data(args.key_three):
+                return
+
+            if not validator.load_scraped_data(args.scraped_data):
+                return
+
+            # Perform validation
+            results = validator.validate_all_units()
+
+            if not results:
+                print("❌ No validation results generated")
+                return
+
+            # Display summary
+            summary = validator.get_validation_summary()
+
+            print(f"\nCROSS-REFERENCE SUMMARY:")
+            print(f"   Total units analyzed: {summary['total_units']}")
+            print(f"   ✅ Both sources: {summary['status_breakdown']['both_sources']} ({summary['validation_percentages']['both_sources']:.1f}%)")
+            print(f"   ⚠️  Key Three only: {summary['status_breakdown']['key_three_only']} ({summary['validation_percentages']['key_three_only']:.1f}%)")
+            print(f"   ❌ Web only: {summary['status_breakdown']['web_only']} ({summary['validation_percentages']['web_only']:.1f}%)")
+            print(f"   🔍 Units with issues: {summary['units_with_issues']}")
+
+            # Show Key Three only units by district
+            if summary['key_three_only_by_district']:
+                print(f"\n⚠️  Key Three Only Units by District:")
+                for district, count in summary['key_three_only_by_district'].items():
+                    print(f"   {district}: {count} units")
+
+            # Show sample units needing attention
+            key_three_only = validator.get_units_by_status(ValidationStatus.KEY_THREE_ONLY)
+            web_only = validator.get_units_by_status(ValidationStatus.WEB_ONLY)
+
+            if key_three_only:
+                print(f"\n⚠️  Sample Key Three Only Units (Missing from Web):")
+                for result in key_three_only[:5]:
+                    print(f"   • {result.unit_key}")
+                    for issue in result.issues[:2]:  # Show first 2 issues
+                        print(f"     - {issue}")
+
+            if web_only:
+                print(f"\n❌ Sample Web Only Units (Not in Key Three):")
+                for result in web_only[:3]:
+                    print(f"   • {result.unit_key}")
+                    for issue in result.issues[:1]:  # Show first issue
+                        print(f"     - {issue}")
+
+            # Save results
+            output_file = validator.save_validation_results(args.output)
+
+            print(f"\n🎯 Validation Complete - Commissioner Action Required:")
+            print(f"   • Review {summary['status_breakdown']['key_three_only']} units missing from web")
+            print(f"   • Investigate {summary['status_breakdown']['web_only']} web-only units")
+            print(f"   • Address {summary['units_with_issues']} units with data quality issues")
+
+            return output_file
+
+        # Terminal_terse mode: Run validation with detailed output going to log, terse summary to terminal
+        result = run_validation_with_terse_output(args, session_manager, run_validation)
+        return result
+
+
+def run_validation_with_terse_output(args, session_manager: SessionManager, run_validation_func):
+    """Run validation with terminal_terse output - detailed log, summary terminal"""
+
+    # Run the full validation (all detailed output goes to log file via terminal_terse mode)
+    output_file = run_validation_func()
+
+    # Now show terse summary on terminal by reading the validation output file
+    try:
+        # Read the validation results from the output file
+        import json
+        with open(output_file, 'r') as f:
+            validation_data = json.load(f)
+
+        # Extract summary information from the validation data
+        summary = validation_data.get('validation_summary', {})
+
+        # Show terse CROSS-REFERENCE SUMMARY on terminal
+        if summary:
+            session_manager.terse_print(f"\nCROSS-REFERENCE SUMMARY:")
+            session_manager.terse_print(f"   Total units analyzed: {summary['total_units']}")
+            session_manager.terse_print(f"   ✅ Both sources: {summary['status_breakdown']['both_sources']} ({summary['validation_percentages']['both_sources']:.1f}%)")
+            session_manager.terse_print(f"   ⚠️  Key Three only: {summary['status_breakdown']['key_three_only']} ({summary['validation_percentages']['key_three_only']:.1f}%)")
+            session_manager.terse_print(f"   ❌ Web only: {summary['status_breakdown']['web_only']} ({summary['validation_percentages']['web_only']:.1f}%)")
+            session_manager.terse_print(f"   🔍 Units with issues: {summary['units_with_issues']}")
+
+            # Show Key Three only units by district (if any)
+            if summary['key_three_only_by_district']:
+                session_manager.terse_print(f"\n⚠️  Key Three Only Units by District:")
+                for district, count in summary['key_three_only_by_district'].items():
+                    session_manager.terse_print(f"   {district}: {count} units")
+
+            # Final action summary on terminal
+            session_manager.terse_print(f"\n🎯 Validation Complete - Commissioner Action Required:")
+            session_manager.terse_print(f"   • Review {summary['status_breakdown']['key_three_only']} units missing from web")
+            session_manager.terse_print(f"   • Investigate {summary['status_breakdown']['web_only']} web-only units")
+            session_manager.terse_print(f"   • Address {summary['units_with_issues']} units with data quality issues")
+        else:
+            session_manager.terse_print(f"CROSS-REFERENCE SUMMARY:")
+            session_manager.terse_print(f"⚠️  Summary data not available in validation output")
+
+    except Exception as e:
+        session_manager.terse_print(f"⚠️  Could not generate terminal summary: {e}")
+        session_manager.terse_print("✅ Validation completed - check log file for details")
+
     return output_file
 
 if __name__ == "__main__":

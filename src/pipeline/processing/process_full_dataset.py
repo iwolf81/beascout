@@ -7,15 +7,18 @@ Process scraped HTML files using current ScrapedDataParser pipeline to generate 
 import os
 import sys
 import json
+import argparse
 from pathlib import Path
 from datetime import datetime
 
 # Add project root to path
-sys.path.append(str(Path(__file__).parent.parent.parent.parent))
+project_root = Path(__file__).parent.parent.parent.parent
+sys.path.append(str(project_root))
 
 from src.pipeline.processing.scraped_data_parser import ScrapedDataParser
+from src.pipeline.core.session_utils import SessionManager, session_logging
 
-def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_code: str) -> str:
+def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_code: str, session_manager: SessionManager = None) -> str:
     """
     Extract units from HTML files using legacy parser, save to JSON
     Returns path to generated JSON file
@@ -41,10 +44,17 @@ def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_c
             str(beascout_file),
             str(joinexploring_file)
         ]
-        result = subprocess.run(cmd, cwd=project_root, capture_output=False)
-        result = result.returncode
+        result = subprocess.run(cmd, cwd=project_root, capture_output=True, text=True)
 
-        if result == 0:
+        # Print subprocess output (will go to log file in terminal_terse mode)
+        if result.stdout:
+            print(result.stdout, end='')
+        if result.stderr:
+            print(result.stderr, end='')
+
+        result_code = result.returncode
+
+        if result_code == 0:
             json_file = f"data/raw/all_units_{zip_code}.json"
             if os.path.exists(json_file):
                 print(f"    ✅ HTML extraction completed")
@@ -60,7 +70,7 @@ def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_c
         print(f"    ❌ HTML parsing failed: {e}")
         return None
 
-def process_with_current_pipeline(json_file: str, zip_code: str) -> str:
+def process_with_current_pipeline(json_file: str, zip_code: str, session_manager: SessionManager = None) -> str:
     """
     Process raw JSON through current ScrapedDataParser pipeline
     This will generate debug logs via UnitIdentifierNormalizer.create_unit_record()
@@ -109,6 +119,84 @@ def process_with_current_pipeline(json_file: str, zip_code: str) -> str:
         import traceback
         traceback.print_exc()
         return None
+
+
+def process_scraped_session_with_terse_output(session_dir: str, session_manager: SessionManager, verbose: bool):
+    """Process a scraped session with terse terminal output and full logging"""
+
+    # In terse mode, show only zip code progress and final summary to terminal
+    # All detailed output goes to log file
+
+    session_path = Path(session_dir)
+    if not session_path.exists():
+        session_manager.terse_print(f"❌ Session directory not found: {session_dir}")
+        return
+
+    # Find all HTML files and determine zip codes to process
+    beascout_files = list(session_path.glob("beascout_*.html"))
+    joinexploring_files = list(session_path.glob("joinexploring_*.html"))
+
+    # Get unique zip codes from filenames
+    zip_codes = set()
+    for file in beascout_files:
+        zip_code = file.stem.replace('beascout_', '')
+        zip_codes.add(zip_code)
+
+    # Show initial progress
+    session_manager.terse_print(f"Processing {len(zip_codes)} unique zip codes...")
+
+    # Process each zip code with minimal terminal feedback
+    successful_files = []
+    for zip_code in sorted(zip_codes):
+        beascout_file = session_path / f"beascout_{zip_code}.html"
+        joinexploring_file = session_path / f"joinexploring_{zip_code}.html"
+
+        if beascout_file.exists() and joinexploring_file.exists():
+            # Show zip code being processed (terse terminal output)
+            session_manager.terse_print(f"Processing ZIP {zip_code}...")
+
+            # Do the actual processing (detailed output goes to log)
+            temp_json = extract_units_from_html(beascout_file, joinexploring_file, zip_code, session_manager)
+            if temp_json:
+                processed_json = process_with_current_pipeline(temp_json, zip_code, session_manager)
+                if processed_json:
+                    successful_files.append(processed_json)
+                    # Clean up temp file
+                    try:
+                        os.remove(temp_json)
+                    except:
+                        pass
+
+    # Combine datasets (detailed output goes to log)
+    if successful_files:
+        combine_datasets(successful_files, session_dir)
+
+    # Show final summary on terminal (matches the expected format from Pass 3 feedback)
+    session_manager.terse_print(f"📊 Successfully processed {len(successful_files)} zip codes")
+    session_manager.terse_print("Combining all scored datasets with deduplication...")
+
+    # Try to extract final summary information for terminal display
+    try:
+        with open("data/raw/all_units_comprehensive_scored.json", 'r') as f:
+            data = json.load(f)
+            total_units = data.get('total_units', 0)
+            avg_score = data.get('average_completeness_score', 0)
+            session_timestamp = data.get('session_summary', {}).get('session_timestamp', 'Unknown')
+
+            session_manager.terse_print(f"📅 Added source tracking for session: {session_timestamp}")
+            dedup_info = data.get('deduplication_summary', {})
+            if dedup_info:
+                before = dedup_info.get('units_before_dedup', 0)
+                after = dedup_info.get('units_after_dedup', 0)
+                session_manager.terse_print(f"   Deduplicated from {before} to {after} unique units")
+
+            session_manager.terse_print("✅ Combined datasets into comprehensive file")
+            session_manager.terse_print(f"   Total units: {total_units}")
+            session_manager.terse_print(f"   Average score: {avg_score}%")
+            session_manager.terse_print("   Saved to: data/raw/all_units_comprehensive_scored.json")
+    except Exception:
+        # If we can't read the final file, just show basic completion
+        session_manager.terse_print("✅ Processing completed")
 
 
 def process_scraped_session(session_dir: str):
@@ -261,13 +349,28 @@ def combine_datasets(json_files: list, session_dir: str = None):
         print(f"   Saved to: {output_file}")
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python3 src/scripts/process_full_dataset_v2.py <session_directory>")
-        print("Example: python3 src/scripts/process_full_dataset_v2.py data/scraped/20250824_220843/")
-        sys.exit(1)
+    """Main function with session management and logging support"""
+    parser = argparse.ArgumentParser(
+        description="Process scraped HTML files using current ScrapedDataParser pipeline"
+    )
+    parser.add_argument('session_directory', help='Directory containing scraped HTML files')
 
-    session_dir = sys.argv[1]
-    process_scraped_session(session_dir)
+    # Add session management arguments
+    session_manager = SessionManager()
+    session_manager.add_session_args(parser)
+
+    args = parser.parse_args()
+
+    # Create session manager from arguments
+    if args.session_id:
+        session_manager = SessionManager.from_args(args)
+
+    # Use terminal_terse mode for regression testing - always terse terminal, full logs
+    with session_logging(session_manager, "process_full_dataset",
+                        log_enabled=args.log, verbose=args.verbose, terminal_terse=True):
+
+        # Process the scraped session with terse terminal output
+        process_scraped_session_with_terse_output(args.session_directory, session_manager, args.verbose)
 
 if __name__ == "__main__":
     main()

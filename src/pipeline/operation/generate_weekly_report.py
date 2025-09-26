@@ -628,8 +628,9 @@ class WeeklyReportPipeline:
             cmd_args.extend(["--key-three", json_key_three])
 
         elif stage.name == "reporting":
-            # Pass session ID for pipeline mode to generate weekly report path
+            # Weekly pipeline mode - generate weekly report format
             cmd_args.extend(["--session-id", self.session_id])
+            cmd_args.append("--weekly")
             # Pass Key Three file for accurate filename display
             if self.key_three_file:
                 cmd_args.extend(["--key-three", self.key_three_file])
