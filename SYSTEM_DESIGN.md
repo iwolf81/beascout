@@ -12,7 +12,7 @@
 
 ## 1. Executive Summary
 
-The BeAScout Unit Information System is designed to ensure comprehensive unit presence correlation for the Heart of New England Council (Massachusetts) by correlating Council Office's authoritative unit registry with beascout.scouting.org and joinexploring.org to identify missing web presence units and potentially defunct listings. The system automates data collection, correlation analysis, and gap reporting to enable effective web presence management for all HNE Council units.
+The BeAScout system ensures comprehensive unit presence correlation for the Heart of New England Council by building an automated system that correlates Council Office's authoritative unit registry with beascout.scouting.org and joinexploring.org to identify missing web presence units and potentially defunct listings, enabling effective web presence management.
 
 ### System Status (Production-Ready)
 - **✅ Complete**: Production-ready system validated with 62 units from zip code 01720
@@ -161,15 +161,15 @@ alias verify_units_discards='f() { code --diff ~/Repos/beascout/tests/reference/
 
 ### 2.6 Production Readiness Validation
 **Metrics Achieved:**
-- 97.6% Key Three correlation accuracy (165 out of 169 units matched between registry and web data)
+- Comprehensive Key Three correlation analysis (165 out of 169 units matched between registry and web data)
 - 61.0% average unit completeness score
 - Comprehensive edge case handling (duplicate numbers, missing data, format variations)
 - 169 personalized emails generated with actual Key Three contact information
 
 **Deployment Readiness Assessment:**
 - ✅ **Data Quality**: Handles real-world data variations and edge cases
-- ✅ **Accuracy**: 97.6% correlation success rate meets production standards
-- ✅ **Scalability**: Modular design supports all 165 HNE units with 97.6% validation success
+- ✅ **Accuracy**: Unit correlation analysis meets production standards
+- ✅ **Scalability**: Modular design supports all 165 HNE units with comprehensive validation
 - ✅ **Error Handling**: Graceful degradation for missing or malformed data
 - ✅ **Documentation**: Comprehensive system understanding and maintenance procedures
 
@@ -628,7 +628,7 @@ Each step logged to debug files with source identification for regression testin
 **Total Units:** 169 units council-wide (Key Three database) with 165 HNE units having web presence
 
 **Current System Status (September 2025):**
-- **Unit Presence Correlation**: 97.6% correlation success between Key Three authoritative registry and web data, identifying missing web presence and potentially defunct units
+- **Unit Presence Correlation**: Complete correlation analysis between Key Three authoritative registry and web data, identifying missing web presence and potentially defunct units
 - **HNE Units Processed**: 165 units successfully correlated with web data
 - **Quality Scoring**: 60.2% average completeness with improvement recommendations
 - **Email Generation**: 169 personalized unit improvement emails generated

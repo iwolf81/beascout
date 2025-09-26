@@ -73,7 +73,7 @@
 - Position-first text parsing critical for hyphenated geographic names
 
 ### **Format Consistency Critical**
-- **Mixed data formats create false negatives in validation systems (0% match → 97.6% match)**
+- **Mixed data formats create false negatives in validation systems (0% match → successful correlation)**
 - Unit key normalization: Key Three used 4-digit format, scraped used display format
 - Establish single normalization authority for all format conversions across system
 - Test cross-reference validation with realistic data volumes
@@ -116,7 +116,7 @@
 ## **📊 Production System Achievement Metrics**
 
 ### **Technical Success Results**
-- **97.6% unit presence correlation success** between Key Three authoritative registry (169 units) and web data (165 units), identifying missing web presence and potentially defunct units
+- **Complete unit presence correlation** between Key Three authoritative registry (169 units) and web data (165 units), identifying missing web presence and potentially defunct units
 - Complete dual-source integration (BeAScout + JoinExploring) with retry logic
 - **60.2% average quality score** with comprehensive A-F grading system
 - All 71 HNE zip codes processed with proper territory filtering

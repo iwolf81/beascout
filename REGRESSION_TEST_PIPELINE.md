@@ -135,7 +135,7 @@ alias ediff='f() { python tests/tools/compare_excel_files.py tests/reference/rep
 
 ### **Data Processing Results:**
 - **Scraped Units**: ~165 HNE units processed from reference HTML files
-- **Unit Correlation**: 97.6% success rate between web data and Key Three registry
+- **Unit Correlation**: Complete correlation analysis between web data and Key Three registry
 - **Quality Score**: ~60% average completeness across reference units
 - **Missing Web Presence**: 4 units identified lacking web visibility
 

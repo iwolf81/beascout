@@ -1,7 +1,12 @@
 # CLAUDE.md - AI Development Context
 
 ## Context Initialization
-Process the markdown files in ../ai-context at the start of each new session.
+
+**CRITICAL: Process ALL markdown files from ../ai-context repository at the start of each new session.**
+
+Read all files **in their entirety** before working on any BeAScout tasks. The ai-context repository contains essential AI-human collaboration guidelines and development methodologies that inform all work on this project.
+
+**Then** process the project documentation structure below to understand the BeAScout system.
 
 ## Project Mission
 Ensure comprehensive unit presence correlation for the Heart of New England Council by building an automated system that correlates Council Office's authoritative unit registry with beascout.scouting.org and joinexploring.org to identify missing web presence units and potentially defunct listings, enabling effective web presence management.
@@ -49,7 +54,7 @@ Ensure comprehensive unit presence correlation for the Heart of New England Coun
 - ✅ **BeAScout Quality Reports**: District-organized Excel reports with professional formatting, quality grades, and Key Three contacts
 - ✅ **Key Three email generation**: Personalized emails with actual contact information and improvement recommendations
 - ✅ **Production pipeline**: Main operational files organized in `src/pipeline/` with single source of truth mapping in `src/pipeline/core/`
-- ✅ **Unit presence correlation**: Comprehensive correlation system between Key Three authoritative registry (169 units) and web data (165 units) with 97.6% correlation success, identifying missing web presence units and potentially defunct listings
+- ✅ **Unit presence correlation**: Comprehensive correlation system between Key Three authoritative registry (169 units) and web data (165 units), identifying missing web presence units and potentially defunct listings
 - ✅ **Unit key normalization**: Fixed format consistency between 4-digit internal processing and display format for reports
 - ✅ **Complete anonymization support**: Email generation works with both real and anonymized data for safe development
 - ✅ **Comprehensive test data**: Full anonymized datasets for regression testing and development
@@ -76,22 +81,34 @@ Ensure comprehensive unit presence correlation for the Heart of New England Coun
 - **Informational Fields (no scoring impact)**: Contact person, phone, website, description (tracked for recommendations)
 - **Quality Penalties**: Half credit for PO Box locations, personal emails
 - **Grade Scale**: A (90%+), B (80-89%), C (70-79%), D (60-69%), F (<60%)
-- **Current Results**: 165 HNE units, 60.2% average completeness, 97.6% Key Three correlation success identifying missing web presence and potentially defunct units, comprehensive district-based reporting implemented
+- **Current Results**: 165 HNE units, 60.2% average completeness, complete Key Three correlation analysis identifying missing web presence and potentially defunct units, comprehensive district-based reporting implemented
 
 **Reference URLs:**
 - beascout.scouting.org example: `?zip=01720&program[0]=pack&program[1]=scoutsBSA&program[2]=crew&program[3]=ship&cubFilter=all&scoutsBSAFilter=all&miles=10`
 - joinexploring.org example: `?zip=01720&program[0]=post&program[1]=club&miles=20`
 
 ## Project Documentation Structure
-Review and process the following markdown files **in their entirety** in the listed order:
+
+**For new Claude sessions, read these files in their entirety in this optimal order:**
+
+### **Core Understanding (Read First)**
 1. **[CLAUDE.md](CLAUDE.md)**: AI development context and technical constraints
-1. **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Current session state and context preservation
-1. **[COLLABORATION_LESSONS.md](COLLABORATION_LESSONS.md)**: Critical collaboration patterns and Claude strength/limitation insights
-1. **[REQUIREMENTS.md](REQUIREMENTS.md)**: Complete business requirements with 127 acceptance criteria for systematic validation
-1. **[README.md](README.md)**: Usage examples, getting started, system overview
-1. **[OPERATIONAL_WORKFLOW.md](OPERATIONAL_WORKFLOW.md)**: Complete operational pipeline commands and workflows
-1. **[COLLABORATION_LOG.md](COLLABORATION_LOG.md)**: AI-human collaboration insights and lessons learned
-1. **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Business requirements, success metrics, operational workflows
-1. **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical system design and component architecture
-1. **[PRODUCTION_STATUS.md](PRODUCTION_STATUS.md)**: Current deployment status and achievements
+2. **[README.md](README.md)**: Project overview, system purpose, and quick start guide
+3. **[REQUIREMENTS.md](REQUIREMENTS.md)**: Complete business requirements with acceptance criteria
+4. **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical system design, file structure, and component architecture
+5. **[PRODUCTION_STATUS.md](PRODUCTION_STATUS.md)**: Current deployment status and achieved capabilities
+
+### **Operational Knowledge (Read Second)**
+6. **[OPERATIONAL_WORKFLOW.md](OPERATIONAL_WORKFLOW.md)**: Complete manual pipeline commands and workflows
+7. **[WEEKLY_REPORT_WORKFLOW.md](WEEKLY_REPORT_WORKFLOW.md)**: Automated weekly reporting pipeline
+8. **[REGRESSION_TEST_PIPELINE.md](REGRESSION_TEST_PIPELINE.md)**: Testing procedures and validation framework
+9. **[KEY_THREE_ANONYMIZATION_WORKFLOW.md](KEY_THREE_ANONYMIZATION_WORKFLOW.md)**: Data safety and anonymization procedures
+
+### **AI Collaboration Context (Read Third)**
+10. **[COLLABORATION_LESSONS.md](COLLABORATION_LESSONS.md)**: Critical AI-human collaboration patterns and insights
+11. **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Active session state (for continued sessions)
+
+### **Reference Material (Read Last)**
+12. **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Comprehensive business design document
+13. **[COLLABORATION_LOG.md](COLLABORATION_LOG.md)**: Detailed historical development record
 

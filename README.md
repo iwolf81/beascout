@@ -1,10 +1,12 @@
 # BeAScout Unit Data Quality Analysis System
 
-Data quality analysis and reporting platform for Scouting America unit information from [beascout.org](https://beascout.scouting.org/) and [joinexploring.org](https://joinexploring.org/) for the Heart of New England Council (central Massachusetts). Generates data quality reports and personalized improvement recommendations for Council leadership and unit Key Three members (i.e., those authorized to update their unit's information).
+Automated system for comprehensive unit presence correlation for the Heart of New England Council (Massachusetts). Correlates Council Office's authoritative unit registry with [beascout.org](https://beascout.scouting.org/) and [joinexploring.org](https://joinexploring.org/) to identify missing web presence units and potentially defunct listings, enabling effective web presence management and data quality improvement.
 
 Project development employed rapid-prototyping, specification programming, and vibe coding techniques with Anthropic's Claude Code 4 AI. [COLLABORATION_LOG.md](https://github.com/iwolf81/beascout/blob/main/COLLABORATION_LOG.md) documents AI-human collaboration evolution for best practices insight. [COLLABORATION_LESSONS.md](https://github.com/iwolf81/beascout/blob/main/COLLABORATION_LESSONS.md) summarizes technical insights and meta-insights about AI-human collaboration effectiveness from this log.
 
-Each new Claude session initializes with markdown files from the [iwolf81/ai-context](https://github.com/iwolf81/ai-context) repository. [AI_INTERACTION_GUIDELINES.md](https://github.com/iwolf81/ai-context/blob/master/AI_INTERACTION_GUIDELINES.md) updates iteratively as new lessons emerge.  
+Each new Claude session initializes with markdown files from the [iwolf81/ai-context](https://github.com/iwolf81/ai-context) repository. [AI_INTERACTION_GUIDELINES.md](https://github.com/iwolf81/ai-context/blob/master/AI_INTERACTION_GUIDELINES.md) updates iteratively as new lessons emerge.
+
+**📚 For complete project documentation structure and reading order, see [Project Documentation Structure](CLAUDE.md#project-documentation-structure) in CLAUDE.md.**  
 
 ## System Overview
 
@@ -69,7 +71,7 @@ The system features consolidated data layer with single source of truth for town
 ## Recent Achievements (September 2025)
 
 **✅ Unit Presence Correlation System**
-- 97.6% correlation success rate between Key Three authoritative registry (169 units) and web data (165 units), identifying missing web presence and potentially defunct units
+- Complete unit analysis between Key Three authoritative registry (169 units) and web data (165 units), identifying missing web presence and potentially defunct units
 - Perfect unit key normalization between 4-digit internal format and display format for reports  
 - Comprehensive identification of units with incomplete Key Three data (10 units with <3 members)
 
@@ -258,7 +260,7 @@ python src/pipeline/reporting/generate_commissioner_report.py  # Excel reports w
 
 ### Current Production Status (All 71 HNE Zip Codes)
 - **Total Units Processed**: 2,034 raw scraped → 165 unique HNE units (92% deduplication)
-- **Unit Presence Correlation Results**: 97.6% correlation success (165/169), identifying missing web presence and potentially defunct units
+- **Unit Presence Correlation Results**: 165 of 169 units matched between sources, identifying missing web presence and potentially defunct units
 - **District Distribution**: Quinapoxet and Soaring Eagle districts fully processed
 - **Unit Key Normalization**: Fixed format consistency between 4-digit internal processing and display format
 - **Territory Filtering**: Successfully excludes non-HNE units (Connecticut, non-council MA towns)
@@ -266,9 +268,6 @@ python src/pipeline/reporting/generate_commissioner_report.py  # Excel reports w
 - **System Status**: Production-ready with complete unit presence correlation and personalized email generation
 
 
-## Project Documentation
-
-For the complete project documentation structure and reading order, see [Project Documentation Structure](CLAUDE.md#project-documentation-structure) in CLAUDE.md.
 
 ## Data Sources
 
@@ -312,7 +311,7 @@ Each District contains multiple towns, and each town may have zero or more Scout
 
 ### Production Readiness Assessment
 - **Metric**: 60.2% average unit completeness score across 165 HNE units
-- **Validation**: 97.6% Key Three correlation accuracy (165/169 units matched between registry and web data)
+- **Validation**: Comprehensive Key Three correlation analysis (165/169 units matched between registry and web data)
 - **Scalability**: System handles duplicate unit numbers, missing data, and format variations reliably
 - **Recommendation**: Production-ready for all 165 HNE Council units with complete unit presence correlation
 

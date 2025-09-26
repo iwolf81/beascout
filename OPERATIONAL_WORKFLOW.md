@@ -83,38 +83,24 @@ dudiff='f() { fname="$1"; base="${fname%.*}"; ext="${fname##*.}"; sort -u "$fnam
 
 ## **Processing:**
 
-### Anonymize **real** Key Three personal data for testing and publishing (e.g., public github).
-- The Key Three leaders for a unit are authorized to update their unit's information in BeAScout.
-- Their information is provided by the Council Office in a generated xlsx spreadsheet.
-- This information must be anonymized for reports uploaded to github.
+### Anonymize **real** Key Three personal data for testing and publishing
 
-#### Two-Step Anonymization Process:
+**For complete Key Three anonymization workflow, see [KEY_THREE_ANONYMIZATION_WORKFLOW.md](KEY_THREE_ANONYMIZATION_WORKFLOW.md).**
 
-**Step 1: Anonymize Excel File**
-#### Input:
-- "data/input/Key 3 08-22-2025.xlsx"
-#### Output:
-- tests/reference/key_three/anonymized_key_three.xlsx
+**Quick Summary:**
+- **Step 1**: Anonymize Excel file (`anonymize_key_three.py`)
+- **Step 2**: Convert to JSON (`convert_key_three_to_json.py`)
+- **Purpose**: Safe development with realistic test data
+- **Safety**: Anonymized data can be committed to git
+
+**Key Commands:**
 ```bash
-# Anonymize personal data while preserving organizational structure
-# NOTE: Each run generates new random fake data (names, emails, phones, addresses)
+# Step 1: Anonymize Excel (generates new fake data each time)
 python src/dev/tools/anonymize_key_three.py "data/input/Key 3 08-22-2025.xlsx" --verify
-```
 
-**Step 2: Convert to JSON for Pipeline Use**
-#### Input:
-- tests/reference/key_three/anonymized_key_three.xlsx
-#### Output:
-- tests/reference/key_three/anonymized_key_three.json
-```bash
-# Convert anonymized Excel to clean JSON format expected by pipeline
+# Step 2: Convert to JSON format for pipeline
 python src/dev/tools/convert_key_three_to_json.py tests/reference/key_three/anonymized_key_three.xlsx
 ```
-
-**🔄 Important Notes:**
-- Only regenerate when real Key Three data is updated
-- Each anonymization run produces different (but valid) fake personal data - new random data is generated each time
-- For regression testing, use current `tests/reference/key_three/anonymized_key_three.xlsx` and `anonymized_key_three.json` as baseline (generated with cleaned-up code)
 
 ### Convert **real** Key Three xlsx file to json.
 - Subsequent processing and analysis required the Key Three data in JSON format.

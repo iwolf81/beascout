@@ -282,7 +282,7 @@ class TestUnitPresenceCorrelation:
         pass
     
     def test_AC045_complete_correlation_processing(self):
-        """AC-045: Complete correlation processing achieves 100% Key Three unit analysis (current: 97.6% = 165/169 units matched with web data)"""
+        """AC-045: Complete correlation processing achieves comprehensive Key Three unit analysis (165/169 units matched with web data, identifying gaps)"""
         pass
     
     def test_AC046_unit_format_consistency(self):

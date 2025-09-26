@@ -13,7 +13,8 @@ The BeAScout Unit Information Analysis System has successfully evolved from prot
 #### Unit Presence Correlation System
 - **Key Three Authoritative Registry**: 169 active units from official Council Office database serving as definitive source for active units
 - **Enhanced Web Data Processing**: 165 HNE units from 2,034 raw scraped records (92% deduplication efficiency)
-- **Presence Gap Analysis**: Correlated Units (165 matched with web data), Missing Web Presence (4 units lacking web visibility), unit correlation success of 97.6%
+- **Presence Gap Analysis**: Correlated Units (165 matched with web data), Missing Web Presence (4 units lacking web visibility)
+- **Quality Analysis**: 60.2% average completeness score across web-active units with A-F grading system
 - **Territory Validation**: Enhanced HNE filtering validates legitimate council units vs non-council entries
 
 #### Advanced Parsing Architecture
@@ -43,9 +44,9 @@ The BeAScout Unit Information Analysis System has successfully evolved from prot
 - **Cross-Source Matching**: Reliable identifier normalization enables precise validation between Key Three and scraped data
 
 #### Unit Presence Coverage (Correlation Analysis)
-- **Web Presence Coverage**: 97.6% of Key Three units found online (165/169 units)
+- **Web Presence Coverage**: 165 of 169 Key Three units found online with quality assessment
 - **Missing Web Presence**: 4 units (2.4%) lacking web visibility require attention
-- **Unit Correlation Success**: 165 units successfully matched between Key Three and web data
+- **Unit Correlation Success**: 165 units successfully matched between Key Three and web data with comprehensive analysis
 - **Authoritative Registry Validation**: Perfect alignment between Key Three authority and web data
 - **Data Integrity**: 0% false positives in territory classification
 
@@ -61,7 +62,7 @@ The BeAScout Unit Information Analysis System has successfully evolved from prot
 - **Single Source of Truth**: 65 HNE towns consolidated in `src/pipeline/core/district_mapping.py`
 - **Position-First Parsing**: Enhanced text extraction prioritizes first occurrence for hyphenated towns
 - **Key Three Parser**: Handles all edge cases with 169 units as definitive council authority
-- **Unit Presence Correlation**: Comprehensive analysis with 97.6% correlation success between Key Three and web data
+- **Unit Presence Correlation**: Comprehensive analysis between Key Three and web data with quality scoring
 
 ### 📋 **Operational Readiness**
 
@@ -174,7 +175,7 @@ The BeAScout Unit Information Analysis System has successfully evolved from prot
 - **Deduplication Efficiency**: 92.3% duplicate removal (1,942 duplicates handled across zip codes)
 - **Unique Scraped Units**: 165 HNE units after deduplication and territory validation
 - **Key Three Authority**: 169 active units as definitive council source of truth
-- **Unit Presence Correlation**: 97.6% correlation success (165 of 169 Key Three units matched with web data)
+- **Unit Presence Correlation**: 165 of 169 Key Three units matched with web data for gap analysis
 - **Average Quality Score**: 60.1% across all processed units
 
 ### Data Quality Metrics (Consolidated System)
@@ -224,21 +225,11 @@ The system represents a comprehensive transformation from initial prototype to p
 
 **TRANSFORMATION COMPLETED**: Complete directory restructuring achieved production-ready organization with clear operational vs development separation.
 
-#### **Operational Pipeline (src/pipeline/ - 11 Core Files)**
-- **acquisition/**: `multi_zip_scraper.py`, `browser_scraper.py` - Data collection
-- **processing/**: `process_full_dataset.py`, `html_extractor.py`, `scraped_data_parser.py` - HTML→JSON
-- **analysis/**: `generate_commissioner_report.py`, `generate_unit_emails.py` - Reports & emails
-- **core/**: `district_mapping.py`, `unit_identifier.py`, `quality_scorer.py`, `hne_towns.py` - Infrastructure
+**For detailed file hierarchy and organization principles, see [ARCHITECTURE.md](ARCHITECTURE.md).**
 
-#### **Development Tools (src/dev/ - Consolidated)**
-- **archive/**: All deprecated/legacy code (flattened structure)
-- **tools/**: Development utilities & scripts
-- **parsing/**, **reporting/**, **validation/**: Alternative implementations
-
-#### **Clean Data Organization**
-- **data/logs/**: Organized application logs
-- **data/output/reports/**: Excel commissioner reports  
-- **data/output/emails/**: Unit improvement emails
+**Key organizational improvements:**
+- **Clear separation**: `src/pipeline/` (11 operational files) vs `src/dev/` (development tools)
+- **Logical pipeline flow**: acquisition → processing → analysis → core
 - **Significant reduction** in root directory clutter achieved
 
 ### **🚀 Production Pipeline Execution Commands**
@@ -272,7 +263,7 @@ python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehe
 ### **🎯 Critical Production Milestones Achieved**
 
 **Unit Presence Correlation System Operational**:
-- **97.6% Correlation Success**: 165 HNE units successfully correlated between Key Three authoritative registry (169 units) and web data (165 units), identifying missing web presence and potentially defunct units
+- **Complete Unit Analysis**: 165 HNE units successfully correlated between Key Three authoritative registry (169 units) and web data (165 units), identifying missing web presence and potentially defunct units
 - **Unit Key Normalization Fixed**: Resolved format mismatches between 4-digit internal processing and display format for reports
 - **Complete Key Three Integration**: All 165 web-active units matched with Key Three contact information for gap analysis
 - **Missing Unit Identification**: 10 units with incomplete Key Three data (<3 members) accurately identified
@@ -292,7 +283,7 @@ python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehe
 ### **📊 Current Production Metrics (September 8, 2025)**
 - **Total HNE Units**: 165 units actively found on web (confirmed through three-way validation)
 - **Key Three Database**: 169 total units (includes 10 with incomplete member data)
-- **Unit Correlation Success**: 97.6% success rate (165/169 units matched between Key Three and web data)
+- **Unit Correlation Success**: 165/169 units matched between Key Three and web data for comprehensive gap analysis
 - **Average Quality Score**: 60.2% completeness across all processed units
 - **Email Generation**: 100% success rate for both real and anonymized data
 - **System Reliability**: Zero regressions, consistent processing across all test scenarios
