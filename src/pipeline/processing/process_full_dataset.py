@@ -23,6 +23,7 @@ def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_c
     Extract units from HTML files using legacy parser, save to JSON
     Returns path to generated JSON file
     """
+    # These detailed messages go to log file only in terminal_terse mode
     print(f"  Processing BeAScout: {beascout_file}")
     print(f"  Processing JoinExploring: {joinexploring_file}")
 
@@ -33,7 +34,7 @@ def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_c
         if 'UNIT_DEBUG_TIMESTAMP' not in os.environ:
             shared_timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             os.environ['UNIT_DEBUG_TIMESTAMP'] = shared_timestamp
-        
+
         # Use HTML parser to extract units to JSON with proper working directory
         # Ensure we're in the project root for proper imports
         import subprocess
@@ -80,8 +81,9 @@ def process_with_current_pipeline(json_file: str, zip_code: str, session_manager
         parser = ScrapedDataParser()
         units = parser.parse_json_file(json_file)
 
+        # These detailed messages go to log file only in terminal_terse mode
         print(f"    Processed {len(units)} units through current pipeline")
-        
+
         # Check if units have integrated quality data
         if units and len(units) > 0:
             first_unit = units[0]
@@ -104,7 +106,7 @@ def process_with_current_pipeline(json_file: str, zip_code: str, session_manager
         }
         with open(processed_json, 'w') as f:
             json.dump(data_wrapper, f, indent=2)
-            
+
         # Verify file was created
         if os.path.exists(processed_json):
             print(f"    ✅ File saved successfully: {processed_json}")
@@ -270,6 +272,7 @@ def process_scraped_session(session_dir: str):
 
 def combine_datasets(json_files: list, session_dir: str = None):
     """Combine all scored datasets with deduplication"""
+    # These detailed messages go to log file only in terminal_terse mode
     print("Combining all scored datasets with deduplication...")
 
     unique_units = {}
