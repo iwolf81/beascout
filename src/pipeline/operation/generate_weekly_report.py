@@ -8,11 +8,31 @@ Designed for Sunday evening execution with robust error handling and recovery
 import argparse
 import json
 import logging
+import subprocess
 import sys
 import time
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
+
+
+class WarningErrorHandler(logging.Handler):
+    """Custom log handler that captures warnings and errors"""
+
+    def __init__(self, pipeline):
+        super().__init__()
+        self.pipeline = pipeline
+
+    def emit(self, record):
+        # Avoid infinite recursion - don't capture our own summary messages
+        message = record.getMessage()
+        if "PIPELINE COMPLETION SUMMARY" in message or "📋 WARNINGS:" in message or "❌ ERRORS:" in message:
+            return
+
+        if record.levelno >= logging.ERROR:
+            self.pipeline.errors.append(message)
+        elif record.levelno >= logging.WARNING:
+            self.pipeline.warnings.append(message)
 
 # Add project root to path
 project_root = Path(__file__).parent.parent.parent.parent
@@ -68,6 +88,16 @@ class WeeklyReportPipeline:
     """
 
     def __init__(self, skip_failed_zips: bool = False, fallback_to_cache: bool = False, key_three_file: str = None, scraped_dir: str = None, baseline_file: str = None):
+        """
+        Initialize weekly report pipeline.
+
+        Args:
+            skip_failed_zips: Continue processing even if some zip codes fail during scraping
+            fallback_to_cache: Use cached/existing data if fresh scraping fails
+            key_three_file: Path to Key Three Excel file with unit registry
+            scraped_dir: Path to EXISTING scraped session directory (input) - skips scraping stage
+            baseline_file: Baseline analytics JSON file for week-over-week comparison
+        """
         self.skip_failed_zips = skip_failed_zips
         self.fallback_to_cache = fallback_to_cache
         self.key_three_file = key_three_file
@@ -78,6 +108,10 @@ class WeeklyReportPipeline:
         # Session-specific data tracking
         self.scraped_session_dir = scraped_dir
         self.scraped_session_id = self._extract_scraped_session_id()
+
+        # Warning and error tracking
+        self.warnings = []
+        self.errors = []
 
         # Setup logging
         self.setup_logging()
@@ -113,13 +147,63 @@ class WeeklyReportPipeline:
         console_handler.setLevel(logging.INFO)
         console_handler.setFormatter(formatter)
 
+        # Warning/error tracking handler
+        warning_error_handler = WarningErrorHandler(self)
+        warning_error_handler.setLevel(logging.WARNING)
+
         # Configure logger
         self.logger = logging.getLogger('pipeline')
         self.logger.setLevel(logging.DEBUG)
         self.logger.addHandler(file_handler)
         self.logger.addHandler(console_handler)
+        self.logger.addHandler(warning_error_handler)
 
         self.logger.info(f"📝 Logging configured: {log_file}")
+
+    def _report_completion_summary(self, overall_success: bool) -> bool:
+        """Report completion summary with warnings and errors highlighted"""
+        # Count issues
+        warning_count = len(self.warnings)
+        error_count = len(self.errors)
+
+        # Determine final status
+        has_issues = warning_count > 0 or error_count > 0
+        final_success = overall_success and not has_issues
+
+        # Always show summary header
+        self.logger.info("=" * 80)
+        self.logger.info("PIPELINE COMPLETION SUMMARY")
+        self.logger.info("=" * 80)
+
+        # Show issue counts
+        if has_issues:
+            self.logger.error(f"⚠️  ISSUES DETECTED: {warning_count} warnings, {error_count} errors")
+        else:
+            self.logger.info("✅ No warnings or errors detected")
+
+        # Show all warnings
+        if self.warnings:
+            self.logger.warning("📋 WARNINGS:")
+            for i, warning in enumerate(self.warnings, 1):
+                self.logger.warning(f"  {i}. {warning}")
+
+        # Show all errors
+        if self.errors:
+            self.logger.error("❌ ERRORS:")
+            for i, error in enumerate(self.errors, 1):
+                self.logger.error(f"  {i}. {error}")
+
+        # Final status
+        if final_success:
+            self.logger.info("🎉 PIPELINE COMPLETED SUCCESSFULLY!")
+        else:
+            if has_issues:
+                self.logger.error("💥 PIPELINE COMPLETED WITH ISSUES - Review warnings/errors above")
+            else:
+                self.logger.error("💥 PIPELINE FAILED!")
+
+        self.logger.info("=" * 80)
+        return final_success
 
     def _define_pipeline_stages(self) -> Dict[str, PipelineStage]:
         """Define all pipeline stages with dependencies and validation"""
@@ -389,13 +473,33 @@ class WeeklyReportPipeline:
         session_summary = None
         scraped_files = []
 
-        for file_path in output_files:
-            if file_path.name == "session_summary.json":
-                session_summary = file_path
-                # Capture the session directory for later stages
-                self.scraped_session_dir = str(file_path.parent)
-            elif file_path.name.endswith('.html'):
-                scraped_files.append(file_path)
+        # PRIORITY: Look for session_summary.json in current session directory FIRST
+        current_session_dir = Path(f"data/scraped/{self.session_id}")
+        current_session_summary = current_session_dir / "session_summary.json"
+
+        if current_session_summary.exists():
+            session_summary = current_session_summary
+            self.scraped_session_dir = str(current_session_dir)
+            self.logger.info(f"✅ Using current session directory: {self.scraped_session_dir}")
+
+            # Collect HTML files from current session directory
+            scraped_files = list(current_session_dir.glob("*.html"))
+        else:
+            # Fallback: Look through output_files (old logic for compatibility)
+            self.logger.warning(f"⚠️  Current session directory not found: {current_session_dir}")
+            self.logger.info("🔍 Searching through output files for session data...")
+
+            for file_path in output_files:
+                if file_path.name == "session_summary.json":
+                    session_summary = file_path
+                    self.scraped_session_dir = str(file_path.parent)
+                    self.logger.warning(f"⚠️  Using fallback session directory: {self.scraped_session_dir}")
+                    break
+
+            # Collect HTML files from fallback directory
+            for file_path in output_files:
+                if file_path.name.endswith('.html'):
+                    scraped_files.append(file_path)
 
         if not session_summary:
             self.logger.error("❌ Session summary file missing")
@@ -513,21 +617,29 @@ class WeeklyReportPipeline:
         if success:
             # Validate outputs
             if self.validate_stage_outputs(stage):
+                # Run regression testing BEFORE marking scraping stage complete
+                if stage.name == "scraping":
+                    try:
+                        # Update scraped session directory to current session after successful scraping
+                        current_session_dir = f"data/scraped/{self.session_id}"
+                        if Path(current_session_dir).exists():
+                            self.scraped_session_dir = current_session_dir
+                            self.logger.info(f"✅ Updated scraped session directory to current session: {current_session_dir}")
+                        else:
+                            self.logger.warning(f"⚠️  Current session directory not found after scraping: {current_session_dir}")
+
+                        self._run_udiff_regression_test()
+                    except RuntimeError as e:
+                        # Regression test failed - mark stage as failed
+                        stage.fail(f"Regression test failed: {e}")
+                        success = False
+                        self.save_status()
+                        return success
+
+                # Mark stage complete only after regression test passes (for scraping) or if not scraping stage
                 stage.complete()
                 duration = stage.duration
                 self.logger.info(f"✅ Stage completed: {stage.name} ({duration:.1f}s)")
-
-                # Update scraped session directory and run regression testing after scraping stage
-                if stage.name == "scraping":
-                    # Update scraped session directory to current session after successful scraping
-                    current_session_dir = f"data/scraped/{self.session_id}"
-                    if Path(current_session_dir).exists():
-                        self.scraped_session_dir = current_session_dir
-                        self.logger.info(f"✅ Updated scraped session directory to current session: {current_session_dir}")
-                    else:
-                        self.logger.warning(f"⚠️  Current session directory not found after scraping: {current_session_dir}")
-
-                    self._run_udiff_regression_test()
             else:
                 stage.fail("Output validation failed")
                 success = False
@@ -684,45 +796,71 @@ class WeeklyReportPipeline:
         return latest
 
     def _run_udiff_regression_test(self):
-        """Execute udiff regression testing on scraped data"""
+        """Compare scraped units with reference baseline using Python set comparison - raises exception on failure"""
         try:
-            import subprocess
+            self.logger.info("🔍 Running regression test: comparing scraped units with reference baseline...")
 
-            self.logger.info("🔍 Running udiff regression testing...")
+            # Define reference file path
+            reference_file = project_root / "tests" / "reference" / "units" / "unit_identifier_debug_scraped_reference_u.log"
 
-            # Execute the udiff alias command
-            result = subprocess.run(
-                ['udiff', 'unit_identifier_debug_scraped_'],
-                capture_output=True,
-                text=True,
-                shell=True,
-                timeout=30
-            )
+            if not reference_file.exists():
+                self.logger.warning(f"⚠️  REGRESSION TEST SKIPPED: Reference file not found: {reference_file}")
+                return
 
-            # Log the results
-            if result.returncode == 0:
-                self.logger.info("✅ REGRESSION TEST: PASS - No unit changes detected")
-                if result.stdout.strip():
-                    self.logger.info("📊 udiff output:")
-                    for line in result.stdout.strip().split('\n'):
-                        self.logger.info(f"  {line}")
+            # Find latest debug file
+            debug_dir = project_root / "data" / "debug"
+            debug_pattern = "unit_identifier_debug_scraped_*.log"
+            debug_files = list(debug_dir.glob(debug_pattern))
+
+            if not debug_files:
+                self.logger.warning(f"⚠️  REGRESSION TEST SKIPPED: No debug files found matching {debug_pattern}")
+                return
+
+            latest_debug = max(debug_files, key=lambda p: p.stat().st_mtime)
+            self.logger.info(f"📋 Comparing: {latest_debug.name}")
+
+            # Load reference units as set (deduplicated and sorted)
+            with open(reference_file, 'r', encoding='utf-8') as f:
+                reference_units = set(line.strip() for line in f if line.strip())
+
+            # Load scraped units as set (deduplicated and sorted)
+            with open(latest_debug, 'r', encoding='utf-8') as f:
+                scraped_units = set(line.strip() for line in f if line.strip())
+
+            # Compare sets
+            added_units = scraped_units - reference_units
+            removed_units = reference_units - scraped_units
+
+            # Report results
+            if added_units or removed_units:
+                self.logger.error("❌ REGRESSION TEST FAILED: Unit changes detected")
+                self.logger.error(f"   Reference: {len(reference_units)} units")
+                self.logger.error(f"   Scraped:   {len(scraped_units)} units")
+
+                if added_units:
+                    self.logger.error(f"   ✨ {len(added_units)} units ADDED (showing first 10):")
+                    for unit in sorted(added_units)[:10]:
+                        self.logger.error(f"      + {unit}")
+                    if len(added_units) > 10:
+                        self.logger.error(f"      ... and {len(added_units) - 10} more")
+
+                if removed_units:
+                    self.logger.error(f"   ❌ {len(removed_units)} units REMOVED (showing first 10):")
+                    for unit in sorted(removed_units)[:10]:
+                        self.logger.error(f"      - {unit}")
+                    if len(removed_units) > 10:
+                        self.logger.error(f"      ... and {len(removed_units) - 10} more")
+
+                raise RuntimeError(f"Regression test failed: {len(added_units)} units added, {len(removed_units)} units removed. Review changes before continuing.")
             else:
-                self.logger.warning("⚠️  REGRESSION TEST: CHANGES DETECTED")
-                if result.stdout.strip():
-                    self.logger.warning("📊 udiff changes detected:")
-                    for line in result.stdout.strip().split('\n'):
-                        self.logger.warning(f"  {line}")
-                if result.stderr.strip():
-                    self.logger.warning("📊 udiff errors:")
-                    for line in result.stderr.strip().split('\n'):
-                        self.logger.warning(f"  {line}")
+                self.logger.info(f"✅ REGRESSION TEST PASSED: {len(scraped_units)} units match reference baseline")
 
-        except subprocess.TimeoutExpired:
-            self.logger.error("❌ REGRESSION TEST: TIMEOUT - udiff command took too long")
-        except FileNotFoundError:
-            self.logger.warning("⚠️  REGRESSION TEST: SKIPPED - udiff alias not found")
+        except RuntimeError:
+            # Re-raise RuntimeError (our own exceptions from above)
+            raise
         except Exception as e:
-            self.logger.error(f"❌ REGRESSION TEST: ERROR - {e}")
+            self.logger.error(f"❌ REGRESSION TEST ERROR: {e}")
+            raise RuntimeError(f"Regression test error: {e}") from e
 
     def save_status(self):
         """Save current pipeline status to file"""
@@ -953,7 +1091,7 @@ This pipeline orchestrates the complete data flow:
                        help='Use cached data if fresh scraping fails')
     parser.add_argument('--session-id', help='Resume specific session ID')
     parser.add_argument('--key-three-file', help='Path to Key Three file (e.g., "data/input/Key 3 08-22-2025.xlsx")')
-    parser.add_argument('--scraped-dir', help='Path to scraped session directory (e.g., "data/scraped/20250919_191632")')
+    parser.add_argument('--scraped-dir', help='Path to EXISTING scraped session directory to use instead of fresh scraping (e.g., "data/scraped/20250919_191632")')
     parser.add_argument('--baseline', help='Baseline analytics file for week-over-week comparison (e.g., "BeAScout_Weekly_Quality_Report_20250904_154530.json")')
 
     args = parser.parse_args()
@@ -980,18 +1118,21 @@ This pipeline orchestrates the complete data flow:
             resume=args.resume
         )
 
-        if success:
-            pipeline.logger.info("🎉 Pipeline completed successfully!")
+        # Report completion summary with warnings/errors highlighted
+        final_success = pipeline._report_completion_summary(success)
+
+        if final_success:
             sys.exit(0)
         else:
-            pipeline.logger.error("💥 Pipeline failed!")
             sys.exit(1)
 
     except KeyboardInterrupt:
         pipeline.logger.warning("⚡ Pipeline interrupted by user")
+        pipeline._report_completion_summary(False)
         sys.exit(130)
     except Exception as e:
         pipeline.logger.error(f"💥 Unexpected error: {e}")
+        pipeline._report_completion_summary(False)
         sys.exit(1)
 
 if __name__ == "__main__":
