@@ -46,24 +46,12 @@ class UnitEmailGenerator:
         """Load processed unit data with quality scores"""
         with open(units_file_path, 'r') as f:
             data = json.load(f)
-        
+
         units = data.get('units_with_scores', [])
-        
-        # Convert 4-digit unit keys to display format for compatibility with Key Three matching
-        for unit in units:
-            unit_key = unit.get('unit_key', '')
-            if unit_key:
-                # Convert "Pack 0007 Clinton" -> "Pack 7 Clinton" for Key Three matching
-                parts = unit_key.split()
-                if len(parts) >= 3:
-                    unit_type = parts[0]
-                    unit_number_4digit = parts[1]
-                    town = ' '.join(parts[2:])
-                    # Remove leading zeros for display format
-                    display_number = unit_number_4digit.lstrip('0') or '0'
-                    display_key = f"{unit_type} {display_number} {town}"
-                    unit['unit_key'] = display_key
-        
+
+        # Keep 4-digit unit_key format for matching with Key Three data
+        # Leading zeros are stripped only for display in emails, not for matching
+
         return units
     
     def load_key_three_data(self, key_three_file_path: str) -> Dict:
@@ -113,19 +101,20 @@ class UnitEmailGenerator:
         key_three_index = {}
         for member in key_three_members:
             unit_org_name = member.get('unit_org_name', '')
-            
+
             # Extract unit info from unitcommorgname using existing parser
             unit_info = self.parser.extract_unit_info_from_unitcommorgname(unit_org_name)
-            
+
             if unit_info and unit_info.get('unit_town'):
-                # Create unit_key in same format as scraped data: "Troop 7012 Leominster" (no leading zeros)
-                unit_number = unit_info['unit_number'].lstrip('0') or '0'  # Remove leading zeros, but keep '0' if all zeros
+                # Create unit_key in same format as scraped data: "Troop 0001 Acton" (4-digit unit number)
+                # Leading zeros are kept for matching - stripped only for display
+                unit_number = unit_info['unit_number']  # Already 4-digit format from parser
                 unit_key = f"{unit_info['unit_type']} {unit_number} {unit_info['unit_town']}"
-                
+
                 if unit_key not in key_three_index:
                     key_three_index[unit_key] = []
                 key_three_index[unit_key].append(member)
-        
+
         return key_three_index
     
     def find_key_three_for_unit(self, unit: Dict, key_three_index: Dict) -> List[Dict]:
