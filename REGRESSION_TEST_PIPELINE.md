@@ -2,6 +2,35 @@
 
 Complete end-to-end pipeline using stable reference data for development, testing, and regression validation.
 
+## **🔒 Data Isolation**
+
+**CRITICAL: Regression tests use separate output directories to prevent contaminating production data.**
+
+| File Type | Production Path | Regression Test Path |
+|-----------|----------------|---------------------|
+| Validation Results | `data/output/enhanced_three_way_validation_results.json` | `data/output/regression/enhanced_three_way_validation_results.json` |
+| Excel Reports | `data/output/reports/*.xlsx` | `data/output/regression/reports/*.xlsx` |
+| Unit Emails | `data/output/unit_emails_v2/*.md` | `data/output/regression/unit_emails/*.md` |
+
+**Why This Matters:**
+- Production uses real Key Three data from `data/input/Key_3_09-29-2025.xlsx`
+- Regression tests use anonymized data from `tests/reference/key_three/anonymized_key_three.json`
+- Without separation, regression tests would overwrite production files with anonymized data
+
+## **⚡ Quick Start**
+
+**Run complete regression test suite:**
+```bash
+python tests/run_regression_tests.py
+```
+
+**Run with detailed logging:**
+```bash
+python tests/run_regression_tests.py --log --verbose
+```
+
+**Expected result:** All tests pass (6/6 steps) with clear PASS/FAIL reporting.
+
 ## **📁 Reference Data Sources**
 
 ### **Available Reference Data:**
@@ -32,30 +61,122 @@ python -u src/pipeline/processing/process_full_dataset.py tests/reference/units/
 ### **Step 2: Three-Way Unit Validation**
 ```bash
 # Input: data/raw/all_units_comprehensive_scored.json + reference Key Three data
-# Output: data/output/three_way_validation_results.json (unit presence correlation)
+# Output: data/output/regression/enhanced_three_way_validation_results.json (unit presence correlation)
 
-python src/pipeline/analysis/three_way_validator.py --key-three tests/reference/key_three/anonymized_key_three.json
+python src/pipeline/analysis/three_way_validator.py \
+  --key-three tests/reference/key_three/anonymized_key_three.json \
+  --output data/output/regression/enhanced_three_way_validation_results.json
 ```
 
 ### **Step 3: Generate Commissioner Report**
 ```bash
 # Input: processed unit data + validated correlation data + reference Key Three
-# Output: data/output/reports/BeAScout_Quality_Report_YYYYMMDD_HHMMSS.xlsx
+# Output: data/output/regression/reports/BeAScout_Quality_Report_YYYYMMDD_HHMMSS.xlsx
 
-python src/pipeline/analysis/generate_commissioner_report.py --key-three tests/reference/key_three/anonymized_key_three.json 2>&1 | tee data/logs/generate_commissioner_report_$(date +%Y%m%d_%H%M%S).log
+python src/pipeline/analysis/generate_commissioner_report.py \
+  --key-three tests/reference/key_three/anonymized_key_three.json \
+  --validation-file data/output/regression/enhanced_three_way_validation_results.json \
+  --output-dir data/output/regression/reports \
+  2>&1 | tee data/logs/generate_commissioner_report_$(date +%Y%m%d_%H%M%S).log
 ```
 
 ### **Step 4: Generate Unit Emails**
 ```bash
-# Input: processed unit data + reference Key Three Excel file
-# Output: data/output/emails/ (personalized improvement emails)
+# Input: validation results with joined Key Three data
+# Output: data/output/regression/unit_emails/ (personalized improvement emails)
 
-python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json tests/reference/key_three/anonymized_key_three.xlsx 2>&1 | tee data/logs/generate_unit_emails_$(date +%Y%m%d_%H%M%S).log
+python src/pipeline/analysis/generate_unit_emails.py \
+  data/output/regression/enhanced_three_way_validation_results.json \
+  --output-dir data/output/regression/unit_emails \
+  2>&1 | tee data/logs/generate_unit_emails_$(date +%Y%m%d_%H%M%S).log
 ```
 
 ---
 
-## **🧪 Regression Testing Framework**
+## **🤖 Automated Regression Testing**
+
+### **Automated Test Runner (Recommended)**
+
+The automated regression test runner executes all pipeline components and validates outputs in a single command:
+
+**Basic Usage:**
+```bash
+# Run complete regression test suite (recommended)
+python tests/run_regression_tests.py
+
+# Run with detailed output
+python tests/run_regression_tests.py --verbose
+
+# Run with session logging
+python tests/run_regression_tests.py --log
+
+# Run unit processing test only (faster)
+python tests/run_regression_tests.py --unit-only
+```
+
+**Example Output:**
+```
+================================================================================
+REGRESSION TEST SUMMARY
+================================================================================
+✅ ALL TESTS PASSED
+📊 Steps: 6/6 passed (100.0%)
+🔍 Session ID: 20250929_083029
+
+📁 Generated Files:
+  - data/debug/cross_reference_validation_debug_20250929_083041.log
+  - data/debug/unit_identifier_debug_scraped_20250929_083029.log
+  - data/output/regression/reports/BeAScout_Quality_Report_20250929_083029.xlsx
+  - data/output/regression/enhanced_three_way_validation_results.json
+  - data/output/regression/unit_emails/*.md
+
+📄 Log Files:
+  - data/logs/process_full_dataset_20250929_083029.log
+  - data/logs/three_way_validator_20250929_083029.log
+
+Detailed Results:
+  ✅ PASS - Step 1/6: Process Full Dataset
+  ✅ PASS - Step 2/6: Unit Processing Regression Test (udiff)
+  ✅ PASS - Step 3/6: Three-Way Validation
+  ✅ PASS - Step 4/6: Three-Way Validation Regression Test (vdiff)
+  ✅ PASS - Step 5/6: Generate Commissioner Report
+  ✅ PASS - Step 6/6: Excel Report Regression Test (ediff)
+```
+
+**Test Components:**
+1. **Process Full Dataset** - HTML processing with quality scoring
+2. **Unit Processing Regression** - Validates unit extraction consistency
+3. **Three-Way Validation** - Unit presence correlation analysis
+4. **Validation Regression** - Validates correlation logic consistency
+5. **Commissioner Report** - Excel report generation
+6. **Excel Report Regression** - Validates report format and data consistency
+
+**Session Management:**
+- Uses unified session timestamps for file correlation
+- Supports `--log` flag for detailed debug logging
+- Generates session-correlated files for easy debugging
+- Tracks all generated files and provides summary
+
+**Available Command Line Options:**
+```bash
+python tests/run_regression_tests.py [options]
+
+Options:
+  --unit-only    Run only unit processing test (faster development cycle)
+  --verbose      Show detailed test execution information
+  --log          Enable session logging with detailed debug output
+  --session-id   Specify custom session ID for file correlation
+```
+
+**Troubleshooting Automated Tests:**
+- **Import errors**: Ensure running from project root (`/Users/iwolf/Repos/beascout`)
+- **Missing reference files**: Run `ls tests/reference/units/scraped/*.html | wc -l` (should show 70+ files)
+- **Test failures**: Check specific step output and compare with manual regression commands
+- **Session correlation**: Use `--log` to generate correlated debug files for investigation
+
+---
+
+## **🧪 Manual Regression Testing Framework**
 
 ### **Prerequisites**
 Load regression testing aliases from `~/.zshrc`:
@@ -84,13 +205,13 @@ vdiff cross_reference_validation_debug_YYYYMMDD_HHMMSS.log
 #### **✅ 3. Excel Report Regression Test (READY)**
 ```bash
 # Compare generated Excel report to reference baseline using ediff alias
-ediff data/output/reports/BeAScout_Quality_Report_YYYYMMDD_HHMMSS.xlsx
+ediff data/output/regression/reports/BeAScout_Quality_Report_YYYYMMDD_HHMMSS.xlsx
 # Expected: "PASS: Excel reports are functionally identical"
 
 # Manual comparison (if needed for debugging):
 python tests/tools/compare_excel_files.py \
   tests/reference/reports/BeAScout_Quality_Report_anonymized.xlsx \
-  data/output/reports/BeAScout_Quality_Report_YYYYMMDD_HHMMSS.xlsx \
+  data/output/regression/reports/BeAScout_Quality_Report_YYYYMMDD_HHMMSS.xlsx \
   --exit-code --quiet
 
 # Exit codes:
