@@ -250,8 +250,8 @@ class EmailDraftGenerator:
                 lines.append("")  # Empty line
                 lines.append("Notable Unit Changes:")
 
-                # Top improvements (up to 3)
-                improvements = [u for u in unit_changes if u["improvement"]][:3]
+                # Top improvements (up to 5)
+                improvements = [u for u in unit_changes if u["improvement"]][:5]
                 if improvements:
                     lines.append("Top Improvements:")
                     for unit in improvements:
@@ -259,18 +259,24 @@ class EmailDraftGenerator:
                         curr_score = unit["current_score"]
                         change = unit["change"]
                         lines.append(f"• {unit['unit_identifier']}: {prev_score}% → {curr_score}% (+{change}%)")
+                else:
+                    lines.append("Top Improvements:")
+                    lines.append("• No unit improvements since baseline")
 
-                # Top declines (up to 3)
-                declines = [u for u in unit_changes if not u["improvement"]][:3]
+                lines.append("")  # Add spacing between improvements and declines
+
+                # Top declines (up to 5)
+                declines = [u for u in unit_changes if not u["improvement"]][:5]
                 if declines:
-                    if improvements:  # Add spacing only if there were improvements
-                        lines.append("")
                     lines.append("Top Declines:")
                     for unit in declines:
                         prev_score = unit["previous_score"]
                         curr_score = unit["current_score"]
                         change = unit["change"]
                         lines.append(f"• {unit['unit_identifier']}: {prev_score}% → {curr_score}% ({change}%)")
+                else:
+                    lines.append("Top Declines:")
+                    lines.append("• No unit declines since baseline")
 
             return "\n".join(lines)
 
