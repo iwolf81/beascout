@@ -1073,3 +1073,80 @@ def generate_search_url(zip_code, unit_type, source='beascout'):
 **Technical Documentation Excellence**: Successfully maintained documentation consistency across complex multi-file updates while preserving technical accuracy and improving business clarity.
 
 **Current System Status**: Production-ready v1.0.0 with complete requirements documentation, systematic acceptance test framework, and clear business goal alignment for unit presence correlation and gap analysis.
+
+---
+
+### October 7, 2025 Session - Email Generation Bug Fixes & Data Isolation
+
+**🎯 CRITICAL SUCCESS: Unit Email Generation Architecture Fixed**
+
+**Problem Resolved**: Email generation was using incorrect Key Three matching logic, resulting in emails with 30+ recipients instead of exactly 3 Key Three members per unit.
+
+**Root Cause Analysis**:
+1. **Duplicate Join Logic**: Email generator was re-implementing Key Three matching instead of using already-correct validation results
+2. **Format Mismatch**: Internal matching used display format (no leading zeros) but should use 4-digit format
+3. **Anonymized Data Contamination**: Regression tests overwrote production validation results with test data
+
+**✅ Technical Fixes Applied**:
+
+**1. Single Source of Truth Architecture**:
+- **Changed**: Email generator now uses `enhanced_three_way_validation_results.json` as input
+- **Benefit**: Reuses already-correct Key Three join from three_way_validator.py
+- **Result**: Exactly 3 Key Three members per unit, guaranteed correct matching
+
+**2. Unit Key Format Standardization**:
+- **Internal Processing**: 4-digit format (`Troop 0001 Acton`) for matching
+- **Display/Filenames**: Leading zeros stripped (`Troop_1_Acton_improvement_email.md`)
+- **Fixed**: Removed incorrect display format conversion in `load_unit_data()`
+- **Fixed**: Kept 4-digit format in Key Three index building
+
+**3. Regression Test Data Isolation**:
+- **Problem**: Regression tests with anonymized data wrote to production paths
+- **Solution**: Created separate `data/output/regression/` directory structure
+- **Updated**: All regression test commands use explicit `--output` flags
+- **Verified**: Full test sequence confirmed no production data contamination
+
+**Files Modified**:
+- `src/pipeline/analysis/generate_unit_emails.py`: Now uses validation results, generates display format filenames
+- `src/dev/reporting/generate_unit_emails_v2.py`: Fixed 4-digit matching, removed display conversion
+- `REGRESSION_TEST_PIPELINE.md`: Added Data Isolation section, updated all commands with regression paths
+- `src/pipeline/analysis/generate_weekly_email_draft.py`: Improved formatting (3→5 units shown, empty state handling)
+
+**Production Verification**:
+- ✅ Ran weekly pipeline with real Key Three data
+- ✅ Generated 165 unit emails with exactly 3 Key Three members each
+- ✅ Ran regression tests (writes to `data/output/regression/`)
+- ✅ Re-ran weekly pipeline - emails still have real data (no contamination)
+- ✅ `diff` test showed identical files before/after regression tests
+
+**New Files Created**:
+- `src/pipeline/analysis/generate_unit_email_pdfs.py`: WeasyPrint-based PDF generation (not yet integrated into workflow)
+- `data/output/regression/` directories: Isolated regression test outputs
+
+**Commits Created**:
+1. "Fix unit email generation to use validation results as single source of truth"
+2. "Isolate regression test output to prevent production data contamination"
+3. "Improve weekly email draft formatting for unit changes"
+
+**📋 Outstanding Tasks for Production Readiness**:
+
+**Code Organization** (Priority 1):
+1. Rename `src/dev/reporting/generate_unit_emails_v2.py` → `src/pipeline/analysis/unit_email_generator.py`
+2. Update import in `generate_unit_emails.py` to use pipeline location
+3. Integrate PDF generation into email workflow
+
+**Documentation Updates** (Priority 2):
+4. Document email generation (MD and PDF) in WEEKLY_REPORT_WORKFLOW.md
+5. Document email generation in OPERATIONAL_WORKFLOW.md
+6. Verify all documentation reflects current code reality
+
+**Testing & Release** (Priority 3):
+7. Execute complete weekly pipeline following documented workflow
+8. Execute regression test pipeline following documented workflow
+9. Verify regression test isolation
+10. Determine version number and create git tag
+11. Push commits and tags to origin/main
+
+**Current System Status**: Email generation now production-quality with proper data architecture. Regression test isolation prevents data contamination. Ready for documentation updates and final release preparation.
+
+**Critical Lesson Applied**: **Sound software engineering practices require documentation updates, workflow verification, and proper version tagging - not just working code.**
