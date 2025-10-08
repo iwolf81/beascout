@@ -157,19 +157,26 @@ python src/pipeline/analysis/generate_commissioner_report.py 2>&1 | tee data/log
 python src/pipeline/analysis/generate_commissioner_report.py --key-three tests/reference/key_three/anonymized_key_three.json 2>&1 | tee data/logs/generate_commissioner_report_$(date +%Y%m%d_%H%M%S).log
 ```
 
-### **Generate Unit Emails**
+### **Generate Unit Emails (Markdown and PDF)**
 #### Input:
-- Prepared unit data:   data/raw/all_units_comprehensive_scored.json
-- Real Key Three data:  "data/input/Key 3 08-22-2025.xlsx" **OR**
-- Test Key Three data:  tests/reference/key_three/anonymized_key_three.xlsx
+- Validation results with Key Three data: data/output/enhanced_three_way_validation_results.json
 #### Output:
-- data/output/reports/BeAScout_Quality_Report_YYYYMMDD_HHMMSS.xslx
+- Markdown emails: data/output/unit_emails/*.md (165 files)
+- PDF emails: data/output/unit_emails/*.pdf (165 files with council branding)
 ```bash
-# Generate unit improvement emails with **real** Key Three data
-python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json "data/input/Key 3 08-22-2025.xlsx"
+# Generate markdown emails with improvement recommendations (uses validation results)
+python src/pipeline/analysis/generate_unit_emails.py \
+  data/output/enhanced_three_way_validation_results.json \
+  --output-dir data/output/unit_emails \
+  2>&1 | tee data/logs/generate_unit_emails_$(date +%Y%m%d_%H%M%S).log
 
-# Generate unit improvement emails with **test** Key Three data
-python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json tests/reference/key_three/anonymized_key_three.xlsx 2>&1 | tee data/logs/generate_unit_emails_$(date +%Y%m%d_%H%M%S).log
+# Convert markdown emails to professional PDFs with council header
+python src/pipeline/analysis/generate_unit_email_pdfs.py
+
+# For regression testing (uses anonymized Key Three data):
+python src/pipeline/analysis/generate_unit_emails.py \
+  data/output/regression/enhanced_three_way_validation_results.json \
+  --output-dir data/output/regression/unit_emails
 ```
 
 ## **Town/District Data Management:**
@@ -227,7 +234,9 @@ cp data/zipcodes/hne_council_zipcodes.json tests/reference/towns/hne_council_zip
 **Need to modify the scraper?** → `src/pipeline/acquisition/multi_zip_scraper.py`
 **Data processing issues?** → `src/pipeline/processing/process_full_dataset.py`
 **Report generation?** → `src/pipeline/analysis/generate_commissioner_report.py`
-**Email generation?** → `src/pipeline/analysis/generate_unit_emails.py`
+**Unit email generation (MD)?** → `src/pipeline/analysis/generate_unit_emails.py`
+**Unit email PDFs?** → `src/pipeline/analysis/generate_unit_email_pdfs.py`
+**Email content template?** → `src/pipeline/analysis/unit_email_generator.py`
 **District mappings?** → `src/pipeline/core/district_mapping.py`
 **Territory zip codes?** → `src/pipeline/core/hne_towns.py`
 

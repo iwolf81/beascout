@@ -130,7 +130,9 @@ python scripts/test_key_three_debug.py  # Test Key Three parsing
 
 **Weekly reports pipeline?** → `src/pipeline/operation/generate_weekly_report.py`
 
-**Email generation?** → `src/pipeline/analysis/generate_unit_emails.py`
+**Unit email generation (MD)?** → `src/pipeline/analysis/generate_unit_emails.py`
+
+**Unit email PDFs?** → `src/pipeline/analysis/generate_unit_email_pdfs.py`
 
 **Weekly email drafts?** → `src/pipeline/analysis/generate_weekly_email_draft.py`
 
@@ -224,8 +226,9 @@ python src/pipeline/analysis/three_way_validator.py --key-three "data/input/Key 
 # Step 5: Generate BeAScout Quality Report (Commissioner Report)
 python src/pipeline/analysis/generate_commissioner_report.py
 
-# Step 6: Generate Unit Improvement Emails
-python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehensive_scored.json "data/input/Key 3 08-22-2025.xlsx"
+# Step 6: Generate Unit Improvement Emails (Markdown + PDF)
+python src/pipeline/analysis/generate_unit_emails.py data/output/enhanced_three_way_validation_results.json
+python src/pipeline/analysis/generate_unit_email_pdfs.py
 ```
 
 #### Option 2: Process Existing Scraped Data

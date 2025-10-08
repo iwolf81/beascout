@@ -170,6 +170,27 @@ python src/pipeline/analysis/generate_weekly_email_draft.py [OPTIONS]
   --scraped-session ID: Scraped session ID for accurate data timestamp display
 ```
 
+### 8. Unit Emails (Optional): `generate_unit_emails.py` + `generate_unit_email_pdfs.py`
+```bash
+# Generate markdown emails with improvement recommendations
+python src/pipeline/analysis/generate_unit_emails.py \
+  data/output/enhanced_three_way_validation_results.json \
+  --output-dir data/output/unit_emails
+
+# Convert markdown emails to professional PDFs with council branding
+python src/pipeline/analysis/generate_unit_email_pdfs.py
+
+# Manual usage options:
+python src/pipeline/analysis/generate_unit_emails.py VALIDATION_FILE [OPTIONS]
+  VALIDATION_FILE: Path to validation results JSON with units and Key Three data
+  --output-dir PATH: Output directory for email files [default: data/output/unit_emails]
+  --max-units NUM: Maximum number of emails to generate (for testing)
+
+python src/pipeline/analysis/generate_unit_email_pdfs.py
+  # Automatically processes all .md files in data/output/unit_emails/
+  # Generates corresponding .pdf files with professional formatting
+```
+
 ## Pipeline Stages
 
 ### 1. Scraping Stage
@@ -207,6 +228,15 @@ python src/pipeline/analysis/generate_weekly_email_draft.py [OPTIONS]
 - **Duration**: ~30 seconds
 - **Output**: `data/output/reports/weekly/BeAScout_Weekly_Email_Draft_YYYYMMDD_HHMMSS.txt`
 - **Dependencies**: Analytics stage + Email configuration
+
+### 7. Unit Emails (Optional Manual Step)
+- **Purpose**: Generate personalized improvement emails for all units
+- **Duration**: ~30 seconds (markdown) + ~1 minute (PDFs)
+- **Outputs**:
+  - Markdown files: `data/output/unit_emails/*.md` (165 files)
+  - PDF files: `data/output/unit_emails/*.pdf` (165 files with council branding)
+- **Dependencies**: Validation stage (requires Key Three contacts)
+- **Note**: Not part of automated pipeline - run manually when needed for unit outreach
 
 ## Error Recovery Options
 
@@ -398,6 +428,8 @@ python src/pipeline/operation/generate_weekly_report.py \
 **Reports**: `data/output/reports/weekly/BeAScout_Weekly_Quality_Report_YYYYMMDD_HHMMSS.xlsx`
 **Analytics**: `data/output/reports/weekly/BeAScout_Weekly_Quality_Report_YYYYMMDD_HHMMSS.json`
 **Email Draft**: `data/output/reports/weekly/BeAScout_Weekly_Email_Draft_YYYYMMDD_HHMMSS.txt`
+**Unit Emails (MD)**: `data/output/unit_emails/*.md` (165 markdown files)
+**Unit Emails (PDF)**: `data/output/unit_emails/*.pdf` (165 PDF files with council branding)
 **Scraped Data**: `data/scraped/session_summary.json` + individual zip code files
 **Processed Data**: `data/raw/all_units_comprehensive_scored.json`
 **Validation Results**: `data/output/enhanced_three_way_validation_results.json`

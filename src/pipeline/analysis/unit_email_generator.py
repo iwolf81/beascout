@@ -26,21 +26,33 @@ class UnitEmailGenerator:
     
     def __init__(self):
         self.council_name = "Heart of New England Council"
-        self.council_email = "[council contact email]"
-        self.council_phone = "[council phone number]"
         self.analysis_date = datetime.now().strftime("%B %d, %Y")
-        
+
+        # Load council contacts from configuration
+        self.council_contacts = self._load_council_contacts()
+
         # Initialize parser for unit info extraction
         self.parser = None
-        
+
         # Quality score grade mappings
         self.grade_thresholds = {
             'A': 90.0,
-            'B': 80.0, 
+            'B': 80.0,
             'C': 70.0,
             'D': 60.0,
             'F': 0.0
         }
+
+    def _load_council_contacts(self) -> List[Dict]:
+        """Load council contact information from email_distribution.json"""
+        config_path = Path(__file__).parent.parent.parent.parent / "data" / "config" / "email_distribution.json"
+        try:
+            with open(config_path, 'r') as f:
+                config = json.load(f)
+                return config.get('council_contacts', [])
+        except Exception as e:
+            print(f"Warning: Could not load council contacts from {config_path}: {e}")
+            return []
     
     def load_unit_data(self, units_file_path: str) -> List[Dict]:
         """Load processed unit data with quality scores"""
@@ -262,7 +274,7 @@ class UnitEmailGenerator:
 - **Best Practice**: Use an email account that can be monitored by multiple unit leaders""")
         
         if recommendations:
-            return "### 🔴 **High Priority - Missing Critical Information:**\n\n" + "\n\n".join(recommendations)
+            return "### **High Priority - Missing Critical Information:**\n\n" + "\n\n".join(recommendations)
         return ""
     
     def generate_recommended_improvements(self, unit: Dict, recommended_missing: List[str]) -> str:
@@ -311,7 +323,7 @@ class UnitEmailGenerator:
                 counter += 1
         
         if recommendations:
-            return "### 🟡 **Recommended - Additional Information:**\n\n" + "\n\n".join(recommendations)
+            return "### **Recommended - Additional Information:**\n\n" + "\n\n".join(recommendations)
         return ""
     
     def generate_email_content(self, unit: Dict, key_three_members: List[Dict]) -> str:
@@ -401,7 +413,7 @@ class UnitEmailGenerator:
         email_parts.append("---\n")
         
         # Greeting - different for missing vs existing units
-        email_parts.append(f"Dear {unit_identifier} Key Three ({key_three_names}),\n")
+        email_parts.append(f"**Dear {unit_identifier} Key Three** ({key_three_names}),\n")
         
         if is_missing_unit:
             email_parts.append(f"The {self.council_name} maintains records of all active units and their Key Three leadership. However, during our periodic review of unit information on BeAScout.org, we discovered that **{unit_identifier} does not appear to have a presence in BeAScout**.\n")
@@ -418,17 +430,17 @@ class UnitEmailGenerator:
         # Existing Information - conditional header based on score
         if existing_info:
             if completeness_score >= 80:
-                info_header = "### ✅ **Excellent Information Available:**"
+                info_header = "### **Excellent Information Available:**"
             elif completeness_score >= 12.5:
-                info_header = "### ✅ **Good Information Available:**"
+                info_header = "### **Good Information Available:**"
             elif len(existing_info) == 1 and 'Chartered Organization' in existing_info[0]:
                 # Only chartered org info available - this is minimal info
-                info_header = "### ✅ **Basic Information Available:**"
+                info_header = "### **Basic Information Available:**"
             else:
-                info_header = "### ✅ **Information Available:**"
+                info_header = "### **Information Available:**"
         else:
             # No information available at all - unit not found on BeAScout/JoinExploring
-            info_header = "### ❌ **No Information Available:**"
+            info_header = "### **No Information Available:**"
         
         email_parts.append(info_header)
         if existing_info:
@@ -442,7 +454,7 @@ class UnitEmailGenerator:
         # Recommendations, Congratulations, or Critical Setup (for missing units)
         if is_missing_unit:
             # Required Setup Information for missing units
-            email_parts.append("### 🔴 **Required Setup Information:**\n")
+            email_parts.append("### **Required Setup Information:**\n")
             email_parts.append("**1. Meeting Location** *(Missing - Critical)*")
             email_parts.append(f"- Families need to know where your {unit_type.capitalize()} meets")
             email_parts.append("- **Action**: Add the complete meeting address (e.g., \"Community Center, 123 Main St, YourTown MA 01234\")\n")
@@ -456,7 +468,7 @@ class UnitEmailGenerator:
             email_parts.append(f"- **Action**: Add a {unit_type.capitalize()}-specific email address such as {unit_type.lower()}{unit_number}{unit_town.lower()}@gmail.com and an optional a phone number\n")
 
             # Add recommended section for missing units to achieve 100% score
-            email_parts.append("### 🟡 **Recommended Additional Information:**\n")
+            email_parts.append("### **Recommended Additional Information:**\n")
             email_parts.append("**4. Contact Person** *(Missing - Recommended)*")
             email_parts.append("- Provides families with a specific person to contact for questions")
             email_parts.append("- **Action**: Add the unit leader's name or designated person to the Contact Information field\n")
@@ -525,15 +537,38 @@ class UnitEmailGenerator:
         # Contact information
         email_parts.append("## Questions or Need Help?\n")
         email_parts.append("If you need assistance updating your unit's information or have questions about these recommendations, please contact:\n")
-        email_parts.append(f"**{self.council_name}**")
-        email_parts.append(f"Email: {self.council_email}")
-        email_parts.append(f"Phone: {self.council_phone}\n")
+
+        # Add contacts in two-column table format
+        if self.council_contacts:
+            email_parts.append("| |  |")
+            email_parts.append("|---------|---------|")
+
+            # Process contacts in pairs for side-by-side display
+            for i in range(0, len(self.council_contacts), 2):
+                contact1 = self.council_contacts[i]
+                col1_parts = [f"**{contact1['name']}**", contact1['title'], f"Email: {contact1['email']}"]
+                if contact1.get('phone'):
+                    col1_parts.append(f"Phone: {contact1['phone']}")
+                col1 = "<br>".join(col1_parts)
+
+                if i + 1 < len(self.council_contacts):
+                    contact2 = self.council_contacts[i + 1]
+                    col2_parts = [f"**{contact2['name']}**", contact2['title'], f"Email: {contact2['email']}"]
+                    if contact2.get('phone'):
+                        col2_parts.append(f"Phone: {contact2['phone']}")
+                    col2 = "<br>".join(col2_parts)
+                else:
+                    col2 = ""
+
+                email_parts.append(f"| {col1} | {col2} |")
+
+        email_parts.append("")  # Blank line after contacts
         
         # Motivational closing - different for low vs higher scores
         if completeness_score < 30:
             email_parts.append(f"Your unit's online presence is currently missing essential information that prevents families from finding and connecting with you. Updating these basic details will dramatically improve your ability to recruit new Scouts and help families discover the great program {unit_identifier} offers!\n")
         else:
-            email_parts.append(f"Thank you for your leadership in Scouting and for helping families discover the great program {unit_identifier} offers!\n")
+            email_parts.append(f"\nThank you for your leadership in Scouting and for helping families discover the great program {unit_identifier} offers!\n")
         
         # Sign off
         email_parts.append("Yours in Scouting,\n")
@@ -564,8 +599,8 @@ def main():
         description='Generate personalized improvement emails for Scouting units',
         epilog="""
 Examples:
-  python generate_unit_emails_v2.py data/raw/all_units_comprehensive_scored.json data/input/HNE_key_three.xlsx
-  python generate_unit_emails_v2.py data/raw/all_units_comprehensive_scored.json "data/input/Key 3 08-22-2025.xlsx" --output-dir emails/
+  python generate_unit_emails.py data/output/enhanced_three_way_validation_results.json
+  python generate_unit_emails.py data/output/enhanced_three_way_validation_results.json --output-dir data/output/unit_emails
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )

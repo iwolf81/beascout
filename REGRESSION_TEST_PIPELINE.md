@@ -10,7 +10,7 @@ Complete end-to-end pipeline using stable reference data for development, testin
 |-----------|----------------|---------------------|
 | Validation Results | `data/output/enhanced_three_way_validation_results.json` | `data/output/regression/enhanced_three_way_validation_results.json` |
 | Excel Reports | `data/output/reports/*.xlsx` | `data/output/regression/reports/*.xlsx` |
-| Unit Emails | `data/output/unit_emails_v2/*.md` | `data/output/regression/unit_emails/*.md` |
+| Unit Emails | `data/output/unit_emails/*.md` | `data/output/regression/unit_emails/*.md` |
 
 **Why This Matters:**
 - Production uses real Key Three data from `data/input/Key_3_09-29-2025.xlsx`

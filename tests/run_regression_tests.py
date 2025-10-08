@@ -222,10 +222,14 @@ class RegressionTestRunner:
         """Execute three_way_validator.py pipeline step"""
         self.log("Executing three_way_validator.py...")
 
+        # CRITICAL: Use regression output path to prevent contaminating production data
+        regression_output = 'data/output/regression/enhanced_three_way_validation_results.json'
+
         cmd = [
             'python3', '-u', 'src/pipeline/analysis/three_way_validator.py',
             '--key-three', 'tests/reference/key_three/anonymized_key_three.json',
             '--scraped-data', 'data/raw/all_units_comprehensive_scored.json',
+            '--output', regression_output,
             '--session-id', self.session_manager.session_id,
             '--log'
         ]
@@ -255,8 +259,8 @@ class RegressionTestRunner:
                 'details': f"STDERR: {stderr}\nSTDOUT: {stdout}"
             }
 
-        # Verify the output file was created
-        output_file = self.project_root / 'data/output/three_way_validation_results.json'
+        # Verify the output file was created in regression path
+        output_file = self.project_root / regression_output
         if not output_file.exists():
             return {
                 'passed': False,
@@ -276,13 +280,17 @@ class RegressionTestRunner:
         """Execute generate_commissioner_report.py pipeline step"""
         self.log("Executing generate_commissioner_report.py...")
 
+        # CRITICAL: Use regression paths to prevent contaminating production data
+        regression_validation = 'data/output/regression/enhanced_three_way_validation_results.json'
+        regression_reports_dir = 'data/output/regression/reports'
+
         cmd = [
             'python3', '-u', 'src/pipeline/analysis/generate_commissioner_report.py',
             '--key-three', 'tests/reference/key_three/anonymized_key_three.json',
             '--quality-data', 'data/raw/all_units_comprehensive_scored.json',
-            '--validation-file', 'data/output/enhanced_three_way_validation_results.json',
+            '--validation-file', regression_validation,
             '--session-id', self.session_manager.session_id,
-            '--output-dir', 'data/output/reports',
+            '--output-dir', regression_reports_dir,
             '--log'
         ]
 
@@ -308,13 +316,14 @@ class RegressionTestRunner:
                 'details': f"STDERR: {stderr}\nSTDOUT: {stdout}"
             }
 
-        # Verify a report file was created
-        report_files = list(self.project_root.glob('data/output/reports/BeAScout_Quality_Report_*.xlsx'))
+        # Verify a report file was created in regression path
+        report_pattern = f'{regression_reports_dir}/BeAScout_Quality_Report_*.xlsx'
+        report_files = list(self.project_root.glob(report_pattern))
         if not report_files:
             return {
                 'passed': False,
                 'error': 'Expected Excel report file not created',
-                'details': 'Expected files in data/output/reports/ matching pattern BeAScout*Quality_Report_*.xlsx'
+                'details': f'Expected files matching pattern: {report_pattern}'
             }
 
         # Show report file created

@@ -68,15 +68,23 @@ src/
 │   │                              # - Position-first town extraction
 │   │                              # - 4-source precedence logic
 │   │                              # - HNE territory filtering
-│   ├── analysis/          # Reports & outputs (4 files)
+│   ├── analysis/          # Reports & outputs (7 files)
 │   │   ├── generate_commissioner_report.py  # Excel report generation
 │   │   │                                   # - Professional formatting
 │   │   │                                   # - District-specific analysis
 │   │   │                                   # - Quality metrics & grading
-│   │   ├── generate_unit_emails.py         # Unit improvement emails
-│   │   │                                   # - Personalized recommendations
+│   │   ├── generate_unit_emails.py         # Unit improvement email generation
+│   │   │                                   # - Generates markdown emails
 │   │   │                                   # - Key Three contact matching
+│   │   ├── unit_email_generator.py         # Unit email content template
+│   │   │                                   # - Personalized recommendations
 │   │   │                                   # - Unit-specific action items
+│   │   ├── generate_unit_email_pdfs.py     # PDF conversion for unit emails
+│   │   │                                   # - Professional council branding
+│   │   │                                   # - Single-page layout with header
+│   │   ├── three_way_validator.py          # Unit presence correlation
+│   │   │                                   # - Key Three registry validation
+│   │   │                                   # - Missing web presence detection
 │   │   ├── generate_weekly_analytics.py    # Week-over-week analytics
 │   │   │                                   # - Baseline comparison analysis
 │   │   │                                   # - Quality improvement tracking

@@ -16,17 +16,8 @@ import json
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-# Import using absolute path fallback
-try:
-    from src.dev.reporting.generate_unit_emails_v2 import UnitEmailGenerator
-except ImportError:
-    # Fallback - direct file import
-    import importlib.util
-    email_gen_path = project_root / "src" / "dev" / "reporting" / "generate_unit_emails_v2.py"
-    spec = importlib.util.spec_from_file_location("generate_unit_emails_v2", email_gen_path)
-    email_gen_module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(email_gen_module)
-    UnitEmailGenerator = email_gen_module.UnitEmailGenerator
+# Import from pipeline location
+from src.pipeline.analysis.unit_email_generator import UnitEmailGenerator
 
 def main():
     parser = argparse.ArgumentParser(
@@ -49,8 +40,8 @@ Examples:
 
     parser.add_argument(
         '--output-dir',
-        default='data/output/unit_emails_v2',
-        help='Output directory for email files (default: data/output/unit_emails_v2)'
+        default='data/output/unit_emails',
+        help='Output directory for email files (default: data/output/unit_emails)'
     )
 
     parser.add_argument(
@@ -138,7 +129,7 @@ Examples:
         else:
             display_filename = unit_key.replace(' ', '_').replace('/', '_')
 
-        email_file = output_dir / f"{display_filename}_improvement_email.md"
+        email_file = output_dir / f"{display_filename}_beascout_improvements.md"
 
         with open(email_file, 'w') as f:
             f.write(email_content)
