@@ -61,6 +61,16 @@
 - Independent human validation of AI-created tests essential (e.g., BeyondCompare verification of compare_excel_files.py)
 - Automated tests must be validated against known good behavior, not just theoretical correctness
 
+### **Regression Testing Infrastructure (Critical for Development Velocity)**
+- **Data isolation architecture critical**: Production data contamination from tests threatens system integrity
+- **Separate output paths required**: `data/output/regression/` prevents test data from overwriting production files
+- **Development confidence requires reliable tests**: Fear of breaking production inhibits velocity without regression safety net
+- **Discipline essential**: Tests only effective when consistently executed before commits
+- **One outstanding issue pattern**: Near-complete solutions often have one remaining edge case requiring systematic resolution
+- **Multi-session debugging investment pays dividends**: Initial time investment in fixing regression tests enables comfortable ongoing development
+- **Before regression test fixes**: Hesitation, manual testing, slow velocity due to fear of breaking production
+- **After regression test fixes**: Confidence, automated validation, significant speed increase in development
+
 ### **Edge Case Management at Scale**
 - **Expect unhandled edge conditions in full dataset that weren't visible in prototype**
 - Villages (Fiskdale, Whitinsville, Jefferson) require special handling as unit identifiers
@@ -87,6 +97,11 @@
 - **Conscious effort needed to continuously update documentation alongside feature and code changes**
 - Treat documentation updates as part of feature delivery, not afterthought
 - Documentation drift accumulates over time and requires systematic consolidation efforts
+- **Concurrent updates prevent drift**: Document features as part of implementation, not afterward
+- **Verification sessions catch accumulated drift**: Periodic comprehensive audits across all affected files
+- **Workflow documentation must be executable**: Commands must be copy-pasteable and verified through actual execution
+- **Three-level verification**: (1) command executability testing, (2) result validation using trusted tools, (3) validation of testing tools themselves against reference standards
+- **Documentation is not complete until workflows are executable and verified with validated tools**
 
 ---
 
@@ -115,6 +130,8 @@
 - **Domain expertise essential to catch AI assumption propagation errors**
 - AI can make up non-existent file references or meaningless statistics without domain validation
 - **Auto-editing modes reduce error detection opportunities** - balance automation with human oversight checkpoints
+- **AI struggles with visual CSS formatting details** - VSCode extensions can provide targeted solutions where AI iterations fail
+- **Extended back-and-forth on visual formatting indicates wrong tool choice** - IDE extensions better for CSS property selection
 
 ### **Essential Management Strategies**
 - **Save early, save often** - Claude will chase bugs down rabbit holes
@@ -123,6 +140,30 @@
 - Explicitly specify manual verification tasks ("I will verify..." vs "Let's verify...")
 - Must be repeatedly told not to commit code unless explicitly directed
 - **Always specify "read the entire document"** - Claude will only read first 20-50 lines unless explicitly told to process the complete file
+- **Recognize when to switch tools**: Visual formatting → IDE extensions, structural code → AI, validation → specialized tools like Beyond Compare
+
+---
+
+## **🛠️ Development Tool Ecosystem**
+
+### **Complementary Tool Usage**
+- **AI for code generation**: Structural implementation, business logic, systematic refactoring
+- **IDE Extensions for refinement**: Visual formatting, CSS property selection, linting, property suggestions
+- **Beyond Compare for validation**: Excel spreadsheet comparison, regression test verification, tool validation
+- **Optimal Pattern**: AI generates structure → IDE extensions refine visual details → Beyond Compare validates results
+
+### **Tool Validation Principle**
+- **Testing tools themselves must be validated against reference standards**
+- Beyond Compare validates `compare_excel_files.py` script accuracy
+- Automated tools validated once, then trusted for rapid iteration
+- Never assume automated tools work correctly without independent verification
+- Reference tools (Beyond Compare, manual inspection) provide ground truth
+
+### **When to Use Which Tool**
+- **AI (Claude)**: Structural code generation, business logic implementation, systematic refactoring, multi-file documentation updates
+- **IDE Extensions**: Visual formatting challenges where CSS property selection unclear, linting, code suggestions
+- **Beyond Compare**: Spreadsheet comparison, regression verification, validating automated comparison tools
+- **Recognition Pattern**: Extended back-and-forth on visual details signals need to switch from AI to IDE extensions
 
 ---
 

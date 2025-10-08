@@ -153,15 +153,46 @@
 ### REQ-009: Unit Improvement Email System
 **Business Need**: Personalized communication to unit leaders with specific improvement guidance
 **Functional Requirements**:
-- Generate individual emails for units with identified improvement opportunities
+- Generate individual markdown emails for units with identified improvement opportunities
 - Include unit-specific recommendations with actionable steps
 - Integrate accurate Key Three contact information
 - Support both real and anonymized data for development safety
 - Format emails ready for sending with proper structure
+- Output filename pattern: `{UnitType}_{UnitNumber}_{UnitTown}_beascout_improvements.md`
 
-**Current Status**: ✅ IMPLEMENTED - 169 personalized emails generated with actual Key Three contact information
+**Current Status**: ✅ IMPLEMENTED - 169 personalized markdown emails generated with actual Key Three contact information
 
 **Acceptance Criteria**: AC-063 through AC-069
+
+### REQ-019: Professional PDF Unit Communications
+**Business Need**: Printable, professionally-branded unit improvement handouts for in-person distribution
+**Functional Requirements**:
+- Convert markdown unit emails to PDF documents with professional formatting
+- Include Heart of New England Council branding header with Scouting America identity
+- Display unit identification in header: "{Unit Type} {Unit Number} {Unit Town}"
+- Apply consistent visual styling: 14pt headers, Scouting America brand colors (#003f87 blue, #ce1126 red)
+- Strip email metadata (TO:/FROM:/SUBJECT:) from PDF while preserving in markdown
+- Remove emoji symbols to prevent Adobe font embedding errors
+- Support council contacts display in two-column table format from `email_distribution.json`
+- Generate matching PDF for each markdown file: `{UnitType}_{UnitNumber}_{UnitTown}_beascout_improvements.pdf`
+
+**PDF Header Format**:
+```
+Heart of New England Council, Scouting America
+Be A Scout Improvements
+{Unit Type} {Unit Number} {Unit Town}
+─────────────────────────────── [red separator]
+```
+
+**Technical Requirements**:
+- Professional typography with readable 10pt body font
+- Standard letter size (8.5" × 11") with 0.5in top/bottom, 0.75in left/right margins
+- Compact spacing for efficient content presentation
+- WeasyPrint-based HTML/CSS to PDF conversion
+
+**Current Status**: ✅ IMPLEMENTED - Professional PDF generation with council branding
+
+**Acceptance Criteria**: AC-136 through AC-145
 
 ---
 
@@ -230,6 +261,21 @@
 - Validate quality scoring changes against manual review baselines
 - Test town extraction modifications against edge case library
 
+**Data Isolation Requirements**:
+- Regression tests use separate output directories to prevent contaminating production data
+- Validation output: `data/output/regression/enhanced_three_way_validation_results.json` (vs production: `data/output/enhanced_three_way_validation_results.json`)
+- Report output: `data/output/regression/reports/*.xlsx` (vs production: `data/output/reports/*.xlsx`)
+- Email output: `data/output/regression/unit_emails/*.md` (vs production: `data/output/unit_emails/*.md`)
+- All regression test scripts support `--output` and `--output-dir` flags for path isolation
+- Production data remains unchanged during regression test execution
+
+**Automated Testing Requirements**:
+- Complete regression test suite: `python tests/run_regression_tests.py`
+- Six automated test steps: process dataset, unit processing regression, three-way validation, validation regression, commissioner report, Excel regression
+- Support unit-only testing for faster development cycles: `--unit-only` flag
+- Detailed logging with session correlation: `--log` flag
+- Clear PASS/FAIL reporting with comprehensive file tracking
+
 **Issue Tracking Requirements**:
 - Systematic development planning through GitHub issues management system
 - Production-ready v1.0.0 milestone achieved with complete core functionality
@@ -238,9 +284,9 @@
 - Maintain existing accuracy in website validation enhancements
 - Track discard regression for non-HNE unit processing changes
 
-**Current Status**: ✅ IMPLEMENTED - Complete regression testing framework with reference data pipeline validation
+**Current Status**: ✅ IMPLEMENTED - Complete regression testing framework with data isolation and automated test runner
 
-**Acceptance Criteria**: AC-094 through AC-104
+**Acceptance Criteria**: AC-094 through AC-104, AC-146 through AC-152
 
 ---
 
@@ -362,5 +408,34 @@
 - Zero critical defects in production release
 - Comprehensive documentation for all business rules and processes
 - Full audit trail for all data processing activities
+
+---
+
+## Acceptance Criteria Appendix
+
+### REQ-019: Professional PDF Unit Communications (AC-136 through AC-145)
+
+**AC-136**: System generates PDF file for each markdown unit email with matching base filename
+**AC-137**: PDF includes Heart of New England Council branding header with three-line format
+**AC-138**: Header displays unit identification: "{Unit Type} {Unit Number} {Unit Town}"
+**AC-139**: PDF applies Scouting America brand colors: #003f87 (blue), #ce1126 (red)
+**AC-140**: Email metadata (TO:/FROM:/SUBJECT:) stripped from PDF content
+**AC-141**: Emoji symbols removed from PDF to prevent Adobe font errors
+**AC-142**: Professional typography with 14pt headers and 10pt body text
+**AC-143**: Council contacts from `email_distribution.json` displayed in two-column table
+**AC-144**: PDF uses standard letter size with 0.5in/0.75in margins
+**AC-145**: Generated PDFs open correctly in Adobe Reader and Apple Preview
+
+### REQ-013: Regression Testing Enhancement (AC-146 through AC-152)
+
+**AC-146**: Regression tests write to `data/output/regression/` directories, not production paths
+**AC-147**: `three_way_validator.py` supports `--output` flag for custom validation output path
+**AC-148**: `generate_commissioner_report.py` supports `--output-dir` flag for custom report directory
+**AC-149**: `generate_unit_emails.py` supports `--output-dir` flag for custom email directory
+**AC-150**: Automated test runner (`tests/run_regression_tests.py`) executes all 6 test steps successfully
+**AC-151**: Regression test suite reports clear PASS/FAIL status for each step
+**AC-152**: Production data files remain unchanged after regression test execution
+
+---
 
 This requirements document provides the foundation for systematic acceptance testing, ensuring all business needs are met while maintaining operational reliability and data security.
