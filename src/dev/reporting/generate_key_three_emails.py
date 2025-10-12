@@ -538,9 +538,7 @@ Phone: [council phone number]
 {"Your unit's online presence is currently missing essential information that prevents families from finding and connecting with you. Updating these basic details will dramatically improve your ability to recruit new Scouts and help families discover the great program " + unit_type + " " + unit_number + " " + town + " offers!" if is_critical else "Thank you for your leadership in Scouting and for helping families discover the great program " + unit_type + " " + unit_number + " " + town + " offers!"}
 
 Yours in Scouting,
-
-**Heart of New England Council**  
-*Unit Support Team*
+Heart of New England Council
 
 ---
 

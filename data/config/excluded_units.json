@@ -1,0 +1,20 @@
+{
+  "description": "Units in Key Three registry that should be excluded from all reports, emails, and analysis",
+  "excluded_units": [
+    {
+      "unit_key": "Crew 1924 Rutland",
+      "reason": "other",
+      "notes": "Place holder unit for Camp Wanocksett staff"
+    },
+    {
+      "unit_key": "Crew 2254 Rutland",
+      "reason": "other",
+      "notes": "Place holder unit for Treasure Valley Scout Reservation staff"
+    }
+  ],
+  "exclusion_reasons": {
+    "inactive": "Unit is inactive/disbanded but still in Key Three",
+    "duplicate": "Duplicate entry in Key Three",
+    "other": "Other administrative reason"
+  }
+}

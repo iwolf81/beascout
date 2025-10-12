@@ -3,6 +3,16 @@
 BeAScout Weekly Quality Report Pipeline Manager
 Orchestrates complete data pipeline from scraping to report generation
 Designed for Sunday evening execution with robust error handling and recovery
+
+Pipeline Stages:
+1. Scraping: BeAScout + JoinExploring data for all HNE zip codes
+2. Processing: Convert HTML to structured JSON with quality scoring
+3. Key Three Conversion: Convert Excel to JSON format
+4. Validation: Correlate with Key Three registry for completeness
+5. Reporting: Generate Excel report for manual email distribution
+6. Analytics: Generate weekly analytics and compare with previous week
+7. Email Draft: Create complete email draft for copy/paste distribution
+8. Unit Emails (Optional): Generate personalized improvement emails with timestamps
 """
 
 import argparse
@@ -26,7 +36,20 @@ class WarningErrorHandler(logging.Handler):
     def emit(self, record):
         # Avoid infinite recursion - don't capture our own summary messages
         message = record.getMessage()
-        if "PIPELINE COMPLETION SUMMARY" in message or "📋 WARNINGS:" in message or "❌ ERRORS:" in message:
+
+        # Skip summary section messages (prevents infinite loop when reporting warnings/errors)
+        summary_indicators = [
+            "PIPELINE COMPLETION SUMMARY",
+            "📋 WARNINGS:",
+            "❌ ERRORS:",
+            "⚠️  ISSUES DETECTED:",
+            "✅ No warnings or errors"
+        ]
+
+        # Skip numbered list items from summary (starts with spaces + number + dot)
+        if any(indicator in message for indicator in summary_indicators):
+            return
+        if message.strip() and message[0:10].strip() and message.strip()[0].isdigit() and '. ' in message[:10]:
             return
 
         if record.levelno >= logging.ERROR:
@@ -87,7 +110,7 @@ class WeeklyReportPipeline:
     Handles orchestration, error recovery, and status tracking
     """
 
-    def __init__(self, skip_failed_zips: bool = False, fallback_to_cache: bool = False, key_three_file: str = None, scraped_dir: str = None, baseline_file: str = None):
+    def __init__(self, skip_failed_zips: bool = False, fallback_to_cache: bool = False, key_three_file: str = None, scraped_dir: str = None, baseline_file: str = None, generate_unit_emails: bool = False):
         """
         Initialize weekly report pipeline.
 
@@ -97,11 +120,13 @@ class WeeklyReportPipeline:
             key_three_file: Path to Key Three Excel file with unit registry
             scraped_dir: Path to EXISTING scraped session directory (input) - skips scraping stage
             baseline_file: Baseline analytics JSON file for week-over-week comparison
+            generate_unit_emails: Generate personalized unit improvement emails with PDFs
         """
         self.skip_failed_zips = skip_failed_zips
         self.fallback_to_cache = fallback_to_cache
         self.key_three_file = key_three_file
         self.baseline_file = baseline_file
+        self.generate_unit_emails = generate_unit_emails
         self.start_time = datetime.now()
         self.session_id = self.start_time.strftime("%Y%m%d_%H%M%S")
 
@@ -288,6 +313,18 @@ class WeeklyReportPipeline:
                 ],
                 output_files=[
                     "data/output/reports/weekly/BeAScout_Weekly_Email_Draft_*.txt"
+                ]
+            ),
+            "unit_emails": PipelineStage(
+                name="unit_emails",
+                description="Generate personalized unit improvement emails with council branding",
+                script_path="src/pipeline/analysis/generate_unit_emails.py",
+                required_files=[
+                    "data/output/enhanced_three_way_validation_results.json"
+                ],
+                output_files=[
+                    "data/output/unit_emails/*.md",
+                    "data/output/unit_emails/*.pdf"
                 ]
             )
         }
@@ -760,6 +797,23 @@ class WeeklyReportPipeline:
             if self.scraped_session_id:
                 cmd_args.extend(["--scraped-session", self.scraped_session_id])
 
+        elif stage.name == "unit_emails":
+            # Add validation results file as positional argument
+            # (Key Three data is already joined in validation results - no need to pass separately)
+            validation_file = "data/output/enhanced_three_way_validation_results.json"
+            cmd_args.append(validation_file)
+
+            # Pass timestamps for footer
+            cmd_args.extend(["--analysis-timestamp", self.session_id])
+
+            if self.scraped_session_id:
+                cmd_args.extend(["--scraped-timestamp", self.scraped_session_id])
+
+            # Extract Key Three timestamp from file modification time
+            key_three_timestamp = self._get_key_three_timestamp()
+            if key_three_timestamp:
+                cmd_args.extend(["--key-three-timestamp", key_three_timestamp])
+
         return cmd_args
 
     def _extract_scraped_session_id(self) -> Optional[str]:
@@ -772,6 +826,40 @@ class WeeklyReportPipeline:
         if session_path.exists():
             return session_path.name
         return None
+
+    def _get_key_three_timestamp(self) -> Optional[str]:
+        """Extract date from Key Three filename (format: Key_3_MM-DD-YYYY.xlsx) - returns YYYYMMDD only"""
+        if not self.key_three_file:
+            return None
+
+        key_three_path = project_root / self.key_three_file
+        if not key_three_path.exists():
+            return None
+
+        try:
+            # Extract date from filename pattern: Key_3_09-29-2025.xlsx or Key 3 09-29-2025.xlsx
+            filename = key_three_path.stem  # Get filename without extension
+
+            # Pattern: Key_3_MM-DD-YYYY or Key 3 MM-DD-YYYY
+            import re
+            match = re.search(r'(\d{2})-(\d{2})-(\d{4})', filename)
+
+            if match:
+                month, day, year = match.groups()
+                # Convert to YYYYMMDD format (date only, no time)
+                timestamp = f"{year}{month}{day}"
+                self.logger.debug(f"✅ Extracted Key Three date from filename: {month}-{day}-{year}")
+                return timestamp
+            else:
+                # Fallback to file modification date if pattern not found
+                mtime = key_three_path.stat().st_mtime
+                timestamp = datetime.fromtimestamp(mtime).strftime("%Y%m%d")
+                self.logger.warning(f"⚠️  Could not extract date from Key Three filename pattern, using file mtime")
+                return timestamp
+
+        except Exception as e:
+            self.logger.warning(f"⚠️  Could not extract Key Three date: {e}")
+            return None
 
     def _find_latest_scraped_session(self) -> Optional[Path]:
         """Find the most recent scraped session directory"""
@@ -941,6 +1029,9 @@ class WeeklyReportPipeline:
         # Determine which stages to run
         if stages_to_run is None:
             stages_to_run = list(self.stages.keys())
+            # Conditionally exclude unit_emails stage unless explicitly requested
+            if not self.generate_unit_emails and "unit_emails" in stages_to_run:
+                stages_to_run = [stage for stage in stages_to_run if stage != "unit_emails"]
 
         # Skip scraping stage if scraped directory is provided
         if self.scraped_session_dir and "scraping" in stages_to_run:
@@ -1057,9 +1148,13 @@ Examples:
   # Run complete pipeline
   python generate_weekly_report.py
 
+  # Run complete pipeline with unit emails
+  python generate_weekly_report.py --generate-unit-emails
+
   # Run specific stage only
   python generate_weekly_report.py --stage scraping
   python generate_weekly_report.py --stage reporting
+  python generate_weekly_report.py --stage unit_emails
 
   # Resume from last failure
   python generate_weekly_report.py --resume
@@ -1073,15 +1168,19 @@ Examples:
 This pipeline orchestrates the complete data flow:
 1. Scraping: BeAScout + JoinExploring data for all HNE zip codes
 2. Processing: Convert HTML to structured JSON with quality scoring
-3. Validation: Correlate with Key Three registry for completeness
-4. Reporting: Generate Excel report for manual email distribution
-5. Analytics: Generate weekly analytics and compare with previous week
-6. Email Draft: Create complete email draft for copy/paste distribution
+3. Key Three Conversion: Convert Excel to JSON format
+4. Validation: Correlate with Key Three registry for completeness
+5. Reporting: Generate Excel report for manual email distribution
+6. Analytics: Generate weekly analytics and compare with previous week
+7. Email Draft: Create complete email draft for copy/paste distribution
+8. Unit Emails (Optional): Generate personalized improvement emails with timestamps
+   - Includes BeAScout scraping timestamp, Key Three report timestamp, and analysis timestamp
+   - Review IDs use analysis timestamp for consistent session tracking
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
 
-    parser.add_argument('--stage', choices=['scraping', 'processing', 'validation', 'reporting', 'analytics', 'email_draft', 'all'],
+    parser.add_argument('--stage', choices=['scraping', 'processing', 'validation', 'reporting', 'analytics', 'email_draft', 'unit_emails', 'all'],
                        default='all', help='Pipeline stage to run [default: all]')
     parser.add_argument('--resume', action='store_true',
                        help='Resume from last successful stage in previous session')
@@ -1093,6 +1192,8 @@ This pipeline orchestrates the complete data flow:
     parser.add_argument('--key-three-file', help='Path to Key Three file (e.g., "data/input/Key 3 08-22-2025.xlsx")')
     parser.add_argument('--scraped-dir', help='Path to EXISTING scraped session directory to use instead of fresh scraping (e.g., "data/scraped/20250919_191632")')
     parser.add_argument('--baseline', help='Baseline analytics file for week-over-week comparison (e.g., "BeAScout_Weekly_Quality_Report_20250904_154530.json")')
+    parser.add_argument('--generate-unit-emails', action='store_true',
+                       help='Generate personalized unit improvement emails with council branding (adds unit_emails stage to pipeline)')
 
     args = parser.parse_args()
 
@@ -1102,7 +1203,8 @@ This pipeline orchestrates the complete data flow:
         fallback_to_cache=args.fallback_to_cache,
         key_three_file=args.key_three_file,
         scraped_dir=args.scraped_dir,
-        baseline_file=args.baseline
+        baseline_file=args.baseline,
+        generate_unit_emails=args.generate_unit_emails
     )
 
     # Determine stages to run

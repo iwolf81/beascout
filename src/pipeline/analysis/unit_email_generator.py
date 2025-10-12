@@ -1,12 +1,21 @@
 #!/usr/bin/env python3
 """
-Generate Unit Improvement Emails - Version 2
+Generate Unit Improvement Emails
 
-Fresh implementation for generating personalized improvement emails 
-for Scouting units based on their BeAScout information quality analysis.
+Generates personalized improvement emails for Scouting units based on their
+BeAScout information quality analysis with proper timestamp tracking.
 
-This script generates emails from scratch using the restructured data
-architecture and follows the sample email templates exactly.
+Features:
+- Personalized emails with unit-specific recommendations
+- Key Three contact information for direct communication
+- Council contact information for support
+- Three-timestamp footer for data provenance:
+  * BeAScout data scraping timestamp (YYYYMMDD_HHMMSS)
+  * Key Three report date (YYYYMMDD - date only)
+  * Analysis timestamp (YYYYMMDD_HHMMSS - for session tracking)
+- Review IDs using analysis timestamp for consistency
+
+Can be run standalone or as part of the weekly report pipeline with --generate-unit-emails flag.
 """
 
 import json
@@ -24,9 +33,14 @@ from src.dev.parsing.key_three_parser import KeyThreeParser
 class UnitEmailGenerator:
     """Generate personalized improvement emails for Scouting units"""
     
-    def __init__(self):
+    def __init__(self, analysis_timestamp: str = None, scraped_timestamp: str = None, key_three_timestamp: str = None):
         self.council_name = "Heart of New England Council"
         self.analysis_date = datetime.now().strftime("%B %d, %Y")
+
+        # Store timestamps for footer (format: YYYYMMDD_HHMMSS)
+        self.analysis_timestamp = analysis_timestamp
+        self.scraped_timestamp = scraped_timestamp
+        self.key_three_timestamp = key_three_timestamp
 
         # Load council contacts from configuration
         self.council_contacts = self._load_council_contacts()
@@ -53,6 +67,36 @@ class UnitEmailGenerator:
         except Exception as e:
             print(f"Warning: Could not load council contacts from {config_path}: {e}")
             return []
+
+    def _format_timestamp(self, timestamp: str) -> str:
+        """
+        Format timestamp to human-readable format:
+        - YYYYMMDD_HHMMSS → 'Month DD, YYYY at HH:MM AM/PM'
+        - YYYYMMDD → 'Month DD, YYYY' (date only, no time)
+        """
+        if not timestamp:
+            return "Date Unknown"
+
+        try:
+            # Check if timestamp includes time (has underscore separator)
+            if '_' in timestamp:
+                # Parse timestamp: YYYYMMDD_HHMMSS
+                date_part = timestamp[:8]
+                time_part = timestamp[9:]
+
+                date_obj = datetime.strptime(date_part, "%Y%m%d")
+                time_obj = datetime.strptime(time_part, "%H%M%S")
+
+                formatted_date = date_obj.strftime("%B %d, %Y")
+                formatted_time = time_obj.strftime("%I:%M:%S %p")
+
+                return f"{formatted_date} at {formatted_time}"
+            else:
+                # Date only: YYYYMMDD
+                date_obj = datetime.strptime(timestamp, "%Y%m%d")
+                return date_obj.strftime("%B %d, %Y")
+        except Exception:
+            return timestamp
     
     def load_unit_data(self, units_file_path: str) -> List[Dict]:
         """Load processed unit data with quality scores"""
@@ -333,16 +377,23 @@ class UnitEmailGenerator:
             # This is a missing unit - create a minimal unit dict
             unit_display = unit
             parts = unit_display.split()
-            if len(parts) >= 2:
+            if len(parts) >= 3:
+                # Unit key format: "Crew 1924 Rutland" - has type, number, and town
                 unit_type = parts[0].capitalize()
                 unit_number = parts[1].lstrip('0') or '0'
+                unit_town = ' '.join(parts[2:])  # Town may be multi-word
+            elif len(parts) >= 2:
+                # Only type and number, no town
+                unit_type = parts[0].capitalize()
+                unit_number = parts[1].lstrip('0') or '0'
+                unit_town = ''
             else:
                 unit_type = "Unit"
                 unit_number = "Unknown"
-            
-            # Extract unit info using existing KeyThreeParser
-            unit_town = ''
-            if key_three_members:
+                unit_town = ''
+
+            # If town still missing, try to extract from KeyThreeParser as fallback
+            if not unit_town and key_three_members:
                 unit_org_name = key_three_members[0].get('unit_org_name', '')
                 if unit_org_name:
                     # Use the existing sophisticated parser
@@ -352,7 +403,7 @@ class UnitEmailGenerator:
                         # Override the parsed values with the more accurate results
                         unit_type = unit_info.get('unit_type', unit_type)
                         unit_number = unit_info.get('unit_number', '').lstrip('0') or '0'
-                        unit_town = unit_info.get('unit_town', '')
+                        unit_town = unit_info.get('unit_town', unit_town)
             
             unit = {
                 'unit_type': unit_type.lower(),
@@ -541,7 +592,7 @@ class UnitEmailGenerator:
         # Add contacts in two-column table format
         if self.council_contacts:
             email_parts.append("| |  |")
-            email_parts.append("|---------|---------|")
+            email_parts.append("|---------------------|---------------------|")
 
             # Process contacts in pairs for side-by-side display
             for i in range(0, len(self.council_contacts), 2):
@@ -571,24 +622,34 @@ class UnitEmailGenerator:
             email_parts.append(f"\nThank you for your leadership in Scouting and for helping families discover the great program {unit_identifier} offers!\n")
         
         # Sign off
-        email_parts.append("Yours in Scouting,\n")
-        email_parts.append(f"**{self.council_name}**")
-        email_parts.append("*Unit Support Team*\n")
+        email_parts.append("Yours in Scouting,")
+        email_parts.append(f"*{self.council_name}*\n")
         email_parts.append("---\n")
         
         # Unit details
         meeting_location = unit.get('meeting_location', '').strip() or "Not specified"
-        review_date = datetime.now().strftime("%B %d, %Y")
-        review_id = f"{unit_type.upper()}_{unit_number}_{unit_town.upper()}_{datetime.now().strftime('%m%d%y')}"
-        
+
+        # Use analysis_timestamp for review_id if available, otherwise use current time
+        if self.analysis_timestamp:
+            review_id = f"{unit_type.upper()}_{unit_number}_{unit_town.upper()}_{self.analysis_timestamp}"
+        else:
+            review_id = f"{unit_type.upper()}_{unit_number}_{unit_town.upper()}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+
+        # Format timestamps for footer
+        beascout_timestamp = self._format_timestamp(self.scraped_timestamp)
+        key_three_timestamp = self._format_timestamp(self.key_three_timestamp)
+        analysis_timestamp = self._format_timestamp(self.analysis_timestamp)
+
         # Footer
-        email_parts.append(f"**Note**: This review was generated using the Council's automated BeAScout information analysis system. Information was analyzed from BeAScout.org on {review_date}. If you've recently updated your information, please allow time for changes to be reflected in our next review.\n")
-        
+        email_parts.append(f"**Note**: This review was generated using the Council's automated BeAScout information analysis system. If you've recently updated your information, please allow time for changes to be reflected in our next review.\n")
+
         email_parts.append(f"**{unit_identifier} Details Reviewed:**")
         email_parts.append(f"- Unit Type: {unit_type.capitalize()}")
         email_parts.append(f"- Charter Organization: {chartered_org}")
         email_parts.append(f"- Meeting Location: {meeting_location}")
-        email_parts.append(f"- Analysis Date: {review_date}")
+        email_parts.append(f"- BeAScout Data Timestamp: {beascout_timestamp}")
+        email_parts.append(f"- Key Three Report Timestamp: {key_three_timestamp}")
+        email_parts.append(f"- Analysis Timestamp: {analysis_timestamp}")
         email_parts.append(f"- Review ID: {review_id}")
         
         return "\n".join(email_parts)
@@ -599,8 +660,33 @@ def main():
         description='Generate personalized improvement emails for Scouting units',
         epilog="""
 Examples:
-  python generate_unit_emails.py data/output/enhanced_three_way_validation_results.json
-  python generate_unit_emails.py data/output/enhanced_three_way_validation_results.json --output-dir data/output/unit_emails
+  # Basic usage with validation file and Key Three data
+  python generate_unit_emails.py \\
+    data/output/enhanced_three_way_validation_results.json \\
+    data/input/Key_3_08-22-2025.xlsx
+
+  # With timestamps for proper footer generation
+  python generate_unit_emails.py \\
+    data/output/enhanced_three_way_validation_results.json \\
+    data/input/Key_3_08-22-2025.xlsx \\
+    --analysis-timestamp 20251012_143022 \\
+    --scraped-timestamp 20251012_120045 \\
+    --key-three-timestamp 20251010
+
+  # Filter to specific unit for testing
+  python generate_unit_emails.py \\
+    data/output/enhanced_three_way_validation_results.json \\
+    data/input/Key_3_08-22-2025.xlsx \\
+    --unit-filter "Troop 7012"
+
+  # Limit number of emails generated
+  python generate_unit_emails.py \\
+    data/output/enhanced_three_way_validation_results.json \\
+    data/input/Key_3_08-22-2025.xlsx \\
+    --max-units 5
+
+Note: When run via pipeline with --generate-unit-emails, timestamps are
+automatically passed for accurate data provenance tracking.
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
@@ -631,15 +717,34 @@ Examples:
         type=int,
         help='Maximum number of emails to generate (for testing)'
     )
-    
+
+    parser.add_argument(
+        '--analysis-timestamp',
+        help='Analysis timestamp for consistent session tracking (format: YYYYMMDD_HHMMSS)'
+    )
+
+    parser.add_argument(
+        '--scraped-timestamp',
+        help='BeAScout data scraping timestamp (format: YYYYMMDD_HHMMSS)'
+    )
+
+    parser.add_argument(
+        '--key-three-timestamp',
+        help='Key Three report date (format: YYYYMMDD - date only, no time)'
+    )
+
     args = parser.parse_args()
-    
+
     # Create output directory
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    
-    # Initialize email generator
-    generator = UnitEmailGenerator()
+
+    # Initialize email generator with timestamps
+    generator = UnitEmailGenerator(
+        analysis_timestamp=args.analysis_timestamp,
+        scraped_timestamp=args.scraped_timestamp,
+        key_three_timestamp=args.key_three_timestamp
+    )
     
     # Load data
     print(f"Loading unit data from {args.units_file}")

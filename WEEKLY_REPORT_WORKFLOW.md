@@ -8,6 +8,9 @@ Automated system for generating weekly quality reports for manual email distribu
 # Run complete pipeline (recommended for Sunday evenings)
 python src/pipeline/operation/generate_weekly_report.py
 
+# Run complete pipeline with unit emails
+python src/pipeline/operation/generate_weekly_report.py --generate-unit-emails
+
 # Run with specific Key Three file
 python src/pipeline/operation/generate_weekly_report.py --key-three-file "data/input/key_3_08-22-2025.xlsx"
 
@@ -21,6 +24,7 @@ python src/pipeline/operation/generate_weekly_report.py --stage validation
 python src/pipeline/operation/generate_weekly_report.py --stage reporting
 python src/pipeline/operation/generate_weekly_report.py --stage analytics
 python src/pipeline/operation/generate_weekly_report.py --stage email_draft
+python src/pipeline/operation/generate_weekly_report.py --stage unit_emails
 ```
 
 ## Pipeline Arguments Reference
@@ -31,7 +35,7 @@ python src/pipeline/operation/generate_weekly_report.py --stage email_draft
 ```bash
 python src/pipeline/operation/generate_weekly_report.py [OPTIONS]
 
---stage {scraping,processing,validation,reporting,analytics,email_draft,all}
+--stage {scraping,processing,validation,reporting,analytics,email_draft,unit_emails,all}
     Pipeline stage to run [default: all]
 
 --resume
@@ -55,6 +59,10 @@ python src/pipeline/operation/generate_weekly_report.py [OPTIONS]
 --baseline BASELINE
     Baseline analytics file for week-over-week comparison
     (e.g., "BeAScout_Weekly_Quality_Report_20250904_154530.json")
+
+--generate-unit-emails
+    Generate personalized unit improvement emails with council branding
+    (adds unit_emails stage to pipeline with automatic timestamp tracking)
 ```
 
 **Common Usage Patterns**:
@@ -170,21 +178,40 @@ python src/pipeline/analysis/generate_weekly_email_draft.py [OPTIONS]
   --scraped-session ID: Scraped session ID for accurate data timestamp display
 ```
 
-### 8. Unit Emails (Optional): `generate_unit_emails.py` + `generate_unit_email_pdfs.py`
+### 8. Unit Emails (Optional): `unit_email_generator.py` + `generate_unit_email_pdfs.py`
 ```bash
-# Generate markdown emails with improvement recommendations
-python src/pipeline/analysis/generate_unit_emails.py \
+# Automated via pipeline (recommended - includes timestamps)
+python src/pipeline/operation/generate_weekly_report.py --generate-unit-emails
+
+# Or run as individual stage with timestamps
+python src/pipeline/operation/generate_weekly_report.py --stage unit_emails
+
+# Manual standalone usage (without timestamps)
+python src/pipeline/analysis/unit_email_generator.py \
   data/output/enhanced_three_way_validation_results.json \
-  --output-dir data/output/unit_emails
+  data/input/Key_3_08-22-2025.xlsx
+
+# Manual usage with timestamps for accurate footer
+python src/pipeline/analysis/unit_email_generator.py \
+  data/output/enhanced_three_way_validation_results.json \
+  data/input/Key_3_08-22-2025.xlsx \
+  --analysis-timestamp 20251012_143022 \
+  --scraped-timestamp 20251012_120045 \
+  --key-three-timestamp 20251010_090000
 
 # Convert markdown emails to professional PDFs with council branding
 python src/pipeline/analysis/generate_unit_email_pdfs.py
 
 # Manual usage options:
-python src/pipeline/analysis/generate_unit_emails.py VALIDATION_FILE [OPTIONS]
-  VALIDATION_FILE: Path to validation results JSON with units and Key Three data
+python src/pipeline/analysis/unit_email_generator.py VALIDATION_FILE KEY_THREE_FILE [OPTIONS]
+  VALIDATION_FILE: Path to validation results JSON with units and quality scores
+  KEY_THREE_FILE: Path to Key Three Excel file for contact information
   --output-dir PATH: Output directory for email files [default: data/output/unit_emails]
   --max-units NUM: Maximum number of emails to generate (for testing)
+  --unit-filter STR: Only generate emails for units matching string
+  --analysis-timestamp: Analysis session timestamp (YYYYMMDD_HHMMSS)
+  --scraped-timestamp: BeAScout scraping timestamp (YYYYMMDD_HHMMSS)
+  --key-three-timestamp: Key Three report timestamp (YYYYMMDD_HHMMSS)
 
 python src/pipeline/analysis/generate_unit_email_pdfs.py
   # Automatically processes all .md files in data/output/unit_emails/
@@ -229,14 +256,19 @@ python src/pipeline/analysis/generate_unit_email_pdfs.py
 - **Output**: `data/output/reports/weekly/BeAScout_Weekly_Email_Draft_YYYYMMDD_HHMMSS.txt`
 - **Dependencies**: Analytics stage + Email configuration
 
-### 7. Unit Emails (Optional Manual Step)
-- **Purpose**: Generate personalized improvement emails for all units
-- **Duration**: ~30 seconds (markdown) + ~1 minute (PDFs)
+### 7. Unit Emails (Optional - via --generate-unit-emails flag)
+- **Purpose**: Generate personalized improvement emails for all units with timestamp tracking
+- **Duration**: ~30 seconds (markdown generation)
 - **Outputs**:
-  - Markdown files: `data/output/unit_emails/*.md` (165 files)
-  - PDF files: `data/output/unit_emails/*.pdf` (165 files with council branding)
-- **Dependencies**: Validation stage (requires Key Three contacts)
-- **Note**: Not part of automated pipeline - run manually when needed for unit outreach
+  - Markdown files: `data/output/unit_emails/*.md` (165 files with three timestamps)
+  - PDF files: `data/output/unit_emails/*.pdf` (165 files - requires separate PDF generation step)
+- **Dependencies**: Validation stage (requires Key Three contacts and validation results)
+- **Timestamps included**:
+  - BeAScout Data Timestamp: When data was scraped
+  - Key Three Report Timestamp: When Key Three file was last modified
+  - Analysis Timestamp: Pipeline session ID for log correlation
+  - Review ID: `<UNIT_TYPE>_<UNIT_NUMBER>_<UNIT_TOWN>_<ANALYSIS_TIMESTAMP>`
+- **Note**: Optional stage - only runs when `--generate-unit-emails` flag is provided
 
 ## Error Recovery Options
 
@@ -467,6 +499,9 @@ python src/pipeline/operation/generate_weekly_report.py \
 ✅ **Accurate timestamps**: Reports and emails show actual scraped data timestamp, not generation time
 ✅ **Baseline analytics**: Explicit baseline comparison for week-over-week analysis
 ✅ **Key Three integration**: Automatic Key Three filename display in reports
+✅ **Unit email generation**: Optional automated generation of personalized unit improvement emails
+✅ **Timestamp tracking**: Three-timestamp footer in unit emails for complete data provenance
+✅ **Review ID consistency**: Unit email review IDs use pipeline session timestamp for log correlation
 
 ## Future Enhancements
 

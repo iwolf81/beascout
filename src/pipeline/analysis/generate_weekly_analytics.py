@@ -55,8 +55,8 @@ class WeeklyAnalyticsGenerator:
             # Use explicit baseline file
             baseline_path = Path(baseline_file)
 
-            # If baseline_file is just a filename, look in reports_dir
-            if not baseline_path.is_absolute():
+            # If baseline_file is just a filename (not a path), look in reports_dir
+            if not baseline_path.is_absolute() and baseline_path.parent == Path('.'):
                 baseline_path = reports_dir / baseline_file
 
             if not baseline_path.exists():

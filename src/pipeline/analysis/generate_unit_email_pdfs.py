@@ -145,6 +145,23 @@ def get_pdf_css() -> str:
         ul, ol {
             page-break-inside: avoid;
         }
+
+        /* Table styling for contact information */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8pt 0;
+        }
+
+        td {
+            padding: 6pt 12pt;
+            vertical-align: top;
+            width: 50%;
+        }
+
+        td:first-child {
+            padding-right: 24pt;
+        }
     """
 
 

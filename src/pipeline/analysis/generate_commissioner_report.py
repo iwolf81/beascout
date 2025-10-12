@@ -24,6 +24,20 @@ sys.path.append(str(project_root))
 
 from src.pipeline.core.session_utils import SessionManager, session_logging
 
+def load_excluded_units():
+    """Load list of units to exclude from all reports and emails"""
+    excluded_file = project_root / "data/config/excluded_units.json"
+    if not excluded_file.exists():
+        return set()
+
+    try:
+        with open(excluded_file, 'r') as f:
+            data = json.load(f)
+        return {unit['unit_key'] for unit in data.get('excluded_units', [])}
+    except Exception as e:
+        print(f"⚠️  Warning: Could not load excluded units: {e}")
+        return set()
+
 class ReportColumns:
     """Centralized column definitions for BeAScout Quality Reports"""
     
@@ -213,13 +227,25 @@ class BeAScoutQualityReportGenerator:
                           validation_file: str = 'data/output/enhanced_three_way_validation_results.json') -> bool:
         """Load unit data with quality tags already calculated during HTML parsing"""
         try:
+            # Load excluded units
+            excluded_units = load_excluded_units()
+            if excluded_units:
+                print(f"🚫 Loaded {len(excluded_units)} excluded units from config")
+
             # Load unit data with integrated quality scoring
             with open(quality_file, 'r', encoding='utf-8') as f:
                 raw_data = json.load(f)
-                
+
                 # Handle both data formats: scraped_units or units_with_scores
-                units = raw_data.get('scraped_units', raw_data.get('units_with_scores', []))
+                all_units = raw_data.get('scraped_units', raw_data.get('units_with_scores', []))
+
+                # Filter out excluded units
+                units = [u for u in all_units if u.get('unit_key', '') not in excluded_units]
+                excluded_count = len(all_units) - len(units)
+
                 print(f"📊 Loaded {len(units)} units with quality data")
+                if excluded_count > 0:
+                    print(f"🚫 Excluded {excluded_count} units from report")
             
             # Load scraping timestamp from the comprehensive data source tracking
             scraping_timestamp = ''
@@ -273,8 +299,13 @@ class BeAScoutQualityReportGenerator:
                 for result in validation_data['validation_results']:
                     if 'key_three_data' in result:
                         unit_key = result['unit_key']
+
+                        # Skip excluded units
+                        if unit_key in excluded_units:
+                            continue
+
                         self.key_three_data[unit_key] = result['key_three_data']
-                        
+
                         # Collect Key Three-only units (missing from BeAScout)
                         if result['status'] == 'key_three_only':
                             missing_units.append(self._create_missing_unit_record(result['key_three_data']))
