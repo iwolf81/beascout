@@ -3,9 +3,9 @@
 ## Project Overview
 **Objective**: Improve Scouting America unit information quality for Heart of New England Council (Massachusetts) by scraping, analyzing, and reporting on unit completeness from beascout.scouting.org and joinexploring.org.
 
-**Repository**: https://github.com/iwolf81/beascout  
-**Current Status**: Production-ready system with consolidated data layer and regression fixes  
-**Date**: August 30, 2025
+**Repository**: https://github.com/iwolf81/beascout
+**Current Status**: Production-ready system with email timestamps, exclusion config, and critical bug fixes
+**Date**: October 12, 2025
 
 ## Current State Summary
 
@@ -316,7 +316,71 @@ Architecture designed for comprehensive data validation:
 - Enhanced Excel reports with discrepancy highlighting and action flags
 - Production deployment of comprehensive data quality audit system
 
-### Latest Session Completion - August 26, 2025 (Continued)
+### Latest Session Completion - October 12, 2025
+
+**🎯 OCTOBER 2025 SESSION: Email Timestamps, Unit Exclusions, Critical Bug Fixes**
+
+**Commit**: f330165 | **Focus**: Email transparency, configuration-based exclusions, pipeline reliability
+
+**✅ Features Implemented**:
+
+1. **Three-Timestamp Email Footer System**
+   - **BeAScout Data Timestamp**: `YYYYMMDD_HHMMSS` format tracks when unit data was scraped
+   - **Key Three Report Date**: `YYYYMMDD` format (date-only) references Council Office registry snapshot
+   - **Analysis Timestamp**: `YYYYMMDD_HHMMSS` format records when email generation occurred
+   - **Complete Data Lineage**: Every unit communication shows full data provenance
+   - **Implementation**: Enhanced `unit_email_generator.py` with timestamp formatting and footer generation
+
+2. **Missing Unit Setup Emails**
+   - **key_three_only Processing**: Units in Key Three but missing from BeAScout now receive setup guidance
+   - **Dedicated Files**: `_beascout_setup.md` suffix distinguishes from `_beascout_improvements.md`
+   - **Complete Coverage**: All 169 Key Three units receive appropriate communication
+   - **Town Parsing Fix**: Correctly extracts town from unit_key for Review ID (e.g., "Crew 1924 Rutland")
+
+3. **Unit Exclusion Configuration System**
+   - **Config File**: `data/config/excluded_units.json` enables system-wide unit filtering
+   - **Audit Trail**: Each exclusion documents unit_key, reason (inactive/duplicate/other), and notes
+   - **Applied Exclusions**: Crew 1924 Rutland (Camp Wanocksett staff), Crew 2254 Rutland (Treasure Valley staff)
+   - **System-Wide Impact**: Excluded units filtered from reports, emails, analytics, and validation
+
+**🐛 Critical Bug Fixes**:
+
+1. **Pipeline Architecture Corrections**
+   - Fixed: Pipeline calling `unit_email_generator.py` module instead of `generate_unit_emails.py` wrapper
+   - Fixed: Timestamp arguments not forwarding through wrapper to generator class
+   - Fixed: Key Three timestamp format changed from `YYYYMMDD_HHMMSS` to `YYYYMMDD` (matches Excel filename)
+
+2. **Week-over-Week Analytics Restored**
+   - Fixed: Baseline path duplication (`data/output/reports/weekly/data/output/reports/weekly/...`)
+   - Root cause: Analytics script prepending reports_dir to already-complete relative paths
+   - Impact: Weekly email drafts now show baseline comparison with change deltas
+
+3. **Data Quality Improvements**
+   - Fixed: Infinite loop in warning handler capturing its own summary output (prevented 57MB log files)
+   - Fixed: PDF table spacing for contact information (enhanced CSS with 24pt column separation)
+   - Enhanced: Path detection logic to distinguish filenames from relative paths with directories
+
+**📊 Updated Metrics**:
+- **Total Active Units**: 167 (169 Key Three - 2 placeholder exclusions)
+- **Units with BeAScout Presence**: 165 units (improvement emails with quality analysis)
+- **Units Missing from BeAScout**: 2 units (setup emails - down from 4 after exclusions)
+- **Email Coverage**: 100% of legitimate units receive appropriate communication
+- **System Reliability**: All regression tests passing, zero production data contamination
+
+**🔧 Files Modified** (9 files):
+- `src/pipeline/operation/generate_weekly_report.py` - Timestamp forwarding, infinite loop fix, email script correction
+- `src/pipeline/analysis/unit_email_generator.py` - Three-timestamp footer, town parsing for missing units
+- `src/pipeline/analysis/generate_unit_emails.py` - Missing unit processing, exclusion filtering
+- `src/pipeline/analysis/generate_commissioner_report.py` - Exclusion filtering for reports
+- `src/pipeline/analysis/generate_weekly_analytics.py` - Baseline path duplication fix
+- `src/pipeline/analysis/generate_unit_email_pdfs.py` - Enhanced table spacing CSS
+- `data/config/excluded_units.json` - New exclusion configuration file (2 units)
+- `WEEKLY_REPORT_WORKFLOW.md` - Documentation updates
+- `src/dev/reporting/generate_key_three_emails.py` - Minor updates
+
+---
+
+### Previous Session - August 26, 2025 (Continued)
 
 **🔧 CRITICAL PARSING ERRORS RESOLVED**
 

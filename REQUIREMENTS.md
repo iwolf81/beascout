@@ -158,9 +158,16 @@
 - Integrate accurate Key Three contact information
 - Support both real and anonymized data for development safety
 - Format emails ready for sending with proper structure
-- Output filename pattern: `{UnitType}_{UnitNumber}_{UnitTown}_beascout_improvements.md`
+- Output filename pattern: `{UnitType}_{UnitNumber}_{UnitTown}_beascout_improvements.md` (improvement emails)
+- Output filename pattern: `{UnitType}_{UnitNumber}_{UnitTown}_beascout_setup.md` (setup emails for missing units)
 
-**Current Status**: ✅ IMPLEMENTED - 169 personalized markdown emails generated with actual Key Three contact information
+**Enhanced Features** (October 2025):
+- **Three-Timestamp Footer**: Each email displays BeAScout data timestamp, Key Three report date, and analysis timestamp for complete data lineage
+- **Missing Unit Setup Emails**: Units in Key Three registry but missing from BeAScout receive dedicated setup guidance
+- **Complete Coverage**: All legitimate units (excluding configured exclusions) receive appropriate communication
+- **Timestamp Formats**: BeAScout/Analysis use `YYYYMMDD_HHMMSS`, Key Three uses `YYYYMMDD` (date-only from Excel filename)
+
+**Current Status**: ✅ IMPLEMENTED - 167 personalized emails (165 improvement + 2 setup) with three-timestamp footer and complete data transparency
 
 **Acceptance Criteria**: AC-063 through AC-069
 
@@ -207,6 +214,14 @@ Be A Scout Improvements
 - Organize code in clean operational structure: `src/pipeline/` vs `src/dev/`
 - Maintain single source of truth for all configuration mappings
 - Support execution from different contexts with stable import paths
+- Enable configuration-based unit exclusion for placeholder/special units
+
+**Unit Exclusion System** (Added October 2025):
+- **Config File**: `data/config/excluded_units.json` defines units to exclude from all processing
+- **System-Wide Filtering**: Excluded units removed from reports, emails, analytics, and validation results
+- **Audit Trail**: Each exclusion documented with unit_key, reason, and optional notes
+- **Supported Reasons**: inactive (defunct units), duplicate (registry errors), other (placeholder/special units)
+- **Current Exclusions**: Crew 1924 Rutland (Camp Wanocksett staff placeholder), Crew 2254 Rutland (Treasure Valley staff placeholder)
 
 **Acceptance Criteria**: AC-070 through AC-076
 

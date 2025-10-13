@@ -331,3 +331,54 @@ python src/pipeline/analysis/generate_unit_emails.py data/raw/all_units_comprehe
 - ✅ **Version Control**: Clean git history with production-ready milestone (v1.0.0)
 
 The BeAScout system has successfully completed all core functionality development and is fully production-ready for HNE Council deployment. September 2025 achievements establish the foundation for ongoing development and systematic enhancement through the GitHub issue management system.
+
+---
+
+## ✅ **OCTOBER 2025 ENHANCEMENTS: Email Timestamps, Exclusions, and Critical Fixes**
+
+**Date:** 2025-10-12 | **Commit:** f330165
+
+### **Enhanced Unit Email System**
+
+**Three-Timestamp Footer System**:
+- **BeAScout Data Timestamp**: Tracks when unit data was scraped from web platforms
+- **Key Three Report Date**: References specific Council Office registry snapshot (date-only format)
+- **Analysis Timestamp**: Records when quality analysis and email generation occurred
+- **Transparency**: Complete data lineage visible in every unit communication
+
+**Missing Unit Setup Emails**:
+- **key_three_only Units**: Generates setup emails for units in Key Three registry but missing from BeAScout
+- **Dedicated Workflow**: Separate `_beascout_setup.md` files for units requiring web presence establishment
+- **Complete Coverage**: All 169 Key Three units receive appropriate communication (improvement or setup)
+
+**Unit Exclusion Configuration**:
+- **Config File**: `data/config/excluded_units.json` enables exclusion of placeholder/special units
+- **System-Wide Filtering**: Excluded units removed from all reports, emails, and analytics
+- **Current Exclusions**: Crew 1924 Rutland (Camp Wanocksett staff), Crew 2254 Rutland (Treasure Valley staff)
+- **Audit Trail**: Exclusion reasons documented in configuration for transparency
+
+### **Critical Bug Fixes**
+
+**Pipeline Architecture Fixes**:
+- **Email Generation Script**: Fixed pipeline calling `unit_email_generator.py` module instead of `generate_unit_emails.py` wrapper
+- **Timestamp Propagation**: Corrected argument forwarding through wrapper to generator class
+- **Key Three Format**: Changed from `YYYYMMDD_HHMMSS` to `YYYYMMDD` (date-only) to match Excel filename format
+
+**Week-over-Week Analytics Restored**:
+- **Baseline Path Duplication**: Fixed analytics script incorrectly prepending reports directory to already-complete paths
+- **Comparison Visibility**: Weekly email drafts now correctly show baseline comparison with change deltas
+- **Path Detection Logic**: Enhanced to distinguish filenames from relative paths with directories
+
+**Data Quality Improvements**:
+- **Infinite Loop Fix**: Warning handler no longer captures its own summary output, preventing 57MB log files
+- **Missing Unit Town**: Fixed Review ID generation for key_three_only units to parse town from unit_key
+- **PDF Table Spacing**: Improved contact information column spacing with enhanced CSS styling
+
+### **📊 Updated Production Metrics (October 2025)**
+- **Total HNE Units**: 167 units after exclusion configuration (169 - 2 placeholder units)
+- **Units with BeAScout Presence**: 165 units with quality analysis and improvement emails
+- **Units Missing from BeAScout**: 2 units receiving setup guidance (down from 4 after exclusions)
+- **Email Generation Coverage**: 100% of legitimate units receive appropriate communication
+- **System Reliability**: All regression tests passing, zero production data contamination
+
+The October 2025 enhancements establish complete email transparency with full timestamp tracking, systematic unit exclusion capability, and restoration of week-over-week analytics for leadership reporting.

@@ -6,18 +6,21 @@
 
 The BeAScout system is a production-ready data quality monitoring platform that processes three primary data sources to generate comprehensive unit quality reports for the Heart of New England Council. The system features consolidated data mappings with single source of truth, position-first town extraction logic, comprehensive debug logging, and automated report generation.
 
-## Current System Status (September 2025)
+## Current System Status (October 2025)
 
 **✅ Production Achievements**:
 - **Unit Presence Correlation**: Complete correlation analysis between Key Three authoritative registry (169 units) and web data (165 units), identifying missing web presence and potentially defunct units
 - **Unit Key Normalization**: Fixed format consistency between 4-digit internal processing and display format for reports
-- **Email Generation**: Complete personalized email system with 100% compatibility for real and anonymized data
+- **Email Generation**: Complete personalized email system with three-timestamp footer and setup emails for missing units
+- **Unit Exclusion System**: Configuration-based exclusion of placeholder/special units from all reports and communications
+- **Week-over-Week Analytics**: Baseline comparison system for tracking quality improvements over time
 - **GitHub Issue Management**: Systematic development roadmap established (#12-19) for future enhancements
 - **Complete Anonymization**: Safe development environment with full anonymized datasets for testing
 
-**🎯 Current Metrics**:
-- **HNE Units Processed**: 165 units successfully identified and validated
-- **Key Three Integration**: 169 total units with comprehensive contact information
+**🎯 Current Metrics** (October 2025):
+- **HNE Units Processed**: 167 active units (169 total - 2 placeholder exclusions)
+- **Units with BeAScout Presence**: 165 units with quality analysis and improvement emails
+- **Units Missing from BeAScout**: 2 units receiving setup guidance (4 total - 2 excluded)
 - **Average Quality Score**: 60.2% completeness with detailed improvement recommendations
 - **Territory Coverage**: All 71 HNE zip codes across 65 towns in 2 districts
 
@@ -116,6 +119,10 @@ src/
     └── scraping/          # Alternative scraping utilities
 
 data/                      # Data organization by processing stage
+├── config/               # System configuration files
+│   ├── excluded_units.json     # Units to exclude from reports/emails
+│   ├── email_distribution.json # Email recipient configuration
+│   └── council_contacts.txt    # Council staff contact information
 ├── input/                 # Source data files
 ├── output/               # Generated reports & emails
 │   ├── reports/          # Excel commissioner reports
