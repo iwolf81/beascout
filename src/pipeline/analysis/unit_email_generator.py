@@ -552,7 +552,7 @@ class UnitEmailGenerator:
             unit_type_lower = self.format_unit_type_for_email(unit.get('unit_type', ''))
             email_parts.append("## Congratulations!\n")
             email_parts.append(f"## Your {unit_type.capitalize()}'s Current Online Status\n")
-            email_parts.append(f"🎉 **Excellent work!** Your {unit_type.capitalize()} has complete, family-friendly information on BeAScout.org. Families searching for Scouting in your area will easily find all the details they need to connect with {unit_identifier}.\n")
+            email_parts.append(f"**Excellent work!** Your {unit_type.capitalize()} has complete, family-friendly information on BeAScout.org. Families searching for Scouting in your area will easily find all the details they need to connect with {unit_identifier}.\n")
 
         # Guidelines section
         email_parts.append("## Guidelines for Effective BeAScout Information\n")

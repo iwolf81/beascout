@@ -323,7 +323,17 @@ class WeeklyReportPipeline:
                     "data/output/enhanced_three_way_validation_results.json"
                 ],
                 output_files=[
-                    "data/output/unit_emails/*.md",
+                    "data/output/unit_emails/*.md"
+                ]
+            ),
+            "unit_email_pdfs": PipelineStage(
+                name="unit_email_pdfs",
+                description="Convert unit improvement emails to professional PDF format",
+                script_path="src/pipeline/analysis/generate_unit_email_pdfs.py",
+                required_files=[
+                    "data/output/unit_emails/*.md"
+                ],
+                output_files=[
                     "data/output/unit_emails/*.pdf"
                 ]
             )
@@ -648,6 +658,17 @@ class WeeklyReportPipeline:
             self.save_status()
             return False
 
+        # Pre-stage cleanup for unit_emails - remove old artifacts before generating new ones
+        if stage.name == "unit_emails":
+            email_dir = Path("data/output/unit_emails")
+            if email_dir.exists():
+                old_md_files = list(email_dir.glob("*.md"))
+                old_pdf_files = list(email_dir.glob("*.pdf"))
+                if old_md_files or old_pdf_files:
+                    self.logger.info(f"🗑️  Cleaning up {len(old_md_files)} old .md and {len(old_pdf_files)} old .pdf files from prior runs")
+                    for f in old_md_files + old_pdf_files:
+                        f.unlink()
+
         # Execute stage
         success = self._execute_stage_script(stage)
 
@@ -738,6 +759,8 @@ class WeeklyReportPipeline:
         # Add stage-specific arguments
         if stage.name == "scraping":
             cmd_args.append("full")  # Run full scraping by default
+            # Pass session ID to ensure scraped directory matches pipeline session
+            cmd_args.extend(["--session-id", self.session_id])
             if self.skip_failed_zips:
                 cmd_args.append("--skip-failed")
             if self.fallback_to_cache:
@@ -1029,9 +1052,12 @@ class WeeklyReportPipeline:
         # Determine which stages to run
         if stages_to_run is None:
             stages_to_run = list(self.stages.keys())
-            # Conditionally exclude unit_emails stage unless explicitly requested
-            if not self.generate_unit_emails and "unit_emails" in stages_to_run:
-                stages_to_run = [stage for stage in stages_to_run if stage != "unit_emails"]
+            # Conditionally exclude unit email stages unless explicitly requested
+            if not self.generate_unit_emails:
+                if "unit_emails" in stages_to_run:
+                    stages_to_run = [stage for stage in stages_to_run if stage != "unit_emails"]
+                if "unit_email_pdfs" in stages_to_run:
+                    stages_to_run = [stage for stage in stages_to_run if stage != "unit_email_pdfs"]
 
         # Skip scraping stage if scraped directory is provided
         if self.scraped_session_dir and "scraping" in stages_to_run:

@@ -323,16 +323,41 @@ async def test_conservative_approach():
 if __name__ == '__main__':
     # For testing, use the test function
     # For production, use process_all_hne_zip_codes()
-    
+
     import sys
-    if len(sys.argv) > 1 and sys.argv[1] == 'test':
+
+    # Parse command line arguments
+    mode = None
+    session_id = None
+    skip_failed = False
+    fallback_cache = False
+
+    for i, arg in enumerate(sys.argv[1:], 1):
+        if arg in ['test', 'full']:
+            mode = arg
+        elif arg == '--session-id' and i + 1 < len(sys.argv):
+            session_id = sys.argv[i + 1]
+        elif arg == '--skip-failed':
+            skip_failed = True
+        elif arg == '--fallback-cache':
+            fallback_cache = True
+
+    if mode == 'test':
         asyncio.run(test_conservative_approach())
-    elif len(sys.argv) > 1 and sys.argv[1] == 'full':
+    elif mode == 'full':
         scraper = MultiZipScraper()
+
+        # Override session timestamp if provided
+        if session_id:
+            scraper.session_timestamp = session_id
+            scraper.session_dir = f"data/scraped/{session_id}"
+            Path(scraper.session_dir).mkdir(parents=True, exist_ok=True)
+
         asyncio.run(scraper.process_all_hne_zip_codes())
     else:
         print("Multi-Zip Scraper")
         print("Usage:")
-        print("  python src/scripts/multi_zip_scraper.py test    # Test with 3 zip codes") 
-        print("  python src/scripts/multi_zip_scraper.py full    # Process all zip codes from file")
-        print("  python src/scripts/multi_zip_scraper.py         # Show usage")
+        print("  python src/scripts/multi_zip_scraper.py test                    # Test with 3 zip codes")
+        print("  python src/scripts/multi_zip_scraper.py full                    # Process all zip codes from file")
+        print("  python src/scripts/multi_zip_scraper.py full --session-id ID    # Use specific session ID")
+        print("  python src/scripts/multi_zip_scraper.py                         # Show usage")
