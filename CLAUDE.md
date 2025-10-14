@@ -1,8 +1,11 @@
-# CLAUDE.md - AI Development Context
+# CLAUDE.md - Be A Scout Development Context
 
 ## Context Initialization
 
-**CRITICAL: Process ALL markdown files from ../ai-context repository at the start of each new session.**
+**CRITICAL: Process the following markdown files from ../ai-context repository at the start of each new session:**
+AI_INTERACTION_GUIDELINES.md
+DEVELOPMENT_PRINCIPLES.md
+CLAUDE_COMMANDS_REFERENCE.md
 
 Read all files **in their entirety** before working on any BeAScout tasks. The ai-context repository contains essential AI-human collaboration guidelines and development methodologies that inform all work on this project.
 
@@ -20,7 +23,7 @@ Ensure comprehensive unit presence correlation for the Heart of New England Coun
 - **Transparent reasoning**: Present analytical thinking process for complex technical decisions
 
 ## Key Technical Constraints
-- **Scale considerations**: 165 HNE units across 71 zip codes requires efficient processing
+- **Scale considerations**: 167 HNE units across 71 zip codes requires efficient processing
 - **Detection avoidance**: 8-12 second delays, session limits, human-like patterns
 - **Tiered extraction**: Regex primary, LLM fallback for complex cases
 - **Ongoing monitoring**: System must support periodic re-scraping and change detection
@@ -96,19 +99,18 @@ Ensure comprehensive unit presence correlation for the Heart of New England Coun
 2. **[README.md](README.md)**: Project overview, system purpose, and quick start guide
 3. **[REQUIREMENTS.md](REQUIREMENTS.md)**: Complete business requirements with acceptance criteria
 4. **[ARCHITECTURE.md](ARCHITECTURE.md)**: Technical system design, file structure, and component architecture
-5. **[PRODUCTION_STATUS.md](PRODUCTION_STATUS.md)**: Current deployment status and achieved capabilities
 
 ### **Operational Knowledge (Read Second)**
-6. **[OPERATIONAL_WORKFLOW.md](OPERATIONAL_WORKFLOW.md)**: Complete manual pipeline commands and workflows
-7. **[WEEKLY_REPORT_WORKFLOW.md](WEEKLY_REPORT_WORKFLOW.md)**: Automated weekly reporting pipeline
-8. **[REGRESSION_TEST_PIPELINE.md](REGRESSION_TEST_PIPELINE.md)**: Testing procedures and validation framework
-9. **[KEY_THREE_ANONYMIZATION_WORKFLOW.md](KEY_THREE_ANONYMIZATION_WORKFLOW.md)**: Data safety and anonymization procedures
+5. **[OPERATIONAL_WORKFLOW.md](OPERATIONAL_WORKFLOW.md)**: Complete manual pipeline commands and workflows
+6. **[WEEKLY_REPORT_WORKFLOW.md](WEEKLY_REPORT_WORKFLOW.md)**: Automated weekly reporting pipeline
+7. **[REGRESSION_TEST_PIPELINE.md](REGRESSION_TEST_PIPELINE.md)**: Testing procedures and validation framework
 
 ### **AI Collaboration Context (Read Third)**
-10. **[COLLABORATION_LESSONS.md](COLLABORATION_LESSONS.md)**: Critical AI-human collaboration patterns and insights
-11. **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Active session state (for continued sessions)
+8. **[COLLABORATION_LESSONS.md](COLLABORATION_LESSONS.md)**: Critical AI-human collaboration patterns and insights
 
-### **Reference Material (Read Last)**
-12. **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Comprehensive business design document
-13. **[COLLABORATION_LOG.md](COLLABORATION_LOG.md)**: Detailed historical development record
-
+### **DO NOT READ UNLESS DIRECTED TO PRESERVE FREE CONTEXT**:
+1. **[COLLABORATION_LOG.md](COLLABORATION_LOG.md)**: Detailed historical development record
+2. **[KEY_THREE_ANONYMIZATION_WORKFLOW.md](KEY_THREE_ANONYMIZATION_WORKFLOW.md)**: Data safety and anonymization procedures
+3. **[SESSION_HANDOFF.md](SESSION_HANDOFF.md)**: Active session state (for sessions recovery)
+4. **[PRODUCTION_STATUS.md](PRODUCTION_STATUS.md)**: Current deployment status and achieved capabilities
+5. **[SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)**: Comprehensive business design document
