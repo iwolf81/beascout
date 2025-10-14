@@ -141,6 +141,7 @@
 - Must be repeatedly told not to commit code unless explicitly directed
 - **Always specify "read the entire document"** - Claude will only read first 20-50 lines unless explicitly told to process the complete file
 - **Recognize when to switch tools**: Visual formatting → IDE extensions, structural code → AI, validation → specialized tools like Beyond Compare
+- **Point-of-use reminders required**: Reading guidelines at session start establishes context but does NOT ensure compliance at decision points - actively remind Claude of specific directives when they apply (e.g., "Follow commit message directives" when committing)
 
 ---
 

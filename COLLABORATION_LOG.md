@@ -8,6 +8,40 @@
 
 ## Critical Lessons Learned
 
+### Lesson: Reading Guidelines at Session Start ≠ Following Them at Decision Points (Oct 14, 2025)
+
+**Problem**: Claude read all initialization files (AI_INTERACTION_GUIDELINES.md, DEVELOPMENT_PRINCIPLES.md, CLAUDE_COMMANDS_REFERENCE.md) completely at session start but failed to apply commit message directives when actually committing files.
+
+**What Happened**:
+1. ✅ User directed: "read CLAUDE.md and follow its instructions"
+2. ✅ Claude read all initialization files entirely
+3. ✅ Claude saw commit message directives in DEVELOPMENT_PRINCIPLES.md:
+   - "For each file being committed, summarize changes for the entire commit AND changes to the specific file"
+   - "The goal is to present a clear history of the file changes to the reader"
+4. ❌ When committing CLAUDE.md, Claude wrote generic commit message without checking actual changes
+5. ✅ Only after user asked "do you remember the commit message directives?" did Claude check `git diff` and write proper detailed commit message
+
+**Root Cause**: This demonstrates a known Claude limitation - reading guidelines establishes context but does NOT ensure application at point of use. Claude needs **active reminders at decision points**, not just context at session start.
+
+**Evidence from Existing Documentation**:
+From COLLABORATION_LESSONS.md:
+> **Claude Limitations Requiring Management**
+> - Claude is not an experienced software engineer - narrow focus when fixing issues
+> - Constantly needs reminding about existing common code solutions
+> - Must be explicitly told to follow coding guidelines for maintainable code
+
+**Better Approach for Users**:
+When directing Claude to commit files, provide active reminders of specific requirements:
+- "Commit with detailed change summary per DEVELOPMENT_PRINCIPLES"
+- "Follow the commit message directives"
+- "Check what changed first, then write proper commit message"
+
+**Key Insight**: Session initialization establishes baseline context, but **point-of-use reminders are necessary for consistent guideline compliance**. Claude's context retrieval is not automatic - it requires explicit triggering at decision points.
+
+**Management Strategy**: Treat guidelines as reference material that must be explicitly invoked when needed, not as behavioral programming that persists throughout the session.
+
+---
+
 ### Lesson: Fix Data Mappings Before Debugging Transformations (Aug 29, 2025)
 
 **Problem**: When debugging town extraction regressions (Pack 0148 showing "Brookfield" instead of "East Brookfield"), I jumped directly into fixing parsing transformation logic without examining the underlying data mappings first.
