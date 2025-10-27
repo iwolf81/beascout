@@ -156,6 +156,12 @@ class EmailDraftGenerator:
             if missing_units is not None:
                 lines.append(f"• Units missing from BeAScout: {missing_units}")
 
+            # Units with web presence NOT in Key Three
+            web_only_units = exec_summary.get("web_only_units")
+            if web_only_units is not None and web_only_units > 0:
+                lines.append(f"• Units with web presence NOT in Key Three: {web_only_units}")
+                lines.append(f"  (Action: Verify Key Three registry is current and regenerate input file if needed)")
+
             # Average quality score
             avg_score = exec_summary.get("average_quality_score")
             if avg_score is not None:
@@ -212,6 +218,13 @@ class EmailDraftGenerator:
                 change = total_data["change"]
                 sign = "+" if change >= 0 else ""
                 lines.append(f"• Total Units: {current} units ({sign}{change} from baseline)")
+
+            # Units with web presence NOT in Key Three (always show if present)
+            exec_summary = self.analytics_data.get("executive_summary", {})
+            web_only_units = exec_summary.get("web_only_units")
+            if web_only_units is not None and web_only_units > 0:
+                lines.append(f"• Units with web presence NOT in Key Three: {web_only_units}")
+                lines.append(f"  (Action: Verify Key Three registry is current and regenerate input file if needed)")
 
             # Average quality score change
             if "average_quality_score" in changes:

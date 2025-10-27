@@ -16,6 +16,7 @@ Raises:
     PermissionError: If unable to write PDF files
 """
 
+import os
 import sys
 from pathlib import Path
 from typing import List
@@ -301,6 +302,11 @@ def main():
 
     if generated_pdfs:
         print(f"\n📄 Sample output: {generated_pdfs[0]}")
+
+    # Use os._exit(0) to skip Python cleanup and prevent WeasyPrint/Pango crash on macOS
+    # All PDFs are written to disk before this point, so cleanup is not needed
+    # This prevents SIGABRT crash during font resource garbage collection
+    os._exit(0)
 
 
 if __name__ == "__main__":

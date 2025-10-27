@@ -209,15 +209,19 @@ class ThreeWayValidator:
         print(f"📋 Cross-reference debug log saved: {debug_file}")
         
         validation_results = []
-        
-        # Analyze all Key Three units (this should be 169)
-        print(f"   Total unique units: {len(key_three_keys)}")
-        
-        # Validate each Key Three unit
-        for unit_key in sorted(key_three_keys):
+
+        # Get all unique unit keys from both sources
+        all_unit_keys = key_three_keys | scraped_keys
+
+        print(f"   Total unique units across both sources: {len(all_unit_keys)}")
+        print(f"   Key Three units: {len(key_three_keys)}")
+        print(f"   Scraped units: {len(scraped_keys)}")
+
+        # Validate each unit (from either source)
+        for unit_key in sorted(all_unit_keys):
             in_key_three = unit_key in key_three_keys
             in_scraped = unit_key in scraped_keys
-            
+
             # Determine validation status
             if in_key_three and in_scraped:
                 status = ValidationStatus.BOTH_SOURCES
@@ -228,21 +232,21 @@ class ThreeWayValidator:
             else:
                 # This shouldn't happen but included for completeness
                 continue
-            
+
             # Create validation result with consolidated Key Three data
             key_three_data = key_three_dict.get(unit_key)
-            
+
             result = ValidationResult(
                 unit_key=unit_key,
                 status=status,
-                key_three_data=key_three_data,  # Already in correct format
+                key_three_data=key_three_data,  # Already in correct format (None for web-only)
                 scraped_data=scraped_dict.get(unit_key),
                 issues=[]
             )
-            
+
             # Identify specific issues
             self._analyze_unit_issues(result)
-            
+
             validation_results.append(result)
         
         self.validation_results = validation_results
@@ -445,9 +449,11 @@ Examples:
                         print(f"     - {issue}")
 
             if web_only:
-                print(f"\n❌ Sample Web Only Units (Not in Key Three):")
-                for result in web_only[:3]:
-                    print(f"   • {result.unit_key}")
+                print(f"\n❌ Web Only Units (Not in Key Three) - ALL {len(web_only)} units:")
+                for result in web_only:
+                    scraped_data = result.scraped_data if result.scraped_data else {}
+                    chartered_org = scraped_data.get('chartered_organization', 'Unknown')
+                    print(f"   • {result.unit_key} - {chartered_org}")
                     for issue in result.issues[:1]:  # Show first issue
                         print(f"     - {issue}")
 

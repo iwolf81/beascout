@@ -722,11 +722,11 @@ class WeeklyReportPipeline:
         try:
             import subprocess
 
-            self.logger.info(f"🔧 Executing: python3 {' '.join(cmd_args)}")
+            self.logger.info(f"🔧 Executing: {sys.executable} {' '.join(cmd_args)}")
 
             # Run with real-time output (use -u flag for unbuffered output like in OPERATIONAL_WORKFLOW.md)
             process = subprocess.Popen(
-                ['python3', '-u'] + cmd_args,
+                [sys.executable, '-u'] + cmd_args,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 universal_newlines=True,
@@ -1232,6 +1232,26 @@ This pipeline orchestrates the complete data flow:
         baseline_file=args.baseline,
         generate_unit_emails=args.generate_unit_emails
     )
+
+    # Log command-line arguments
+    pipeline.logger.info("📝 Command-line arguments:")
+    pipeline.logger.info(f"  --stage: {args.stage}")
+    if args.resume:
+        pipeline.logger.info(f"  --resume: {args.resume}")
+    if args.skip_failed_zips:
+        pipeline.logger.info(f"  --skip-failed-zips: {args.skip_failed_zips}")
+    if args.fallback_to_cache:
+        pipeline.logger.info(f"  --fallback-to-cache: {args.fallback_to_cache}")
+    if args.session_id:
+        pipeline.logger.info(f"  --session-id: {args.session_id}")
+    if args.key_three_file:
+        pipeline.logger.info(f"  --key-three: {args.key_three_file}")
+    if args.scraped_dir:
+        pipeline.logger.info(f"  --scraped-dir: {args.scraped_dir}")
+    if args.baseline:
+        pipeline.logger.info(f"  --baseline: {args.baseline}")
+    if args.generate_unit_emails:
+        pipeline.logger.info(f"  --generate-unit-emails: {args.generate_unit_emails}")
 
     # Determine stages to run
     if args.stage == 'all':

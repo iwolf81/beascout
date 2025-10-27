@@ -11,6 +11,9 @@
 		{
 			"name": "ai-context",
 			"path": "../ai-context"
+		},
+		{
+			"path": "../../Documents/Job_Search"
 		}
 	],
 	"settings": {

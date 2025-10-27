@@ -129,7 +129,8 @@ class WeeklyAnalyticsGenerator:
                 "total_units": None,
                 "average_quality_score": None,
                 "grade_distribution": {},
-                "units_missing_from_beascout": None
+                "units_missing_from_beascout": None,
+                "web_only_units": None
             }
 
             # Scan through rows looking for key metrics
@@ -168,6 +169,15 @@ class WeeklyAnalyticsGenerator:
                         if next_cell.value is not None:
                             try:
                                 stats["units_missing_from_beascout"] = int(next_cell.value)
+                            except (ValueError, TypeError):
+                                pass
+
+                    # Extract units with web presence NOT in Key Three
+                    elif "Units with web presence NOT in Key Three" in cell_text:
+                        next_cell = ws.cell(row=cell.row, column=cell.column + 1)
+                        if next_cell.value is not None:
+                            try:
+                                stats["web_only_units"] = int(next_cell.value)
                             except (ValueError, TypeError):
                                 pass
 

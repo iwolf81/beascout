@@ -291,32 +291,48 @@ class BeAScoutQualityReportGenerator:
             # Load validation data to get Key Three info and missing units
             with open(validation_file, 'r', encoding='utf-8') as f:
                 validation_data = json.load(f)
-                
+
                 # Create lookup for Key Three member information
                 self.key_three_data = {}
                 missing_units = []
-                
+                web_only_units = []
+
                 for result in validation_data['validation_results']:
-                    if 'key_three_data' in result:
-                        unit_key = result['unit_key']
+                    unit_key = result['unit_key']
 
-                        # Skip excluded units
-                        if unit_key in excluded_units:
-                            continue
+                    # Skip excluded units
+                    if unit_key in excluded_units:
+                        continue
 
+                    if 'key_three_data' in result and result['key_three_data'] is not None:
                         self.key_three_data[unit_key] = result['key_three_data']
 
                         # Collect Key Three-only units (missing from BeAScout)
                         if result['status'] == 'key_three_only':
                             missing_units.append(self._create_missing_unit_record(result['key_three_data']))
-                
+
+                    # Collect web-only units (NOT in Key Three registry)
+                    if result['status'] == 'web_only':
+                        web_only_unit = {
+                            'unit_key': unit_key,
+                            'scraped_data': result.get('scraped_data', {}),
+                            'issues': result.get('issues', [])
+                        }
+                        web_only_units.append(web_only_unit)
+                        print(f"⚠️  Web-only unit found (not in Key Three): {unit_key}")
+
                 # Add missing units to quality data with score=0, grade="N/A"
                 self.quality_data['units_with_scores'].extend(missing_units)
                 self.quality_data['total_units'] = len(self.quality_data['units_with_scores'])
-                
+
+                # Store web-only units for reporting
+                self.web_only_units = web_only_units
+
                 print(f"📊 Loaded Key Three data for {len(self.key_three_data)} units")
                 print(f"📊 Added {len(missing_units)} units missing from BeAScout")
-                
+                if web_only_units:
+                    print(f"⚠️  Found {len(web_only_units)} units with web presence NOT in Key Three")
+
                 # Store validation summary for executive summary
                 self.validation_summary = validation_data['validation_summary']
             
@@ -455,7 +471,10 @@ class BeAScoutQualityReportGenerator:
         
         # Count missing units
         missing_units_count = len([u for u in self.quality_data['units_with_scores'] if u.get('missing_from_beascout', False)])
-        
+
+        # Count web-only units (not in Key Three registry)
+        web_only_count = len(getattr(self, 'web_only_units', []))
+
         # Count units by district
         district_counts = {}
         town_counts = set()
@@ -473,6 +492,7 @@ class BeAScoutQualityReportGenerator:
         metrics = [
             ("Total Units Analyzed", total_units),
             ("Units missing from BeAScout", missing_units_count),
+            ("Units with web presence NOT in Key Three", web_only_count),
             ("Units across Towns", f"{total_units} units across {len(town_counts)} towns"),
             ("Average Quality Score", f"{avg_score:.1f}%"),
             ("Quality Grade Distribution:", ""),
@@ -495,14 +515,34 @@ class BeAScoutQualityReportGenerator:
         row += 1  # Reduced spacing
         ws[f'A{row}'] = "UNITS BY DISTRICT"
         ws[f'A{row}'].font = Font(size=14, bold=True)
-        
+
         row += 1  # Reduced spacing
         for district, count in sorted(district_counts.items()):
             ws[f'A{row}'] = district
             ws[f'B{row}'] = f"{count} units"
             ws[f'A{row}'].font = Font(bold=True)
             row += 1
-        
+
+        # Web-only units section (units with web presence NOT in Key Three)
+        if web_only_count > 0:
+            row += 1
+            ws[f'A{row}'] = "UNITS MISSING FROM KEY THREE"
+            ws[f'A{row}'].font = Font(size=14, bold=True)
+
+            row += 1
+            ws[f'A{row}'] = "These units appear on BeAScout.org or JoinExploring.org but are NOT in the Key Three registry."
+            ws[f'A{row}'].font = Font(italic=True)
+
+            row += 1
+            for web_unit in getattr(self, 'web_only_units', []):
+                unit_key = web_unit['unit_key']
+                scraped_data = web_unit.get('scraped_data', {})
+                chartered_org = scraped_data.get('chartered_organization', 'Unknown')
+
+                ws[f'A{row}'] = f"  • {unit_key}"
+                ws[f'B{row}'] = f"Chartered Org: {chartered_org}"
+                row += 1
+
         # Quality Issue Legend with restructured format - reduced spacing
         row += 1  # Reduced spacing
         ws[f'A{row}'] = "QUALITY ISSUE LEGEND"

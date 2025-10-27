@@ -351,6 +351,14 @@ def combine_datasets(json_files: list, session_dir: str = None):
         print(f"   Average score: {avg_score:.1f}%")
         print(f"   Saved to: {output_file}")
 
+        # Log list of all unique HNE units (one line per unit)
+        print(f"\n📋 HNE Units Found (deduplicated, {len(combined_units)} total):")
+        for unit in sorted(combined_units, key=lambda u: u.get('unit_key', '')):
+            unit_key = unit.get('unit_key', 'Unknown')
+            grade = unit.get('completeness_grade', 'N/A')
+            score = unit.get('completeness_score', 0)
+            print(f"   • {unit_key} (Grade: {grade}, Score: {score:.1f}%)")
+
 def main():
     """Main function with session management and logging support"""
     parser = argparse.ArgumentParser(
