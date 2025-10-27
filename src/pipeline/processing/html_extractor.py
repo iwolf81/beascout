@@ -13,6 +13,35 @@ import re
 from bs4 import BeautifulSoup
 import json
 
+def load_location_exceptions():
+    """Load location exception configuration for units without street numbers"""
+    exception_file = Path(__file__).parent.parent.parent.parent / 'data/config/location_exceptions.json'
+    try:
+        with open(exception_file, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+            return set(config.get('units_without_street_numbers', {}).keys())
+    except FileNotFoundError:
+        return set()  # No exceptions if file doesn't exist
+    except json.JSONDecodeError:
+        print(f"Warning: Could not parse {exception_file}")
+        return set()
+
+# Cache exceptions at module level to avoid repeated file reads
+_LOCATION_EXCEPTIONS = load_location_exceptions()
+
+def check_location_exception(unit_data):
+    """Check if unit is in location exception list (doesn't require street number)"""
+    from src.pipeline.core.unit_identifier import UnitIdentifierNormalizer
+    # Generate normalized identifier (e.g., "Troop 0123 Shirley")
+    unit_key = UnitIdentifierNormalizer.normalize_unit_identifier(
+        unit_data.get('unit_type', ''),
+        unit_data.get('unit_number', ''),
+        unit_data.get('unit_town', '')
+    )
+    # Convert spaces to underscores to match config file format
+    unit_key_config_format = unit_key.replace(' ', '_')
+    return unit_key_config_format in _LOCATION_EXCEPTIONS
+
 def get_district_for_town(town):
     """Assign district based on town name using centralized mapping"""
     try:
@@ -576,6 +605,22 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
             if address_components['full_location']:
                 meeting_location = address_components['full_location']
                 meeting_location_source = "address"
+            else:
+                # FALLBACK: If no location extracted but unit_address contains street address,
+                # use the entire unit_address value to preserve facility name + address
+
+                # Check if unit is in exception list (doesn't require street number)
+                is_exception = check_location_exception(unit_data)
+
+                if is_exception:
+                    # Exception unit - accept location without street number requirement
+                    meeting_location = unit_address
+                    meeting_location_source = "address_fallback_exception"
+                elif re.search(r'\d+\s+[A-Za-z][A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Boulevard|Blvd|Way|Court|Ct|Place|Pl)',
+                               unit_address, re.IGNORECASE):
+                    # Normal fallback - requires street number
+                    meeting_location = unit_address
+                    meeting_location_source = "address_fallback"
             if address_components['town']:
                 unit_town = address_components['town']
         
