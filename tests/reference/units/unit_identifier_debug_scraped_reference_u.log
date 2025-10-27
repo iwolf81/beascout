@@ -3,6 +3,7 @@
   unit_type: 'Crew',   unit_number: '0204',   unit_town: 'West Boylston',   chartered_org: 'West Boylston-American Legion Post 204'
   unit_type: 'Crew',   unit_number: '0250',   unit_town: 'Harvard',   chartered_org: 'Harvard-Sportsmens Club'
   unit_type: 'Pack',   unit_number: '0001',   unit_town: 'Acton',   chartered_org: 'Acton-The Church of The Good Shepherd'
+  unit_type: 'Pack',   unit_number: '0004',   unit_town: 'Gardner',   chartered_org: 'Gardner-Annunciation Parish'
   unit_type: 'Pack',   unit_number: '0007',   unit_town: 'Clinton',   chartered_org: 'Clinton Heart of New England Council'
   unit_type: 'Pack',   unit_number: '0009',   unit_town: 'Lancaster',   chartered_org: 'Lancaster-First Church of Christ Unitarian'
   unit_type: 'Pack',   unit_number: '0009',   unit_town: 'Worcester',   chartered_org: 'Worcester - Greendale Peoples Church'

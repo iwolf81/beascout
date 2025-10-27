@@ -433,7 +433,9 @@ def parse_specialty_info(primary_id, chartered_org):
         clean_org = parts[0].strip()
         # Remove unit info from org name
         clean_org = re.sub(r'^(Crew|Post|Club|Pack|Troop)\s+\d+\s+', '', clean_org).strip()
-        
+        # Normalize whitespace (collapse multiple spaces to single space)
+        clean_org = re.sub(r'\s+', ' ', clean_org)
+
         # Extract specialty
         specialty = parts[1].strip()
         return clean_org, specialty
@@ -481,14 +483,11 @@ def extract_unit_fields(wrapper, index, unit_name_elem=None):
                         
                         # Extract town name from chartered organization
                         unit_data['unit_town'] = extract_town_from_org(chartered_org)
-                        
-                        # Handle specialty parsing for specialized units (Crew, Post, Club)
-                        if unit_data['unit_type'] in ['Crew', 'Post', 'Club']:
-                            clean_org, specialty = parse_specialty_info(full_name, chartered_org)
-                            unit_data['chartered_organization'] = clean_org
-                            unit_data['specialty'] = specialty
-                        else:
-                            unit_data['chartered_organization'] = chartered_org
+
+                        # Handle specialty parsing for all unit types (BeAScout now provides specialty for Troops too)
+                        clean_org, specialty = parse_specialty_info(full_name, chartered_org)
+                        unit_data['chartered_organization'] = clean_org
+                        unit_data['specialty'] = specialty
         
         # Extract distance
         if unit_name_elem:
