@@ -124,10 +124,14 @@ data/                      # Data organization by processing stage
 │   ├── email_distribution.json # Email recipient configuration
 │   └── council_contacts.txt    # Council staff contact information
 ├── input/                 # Source data files
-├── output/               # Generated reports & emails
+├── output/               # Generated reports & emails (production)
 │   ├── reports/          # Excel commissioner reports
-│   └── emails/           # Unit improvement emails
-├── raw/                  # Processed JSON data
+│   ├── emails/           # Unit improvement emails
+│   └── regression/       # Isolated regression test outputs
+│       ├── raw/          # Regression test processed JSON data
+│       ├── reports/      # Regression test Excel reports
+│       └── unit_emails/  # Regression test email outputs
+├── raw/                  # Processed JSON data (production)
 ├── scraped/              # HTML scraping results
 ├── logs/                 # Application logs (organized)
 ├── feedback/             # User feedback & planning
@@ -135,6 +139,11 @@ data/                      # Data organization by processing stage
 
 tests/                    # Test framework & regression validation
 ├── reference/            # Reference files for regression testing
+│   ├── units/            # Reference scraped HTML data (142 files)
+│   ├── key_three/        # Anonymized Key Three data
+│   ├── reports/          # Reference Excel reports & debug logs
+│   └── towns/            # Reference town/zip code data
+├── run_regression_tests.py  # Automated regression test runner
 └── verify_all.py         # Comprehensive validation runner
 ```
 

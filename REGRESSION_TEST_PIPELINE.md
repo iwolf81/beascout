@@ -8,6 +8,9 @@ Complete end-to-end pipeline using stable reference data for development, testin
 
 | File Type | Production Path | Regression Test Path |
 |-----------|----------------|---------------------|
+| Raw JSON (per zip) | `data/raw/all_units_XXXXX.json` | `data/output/regression/raw/all_units_XXXXX.json` |
+| Processed JSON (per zip) | `data/raw/all_units_XXXXX_processed.json` | `data/output/regression/raw/all_units_XXXXX_processed.json` |
+| Comprehensive Scored JSON | `data/raw/all_units_comprehensive_scored.json` | `data/output/regression/raw/all_units_comprehensive_scored.json` |
 | Validation Results | `data/output/enhanced_three_way_validation_results.json` | `data/output/regression/enhanced_three_way_validation_results.json` |
 | Excel Reports | `data/output/reports/*.xlsx` | `data/output/regression/reports/*.xlsx` |
 | Unit Emails | `data/output/unit_emails/*.md` | `data/output/regression/unit_emails/*.md` |
@@ -53,31 +56,41 @@ Execute these commands in sequence to run the complete pipeline with reference d
 ### **Step 1: Process Reference Scraped HTML Data**
 ```bash
 # Input: tests/reference/units/scraped/*.html (pre-scraped reference data)
-# Output: data/raw/all_units_comprehensive_scored.json (processed units with quality scores)
+# Output: data/output/regression/raw/all_units_comprehensive_scored.json (processed units with quality scores)
 
-python -u src/pipeline/processing/process_full_dataset.py tests/reference/units/scraped/ 2>&1 | tee data/logs/process_full_dataset_$(date +%Y%m%d_%H%M%S).log
+SESSION_ID=$(date +%Y%m%d_%H%M%S)
+python -u src/pipeline/processing/process_full_dataset.py tests/reference/units/scraped/ \
+  --session-type regression \
+  --session-id $SESSION_ID \
+  --log \
+  2>&1 | tee data/logs/process_full_dataset_$SESSION_ID.log
 ```
 
 ### **Step 2: Three-Way Unit Validation**
 ```bash
-# Input: data/raw/all_units_comprehensive_scored.json + reference Key Three data
+# Input: data/output/regression/raw/all_units_comprehensive_scored.json + reference Key Three data
 # Output: data/output/regression/enhanced_three_way_validation_results.json (unit presence correlation)
 
 python src/pipeline/analysis/three_way_validator.py \
   --key-three tests/reference/key_three/anonymized_key_three.json \
-  --output data/output/regression/enhanced_three_way_validation_results.json
+  --scraped-data data/output/regression/raw/all_units_comprehensive_scored.json \
+  --output data/output/regression/enhanced_three_way_validation_results.json \
+  --session-id $SESSION_ID \
+  --log
 ```
 
 ### **Step 3: Generate Commissioner Report**
 ```bash
-# Input: processed unit data + validated correlation data + reference Key Three
+# Input: data/output/regression/raw/all_units_comprehensive_scored.json + validated correlation data + reference Key Three
 # Output: data/output/regression/reports/BeAScout_Quality_Report_YYYYMMDD_HHMMSS.xlsx
 
 python src/pipeline/analysis/generate_commissioner_report.py \
   --key-three tests/reference/key_three/anonymized_key_three.json \
+  --quality-data data/output/regression/raw/all_units_comprehensive_scored.json \
   --validation-file data/output/regression/enhanced_three_way_validation_results.json \
   --output-dir data/output/regression/reports \
-  2>&1 | tee data/logs/generate_commissioner_report_$(date +%Y%m%d_%H%M%S).log
+  --session-id $SESSION_ID \
+  --log
 ```
 
 ### **Step 4: Generate Unit Emails**
@@ -88,7 +101,8 @@ python src/pipeline/analysis/generate_commissioner_report.py \
 python src/pipeline/analysis/generate_unit_emails.py \
   data/output/regression/enhanced_three_way_validation_results.json \
   --output-dir data/output/regression/unit_emails \
-  2>&1 | tee data/logs/generate_unit_emails_$(date +%Y%m%d_%H%M%S).log
+  --session-id $SESSION_ID \
+  --log
 ```
 
 ---
@@ -121,18 +135,18 @@ REGRESSION TEST SUMMARY
 ================================================================================
 ✅ ALL TESTS PASSED
 📊 Steps: 6/6 passed (100.0%)
-🔍 Session ID: 20250929_083029
+🔍 Session ID: 20251027_200044
 
 📁 Generated Files:
-  - data/debug/cross_reference_validation_debug_20250929_083041.log
-  - data/debug/unit_identifier_debug_scraped_20250929_083029.log
-  - data/output/regression/reports/BeAScout_Quality_Report_20250929_083029.xlsx
-  - data/output/regression/enhanced_three_way_validation_results.json
-  - data/output/regression/unit_emails/*.md
+  - data/debug/cross_reference_validation_debug_20251027_200044.log
+  - data/debug/discarded_unit_identifier_debug_scraped_20251027_200044.log
+  - data/debug/unit_identifier_debug_scraped_20251027_200044.log
 
 📄 Log Files:
-  - data/logs/process_full_dataset_20250929_083029.log
-  - data/logs/three_way_validator_20250929_083029.log
+  - data/logs/generate_commissioner_report_20251027_200044.log
+  - data/logs/process_full_dataset_20251027_200044.log
+  - data/logs/run_regression_tests_20251027_200044.log
+  - data/logs/three_way_validator_20251027_200044.log
 
 Detailed Results:
   ✅ PASS - Step 1/6: Process Full Dataset

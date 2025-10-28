@@ -65,18 +65,24 @@ Ensure comprehensive unit presence correlation for the Heart of New England Coun
 - ✅ **Weekly reporting pipeline**: Automated end-to-end weekly quality reports with `generate_weekly_report.py`
 - ✅ **Week-over-week analytics**: Baseline comparison system tracking quality improvements and declines
 - ✅ **Automated email drafts**: Leadership distribution with copy/paste format and comprehensive statistics
+- ✅ **Regression test isolation**: Complete separation of test output (`data/output/regression/raw/`) from production data (`data/raw/`)
+- ✅ **Debug log consistency**: Unified session timestamps across all debug files for regression correlation
+- ✅ **Enhanced specialty parsing**: Extended Crew specialty extraction with whitespace normalization
+- ✅ **Robust configuration loading**: Location exception handling with fallback paths
 - 🎯 **v1.0.0 tagging ready**: Production-ready milestone with complete core functionality
 - ⏳ **Development workflow optimization**: Systematic code quality improvements (issues #15-17)
 - ⏳ **Cloud deployment planning**: Infrastructure scaling strategy (issue #19)
 
 **Key Technical Patterns:**
-- **Dual-source scraping**: `src/pipeline/acquisition/browser_scraper.py` with common retry logic for both BeAScout and JoinExploring  
+- **Dual-source scraping**: `src/pipeline/acquisition/browser_scraper.py` with common retry logic for both BeAScout and JoinExploring
 - **URL generation**: `src/dev/scraping/url_generator.py` handles proper parameter encoding for both platforms
 - **HNE filtering**: Enhanced `src/pipeline/processing/html_extractor.py` with unit_town prioritization over org name matching
 - **Quality scoring**: `src/pipeline/core/quality_scorer.py` with specialized unit support (Crews, Posts, Clubs at 14% vs 17.5%)
 - **Weekly pipeline**: `src/pipeline/operation/generate_weekly_report.py` orchestrates complete workflow with stage-based execution and error recovery
 - **Analytics generation**: `src/pipeline/analysis/generate_weekly_analytics.py` with explicit baseline comparison
 - **Email automation**: `src/pipeline/analysis/generate_weekly_email_draft.py` for leadership distribution
+- **Regression testing**: `tests/run_regression_tests.py` with isolated output directories and session-based file correlation
+- **Session management**: `SESSION_TYPE` environment variable controls output directory routing (production vs regression)
 - **Data flow**: Browser automation → HTML → JSON → Quality scoring → Excel reports → Analytics → Email drafts
 
 **Quality Scoring Implementation:**
