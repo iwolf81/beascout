@@ -173,6 +173,7 @@ class RegressionTestRunner:
             'python3', '-u', 'src/pipeline/processing/process_full_dataset.py',
             'tests/reference/units/scraped/',
             '--session-id', self.session_manager.session_id,
+            '--session-type', 'regression',
             '--log'
         ]
 
@@ -201,8 +202,8 @@ class RegressionTestRunner:
                 'details': f"STDERR: {stderr}\nSTDOUT: {stdout}"
             }
 
-        # Verify the output file was created
-        output_file = self.project_root / 'data/raw/all_units_comprehensive_scored.json'
+        # Verify the output file was created (in regression directory)
+        output_file = self.project_root / 'data/output/regression/raw/all_units_comprehensive_scored.json'
         if not output_file.exists():
             return {
                 'passed': False,
@@ -228,7 +229,7 @@ class RegressionTestRunner:
         cmd = [
             'python3', '-u', 'src/pipeline/analysis/three_way_validator.py',
             '--key-three', 'tests/reference/key_three/anonymized_key_three.json',
-            '--scraped-data', 'data/raw/all_units_comprehensive_scored.json',
+            '--scraped-data', 'data/output/regression/raw/all_units_comprehensive_scored.json',
             '--output', regression_output,
             '--session-id', self.session_manager.session_id,
             '--log'
@@ -287,7 +288,7 @@ class RegressionTestRunner:
         cmd = [
             'python3', '-u', 'src/pipeline/analysis/generate_commissioner_report.py',
             '--key-three', 'tests/reference/key_three/anonymized_key_three.json',
-            '--quality-data', 'data/raw/all_units_comprehensive_scored.json',
+            '--quality-data', 'data/output/regression/raw/all_units_comprehensive_scored.json',
             '--validation-file', regression_validation,
             '--session-id', self.session_manager.session_id,
             '--output-dir', regression_reports_dir,
@@ -438,12 +439,12 @@ class RegressionTestRunner:
         self.log("Validating Excel report output...")
 
         # Find the generated report file
-        report_files = list(self.project_root.glob('data/output/reports/BeAScout_Quality_Report_*.xlsx'))
+        report_files = list(self.project_root.glob('data/output/regression/reports/BeAScout_Quality_Report_*.xlsx'))
         if not report_files:
             return {
                 'passed': False,
                 'error': 'No Excel report file found',
-                'details': 'Expected files in data/output/reports/ matching pattern BeAScout_Quality_Report_*.xlsx'
+                'details': 'Expected files in data/output/regression/reports/ matching pattern BeAScout_Quality_Report_*.xlsx'
             }
 
         # Use the most recent report file

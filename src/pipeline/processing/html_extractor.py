@@ -932,13 +932,21 @@ def main():
         if zip_match:
             zip_codes.add(zip_match.group(1))
     
+    # Determine output directory based on session type
+    import os
+    session_type = os.environ.get('SESSION_TYPE', 'pipeline')
+    if session_type == 'regression':
+        output_dir = 'data/output/regression/raw'
+    else:
+        output_dir = 'data/raw'
+
     if zip_codes:
         # Use first zip code found for output filename
         zip_code = sorted(zip_codes)[0]  # Use first zip code alphabetically for consistency
-        output_file = f'data/raw/all_units_{zip_code}.json'
+        output_file = f'{output_dir}/all_units_{zip_code}.json'
     else:
         # Fallback to combined if no zip codes found
-        output_file = 'data/raw/all_units_combined.json'
+        output_file = f'{output_dir}/all_units_combined.json'
     
     # Save all units to JSON
     output_data = {

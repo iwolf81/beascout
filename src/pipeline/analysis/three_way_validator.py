@@ -48,11 +48,12 @@ class ThreeWayValidator:
     Comprehensive unit validation engine
     Cross-references Key Three database (169 units) with scraped web data (163 units)
     """
-    
-    def __init__(self):
+
+    def __init__(self, session_manager=None):
         self.key_three_units = []
         self.scraped_units = []
         self.validation_results = []
+        self.session_manager = session_manager
         
     def load_key_three_data(self, file_path: str) -> bool:
         """Load Key Three foundation data (169 units)"""
@@ -157,8 +158,11 @@ class ThreeWayValidator:
                     scraped_keys.add(normalized_key)
                     scraped_dict[normalized_key] = unit
         
-        # Create debug log file
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        # Create debug log file using session ID if available
+        if self.session_manager and self.session_manager.session_id:
+            timestamp = self.session_manager.session_id
+        else:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         debug_file = f'data/debug/cross_reference_validation_debug_{timestamp}.log'
         os.makedirs('data/debug', exist_ok=True)
         
@@ -405,7 +409,7 @@ Examples:
             print(f"📁 Key Three data: {args.key_three}")
             print(f"📁 Scraped data: {args.scraped_data}")
 
-            validator = ThreeWayValidator()
+            validator = ThreeWayValidator(session_manager=session_manager)
 
             # Load data sources
             if not validator.load_key_three_data(args.key_three):

@@ -35,6 +35,10 @@ def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_c
             shared_timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             os.environ['UNIT_DEBUG_TIMESTAMP'] = shared_timestamp
 
+        # Pass session type to subprocess for output directory selection
+        if session_manager:
+            os.environ['SESSION_TYPE'] = session_manager.session_type
+
         # Use HTML parser to extract units to JSON with proper working directory
         # Ensure we're in the project root for proper imports
         import subprocess
@@ -56,7 +60,12 @@ def extract_units_from_html(beascout_file: Path, joinexploring_file: Path, zip_c
         result_code = result.returncode
 
         if result_code == 0:
-            json_file = f"data/raw/all_units_{zip_code}.json"
+            # Determine output directory based on session type
+            if session_manager and session_manager.session_type == 'regression':
+                json_file = f"data/output/regression/raw/all_units_{zip_code}.json"
+            else:
+                json_file = f"data/raw/all_units_{zip_code}.json"
+
             if os.path.exists(json_file):
                 print(f"    ✅ HTML extraction completed")
                 return json_file
@@ -97,7 +106,12 @@ def process_with_current_pipeline(json_file: str, zip_code: str, session_manager
         os.makedirs("data/raw", exist_ok=True)
 
         # Save processed units with wrapper structure for consistency with combine_datasets
-        processed_json = f"data/raw/all_units_{zip_code}_processed.json"
+        # Determine output directory based on session type
+        if session_manager and session_manager.session_type == 'regression':
+            processed_json = f"data/output/regression/raw/all_units_{zip_code}_processed.json"
+        else:
+            processed_json = f"data/raw/all_units_{zip_code}_processed.json"
+
         data_wrapper = {
             'units_with_scores': units,
             'total_units': len(units),
@@ -171,15 +185,21 @@ def process_scraped_session_with_terse_output(session_dir: str, session_manager:
 
     # Combine datasets (detailed output goes to log)
     if successful_files:
-        combine_datasets(successful_files, session_dir)
+        combine_datasets(successful_files, session_dir, session_manager)
 
     # Show final summary on terminal (matches the expected format from Pass 3 feedback)
     session_manager.terse_print(f"📊 Successfully processed {len(successful_files)} zip codes")
     session_manager.terse_print("Combining all scored datasets with deduplication...")
 
+    # Determine which output file to read based on session type
+    if session_manager.session_type == 'regression':
+        output_file = "data/output/regression/raw/all_units_comprehensive_scored.json"
+    else:
+        output_file = "data/raw/all_units_comprehensive_scored.json"
+
     # Try to extract final summary information for terminal display
     try:
-        with open("data/raw/all_units_comprehensive_scored.json", 'r') as f:
+        with open(output_file, 'r') as f:
             data = json.load(f)
             total_units = data.get('total_units', 0)
             avg_score = data.get('average_completeness_score', 0)
@@ -195,7 +215,7 @@ def process_scraped_session_with_terse_output(session_dir: str, session_manager:
             session_manager.terse_print("✅ Combined datasets into comprehensive file")
             session_manager.terse_print(f"   Total units: {total_units}")
             session_manager.terse_print(f"   Average score: {avg_score}%")
-            session_manager.terse_print("   Saved to: data/raw/all_units_comprehensive_scored.json")
+            session_manager.terse_print(f"   Saved to: {output_file}")
     except Exception:
         # If we can't read the final file, just show basic completion
         session_manager.terse_print("✅ Processing completed")
@@ -270,7 +290,7 @@ def process_scraped_session(session_dir: str):
     else:
         print("❌ No data to combine")
 
-def combine_datasets(json_files: list, session_dir: str = None):
+def combine_datasets(json_files: list, session_dir: str = None, session_manager: SessionManager = None):
     """Combine all scored datasets with deduplication"""
     # These detailed messages go to log file only in terminal_terse mode
     print("Combining all scored datasets with deduplication...")
@@ -340,8 +360,14 @@ def combine_datasets(json_files: list, session_dir: str = None):
             'units_with_scores': combined_units
         }
 
-        # Save comprehensive dataset
-        output_file = "data/raw/all_units_comprehensive_scored.json"
+        # Determine output path based on session type
+        if session_manager and session_manager.session_type == 'regression':
+            output_file = "data/output/regression/raw/all_units_comprehensive_scored.json"
+            # Ensure regression output directory exists
+            import os
+            os.makedirs("data/output/regression/raw", exist_ok=True)
+        else:
+            output_file = "data/raw/all_units_comprehensive_scored.json"
         with open(output_file, 'w') as f:
             json.dump(combined_data, f, indent=2)
 

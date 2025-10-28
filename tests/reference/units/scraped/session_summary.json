@@ -1,11 +1,11 @@
 {
-  "session_timestamp": "20250905_000339",
-  "start_time": "2025-09-05T00:03:39.739713",
-  "end_time": "2025-09-05T01:09:40.183173",
-  "duration_minutes": 66.00739056666666,
-  "total_zip_codes": 71,
-  "successful_zips": 71,
+  "session_timestamp": "20251026_214029",
+  "start_time": "2025-10-26T21:40:29.847514",
+  "end_time": "2025-10-26T22:49:27.467114",
+  "duration_minutes": 68.96032621666667,
+  "total_zip_codes": 75,
+  "successful_zips": 75,
   "failed_zips": 0,
   "success_rate": 1.0,
-  "session_directory": "data/scraped/20250905_000339"
+  "session_directory": "data/scraped/20251026_214029"
 }
