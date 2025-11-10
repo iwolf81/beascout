@@ -3,7 +3,7 @@
 Generate PDF versions of unit improvement emails from markdown files.
 
 This module converts markdown-formatted unit improvement emails into professional
-single-page PDF documents using WeasyPrint with custom CSS styling.
+single-page PDF documents using Pandoc with custom CSS styling.
 
 Inputs:
     - data/output/unit_emails/*.md: Markdown email files
@@ -11,22 +11,44 @@ Inputs:
 Outputs:
     - data/output/unit_emails/*.pdf: Corresponding PDF files
 
+Requirements:
+    - Pandoc must be installed (brew install pandoc or apt-get install pandoc)
+
 Raises:
     FileNotFoundError: If input directory or markdown files don't exist
     PermissionError: If unable to write PDF files
+    RuntimeError: If pandoc is not installed or execution fails
 """
 
 import os
 import sys
+import subprocess
+import tempfile
 from pathlib import Path
 from typing import List
-
-import markdown
-from weasyprint import HTML, CSS
 
 # Add project root to path for imports
 project_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(project_root))
+
+
+def check_pandoc_installed() -> bool:
+    """
+    Check if pandoc is installed and accessible.
+
+    Returns:
+        bool: True if pandoc is available, False otherwise
+    """
+    try:
+        result = subprocess.run(
+            ['pandoc', '--version'],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        return result.returncode == 0
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        return False
 
 
 def get_pdf_css() -> str:
@@ -34,7 +56,7 @@ def get_pdf_css() -> str:
     Generate CSS styling for single-page PDF layout.
 
     Returns:
-        str: CSS stylesheet content for PDF generation
+        str: CSS stylesheet content for PDF generation via Pandoc
 
     Design:
         - Single page constraint with controlled margins
@@ -168,7 +190,7 @@ def get_pdf_css() -> str:
 
 def convert_markdown_to_pdf(markdown_file: Path, output_pdf: Path) -> None:
     """
-    Convert a markdown file to PDF with professional styling.
+    Convert a markdown file to PDF with professional styling using Pandoc.
 
     Args:
         markdown_file: Path to input markdown file
@@ -177,24 +199,27 @@ def convert_markdown_to_pdf(markdown_file: Path, output_pdf: Path) -> None:
     Raises:
         FileNotFoundError: If markdown_file doesn't exist
         PermissionError: If unable to write output_pdf
+        RuntimeError: If pandoc execution fails
     """
+    if not markdown_file.exists():
+        raise FileNotFoundError(f"Markdown file not found: {markdown_file}")
+
     # Parse unit info from filename: "Pack_7_Clinton_beascout_improvements.md"
     filename_parts = markdown_file.stem.replace('_beascout_improvements', '').split('_')
 
-    header_html = ""
+    header_markdown = ""
     if len(filename_parts) >= 3:
         unit_type = filename_parts[0]
         unit_number = filename_parts[1]
         unit_town = ' '.join(filename_parts[2:])
 
-        header_html = f'''
-        <div class="pdf-header">
-            <h1>Heart of New England Council, Scouting America</h1>
-            <h2>Be A Scout Improvements</h2>
-            <h3>{unit_type} {unit_number} {unit_town}</h3>
-        </div>
-        <div class="pdf-separator"></div>
-        '''
+        header_markdown = f"""---
+title: "Heart of New England Council, Scouting America"
+subtitle: "Be A Scout Improvements"
+author: "{unit_type} {unit_number} {unit_town}"
+---
+
+"""
 
     # Read markdown content
     with open(markdown_file, 'r', encoding='utf-8') as f:
@@ -216,32 +241,62 @@ def convert_markdown_to_pdf(markdown_file: Path, output_pdf: Path) -> None:
 
     md_content = '\n'.join(cleaned_lines)
 
-    # Convert markdown to HTML
-    html_content = markdown.markdown(
-        md_content,
-        extensions=['extra', 'nl2br']  # Support tables, fenced code, line breaks
-    )
+    # Combine header and content
+    full_markdown = header_markdown + md_content
 
-    # Wrap in basic HTML structure with header
-    full_html = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Unit Improvement Email</title>
-    </head>
-    <body>
-        {header_html}
-        {html_content}
-    </body>
-    </html>
-    """
+    # Create temporary files for markdown and CSS
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False, encoding='utf-8') as temp_md:
+        temp_md.write(full_markdown)
+        temp_md_path = temp_md.name
 
-    # Generate PDF with custom CSS
-    HTML(string=full_html).write_pdf(
-        output_pdf,
-        stylesheets=[CSS(string=get_pdf_css())]
-    )
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.css', delete=False, encoding='utf-8') as temp_css:
+        temp_css.write(get_pdf_css())
+        temp_css_path = temp_css.name
+
+    try:
+        # Run pandoc to convert markdown to PDF
+        cmd = [
+            'pandoc',
+            temp_md_path,
+            '--css', temp_css_path,
+            '--pdf-engine=wkhtmltopdf',  # Use wkhtmltopdf for CSS support
+            '-o', str(output_pdf),
+            '--standalone'
+        ]
+
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+
+        if result.returncode != 0:
+            # If wkhtmltopdf not available, try default engine
+            if 'wkhtmltopdf not found' in result.stderr.lower():
+                cmd = [
+                    'pandoc',
+                    temp_md_path,
+                    '-o', str(output_pdf),
+                    '--standalone'
+                ]
+                result = subprocess.run(
+                    cmd,
+                    capture_output=True,
+                    text=True,
+                    timeout=30
+                )
+
+            if result.returncode != 0:
+                raise RuntimeError(f"Pandoc failed: {result.stderr}")
+
+    finally:
+        # Clean up temporary files
+        try:
+            os.unlink(temp_md_path)
+            os.unlink(temp_css_path)
+        except:
+            pass
 
 
 def process_all_unit_emails(input_dir: Path, output_dir: Path = None) -> List[Path]:
@@ -257,7 +312,14 @@ def process_all_unit_emails(input_dir: Path, output_dir: Path = None) -> List[Pa
 
     Raises:
         FileNotFoundError: If input_dir doesn't exist
+        RuntimeError: If pandoc is not installed
     """
+    if not check_pandoc_installed():
+        raise RuntimeError(
+            "Pandoc is not installed or not in PATH. "
+            "Install with: brew install pandoc (macOS) or apt-get install pandoc (Linux)"
+        )
+
     if output_dir is None:
         output_dir = input_dir
 
@@ -275,7 +337,7 @@ def process_all_unit_emails(input_dir: Path, output_dir: Path = None) -> List[Pa
 
     generated_pdfs = []
 
-    print(f"Converting {len(markdown_files)} markdown files to PDF...")
+    print(f"Converting {len(markdown_files)} markdown files to PDF using Pandoc...")
 
     for md_file in markdown_files:
         # Generate PDF filename
@@ -302,11 +364,6 @@ def main():
 
     if generated_pdfs:
         print(f"\n📄 Sample output: {generated_pdfs[0]}")
-
-    # Use os._exit(0) to skip Python cleanup and prevent WeasyPrint/Pango crash on macOS
-    # All PDFs are written to disk before this point, so cleanup is not needed
-    # This prevents SIGABRT crash during font resource garbage collection
-    os._exit(0)
 
 
 if __name__ == "__main__":

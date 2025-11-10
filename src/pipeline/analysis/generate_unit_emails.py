@@ -8,6 +8,7 @@ using the new email generation system.
 
 import sys
 import os
+import re
 from pathlib import Path
 import argparse
 import json
@@ -18,6 +19,27 @@ sys.path.insert(0, str(project_root))
 
 # Import from pipeline location
 from src.pipeline.analysis.unit_email_generator import UnitEmailGenerator
+
+def sanitize_content(text: str) -> str:
+    """
+    Remove ASCII control characters that can cause issues with PDF generation.
+
+    Removes all control characters (U+0000 through U+001F) except:
+    - Newline (0x0A)
+    - Tab (0x09)
+    - Carriage return (0x0D)
+
+    These control characters often come from scraped web data and can cause
+    LaTeX/Pandoc errors during PDF conversion.
+
+    Args:
+        text: Input text possibly containing control characters
+
+    Returns:
+        Sanitized text with control characters removed
+    """
+    return re.sub(r'[\x00-\x08\x0B-\x0C\x0E-\x1F]', '', text)
+
 
 def load_excluded_units():
     """Load list of units to exclude from all reports and emails"""
@@ -178,6 +200,9 @@ Examples:
 
         email_file = output_dir / f"{display_filename}_beascout_improvements.md"
 
+        # Sanitize content to remove control characters before writing
+        email_content = sanitize_content(email_content)
+
         with open(email_file, 'w') as f:
             f.write(email_content)
 
@@ -241,6 +266,9 @@ Examples:
             display_filename = unit_key.replace(' ', '_').replace('/', '_')
 
         email_file = output_dir / f"{display_filename}_beascout_setup.md"
+
+        # Sanitize content to remove control characters before writing
+        email_content = sanitize_content(email_content)
 
         with open(email_file, 'w') as f:
             f.write(email_content)
