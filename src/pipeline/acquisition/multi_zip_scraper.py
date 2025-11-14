@@ -58,6 +58,10 @@ class MultiZipScraper:
             'consecutive_failures': 0,
             'start_time': None
         }
+
+        # Session directory attributes (can be overridden via --session-id)
+        self.session_timestamp = None
+        self.session_dir = None
     
     def is_processing_allowed(self) -> bool:
         """Check if processing is allowed (always True now - removed time restrictions)"""
@@ -206,16 +210,23 @@ class MultiZipScraper:
         
         all_zips = zip_data['all_zipcodes']
         print(f"📋 Loaded {len(all_zips)} zip codes")
-        
+
         # Create timestamped directory for this scraping session
+        # Only create new session timestamp if not already provided via --session-id
         start_time = datetime.now()
         self.session_stats['start_time'] = start_time
-        self.session_timestamp = start_time.strftime("%Y%m%d_%H%M%S")
-        self.session_dir = f"data/scraped/{self.session_timestamp}"
-        
-        # Create session directory
+
+        if not self.session_timestamp:
+            # No session ID provided - create new timestamp
+            self.session_timestamp = start_time.strftime("%Y%m%d_%H%M%S")
+            self.session_dir = f"data/scraped/{self.session_timestamp}"
+            print(f"📁 Session directory: {self.session_dir}")
+        else:
+            # Session ID already provided via --session-id argument
+            print(f"📁 Using provided session directory: {self.session_dir}")
+
+        # Create session directory (idempotent with exist_ok=True)
         Path(self.session_dir).mkdir(parents=True, exist_ok=True)
-        print(f"📁 Session directory: {self.session_dir}")
         
         # Process in batches
         batch_size = self.config['batch_size']
