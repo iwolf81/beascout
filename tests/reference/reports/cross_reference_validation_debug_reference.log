@@ -1,7 +1,7 @@
 === CROSS-REFERENCE VALIDATION DEBUG LOG ===
 
-Key Three units loaded: 498
-Scraped units loaded: 166
+Key Three units loaded: 500
+Scraped units loaded: 169
 
 KEY THREE UNIT KEYS:
   Club 1129 Worcester
@@ -12,6 +12,7 @@ KEY THREE UNIT KEYS:
   Crew 2254 Rutland
   Pack 0001 Acton
   Pack 0003 Leominster
+  Pack 0004 Gardner
   Pack 0007 Clinton
   Pack 0009 Lancaster
   Pack 0009 Worcester
@@ -63,6 +64,7 @@ KEY THREE UNIT KEYS:
   Pack 0274 Dudley
   Pack 0306 Paxton
   Pack 0316 Douglas
+  Pack 0777 Athol
   Pack 1455 Pepperell
   Pack 1728 Lunenburg
   Post 2012 Holden
@@ -145,6 +147,7 @@ KEY THREE UNIT KEYS:
   Troop 0316 Douglas
   Troop 0338 Charlton
   Troop 0477 Leominster
+  Troop 0777 Athol
   Troop 1004 Shrewsbury
   Troop 1026 Barre
   Troop 1728 Lunenburg
@@ -173,6 +176,7 @@ KEY THREE UNIT KEYS:
   Troop 7338 Charlton
   Troop 7530 Auburn
   Troop 7740 Leominster
+  Troop 7777 Athol
 
 SCRAPED UNIT KEYS:
   Club 1129 Worcester
@@ -231,6 +235,7 @@ SCRAPED UNIT KEYS:
   Pack 0274 Dudley
   Pack 0306 Paxton
   Pack 0316 Douglas
+  Pack 0777 Athol
   Pack 1455 Pepperell
   Pack 1728 Lunenburg
   Post 2012 Holden
@@ -313,6 +318,7 @@ SCRAPED UNIT KEYS:
   Troop 0316 Douglas
   Troop 0338 Charlton
   Troop 0477 Leominster
+  Troop 0777 Athol
   Troop 1004 Shrewsbury
   Troop 1026 Barre
   Troop 1728 Lunenburg
@@ -341,6 +347,7 @@ SCRAPED UNIT KEYS:
   Troop 7338 Charlton
   Troop 7530 Auburn
   Troop 7740 Leominster
+  Troop 7777 Athol
 
 UNITS ONLY IN KEY THREE (4):
   Crew 1924 Rutland
@@ -348,15 +355,15 @@ UNITS ONLY IN KEY THREE (4):
   Pack 0003 Leominster
   Pack 0161 Fiskdale
 
-UNITS ONLY IN SCRAPED DATA (1):
-  Pack 0004 Gardner
+UNITS ONLY IN SCRAPED DATA (0):
 
-MATCHING UNITS (165):
+MATCHING UNITS (169):
   Club 1129 Worcester
   Crew 0006 Gardner
   Crew 0204 West Boylston
   Crew 0250 Harvard
   Pack 0001 Acton
+  Pack 0004 Gardner
   Pack 0007 Clinton
   Pack 0009 Lancaster
   Pack 0009 Worcester
@@ -407,6 +414,7 @@ MATCHING UNITS (165):
   Pack 0274 Dudley
   Pack 0306 Paxton
   Pack 0316 Douglas
+  Pack 0777 Athol
   Pack 1455 Pepperell
   Pack 1728 Lunenburg
   Post 2012 Holden
@@ -489,6 +497,7 @@ MATCHING UNITS (165):
   Troop 0316 Douglas
   Troop 0338 Charlton
   Troop 0477 Leominster
+  Troop 0777 Athol
   Troop 1004 Shrewsbury
   Troop 1026 Barre
   Troop 1728 Lunenburg
@@ -517,6 +526,7 @@ MATCHING UNITS (165):
   Troop 7338 Charlton
   Troop 7530 Auburn
   Troop 7740 Leominster
+  Troop 7777 Athol
 
 CROSS-REFERENCE SUMMARY:
   Expected Key Three: 169 units
@@ -525,8 +535,8 @@ CROSS-REFERENCE SUMMARY:
   Expected Key Three Only: 4 units
   Expected Scraped Only: 0 units
 
-  Actual Key Three: 169 units
-  Actual Scraped: 166 units
-  Actual Matches: 165 units
+  Actual Key Three: 173 units
+  Actual Scraped: 169 units
+  Actual Matches: 169 units
   Actual Key Three Only: 4 units
-  Actual Scraped Only: 1 units
+  Actual Scraped Only: 0 units
